@@ -428,9 +428,10 @@ Quando $x$ indica a participação num tratamento atribuído aleatoriamente, RLS
 ::: {.interativo}
 ```{ojs}
 //| echo: false
-viewof b0 = Inputs.range([-2, 4], {value: 0, step: 0.05, label: "intercepto b₀"})
-viewof b1 = Inputs.range([-1, 2.5], {value: 0.3, step: 0.01, label: "inclinação b₁"})
-viewof mostrar = Inputs.toggle({label: "mostrar a reta de MQO", value: false})
+import {controle, alternador} from "/ojs/controles.js"
+viewof b0 = controle("intercepto b₀", [-2, 4], {valor: 0, passo: 0.05, casas: 2})
+viewof b1 = controle("inclinação b₁", [-1, 2.5], {valor: 0.3, passo: 0.01, casas: 2})
+viewof mostrar = alternador("mostrar a reta de MQO", {valor: false})
 ```
 
 ```{ojs}
@@ -477,9 +478,9 @@ sqrA = d3.sum(dadosA, d => (d.y - b0 - b1 * d.x) ** 2)
 ::: {.interativo}
 ```{ojs}
 //| echo: false
-viewof nB = Inputs.range([5, 200], {value: 20, step: 1, label: "tamanho da amostra n"})
-viewof sigmaB = Inputs.range([0.2, 3], {value: 1, step: 0.1, label: "σ (ruído)"})
-viewof dispB = Inputs.range([0.2, 3], {value: 1, step: 0.1, label: "dispersão de x"})
+viewof nB = controle("tamanho da amostra n", [5, 200], {valor: 20, passo: 1})
+viewof sigmaB = controle("σ (ruído)", [0.2, 3], {valor: 1, passo: 0.1, casas: 1})
+viewof dispB = controle("dispersão de x", [0.2, 3], {valor: 1, passo: 0.1, casas: 1})
 ```
 
 ```{ojs}

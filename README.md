@@ -60,8 +60,12 @@ Arquivos **gerados** pelo script (não edite à mão): `_quarto-site.yml`, `_qua
 
 ## Publicação
 
-O workflow `.github/workflows/publicar.yml` roda a cada *push*: renderiza o site, o PDF e o baralho do Anki e guarda tudo como artefato **livro** na página da execução (aba *Actions*), mesmo com o repositório privado.
+O workflow `.github/workflows/publicar.yml` roda a cada *push*: renderiza o site, o PDF e o baralho do Anki, guarda tudo como artefato **livro** da execução (aba *Actions*) e, com o repositório público, publica no GitHub Pages:
 
-Para publicar também no GitHub Pages: em *Settings → Pages*, escolha *Source: GitHub Actions* e crie a variável de repositório `PUBLICAR_PAGES = true` (*Settings → Secrets and variables → Actions → Variables*). Em repositórios privados, o Pages exige um plano pago.
+- site: <https://medeirosdavid.github.io/formacao-economia/>
+- PDF: <https://medeirosdavid.github.io/formacao-economia/pdf/formacao-economia.pdf>
+- Anki: <https://medeirosdavid.github.io/formacao-economia/formacao-economia.apkg>
+
+Pré-requisito, uma única vez: *Settings → Pages → Build and deployment → Source: GitHub Actions*. Se o repositório voltar a ser privado, a publicação para (a menos que a variável de repositório `PUBLICAR_PAGES` seja `true` e a conta tenha plano com Pages privado).
 
 Os resultados do código ficam congelados em `_freeze/` (versione essa pasta depois da primeira renderização local) e as séries de dados em `dados/cache/`.

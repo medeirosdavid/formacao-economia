@@ -93,7 +93,7 @@ Interativo em OJS.
 
 ### Interativo (Observable JS)
 
-Blocos ` ```{ojs} ` rodam no navegador, sem servidor; `Inputs.range` cria controles deslizantes e `Plot` desenha gráficos. Envolva o interativo num `content-visible when-format="html"` e numa div `.interativo`.
+Blocos ` ```{ojs} ` rodam no navegador, sem servidor. Para os controles, use os do livro, que não dependem de bibliotecas externas: `import {controle, alternador} from "/ojs/controles.js"`, e então `viewof a = controle("rótulo", [mín, máx], {valor, passo, casas})` ou `viewof b = alternador("rótulo")`. Para os gráficos, use `Plot`. Envolva o interativo num `content-visible when-format="html"` e numa div `.interativo`.
 
 ### Laboratório e dados
 

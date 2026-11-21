@@ -1,9 +1,9 @@
 # Renderiza o site, o PDF e o baralho do Anki a cada push.
 # • Sempre: o resultado fica disponível como artefato "livro" na página da execução
 #   (aba Actions → execução → Artifacts), inclusive em repositório privado.
-# • GitHub Pages (opcional): em Settings → Pages escolha "Source: GitHub Actions" e
-#   crie a variável de repositório PUBLICAR_PAGES = true (Settings → Secrets and
-#   variables → Actions → Variables). Em repositório privado, o Pages exige plano pago.
+# • GitHub Pages: publica automaticamente quando o repositório é público (ou quando
+#   a variável de repositório PUBLICAR_PAGES = true). Pré-requisito, uma única vez:
+#   Settings → Pages → Build and deployment → Source: "GitHub Actions".
 name: Publicar livro
 
 on:
@@ -63,13 +63,13 @@ jobs:
           path: _book
           retention-days: 30
 
-      - if: vars.PUBLICAR_PAGES == 'true'
+      - if: ${{ !github.event.repository.private || vars.PUBLICAR_PAGES == 'true' }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: _book
 
   publicar:
-    if: vars.PUBLICAR_PAGES == 'true'
+    if: ${{ !github.event.repository.private || vars.PUBLICAR_PAGES == 'true' }}
     needs: renderizar
     runs-on: ubuntu-latest
     environment:

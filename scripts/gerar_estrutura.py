@@ -330,7 +330,8 @@ def perfil(dados: dict, caminhos: dict, so_escritos: bool) -> str:
     cfg["book"]["appendices"] = APENDICES
     if not so_escritos:
         cfg["book"]["sidebar"] = {"tools": [
-            {"icon": "file-earmark-pdf", "href": "pdf/formacao-economia.pdf", "text": "PDF"}]}
+            {"icon": "file-earmark-pdf", "href": "pdf/formacao-economia.pdf", "text": "PDF"},
+            {"icon": "stack", "href": "formacao-economia.apkg", "text": "Baralho Anki"}]}
     else:
         cfg["project"] = {"output-dir": "_pdf"}
         cfg["book"]["output-file"] = "formacao-economia"

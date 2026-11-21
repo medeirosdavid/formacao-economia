@@ -172,6 +172,9 @@ book:
     - icon: file-earmark-pdf
       href: pdf/formacao-economia.pdf
       text: PDF
+    - icon: stack
+      href: formacao-economia.apkg
+      text: Baralho Anki
 
 # ---- formato (copiado de _formato-html.yml)
 # Formato do site. Copiado para _quarto-site.yml por scripts/gerar_estrutura.py.

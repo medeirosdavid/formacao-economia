@@ -96,3 +96,12 @@ h1, h2, h3, h4, .sidebar, .navbar, .quarto-title, .theorem-title, .proof-title,
 // Sem botão de copiar nas células interativas (código oculto)
 .interativo .code-copy-button, .cell .code-copy-button:has(+ .ojs-in-a-box-waiting-for-module-import) { display: none !important; }
 .interativo div.sourceCode { display: none; }
+
+// Controles próprios dos interativos (ojs/controles.js)
+form.controle {
+  display: grid; grid-template-columns: 11rem 1fr 3.5rem; align-items: center; gap: .6rem;
+  max-width: 34rem; margin: .25rem 0; font-family: $font-family-sans-serif; font-size: .92rem;
+  input[type=range] { width: 100%; accent-color: $cor-definicao; }
+  output { font-variant-numeric: tabular-nums; text-align: right; color: $cor-exercicio; }
+  &.controle-alternador { display: block; input { accent-color: $cor-definicao; margin-right: .3rem; } }
+}

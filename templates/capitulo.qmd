@@ -40,7 +40,8 @@ Demonstração completa.
 ::: {.interativo}
 ```{ojs}
 //| echo: false
-viewof parametro = Inputs.range([0, 1], {value: 0.5, step: 0.01, label: "parâmetro"})
+import {controle, alternador} from "/ojs/controles.js"
+viewof parametro = controle("parâmetro", [0, 1], {valor: 0.5, passo: 0.01, casas: 2})
 ```
 :::
 :::
