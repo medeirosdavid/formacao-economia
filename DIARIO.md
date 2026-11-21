@@ -24,10 +24,12 @@ Registro curto de cada sessão: o que foi feito, decisões e pendências. Entrad
   - aplicação da lei de Okun com o SGS (24369, 22109);
   - 7 exercícios resolvidos, 11 flashcards, ficha-resumo.
 - Verificação: site e PDF renderizados sem avisos; MathJax sem erros; interativos funcionando; o caminho dos dados foi testado com respostas simuladas da API.
+- Repositório `medeirosdavid/formacao-economia` criado (**privado**, por decisão de David) e enviado.
+- CI ajustada: cada *push* gera o site, o PDF e o baralho Anki como artefato **livro** da execução (aba *Actions*). O deploy no GitHub Pages fica desligado até existir a variável `PUBLICAR_PAGES = true`.
 
 **Pendências**
 
-- [x] Criar o repositório `medeirosdavid/formacao-economia` (privado) e fazer o primeiro *push*.
-- [ ] Primeira renderização com internet, para preencher `dados/cache/` com as séries reais e conferir os números da lei de Okun; depois, versionar `_freeze/`.
+- [ ] Conferir a primeira execução do GitHub Actions: o build deve passar e o artefato **livro** deve trazer os números reais da lei de Okun.
+- [ ] Primeira renderização local com internet, para preencher `dados/cache/` e `_freeze/` e versioná-los.
 - [ ] Revisar o ECM-G01: estilo, profundidade e exercícios. O resultado calibra todos os capítulos seguintes.
 - [ ] Decidir por onde a revisão começa: base quantitativa (MAT/EST) ou econometria de graduação em sequência.
