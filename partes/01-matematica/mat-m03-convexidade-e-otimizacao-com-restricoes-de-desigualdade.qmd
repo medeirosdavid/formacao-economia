@@ -1,0 +1,28 @@
+# Convexidade e otimização com restrições de desigualdade {#sec-mat-m03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g07 (*Otimização: sem restrições e com restrições de igualdade*); @sec-mat-m01 (*Análise real em $\mathbb{R}^n$ e espaços métricos*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Otimização: sem restrições e com restrições de igualdade* (MAT-G07); *Análise real em $\mathbb{R}^n$ e espaços métricos* (MAT-M01)
+:::
+
+**Leituras principais:** @sundaram1996, @delafuente2000
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Conjuntos e funções convexas
+2. Quase-concavidade
+3. Teoremas de separação
+4. Condições de Kuhn–Tucker
+5. Qualificação de restrições
+6. Dualidade
+:::

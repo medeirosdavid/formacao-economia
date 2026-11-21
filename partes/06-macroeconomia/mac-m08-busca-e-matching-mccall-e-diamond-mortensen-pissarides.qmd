@@ -1,0 +1,27 @@
+# Busca e matching: McCall e Diamond–Mortensen–Pissarides {#sec-mac-m08}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M08`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-d03 (*Programação dinâmica estocástica*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Programação dinâmica estocástica* (MAT-D03)
+:::
+
+**Leituras principais:** @ljungqvist2018, @pissarides2000
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Modelo de McCall e salário de reserva
+2. Função de matching
+3. Modelo DMP: criação e destruição de empregos
+4. Barganha de Nash
+5. O enigma de Shimer
+:::

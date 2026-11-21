@@ -1,0 +1,27 @@
+# Previsibilidade de retornos {#sec-fin-m07}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `FIN-M07`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-m03 (*O fator estocástico de desconto*); @sec-ecm-m09 (*Modelos ARMA e previsão*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *O fator estocástico de desconto* (FIN-M03); *Modelos ARMA e previsão* (ECM-M09)
+:::
+
+**Leituras principais:** @campbell1988, @cochrane2005
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Decomposição de Campbell–Shiller
+2. Regressões preditivas
+3. Viés de Stambaugh
+4. Volatilidade excessiva
+5. Previsão fora da amostra
+:::

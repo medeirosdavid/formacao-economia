@@ -1,0 +1,26 @@
+# Risco, retorno e diversificação {#sec-fin-g04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `FIN-G04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-g01 (*Valor do dinheiro no tempo*); @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Valor do dinheiro no tempo* (FIN-G01); *Esperança, momentos e distribuições conjuntas* (EST-G03)
+:::
+
+**Leituras principais:** @bodie2021, @markowitz1952
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Retornos e suas medidas
+2. Risco e diversificação
+3. Fronteira eficiente
+4. Ativo livre de risco e linha de mercado de capitais
+:::

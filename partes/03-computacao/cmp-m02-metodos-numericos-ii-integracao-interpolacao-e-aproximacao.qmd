@@ -1,0 +1,26 @@
+# Métodos numéricos II: integração, interpolação e aproximação {#sec-cmp-m02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `CMP-M02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-cmp-m01 (*Métodos numéricos I: raízes, otimização e diferenciação*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Métodos numéricos I: raízes, otimização e diferenciação* (CMP-M01)
+:::
+
+**Leituras principais:** @judd1998, @miranda2002
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Quadratura de Newton–Cotes e gaussiana
+2. Interpolação polinomial e splines
+3. Polinômios de Chebyshev
+4. Aproximação de funções
+:::

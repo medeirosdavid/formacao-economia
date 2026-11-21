@@ -1,0 +1,18 @@
+# Formato do site. Copiado para _quarto-site.yml por scripts/gerar_estrutura.py.
+format:
+  html:
+    theme:
+      light: [cosmo, estilos/tema.scss]
+    toc: true
+    toc-depth: 3
+    toc-title: "Nesta página"
+    number-depth: 3
+    html-math-method: mathjax
+    include-in-header:
+      - file: estilos/mathjax-macros.html   # gerado de tex/macros.tex
+    crossrefs-hover: true
+    code-copy: true
+    code-overflow: wrap
+    fig-format: svg
+    fig-responsive: true
+    lightbox: true

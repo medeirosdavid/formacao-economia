@@ -1,0 +1,27 @@
+# Programação dinâmica estocástica {#sec-mat-d03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAT-D03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-d02 (*Programação dinâmica determinística*); @sec-est-d01 (*Cadeias de Markov*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Programação dinâmica determinística* (MAT-D02); *Cadeias de Markov* (EST-D01)
+:::
+
+**Leituras principais:** @stokey1989, @ljungqvist2018
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Choques markovianos
+2. Bellman estocástico
+3. Funções política e equação de Euler estocástica
+4. Distribuições invariantes
+5. Convergência fraca
+:::

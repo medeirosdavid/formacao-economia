@@ -1,0 +1,27 @@
+# Modelos de espaço de estados e filtro de Kalman {#sec-ecm-d03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `ECM-D03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m09 (*Modelos ARMA e previsão*); @sec-ecm-m05 (*Máxima verossimilhança e a trindade de testes*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Modelos ARMA e previsão* (ECM-M09); *Máxima verossimilhança e a trindade de testes* (ECM-M05)
+:::
+
+**Leituras principais:** @durbin2012, @hamilton1994
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Forma de espaço de estados
+2. Filtro de Kalman
+3. Suavização
+4. Verossimilhança e estimação
+5. Aplicações: tendência-ciclo, juro neutro
+:::

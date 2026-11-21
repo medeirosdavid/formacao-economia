@@ -1,0 +1,26 @@
+# Solução de modelos dinâmicos: VFI, PFI e EGM {#sec-cmp-d01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `CMP-D01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-d03 (*Programação dinâmica estocástica*); @sec-cmp-m02 (*Métodos numéricos II: integração, interpolação e aproximação*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Programação dinâmica estocástica* (MAT-D03); *Métodos numéricos II: integração, interpolação e aproximação* (CMP-M02)
+:::
+
+**Leituras principais:** @heer2009, @quantecon
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Iteração da função valor
+2. Iteração da função política
+3. Método dos pontos endógenos (EGM)
+4. Precisão: erros na equação de Euler
+:::

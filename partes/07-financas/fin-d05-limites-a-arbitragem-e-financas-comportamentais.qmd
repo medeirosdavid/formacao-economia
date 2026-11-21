@@ -1,0 +1,26 @@
+# Limites à arbitragem e finanças comportamentais {#sec-fin-d05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `FIN-D05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-m05 (*Modelos de fatores: CAPM, APT e Fama–French*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Modelos de fatores: CAPM, APT e Fama–French* (FIN-M05)
+:::
+
+**Leituras principais:** @shleifer1997
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Limites à arbitragem
+2. Crenças e extrapolação
+3. Preferências não convencionais
+4. Bolhas
+:::

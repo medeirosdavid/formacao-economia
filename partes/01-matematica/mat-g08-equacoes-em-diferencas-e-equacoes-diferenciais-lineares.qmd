@@ -1,0 +1,27 @@
+# Equações em diferenças e equações diferenciais lineares {#sec-mat-g08}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAT-G08`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g04 (*Integração e aplicações*); @sec-mat-g05 (*Álgebra linear I: vetores, matrizes e sistemas lineares*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Integração e aplicações* (MAT-G04); *Álgebra linear I: vetores, matrizes e sistemas lineares* (MAT-G05)
+:::
+
+**Leituras principais:** @simon1994, @sydsaeter2016
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Equações em diferenças de 1ª e 2ª ordem
+2. Equações diferenciais de 1ª e 2ª ordem
+3. Estado estacionário e estabilidade
+4. Sistemas lineares
+5. Aplicações: teia de aranha, Solow
+:::

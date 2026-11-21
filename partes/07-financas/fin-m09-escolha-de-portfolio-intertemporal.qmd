@@ -1,0 +1,26 @@
+# Escolha de portfólio intertemporal {#sec-fin-m09}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `FIN-M09`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-m01 (*Escolha de portfólio*); @sec-mat-d03 (*Programação dinâmica estocástica*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Escolha de portfólio* (FIN-M01); *Programação dinâmica estocástica* (MAT-D03)
+:::
+
+**Leituras principais:** @campbell2018, @back2017
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Samuelson e Merton em tempo discreto
+2. Demanda de hedge intertemporal
+3. Retornos previsíveis e alocação
+4. Ciclo de vida e capital humano
+:::

@@ -1,0 +1,26 @@
+# Escolha intertemporal {#sec-mic-g04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MIC-G04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-g01 (*Escolha do consumidor e demanda*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Escolha do consumidor e demanda* (MIC-G01)
+:::
+
+**Leituras principais:** @varian2014
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Restrição orçamentária intertemporal
+2. Taxa de juros e poupança
+3. Modelo de Fisher
+4. Valor presente e decisões de investimento
+:::

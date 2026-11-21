@@ -1,0 +1,27 @@
+# Moeda, inflação e bancos centrais {#sec-mac-g04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAC-G04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-g01 (*Contas nacionais e medidas macroeconômicas*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Contas nacionais e medidas macroeconômicas* (MAC-G01)
+:::
+
+**Leituras principais:** @mankiw2019, @blanchard2021
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Funções da moeda e agregados monetários
+2. Teoria quantitativa
+3. Senhoriagem e imposto inflacionário
+4. Custos da inflação
+5. Bancos centrais e o sistema financeiro
+:::

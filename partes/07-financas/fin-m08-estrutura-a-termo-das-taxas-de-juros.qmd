@@ -1,0 +1,27 @@
+# Estrutura a termo das taxas de juros {#sec-fin-m08}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `FIN-M08`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-g02 (*Renda fixa: títulos, taxas e duration*); @sec-fin-m03 (*O fator estocástico de desconto*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Renda fixa: títulos, taxas e duration* (FIN-G02); *O fator estocástico de desconto* (FIN-M03)
+:::
+
+**Leituras principais:** @campbell1997, @vasicek1977, @cox1985
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Hipótese das expectativas
+2. Prêmio a termo
+3. Modelos de Vasicek e CIR
+4. Nelson–Siegel
+5. A curva de juros brasileira
+:::

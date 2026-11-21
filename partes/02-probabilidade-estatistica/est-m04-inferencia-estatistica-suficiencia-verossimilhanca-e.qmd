@@ -1,0 +1,26 @@
+# Inferência estatística: suficiência, verossimilhança e eficiência {#sec-est-m04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `EST-M04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-g05 (*Estimação pontual e intervalar*); @sec-est-m03 (*Modos de convergência e teoremas-limite*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Estimação pontual e intervalar* (EST-G05); *Modos de convergência e teoremas-limite* (EST-M03)
+:::
+
+**Leituras principais:** @casella2002
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Suficiência e fatoração
+2. Completude e Rao–Blackwell
+3. Informação de Fisher e Cramér–Rao
+4. Propriedades assintóticas do EMV
+:::

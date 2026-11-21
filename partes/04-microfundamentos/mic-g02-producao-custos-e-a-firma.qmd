@@ -1,0 +1,26 @@
+# Produção, custos e a firma {#sec-mic-g02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MIC-G02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g07 (*Otimização: sem restrições e com restrições de igualdade*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Otimização: sem restrições e com restrições de igualdade* (MAT-G07)
+:::
+
+**Leituras principais:** @varian2014
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Tecnologia e funções de produção
+2. Minimização de custos
+3. Maximização de lucro
+4. Curto e longo prazo
+:::

@@ -1,0 +1,26 @@
+# Modelos não lineares de séries temporais {#sec-ecm-d10}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `ECM-D10`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-d03 (*Modelos de espaço de estados e filtro de Kalman*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Modelos de espaço de estados e filtro de Kalman* (ECM-D03)
+:::
+
+**Leituras principais:** @hamilton1994
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Mudança de regime markoviana
+2. Modelos de limiar (TAR)
+3. Transição suave (STAR)
+4. Aplicação: datação de ciclos
+:::

@@ -1,0 +1,26 @@
+# Bootstrap e inferência por reamostragem {#sec-ecm-d07}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `ECM-D07`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m02 (*Teoria assintótica do MQO e inferência robusta*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Teoria assintótica do MQO e inferência robusta* (ECM-M02)
+:::
+
+**Leituras principais:** @efron1993, @hansen2022
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Bootstrap não paramétrico
+2. Bootstrap de resíduos e selvagem
+3. Bootstrap em blocos
+4. Refinamentos assintóticos
+:::

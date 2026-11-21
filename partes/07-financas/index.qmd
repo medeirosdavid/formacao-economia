@@ -1,0 +1,34 @@
+# Finanças {.unnumbered}
+
+<!-- ARQUIVO GERADO por scripts/gerar_estrutura.py — edite curriculo.yml, não este arquivo -->
+
+Do valor presente aos modelos dinâmicos de apreçamento: renda fixa, portfólio, fator estocástico de desconto, estrutura a termo e macro-finanças.
+
+::: {.content-visible when-format="html"}
+| Código | Nível | Capítulo | Status |
+|:--|:--|:--|:--|
+| FIN-G01 | G | [Valor do dinheiro no tempo](fin-g01-valor-do-dinheiro-no-tempo.qmd) | ○ planejado |
+| FIN-G02 | G | [Renda fixa: títulos, taxas e duration](fin-g02-renda-fixa-titulos-taxas-e-duration.qmd) | ○ planejado |
+| FIN-G03 | G | [Avaliação de ações](fin-g03-avaliacao-de-acoes.qmd) | ○ planejado |
+| FIN-G04 | G | [Risco, retorno e diversificação](fin-g04-risco-retorno-e-diversificacao.qmd) | ○ planejado |
+| FIN-G05 | G | [CAPM e modelos de fatores: introdução](fin-g05-capm-e-modelos-de-fatores-introducao.qmd) | ○ planejado |
+| FIN-G06 | G | [Eficiência de mercado](fin-g06-eficiencia-de-mercado.qmd) | ○ planejado |
+| FIN-G07 | G | [Derivativos: termos, futuros e opções](fin-g07-derivativos-termos-futuros-e-opcoes.qmd) | ○ planejado |
+| FIN-G08 | G | [Finanças corporativas: orçamento e estrutura de capital](fin-g08-financas-corporativas-orcamento-e-estrutura-de-capital.qmd) | ○ planejado |
+| FIN-M01 | M | [Escolha de portfólio](fin-m01-escolha-de-portfolio.qmd) | ○ planejado |
+| FIN-M02 | M | [Preços de estado, mercados completos e não-arbitragem](fin-m02-precos-de-estado-mercados-completos-e-nao-arbitragem.qmd) | ○ planejado |
+| FIN-M03 | M | [O fator estocástico de desconto](fin-m03-o-fator-estocastico-de-desconto.qmd) | ○ planejado |
+| FIN-M04 | M | [Apreçamento baseado em consumo e o enigma do prêmio das ações](fin-m04-aprecamento-baseado-em-consumo-e-o-enigma-do-premio-das.qmd) | ○ planejado |
+| FIN-M05 | M | [Modelos de fatores: CAPM, APT e Fama–French](fin-m05-modelos-de-fatores-capm-apt-e-fama-french.qmd) | ○ planejado |
+| FIN-M06 | M | [Testes de modelos de apreçamento](fin-m06-testes-de-modelos-de-aprecamento.qmd) | ○ planejado |
+| FIN-M07 | M | [Previsibilidade de retornos](fin-m07-previsibilidade-de-retornos.qmd) | ○ planejado |
+| FIN-M08 | M | [Estrutura a termo das taxas de juros](fin-m08-estrutura-a-termo-das-taxas-de-juros.qmd) | ○ planejado |
+| FIN-M09 | M | [Escolha de portfólio intertemporal](fin-m09-escolha-de-portfolio-intertemporal.qmd) | ○ planejado |
+| FIN-D01 | D | [Preferências recursivas, risco de longo prazo, hábitos e desastres](fin-d01-preferencias-recursivas-risco-de-longo-prazo-habitos-e.qmd) | ○ planejado |
+| FIN-D02 | D | [Tempo contínuo: não-arbitragem e Black–Scholes–Merton](fin-d02-tempo-continuo-nao-arbitragem-e-black-scholes-merton.qmd) | ○ planejado |
+| FIN-D03 | D | [Modelos afins de estrutura a termo e prêmio a termo](fin-d03-modelos-afins-de-estrutura-a-termo-e-premio-a-termo.qmd) | ○ planejado |
+| FIN-D04 | D | [Macro-finanças: intermediários e apreçamento de ativos](fin-d04-macro-financas-intermediarios-e-aprecamento-de-ativos.qmd) | ○ planejado |
+| FIN-D05 | D | [Limites à arbitragem e finanças comportamentais](fin-d05-limites-a-arbitragem-e-financas-comportamentais.qmd) | ○ planejado |
+| FIN-D06 | D | [Risco de crédito](fin-d06-risco-de-credito.qmd) | ○ planejado |
+| FIN-D07 | D | [Microestrutura de mercado](fin-d07-microestrutura-de-mercado.qmd) | ○ planejado |
+:::

@@ -1,0 +1,27 @@
+# Regressão linear múltipla {#sec-ecm-g02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `ECM-G02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-g01 (*Regressão linear simples*); @sec-mat-g05 (*Álgebra linear I: vetores, matrizes e sistemas lineares*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** @sec-ecm-g01 (*Regressão linear simples*); *Álgebra linear I: vetores, matrizes e sistemas lineares* (MAT-G05)
+:::
+
+**Leituras principais:** @wooldridge2019, @stock2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Interpretação ceteris paribus
+2. Estimador de MQO com vários regressores
+3. Partialling out
+4. Viés de variável omitida
+5. Multicolinearidade
+:::

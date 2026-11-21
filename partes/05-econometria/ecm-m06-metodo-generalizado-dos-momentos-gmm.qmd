@@ -1,0 +1,27 @@
+# Método generalizado dos momentos (GMM) {#sec-ecm-m06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `ECM-M06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m04 (*Variáveis instrumentais: teoria e instrumentos fracos*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Variáveis instrumentais: teoria e instrumentos fracos* (ECM-M04)
+:::
+
+**Leituras principais:** @hansen1982, @hayashi2000, @hansen2022
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Condições de momento
+2. Estimador GMM e matriz de ponderação ótima
+3. GMM em dois passos e iterado
+4. Teste J de sobreidentificação
+5. Aplicação: equação de Euler do consumo
+:::

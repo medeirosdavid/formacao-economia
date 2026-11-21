@@ -1,0 +1,27 @@
+# Movimento browniano e cálculo de Itô {#sec-est-d04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `EST-D04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-d03 (*Martingais*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Martingais* (EST-D03)
+:::
+
+**Leituras principais:** @shreve2004, @oksendal2003
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Movimento browniano
+2. Integral de Itô
+3. Lema de Itô
+4. Equações diferenciais estocásticas
+5. Mudança de medida e Girsanov
+:::

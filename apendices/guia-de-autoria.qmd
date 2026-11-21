@@ -1,0 +1,129 @@
+# Guia de autoria {#sec-guia}
+
+Este apêndice é o manual de construção do livro: como uma sessão de estudo vira um capítulo, qual é o roteiro de cada capítulo e qual sintaxe usar em cada elemento. Ele vale tanto para quem escreve à mão quanto para o assistente que redige os rascunhos.
+
+## O ciclo de uma sessão de estudo
+
+1. **Escolha do capítulo.** O tema estudado corresponde a um código em `curriculo.yml`. Se não houver um, acrescente o capítulo ao currículo (com código, nível, pré-requisitos e leituras) e rode `python scripts/gerar_estrutura.py`.
+2. **Material de entrada.** Fonte principal (livro, notas de aula, artigo), suas anotações, dúvidas e o que achou difícil.
+3. **Rascunho.** O capítulo é redigido **seção por seção**, seguindo o roteiro abaixo, e o status passa para `rascunho`.
+4. **Revisão.** Você lê, corrige e anota; demonstrações são conferidas linha a linha; código roda do zero. Status: `revisao`.
+5. **Fechamento.** Exercícios, flashcards e ficha-resumo prontos; o capítulo renderiza sem avisos no site e no PDF. Status: `completo`.
+6. **Registro.** Atualize o status em `curriculo.yml`, rode o script de estrutura, faça *commit* e registre a sessão no diário do Project.
+
+## Roteiro de um capítulo
+
+O arquivo `templates/capitulo.qmd` contém o esqueleto completo; copie as seções para o esboço gerado pelo script, **mantendo os marcadores de cabeçalho**.
+
+| Seção | Conteúdo | Obrigatória? |
+|:--|:--|:--|
+| Motivação | a pergunta econômica; por que o tema importa | sim |
+| Teoria (várias seções) | definições, resultados e demonstrações completas | sim |
+| Pontes | onde a ideia reaparece no livro, com referências cruzadas | sim |
+| Interativo | uma simulação manipulável em Observable JS | quando ajudar a intuição |
+| Laboratório computacional | código que reproduz os resultados do capítulo | sim |
+| Aplicação com dados brasileiros | o método aplicado a dados reais | nos capítulos empíricos |
+| Exercícios resolvidos | 5 a 10, mesclando demonstrações e cálculos | sim |
+| Flashcards | 8 a 15 perguntas de revisão | sim |
+| Ficha-resumo | uma página com o essencial | sim |
+| Notas bibliográficas | o que ler a seguir e por quê | sim |
+
+**Estilo do texto.** Português do Brasil, acentos diretos no arquivo (UTF-8), frases curtas, intuição *antes* da formalização e de volta *depois* dela. Toda demonstração é completa ou aponta exatamente onde a parte omitida está no livro. Nenhum trecho é transcrito de outra obra: o texto é sempre reescrito.
+
+## Sintaxe dos elementos
+
+### Ambientes matemáticos
+
+````markdown
+::: {#def-ecm-g01-mqo}
+## Estimador de MQO
+Texto da definição, com $\hat\beta_1$ e macros como $\E$ e $\Var$.
+:::
+
+::: {#thm-ecm-g01-gauss-markov}
+## Gauss–Markov
+Enunciado.
+:::
+
+::: {.proof}
+Demonstração. Referências: @def-ecm-g01-mqo, @eq-ecm-g01-normais.
+:::
+
+::: {.remark}
+Observação (sem número).
+:::
+````
+
+Equações numeradas: `$$ ... $$ {#eq-ecm-g01-normais}`. Os tipos disponíveis são `def`, `thm`, `prp`, `lem`, `cor`, `exm`, `exr` (numerados) e `.proof`, `.remark`, `.solution` (sem número).
+
+### Exercício com solução recolhida
+
+````markdown
+::: {#exr-ecm-g01-1}
+Enunciado.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Solução completa.
+:::
+````
+
+### Flashcard
+
+````markdown
+::: {.callout-note .flashcard collapse="true"}
+## Pergunta curta e precisa?
+Resposta direta, com matemática se necessário.
+:::
+````
+
+No site, o cartão aparece recolhido (clique para ver a resposta). O comando `python scripts/flashcards_anki.py` gera o baralho do Anki a partir de todos os cartões do livro.
+
+### Conteúdo só do site ou só do PDF
+
+````markdown
+::: {.content-visible when-format="html"}
+Interativo em OJS.
+:::
+
+::: {.content-visible unless-format="html"}
+*A versão interativa desta seção está disponível no site.*
+:::
+````
+
+### Interativo (Observable JS)
+
+Blocos ` ```{ojs} ` rodam no navegador, sem servidor; `Inputs.range` cria controles deslizantes e `Plot` desenha gráficos. Envolva o interativo num `content-visible when-format="html"` e numa div `.interativo`.
+
+### Laboratório e dados
+
+Blocos ` ```{python} ` são executados na renderização; com `freeze: auto`, só rodam de novo quando o capítulo muda. Use o pacote do livro:
+
+```python
+from formacao import dados, graficos
+graficos.estilo()
+u = dados.sgs("desocupacao", inicio="2012-01-01")   # PNAD Contínua, com cache
+```
+
+As séries baixadas ficam em `dados/cache/` e são versionadas: o livro renderiza igual sem internet. Para atualizar, use `dados.sgs(..., atualizar=True)` ou `FORMACAO_ATUALIZAR_DADOS=1 quarto render`.
+
+## Comandos
+
+| Tarefa | Comando |
+|:--|:--|
+| validar o currículo | `python scripts/gerar_estrutura.py --checar` |
+| gerar esboços, cabeçalhos e listas | `python scripts/gerar_estrutura.py` |
+| pré-visualizar o site | `quarto preview` |
+| renderizar o site | `quarto render` |
+| renderizar o PDF | `quarto render --profile pdf --to pdf` |
+| gerar o baralho do Anki | `python scripts/flashcards_anki.py` |
+
+## Lista de verificação para marcar um capítulo como completo
+
+- [ ] Todas as seções obrigatórias presentes.
+- [ ] Demonstrações conferidas; nenhuma referência cruzada quebrada (`?@…`).
+- [ ] Laboratório roda do zero num ambiente limpo.
+- [ ] Notação conforme o @sec-notacao; macros novas documentadas.
+- [ ] Exercícios com soluções; flashcards exportam sem erro.
+- [ ] Ficha-resumo cabe em uma página do PDF.
+- [ ] Status atualizado em `curriculo.yml`.

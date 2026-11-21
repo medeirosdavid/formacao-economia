@@ -1,0 +1,26 @@
+# Mercado de trabalho e desemprego {#sec-mac-g03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAC-G03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-g01 (*Contas nacionais e medidas macroeconômicas*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Contas nacionais e medidas macroeconômicas* (MAC-G01)
+:::
+
+**Leituras principais:** @blanchard2021
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Fluxos no mercado de trabalho
+2. Determinação de salários e preços
+3. Taxa natural de desemprego
+4. O mercado de trabalho brasileiro
+:::

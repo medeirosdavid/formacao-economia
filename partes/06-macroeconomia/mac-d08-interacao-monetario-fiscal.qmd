@@ -1,0 +1,26 @@
+# Interação monetário-fiscal {#sec-mac-d08}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAC-D08`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m11 (*Política monetária: regras, determinação e política ótima*); @sec-mac-m12 (*Política fiscal: equivalência ricardiana, suavização de impostos e tributação ótima*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Política monetária: regras, determinação e política ótima* (MAC-M11); *Política fiscal: equivalência ricardiana, suavização de impostos e tributação ótima* (MAC-M12)
+:::
+
+**Leituras principais:** @sargent1981, @walsh2017
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Aritmética monetarista desagradável
+2. Políticas ativas e passivas (Leeper)
+3. Teoria fiscal do nível de preços
+4. Dominância fiscal
+:::

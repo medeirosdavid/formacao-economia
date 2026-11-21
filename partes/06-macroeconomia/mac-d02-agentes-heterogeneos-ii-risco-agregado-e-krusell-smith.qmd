@@ -1,0 +1,26 @@
+# Agentes heterogêneos II: risco agregado e Krusell–Smith {#sec-mac-d02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAC-D02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-d01 (*Agentes heterogêneos I: Bewley–Huggett–Aiyagari*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Agentes heterogêneos I: Bewley–Huggett–Aiyagari* (MAC-D01)
+:::
+
+**Leituras principais:** @krusell1998, @heer2009
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. A distribuição como variável de estado
+2. Agregação aproximada
+3. Algoritmo de Krusell–Smith
+4. Precisão e alternativas
+:::

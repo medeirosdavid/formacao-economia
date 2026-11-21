@@ -1,0 +1,27 @@
+# Consumo: renda permanente, ciclo de vida e poupança precaucional {#sec-mac-m04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-g09 (*Consumo e investimento: microfundamentos*); @sec-mic-m02 (*Escolha sob incerteza*); @sec-mat-d02 (*Programação dinâmica determinística*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Consumo e investimento: microfundamentos* (MAC-G09); *Escolha sob incerteza* (MIC-M02); *Programação dinâmica determinística* (MAT-D02)
+:::
+
+**Leituras principais:** @romer2019, @ljungqvist2018
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Hall (1978) e passeio aleatório do consumo
+2. Excesso de sensibilidade e suavidade
+3. Poupança precaucional
+4. Restrições de liquidez
+5. Buffer-stock
+:::

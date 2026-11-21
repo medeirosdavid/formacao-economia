@@ -1,0 +1,26 @@
+# Métodos de perturbação e projeção {#sec-cmp-d02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `CMP-D02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-cmp-d01 (*Solução de modelos dinâmicos: VFI, PFI e EGM*); @sec-mat-m06 (*Sistemas dinâmicos: estabilidade, linearização e diagramas de fase*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Solução de modelos dinâmicos: VFI, PFI e EGM* (CMP-D01); *Sistemas dinâmicos: estabilidade, linearização e diagramas de fase* (MAT-M06)
+:::
+
+**Leituras principais:** @fernandezvillaverde2016, @judd1998
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Linearização e solução de Blanchard–Kahn/Klein
+2. Perturbação de ordem superior
+3. Métodos de projeção e colocação
+4. Comparação de métodos
+:::

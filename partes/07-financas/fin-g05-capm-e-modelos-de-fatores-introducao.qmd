@@ -1,0 +1,26 @@
+# CAPM e modelos de fatores: introdução {#sec-fin-g05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `FIN-G05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-g04 (*Risco, retorno e diversificação*); @sec-ecm-g01 (*Regressão linear simples*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Risco, retorno e diversificação* (FIN-G04); @sec-ecm-g01 (*Regressão linear simples*)
+:::
+
+**Leituras principais:** @bodie2021
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. O CAPM
+2. Beta e a linha do mercado de títulos
+3. Estimação do beta por regressão
+4. Modelos multifatoriais
+:::

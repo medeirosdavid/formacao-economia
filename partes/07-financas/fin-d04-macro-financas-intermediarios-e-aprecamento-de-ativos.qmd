@@ -1,0 +1,26 @@
+# Macro-finanças: intermediários e apreçamento de ativos {#sec-fin-d04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `FIN-D04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-d01 (*Preferências recursivas, risco de longo prazo, hábitos e desastres*); @sec-mac-d04 (*Fricções financeiras e o acelerador financeiro*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Preferências recursivas, risco de longo prazo, hábitos e desastres* (FIN-D01); *Fricções financeiras e o acelerador financeiro* (MAC-D04)
+:::
+
+**Leituras principais:** @he2013
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Apreçamento por intermediários
+2. Restrições de capital e prêmios de risco
+3. Política monetária e prêmios de risco
+4. Sistemas de demanda por ativos
+:::

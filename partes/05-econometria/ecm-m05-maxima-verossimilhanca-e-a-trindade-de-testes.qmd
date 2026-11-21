@@ -1,0 +1,26 @@
+# Máxima verossimilhança e a trindade de testes {#sec-ecm-m05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `ECM-M05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m02 (*Teoria assintótica do MQO e inferência robusta*); @sec-est-m04 (*Inferência estatística: suficiência, verossimilhança e eficiência*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Teoria assintótica do MQO e inferência robusta* (ECM-M02); *Inferência estatística: suficiência, verossimilhança e eficiência* (EST-M04)
+:::
+
+**Leituras principais:** @hayashi2000, @hansen2022
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Consistência e normalidade assintótica do EMV
+2. Matriz de informação
+3. Testes de Wald, LR e LM
+4. Quase-máxima verossimilhança
+:::

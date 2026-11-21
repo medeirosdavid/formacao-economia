@@ -1,0 +1,27 @@
+# Valor do dinheiro no tempo {#sec-fin-g01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `FIN-G01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g02 (*Números reais, sequências e séries*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Números reais, sequências e séries* (MAT-G02)
+:::
+
+**Leituras principais:** @berk2020, @bodie2021
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Juros simples e compostos
+2. Valor presente e futuro
+3. Anuidades e perpetuidades
+4. Taxas nominais, reais e efetivas
+5. Convenções brasileiras: dias úteis/252
+:::

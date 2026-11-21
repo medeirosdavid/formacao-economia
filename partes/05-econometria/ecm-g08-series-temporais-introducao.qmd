@@ -1,0 +1,27 @@
+# Séries temporais: introdução {#sec-ecm-g08}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `ECM-G08`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-g05 (*Heterocedasticidade e autocorrelação*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Heterocedasticidade e autocorrelação* (ECM-G05)
+:::
+
+**Leituras principais:** @wooldridge2019, @stock2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Tendência e sazonalidade
+2. Estacionariedade e dependência fraca
+3. Modelos autorregressivos
+4. Defasagens distribuídas
+5. Previsão
+:::

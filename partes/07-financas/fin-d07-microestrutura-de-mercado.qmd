@@ -1,0 +1,26 @@
+# Microestrutura de mercado {#sec-fin-d07}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `FIN-D07`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-m06 (*Informação assimétrica*); @sec-fin-g06 (*Eficiência de mercado*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Informação assimétrica* (MIC-M06); *Eficiência de mercado* (FIN-G06)
+:::
+
+**Leituras principais:** @ohara1995
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Modelo de Kyle
+2. Glosten–Milgrom
+3. Liquidez e custos de transação
+4. Livro de ofertas
+:::

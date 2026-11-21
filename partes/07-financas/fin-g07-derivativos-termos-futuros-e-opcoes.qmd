@@ -1,0 +1,27 @@
+# Derivativos: termos, futuros e opções {#sec-fin-g07}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `FIN-G07`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-g01 (*Valor do dinheiro no tempo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Valor do dinheiro no tempo* (FIN-G01)
+:::
+
+**Leituras principais:** @hull2022
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Contratos a termo e futuros
+2. Precificação por não-arbitragem
+3. Opções: payoffs e estratégias
+4. Paridade put-call
+5. Árvore binomial
+:::

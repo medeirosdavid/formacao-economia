@@ -1,0 +1,27 @@
+# Macroeconomia brasileira: dos planos de estabilização ao regime de metas {#sec-mac-g10}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAC-G10`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-g06 (*Oferta agregada, curva de Phillips e expectativas*); @sec-mac-g07 (*Economia aberta: câmbio, balanço de pagamentos e Mundell–Fleming*); @sec-mac-g08 (*Política fiscal e dívida pública*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Oferta agregada, curva de Phillips e expectativas* (MAC-G06); *Economia aberta: câmbio, balanço de pagamentos e Mundell–Fleming* (MAC-G07); *Política fiscal e dívida pública* (MAC-G08)
+:::
+
+**Leituras principais:** @giambiagi2011, @abreu2014
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Industrialização e crise da dívida
+2. Alta inflação e planos heterodoxos
+3. Plano Real
+4. Tripé macroeconômico
+5. Ciclos e crises recentes
+:::

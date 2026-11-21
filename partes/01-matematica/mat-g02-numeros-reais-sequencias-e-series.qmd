@@ -1,0 +1,28 @@
+# Números reais, sequências e séries {#sec-mat-g02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAT-G02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g01 (*Lógica, conjuntos e métodos de demonstração*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Lógica, conjuntos e métodos de demonstração* (MAT-G01)
+:::
+
+**Leituras principais:** @lima1989, @rudin1976
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Axioma do supremo
+2. Sequências e limites
+3. Subsequências e Bolzano–Weierstrass
+4. Sequências de Cauchy
+5. Séries e critérios de convergência
+6. Séries geométricas e valor presente
+:::

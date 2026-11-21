@@ -1,0 +1,26 @@
+# Modelos de agentes heterogêneos: distribuição e equilíbrio {#sec-cmp-d03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `CMP-D03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-cmp-d01 (*Solução de modelos dinâmicos: VFI, PFI e EGM*); @sec-mac-d01 (*Agentes heterogêneos I: Bewley–Huggett–Aiyagari*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Solução de modelos dinâmicos: VFI, PFI e EGM* (CMP-D01); *Agentes heterogêneos I: Bewley–Huggett–Aiyagari* (MAC-D01)
+:::
+
+**Leituras principais:** @auclert2021, @heer2009
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Método do histograma (Young)
+2. Equilíbrio estacionário
+3. Transições determinísticas
+4. Jacobianos no espaço de sequências
+:::

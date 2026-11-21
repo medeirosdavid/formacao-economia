@@ -1,0 +1,26 @@
+# Dados em painel: efeitos fixos, aleatórios e painéis dinâmicos {#sec-ecm-m07}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `ECM-M07`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m02 (*Teoria assintótica do MQO e inferência robusta*); @sec-ecm-g07 (*Dados em painel: introdução*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Teoria assintótica do MQO e inferência robusta* (ECM-M02); *Dados em painel: introdução* (ECM-G07)
+:::
+
+**Leituras principais:** @wooldridge2010, @hansen2022
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Efeitos fixos e aleatórios
+2. Teste de Hausman
+3. Painéis dinâmicos e viés de Nickell
+4. Arellano–Bond e Blundell–Bond
+:::

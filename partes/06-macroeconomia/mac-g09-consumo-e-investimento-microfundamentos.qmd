@@ -1,0 +1,26 @@
+# Consumo e investimento: microfundamentos {#sec-mac-g09}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAC-G09`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-g04 (*Escolha intertemporal*); @sec-mac-g05 (*Demanda agregada: IS-LM e IS-MP*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Escolha intertemporal* (MIC-G04); *Demanda agregada: IS-LM e IS-MP* (MAC-G05)
+:::
+
+**Leituras principais:** @mankiw2019, @romer2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Consumo keynesiano e evidências
+2. Renda permanente e ciclo de vida
+3. Investimento e custo de uso do capital
+4. q de Tobin (introdução)
+:::

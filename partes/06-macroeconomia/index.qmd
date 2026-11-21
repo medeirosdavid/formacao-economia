@@ -1,0 +1,43 @@
+# Macroeconomia {.unnumbered}
+
+<!-- ARQUIVO GERADO por scripts/gerar_estrutura.py — edite curriculo.yml, não este arquivo -->
+
+Da contabilidade nacional e do IS-LM aos modelos de agentes heterogêneos: crescimento, ciclos, moeda, política monetária e fiscal, economia aberta.
+
+::: {.content-visible when-format="html"}
+| Código | Nível | Capítulo | Status |
+|:--|:--|:--|:--|
+| MAC-G01 | G | [Contas nacionais e medidas macroeconômicas](mac-g01-contas-nacionais-e-medidas-macroeconomicas.qmd) | ○ planejado |
+| MAC-G02 | G | [Crescimento de longo prazo: fatos e o modelo de Solow](mac-g02-crescimento-de-longo-prazo-fatos-e-o-modelo-de-solow.qmd) | ○ planejado |
+| MAC-G03 | G | [Mercado de trabalho e desemprego](mac-g03-mercado-de-trabalho-e-desemprego.qmd) | ○ planejado |
+| MAC-G04 | G | [Moeda, inflação e bancos centrais](mac-g04-moeda-inflacao-e-bancos-centrais.qmd) | ○ planejado |
+| MAC-G05 | G | [Demanda agregada: IS-LM e IS-MP](mac-g05-demanda-agregada-is-lm-e-is-mp.qmd) | ○ planejado |
+| MAC-G06 | G | [Oferta agregada, curva de Phillips e expectativas](mac-g06-oferta-agregada-curva-de-phillips-e-expectativas.qmd) | ○ planejado |
+| MAC-G07 | G | [Economia aberta: câmbio, balanço de pagamentos e Mundell–Fleming](mac-g07-economia-aberta-cambio-balanco-de-pagamentos-e-mundell.qmd) | ○ planejado |
+| MAC-G08 | G | [Política fiscal e dívida pública](mac-g08-politica-fiscal-e-divida-publica.qmd) | ○ planejado |
+| MAC-G09 | G | [Consumo e investimento: microfundamentos](mac-g09-consumo-e-investimento-microfundamentos.qmd) | ○ planejado |
+| MAC-G10 | G | [Macroeconomia brasileira: dos planos de estabilização ao regime de metas](mac-g10-macroeconomia-brasileira-dos-planos-de-estabilizacao-ao.qmd) | ○ planejado |
+| MAC-M01 | M | [Crescimento neoclássico: Solow e Ramsey–Cass–Koopmans](mac-m01-crescimento-neoclassico-solow-e-ramsey-cass-koopmans.qmd) | ○ planejado |
+| MAC-M02 | M | [Gerações sobrepostas](mac-m02-geracoes-sobrepostas.qmd) | ○ planejado |
+| MAC-M03 | M | [Crescimento endógeno](mac-m03-crescimento-endogeno.qmd) | ○ planejado |
+| MAC-M04 | M | [Consumo: renda permanente, ciclo de vida e poupança precaucional](mac-m04-consumo-renda-permanente-ciclo-de-vida-e-poupanca.qmd) | ○ planejado |
+| MAC-M05 | M | [Investimento: q de Tobin e custos de ajustamento](mac-m05-investimento-q-de-tobin-e-custos-de-ajustamento.qmd) | ○ planejado |
+| MAC-M06 | M | [Equilíbrio competitivo recursivo](mac-m06-equilibrio-competitivo-recursivo.qmd) | ○ planejado |
+| MAC-M07 | M | [Ciclos reais de negócios (RBC)](mac-m07-ciclos-reais-de-negocios-rbc.qmd) | ○ planejado |
+| MAC-M08 | M | [Busca e matching: McCall e Diamond–Mortensen–Pissarides](mac-m08-busca-e-matching-mccall-e-diamond-mortensen-pissarides.qmd) | ○ planejado |
+| MAC-M09 | M | [Moeda em equilíbrio geral](mac-m09-moeda-em-equilibrio-geral.qmd) | ○ planejado |
+| MAC-M10 | M | [O modelo Novo-Keynesiano básico](mac-m10-o-modelo-novo-keynesiano-basico.qmd) | ○ planejado |
+| MAC-M11 | M | [Política monetária: regras, determinação e política ótima](mac-m11-politica-monetaria-regras-determinacao-e-politica-otima.qmd) | ○ planejado |
+| MAC-M12 | M | [Política fiscal: equivalência ricardiana, suavização de impostos e tributação ótima](mac-m12-politica-fiscal-equivalencia-ricardiana-suavizacao-de.qmd) | ○ planejado |
+| MAC-M13 | M | [Inconsistência temporal e credibilidade](mac-m13-inconsistencia-temporal-e-credibilidade.qmd) | ○ planejado |
+| MAC-D01 | D | [Agentes heterogêneos I: Bewley–Huggett–Aiyagari](mac-d01-agentes-heterogeneos-i-bewley-huggett-aiyagari.qmd) | ○ planejado |
+| MAC-D02 | D | [Agentes heterogêneos II: risco agregado e Krusell–Smith](mac-d02-agentes-heterogeneos-ii-risco-agregado-e-krusell-smith.qmd) | ○ planejado |
+| MAC-D03 | D | [HANK: política monetária com agentes heterogêneos](mac-d03-hank-politica-monetaria-com-agentes-heterogeneos.qmd) | ○ planejado |
+| MAC-D04 | D | [Fricções financeiras e o acelerador financeiro](mac-d04-friccoes-financeiras-e-o-acelerador-financeiro.qmd) | ○ planejado |
+| MAC-D05 | D | [Economias abertas pequenas e emergentes](mac-d05-economias-abertas-pequenas-e-emergentes.qmd) | ○ planejado |
+| MAC-D06 | D | [Dívida soberana e default](mac-d06-divida-soberana-e-default.qmd) | ○ planejado |
+| MAC-D07 | D | [Limite inferior zero, forward guidance e política não convencional](mac-d07-limite-inferior-zero-forward-guidance-e-politica-nao.qmd) | ○ planejado |
+| MAC-D08 | D | [Interação monetário-fiscal](mac-d08-interacao-monetario-fiscal.qmd) | ○ planejado |
+| MAC-D09 | D | [Expectativas: aprendizagem e informação imperfeita](mac-d09-expectativas-aprendizagem-e-informacao-imperfeita.qmd) | ○ planejado |
+| MAC-D10 | D | [Modelos DSGE de média escala](mac-d10-modelos-dsge-de-media-escala.qmd) | ○ planejado |
+:::

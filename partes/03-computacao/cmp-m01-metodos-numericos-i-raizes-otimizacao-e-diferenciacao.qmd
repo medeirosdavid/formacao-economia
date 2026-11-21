@@ -1,0 +1,27 @@
+# Métodos numéricos I: raízes, otimização e diferenciação {#sec-cmp-m01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `CMP-M01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-cmp-g01 (*Python para economistas*); @sec-mat-g07 (*Otimização: sem restrições e com restrições de igualdade*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Python para economistas* (CMP-G01); *Otimização: sem restrições e com restrições de igualdade* (MAT-G07)
+:::
+
+**Leituras principais:** @judd1998, @miranda2002
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Bisseção, Newton e quase-Newton
+2. Otimização sem derivadas
+3. Diferenciação numérica e automática
+4. Sistemas não lineares
+5. Condicionamento e erros de ponto flutuante
+:::

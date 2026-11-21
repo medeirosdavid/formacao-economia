@@ -1,0 +1,27 @@
+# Política fiscal: equivalência ricardiana, suavização de impostos e tributação ótima {#sec-mac-m12}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M12`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m06 (*Equilíbrio competitivo recursivo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Equilíbrio competitivo recursivo* (MAC-M06)
+:::
+
+**Leituras principais:** @ljungqvist2018, @barro1979
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Equivalência ricardiana
+2. Suavização de impostos (Barro)
+3. Tributação ótima à Ramsey
+4. Tributação do capital (Chamley–Judd)
+5. Multiplicadores fiscais
+:::

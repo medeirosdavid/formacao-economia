@@ -1,0 +1,26 @@
+# Limite inferior zero, forward guidance e política não convencional {#sec-mac-d07}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAC-D07`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m11 (*Política monetária: regras, determinação e política ótima*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Política monetária: regras, determinação e política ótima* (MAC-M11)
+:::
+
+**Leituras principais:** @gali2015, @woodford2003
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. O limite inferior da taxa de juros
+2. Armadilha da liquidez
+3. Forward guidance e seu enigma
+4. Afrouxamento quantitativo
+:::

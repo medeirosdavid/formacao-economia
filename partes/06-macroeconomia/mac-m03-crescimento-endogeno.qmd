@@ -1,0 +1,27 @@
+# Crescimento endógeno {#sec-mac-m03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m01 (*Crescimento neoclássico: Solow e Ramsey–Cass–Koopmans*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Crescimento neoclássico: Solow e Ramsey–Cass–Koopmans* (MAC-M01)
+:::
+
+**Leituras principais:** @acemoglu2009, @barro2004
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Modelo AK
+2. Externalidades e learning-by-doing
+3. Variedade de produtos (Romer)
+4. Crescimento schumpeteriano
+5. Capital humano e Mankiw–Romer–Weil
+:::

@@ -1,0 +1,26 @@
+# Testes ótimos e regiões de confiança {#sec-est-m05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `EST-M05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-m04 (*Inferência estatística: suficiência, verossimilhança e eficiência*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Inferência estatística: suficiência, verossimilhança e eficiência* (EST-M04)
+:::
+
+**Leituras principais:** @casella2002
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Lema de Neyman–Pearson
+2. Testes uniformemente mais poderosos
+3. Razão de verossimilhança
+4. Inversão de testes
+:::

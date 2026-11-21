@@ -1,0 +1,26 @@
+# Equilíbrio geral e teoremas do bem-estar {#sec-mic-m03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MIC-M03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-m01 (*Teoria do consumidor*); @sec-mat-m05 (*Correspondências e teoremas de ponto fixo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Teoria do consumidor* (MIC-M01); *Correspondências e teoremas de ponto fixo* (MAT-M05)
+:::
+
+**Leituras principais:** @mwg1995, @jehle2011
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Economias de troca e produção
+2. Existência de equilíbrio
+3. Primeiro e segundo teoremas do bem-estar
+4. Unicidade e estabilidade
+:::

@@ -1,0 +1,26 @@
+# Modelos de fatores: CAPM, APT e Fama–French {#sec-fin-m05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `FIN-M05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-m03 (*O fator estocástico de desconto*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *O fator estocástico de desconto* (FIN-M03)
+:::
+
+**Leituras principais:** @cochrane2005, @fama1993
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. CAPM como modelo de equilíbrio
+2. Arbitrage Pricing Theory
+3. Fatores de Fama–French
+4. Zoológico de fatores
+:::

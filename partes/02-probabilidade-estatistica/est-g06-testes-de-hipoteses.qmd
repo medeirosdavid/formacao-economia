@@ -1,0 +1,26 @@
+# Testes de hipóteses {#sec-est-g06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `EST-G06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-g05 (*Estimação pontual e intervalar*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Estimação pontual e intervalar* (EST-G05)
+:::
+
+**Leituras principais:** @casella2002, @bussab2017
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Hipóteses, erros e poder
+2. Valor-p
+3. Testes para médias e proporções
+4. Relação entre testes e intervalos
+:::

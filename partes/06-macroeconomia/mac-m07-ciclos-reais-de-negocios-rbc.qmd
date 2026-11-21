@@ -1,0 +1,27 @@
+# Ciclos reais de negócios (RBC) {#sec-mac-m07}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M07`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m06 (*Equilíbrio competitivo recursivo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Equilíbrio competitivo recursivo* (MAC-M06)
+:::
+
+**Leituras principais:** @kydland1982, @romer2019, @ljungqvist2018
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Fatos estilizados dos ciclos
+2. O modelo RBC básico
+3. Calibração
+4. Log-linearização e impulso-resposta
+5. Críticas e extensões
+:::

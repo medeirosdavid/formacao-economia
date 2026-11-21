@@ -1,0 +1,27 @@
+# Cadeias de Markov {#sec-est-d01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `EST-D01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*); @sec-mat-m02 (*Álgebra linear II: autovalores, decomposições e formas quadráticas*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Esperança, momentos e distribuições conjuntas* (EST-G03); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02)
+:::
+
+**Leituras principais:** @ljungqvist2018, @durrett2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Matriz de transição
+2. Distribuições estacionárias
+3. Irredutibilidade, aperiodicidade e ergodicidade
+4. Cadeias em espaço contínuo
+5. Aplicação: ciclos de negócios
+:::

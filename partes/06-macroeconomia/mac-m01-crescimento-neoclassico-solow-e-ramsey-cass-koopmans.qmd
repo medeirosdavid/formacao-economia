@@ -1,0 +1,27 @@
+# Crescimento neoclássico: Solow e Ramsey–Cass–Koopmans {#sec-mac-m01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-g02 (*Crescimento de longo prazo: fatos e o modelo de Solow*); @sec-mat-d01 (*Cálculo das variações e controle ótimo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Crescimento de longo prazo: fatos e o modelo de Solow* (MAC-G02); *Cálculo das variações e controle ótimo* (MAT-D01)
+:::
+
+**Leituras principais:** @acemoglu2009, @romer2019, @barro2004
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Solow em tempo contínuo
+2. Ramsey–Cass–Koopmans: planejador e equilíbrio descentralizado
+3. Equação de Euler e transversalidade
+4. Dinâmica de sela
+5. Política fiscal no modelo de Ramsey
+:::

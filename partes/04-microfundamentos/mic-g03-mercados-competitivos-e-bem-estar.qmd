@@ -1,0 +1,26 @@
+# Mercados competitivos e bem-estar {#sec-mic-g03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MIC-G03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-g01 (*Escolha do consumidor e demanda*); @sec-mic-g02 (*Produção, custos e a firma*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Escolha do consumidor e demanda* (MIC-G01); *Produção, custos e a firma* (MIC-G02)
+:::
+
+**Leituras principais:** @varian2014
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Equilíbrio parcial
+2. Eficiência e excedentes
+3. Caixa de Edgeworth
+4. Externalidades e bens públicos
+:::

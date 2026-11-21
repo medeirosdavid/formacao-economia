@@ -1,0 +1,27 @@
+# Identificação estrutural em VARs {#sec-ecm-d01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `ECM-D01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m11 (*Vetores autorregressivos (VAR)*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Vetores autorregressivos (VAR)* (ECM-M11)
+:::
+
+**Leituras principais:** @kilian2017
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. O problema de identificação
+2. Restrições de curto e longo prazo
+3. Restrições de sinal
+4. Instrumentos externos (proxy-SVAR)
+5. Identificação por heterocedasticidade
+:::

@@ -1,0 +1,27 @@
+# Amostragem e teoremas-limite {#sec-est-g04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `EST-G04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Esperança, momentos e distribuições conjuntas* (EST-G03)
+:::
+
+**Leituras principais:** @degroot2012, @casella2002
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Amostra aleatória e estatísticas
+2. Desigualdades de Markov e Chebyshev
+3. Lei dos grandes números
+4. Teorema central do limite
+5. Distribuições qui-quadrado, t e F
+:::

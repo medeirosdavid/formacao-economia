@@ -1,0 +1,26 @@
+# Preços de estado, mercados completos e não-arbitragem {#sec-fin-m02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `FIN-M02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-m04 (*Equilíbrio geral com tempo e incerteza*); @sec-mat-m03 (*Convexidade e otimização com restrições de desigualdade*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Equilíbrio geral com tempo e incerteza* (MIC-M04); *Convexidade e otimização com restrições de desigualdade* (MAT-M03)
+:::
+
+**Leituras principais:** @back2017, @duffie2001
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Preços de estado
+2. Mercados completos e ativos de Arrow
+3. Teorema fundamental do apreçamento
+4. Medida neutra ao risco
+:::

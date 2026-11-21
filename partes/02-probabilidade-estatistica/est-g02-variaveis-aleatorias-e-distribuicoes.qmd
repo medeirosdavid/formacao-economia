@@ -1,0 +1,26 @@
+# Variáveis aleatórias e distribuições {#sec-est-g02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `EST-G02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-g01 (*Probabilidade: axiomas, condicionamento e Bayes*); @sec-mat-g04 (*Integração e aplicações*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Probabilidade: axiomas, condicionamento e Bayes* (EST-G01); *Integração e aplicações* (MAT-G04)
+:::
+
+**Leituras principais:** @degroot2012, @casella2002
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Variáveis discretas e contínuas
+2. Funções de distribuição e densidade
+3. Distribuições usuais
+4. Transformações de variáveis
+:::

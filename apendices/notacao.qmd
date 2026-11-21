@@ -1,0 +1,75 @@
+# Notação e convenções {#sec-notacao}
+
+Este apêndice fixa a notação usada em **todo** o livro. Quando um capítulo precisar de algo diferente, ele avisa explicitamente; quando um símbolo novo for usado em mais de um capítulo, ele entra aqui (e, se for uma macro, em `tex/macros.tex`).
+
+## Convenções gerais
+
+**Escalares, vetores e matrizes.** Escalares em itálico ($x$, $\beta$, $\sigma^2$); vetores e matrizes em negrito ($\vb{x}$, $\vb{\beta}$, $\vb{X}$). Vetores são sempre **colunas**; $\vb{x}\T$ é o vetor-linha correspondente. $\Id_n$ é a identidade $n \times n$.
+
+**Variáveis aleatórias.** Quando a distinção entre variável aleatória e realização importa (probabilidade e estatística), usamos maiúsculas para a variável ($X$) e minúsculas para a realização ($x$). Em econometria, macro e finanças seguimos o uso corrente: $y_i$, $x_t$, $c_t$ denotam variáveis aleatórias ou seus valores, conforme o contexto.
+
+**Parâmetros e estimadores.** Parâmetros populacionais em letras gregas; estimadores com acento circunflexo ($\hat\beta$, $\hat\sigma^2$). Valores ajustados $\hat y_i$, resíduos $\hat u_i$, erros (não observáveis) $u_i$. O valor verdadeiro de um parâmetro, quando é preciso distingui-lo de um valor genérico, é $\beta_0$ — exceto no modelo de regressão, em que $\beta_0$ é o intercepto; ali o valor verdadeiro não recebe índice especial.
+
+**Índices.** $i = 1, \dots, n$ para unidades de corte transversal; $t = 1, \dots, T$ para o tempo; $j, k$ para regressores, bens ou ativos; $s$ para estados da natureza.
+
+**Logaritmos e taxas.** $\log$ é o logaritmo natural. Variações em pontos percentuais (p.p.) e variações percentuais (%) nunca são confundidas no texto. Em finanças, $R_{t+1}$ é o retorno **bruto** entre $t$ e $t+1$, $r_{t+1} \defeq \log R_{t+1}$ é o log-retorno e $R^e_{t+1} \defeq R_{t+1} - R^f_t$ é o retorno em excesso.
+
+**Tempo em macroeconomia.** Estoques são datados pelo período em que estão **disponíveis para uso**: $k_t$ é o capital usado na produção em $t$ (escolhido em $t-1$); $a_{t+1}$ são os ativos levados de $t$ para $t+1$. Fluxos são datados pelo período em que ocorrem. Expectativas condicionais à informação disponível em $t$: $\E_t[\,\cdot\,] \defeq \E[\,\cdot \mid \Filt_t]$.
+
+**Definições.** "$\defeq$" define o lado esquerdo pelo direito. "$\iff$" e "se, e somente se" são equivalentes.
+
+## Macros
+
+As macros abaixo estão definidas em `tex/macros.tex` e funcionam igualmente no site e no PDF.
+
+| Macro | Resultado | Significado |
+|:--|:--|:--|
+| `\R`, `\N`, `\Z`, `\Q` | $\R, \N, \Z, \Q$ | conjuntos numéricos |
+| `\E`, `\Prob` | $\E, \Prob$ | esperança, probabilidade |
+| `\Var`, `\Cov`, `\Corr`, `\Avar` | $\Var, \Cov, \Corr, \Avar$ | variância, covariância, correlação, variância assintótica |
+| `\Normal(\mu,\sigma^2)` | $\Normal(\mu,\sigma^2)$ | distribuição normal |
+| `\iid` | $\iid$ | independentes e identicamente distribuídas |
+| `\indep` | $X \indep Y$ | independência |
+| `\pto`, `\dto`, `\qcto` | $\pto, \dto, \qcto$ | convergência em probabilidade, em distribuição, quase certa |
+| `\plim` | $\plim_{n\to\infty}$ | limite em probabilidade |
+| `\Filt` | $\Filt_t$ | informação ($\sigma$-álgebra/filtração) |
+| `\vb{x}` | $\vb{x}$, $\vb{X}$ | vetor ou matriz |
+| `\T`, `\inv` | $\vb{X}\T$, $\vb{A}\inv$ | transposta, inversa |
+| `\tr`, `\posto`, `\diag`, `\vecop` | $\tr, \posto, \diag, \vecop$ | traço, posto, diagonal, vetorização |
+| `\Id` | $\Id$ | matriz identidade |
+| `\argmax`, `\argmin` | $\argmax_x$, $\argmin_x$ | maximizador, minimizador |
+| `\dd`, `\pd{f}{x}` | $\dd x$, $\pd{f}{x}$ | diferencial, derivada parcial |
+| `\defeq` | $\defeq$ | definição |
+| `\Lag` | $\Lag$ | operador de defasagem ($\Lag x_t = x_{t-1}$) |
+| `\abs{x}`, `\norm{x}` | $\abs{x}$, $\norm{x}$ | valor absoluto, norma |
+| `\ind{A}` | $\ind{A}$ | função indicadora |
+| `\SQT`, `\SQE`, `\SQR` | $\SQT, \SQE, \SQR$ | somas dos quadrados total, explicada e dos resíduos |
+| `\ep` | $\ep(\hat\beta)$ | erro-padrão |
+
+## Rótulos e referências cruzadas
+
+Todo rótulo começa pelo tipo e pelo código do capítulo, o que garante unicidade no livro inteiro e diz, só de olhar, de onde vem a referência.
+
+| Objeto | Rótulo | Exemplo de uso |
+|:--|:--|:--|
+| Capítulo | `#sec-ecm-g01` | `@sec-ecm-g01` |
+| Seção | `#sec-ecm-g01-gauss-markov` | `@sec-ecm-g01-gauss-markov` |
+| Definição | `#def-ecm-g01-mqo` | `@def-ecm-g01-mqo` |
+| Teorema / Proposição / Lema / Corolário | `#thm-…`, `#prp-…`, `#lem-…`, `#cor-…` | `@thm-ecm-g01-gauss-markov` |
+| Exemplo / Exercício | `#exm-…`, `#exr-…` | `@exr-ecm-g01-1` |
+| Equação | `{#eq-ecm-g01-normais}` | `@eq-ecm-g01-normais` |
+| Figura / Tabela | `#fig-…`, `#tbl-…` | `@fig-ecm-g01-okun` |
+
+## Ambientes: qual usar
+
+| Ambiente | Uso |
+|:--|:--|
+| **Definição** | introduz um objeto ou conceito |
+| **Teorema** | resultado central do capítulo |
+| **Proposição** | resultado de menor porte, mas útil por si só |
+| **Lema** | resultado auxiliar, usado numa demonstração |
+| **Corolário** | consequência imediata de um resultado anterior |
+| **Exemplo** | ilustração concreta |
+| **Observação** | comentário, ressalva ou intuição |
+| **Exercício** + **Solução** | problemas resolvidos ao fim do capítulo |
+| **Demonstração** | prova do resultado imediatamente anterior |

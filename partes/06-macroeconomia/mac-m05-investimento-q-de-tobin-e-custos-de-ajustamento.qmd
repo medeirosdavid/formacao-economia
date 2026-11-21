@@ -1,0 +1,26 @@
+# Investimento: q de Tobin e custos de ajustamento {#sec-mac-m05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-g09 (*Consumo e investimento: microfundamentos*); @sec-mat-d01 (*Cálculo das variações e controle ótimo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Consumo e investimento: microfundamentos* (MAC-G09); *Cálculo das variações e controle ótimo* (MAT-D01)
+:::
+
+**Leituras principais:** @romer2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Custos de ajustamento convexos
+2. q marginal e q médio (Hayashi)
+3. Irreversibilidade e opções reais
+4. Investimento e incerteza
+:::

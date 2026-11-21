@@ -1,0 +1,27 @@
+# Equilíbrio geral com tempo e incerteza {#sec-mic-m04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MIC-M04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-m03 (*Equilíbrio geral e teoremas do bem-estar*); @sec-mic-m02 (*Escolha sob incerteza*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Equilíbrio geral e teoremas do bem-estar* (MIC-M03); *Escolha sob incerteza* (MIC-M02)
+:::
+
+**Leituras principais:** @mwg1995, @ljungqvist2018
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Mercados de Arrow–Debreu
+2. Mercados sequenciais e títulos de Arrow
+3. Equivalência entre as estruturas de mercado
+4. Compartilhamento de risco
+5. Mercados incompletos
+:::

@@ -1,0 +1,27 @@
+# Estimação de modelos DSGE {#sec-ecm-d05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `ECM-D05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-d03 (*Modelos de espaço de estados e filtro de Kalman*); @sec-ecm-d04 (*Econometria bayesiana e MCMC*); @sec-cmp-d02 (*Métodos de perturbação e projeção*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Modelos de espaço de estados e filtro de Kalman* (ECM-D03); *Econometria bayesiana e MCMC* (ECM-D04); *Métodos de perturbação e projeção* (CMP-D02)
+:::
+
+**Leituras principais:** @herbst2016, @fernandezvillaverde2016, @canova2007
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Solução linearizada e espaço de estados
+2. Verossimilhança via filtro de Kalman
+3. Estimação bayesiana com Random-Walk Metropolis
+4. Identificação em DSGE
+5. Calibração e momentos simulados
+:::

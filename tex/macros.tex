@@ -1,0 +1,62 @@
+% =============================================================================
+% MACROS DE NOTAÇÃO — fonte única para HTML (MathJax) e PDF (LaTeX).
+% -----------------------------------------------------------------------------
+% • PDF: este arquivo entra no preâmbulo (include-in-header em _quarto.yml).
+% • HTML: scripts/gerar_estrutura.py converte este arquivo em
+%   estilos/mathjax-macros.html, que configura o MathJax em todas as páginas.
+% Regras: use apenas \newcommand (nada de \DeclareMathOperator ou \def) e
+% documente cada macro nova no apêndice de notação.
+% =============================================================================
+
+% ---- Conjuntos numéricos
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+% ---- Probabilidade e estatística
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Corr}{\operatorname{Corr}}
+\newcommand{\Avar}{\operatorname{Avar}}
+\newcommand{\Normal}{\mathcal{N}}
+\newcommand{\iid}{\overset{\text{iid}}{\sim}}
+\newcommand{\indep}{\perp\!\!\!\perp}
+\newcommand{\pto}{\xrightarrow{\;p\;}}
+\newcommand{\dto}{\xrightarrow{\;d\;}}
+\newcommand{\qcto}{\xrightarrow{\;\text{q.c.}\;}}
+\newcommand{\plim}{\operatorname*{plim}}
+\newcommand{\Filt}{\mathcal{F}}
+
+% ---- Álgebra linear
+\newcommand{\vb}[1]{\boldsymbol{#1}}
+\newcommand{\T}{^{\top}}
+\newcommand{\inv}{^{-1}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\posto}{\operatorname{posto}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\vecop}{\operatorname{vec}}
+\newcommand{\Id}{\boldsymbol{I}}
+
+% ---- Otimização e cálculo
+\newcommand{\argmax}{\operatorname*{arg\,max}}
+\newcommand{\argmin}{\operatorname*{arg\,min}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\defeq}{\mathrel{:=}}
+
+% ---- Séries temporais
+\newcommand{\Lag}{\mathrm{L}}
+
+% ---- Diversos
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\ind}[1]{\mathbf{1}\{#1\}}
+
+% ---- Econometria (siglas em português)
+\newcommand{\SQT}{\mathrm{SQT}}
+\newcommand{\SQE}{\mathrm{SQE}}
+\newcommand{\SQR}{\mathrm{SQR}}
+\newcommand{\ep}{\operatorname{ep}}

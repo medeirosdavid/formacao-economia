@@ -1,0 +1,27 @@
+# Teoria do consumidor {#sec-mic-m01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MIC-M01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-g01 (*Escolha do consumidor e demanda*); @sec-mat-m04 (*Estática comparativa: função implícita, envelope e teorema do máximo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Escolha do consumidor e demanda* (MIC-G01); *Estática comparativa: função implícita, envelope e teorema do máximo* (MAT-M04)
+:::
+
+**Leituras principais:** @mwg1995, @jehle2011
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Preferências e representação
+2. Utilidade indireta e função dispêndio
+3. Dualidade, Roy e Shephard
+4. Equação de Slutsky
+5. Agregação
+:::

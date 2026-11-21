@@ -1,0 +1,28 @@
+# Álgebra linear I: vetores, matrizes e sistemas lineares {#sec-mat-g05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAT-G05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g01 (*Lógica, conjuntos e métodos de demonstração*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Lógica, conjuntos e métodos de demonstração* (MAT-G01)
+:::
+
+**Leituras principais:** @strang2016, @simon1994
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Vetores e o espaço $\mathbb{R}^n$
+2. Operações com matrizes
+3. Eliminação gaussiana e posto
+4. Determinante e inversa
+5. Independência linear, base e dimensão
+6. Aplicação: modelo insumo-produto
+:::

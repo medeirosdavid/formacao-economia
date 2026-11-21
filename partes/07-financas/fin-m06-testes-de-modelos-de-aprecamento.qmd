@@ -1,0 +1,26 @@
+# Testes de modelos de apreçamento {#sec-fin-m06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `FIN-M06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-m05 (*Modelos de fatores: CAPM, APT e Fama–French*); @sec-ecm-m06 (*Método generalizado dos momentos (GMM)*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Modelos de fatores: CAPM, APT e Fama–French* (FIN-M05); *Método generalizado dos momentos (GMM)* (ECM-M06)
+:::
+
+**Leituras principais:** @cochrane2005, @fama1973, @campbell1997
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Regressões de séries temporais e teste GRS
+2. Regressões cross-section
+3. Fama–MacBeth
+4. GMM em apreçamento de ativos
+:::

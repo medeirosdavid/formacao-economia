@@ -1,0 +1,26 @@
+# Discretização de processos estocásticos {#sec-cmp-m04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `CMP-M04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-cmp-m03 (*Simulação e Monte Carlo*); @sec-est-d01 (*Cadeias de Markov*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Simulação e Monte Carlo* (CMP-M03); *Cadeias de Markov* (EST-D01)
+:::
+
+**Leituras principais:** @quantecon, @heer2009
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Método de Tauchen
+2. Método de Rouwenhorst
+3. Comparação de precisão
+4. Processos persistentes
+:::

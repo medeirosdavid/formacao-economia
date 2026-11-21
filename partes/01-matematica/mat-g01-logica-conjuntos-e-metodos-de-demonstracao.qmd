@@ -1,0 +1,20 @@
+# Lógica, conjuntos e métodos de demonstração {#sec-mat-g01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAT-G01`
+
+**Pré-requisitos:** nenhum
+
+**Leituras principais:** @simon1994, @lima1989
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Proposições, conectivos e quantificadores
+2. Conjuntos, relações e funções
+3. Cardinalidade
+4. Demonstração direta, contrapositiva, por absurdo e por indução
+:::

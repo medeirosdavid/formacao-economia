@@ -1,0 +1,26 @@
+# Gerações sobrepostas {#sec-mac-m02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m01 (*Crescimento neoclássico: Solow e Ramsey–Cass–Koopmans*); @sec-mic-m03 (*Equilíbrio geral e teoremas do bem-estar*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Crescimento neoclássico: Solow e Ramsey–Cass–Koopmans* (MAC-M01); *Equilíbrio geral e teoremas do bem-estar* (MIC-M03)
+:::
+
+**Leituras principais:** @acemoglu2009, @romer2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. O modelo de Diamond
+2. Ineficiência dinâmica
+3. Previdência: repartição e capitalização
+4. Dívida pública e bolhas
+:::

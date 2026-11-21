@@ -1,0 +1,27 @@
+# Martingais {#sec-est-d03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `EST-D03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-m02 (*Esperança condicional*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Esperança condicional* (EST-M02)
+:::
+
+**Leituras principais:** @durrett2019, @shreve2004
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Filtrações e tempos de parada
+2. Martingais em tempo discreto
+3. Teorema da parada opcional
+4. Convergência de martingais
+5. TCL para diferenças de martingal
+:::

@@ -1,0 +1,27 @@
+# Estática comparativa: função implícita, envelope e teorema do máximo {#sec-mat-m04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-m03 (*Convexidade e otimização com restrições de desigualdade*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Convexidade e otimização com restrições de desigualdade* (MAT-M03)
+:::
+
+**Leituras principais:** @sundaram1996, @simon1994
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Teorema da função implícita
+2. Teorema do envelope
+3. Correspondências e continuidade
+4. Teorema do máximo de Berge
+5. Estática comparativa monótona
+:::

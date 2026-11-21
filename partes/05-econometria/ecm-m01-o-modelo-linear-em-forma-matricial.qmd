@@ -1,0 +1,27 @@
+# O modelo linear em forma matricial {#sec-ecm-m01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `ECM-M01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-g02 (*Regressão linear múltipla*); @sec-mat-m02 (*Álgebra linear II: autovalores, decomposições e formas quadráticas*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Regressão linear múltipla* (ECM-G02); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02)
+:::
+
+**Leituras principais:** @hayashi2000, @hansen2022
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. MQO como projeção
+2. Teorema de Frisch–Waugh–Lovell
+3. Gauss–Markov geral
+4. Distribuição exata sob normalidade
+5. Mínimos quadrados restritos
+:::

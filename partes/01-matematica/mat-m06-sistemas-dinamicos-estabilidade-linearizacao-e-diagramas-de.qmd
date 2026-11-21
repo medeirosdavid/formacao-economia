@@ -1,0 +1,27 @@
+# Sistemas dinâmicos: estabilidade, linearização e diagramas de fase {#sec-mat-m06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g08 (*Equações em diferenças e equações diferenciais lineares*); @sec-mat-m02 (*Álgebra linear II: autovalores, decomposições e formas quadráticas*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Equações em diferenças e equações diferenciais lineares* (MAT-G08); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02)
+:::
+
+**Leituras principais:** @delafuente2000, @acemoglu2009
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Sistemas lineares em tempo discreto e contínuo
+2. Linearização e teorema de Hartman–Grobman
+3. Pontos de sela e variedades estáveis
+4. Diagramas de fase
+5. Condições de Blanchard–Kahn
+:::

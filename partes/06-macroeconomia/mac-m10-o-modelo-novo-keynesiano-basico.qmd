@@ -1,0 +1,27 @@
+# O modelo Novo-Keynesiano básico {#sec-mac-m10}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M10`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m07 (*Ciclos reais de negócios (RBC)*); @sec-mac-m09 (*Moeda em equilíbrio geral*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Ciclos reais de negócios (RBC)* (MAC-M07); *Moeda em equilíbrio geral* (MAC-M09)
+:::
+
+**Leituras principais:** @gali2015, @woodford2003
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Competição monopolística
+2. Rigidez de preços à Calvo
+3. Curva de Phillips Novo-Keynesiana
+4. IS dinâmica
+5. Equilíbrio com regra de juros
+:::

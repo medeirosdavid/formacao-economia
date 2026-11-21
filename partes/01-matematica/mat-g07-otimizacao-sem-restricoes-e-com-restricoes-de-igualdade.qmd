@@ -1,0 +1,28 @@
+# Otimização: sem restrições e com restrições de igualdade {#sec-mat-g07}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAT-G07`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g06 (*Cálculo em várias variáveis*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Cálculo em várias variáveis* (MAT-G06)
+:::
+
+**Leituras principais:** @simon1994, @sundaram1996
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Condições de primeira e segunda ordem
+2. Concavidade e ótimos globais
+3. Método de Lagrange
+4. Interpretação dos multiplicadores
+5. Hessiana orlada
+6. Aplicações: consumidor e firma
+:::

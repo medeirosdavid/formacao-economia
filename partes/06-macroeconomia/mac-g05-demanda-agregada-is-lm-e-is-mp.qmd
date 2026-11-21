@@ -1,0 +1,26 @@
+# Demanda agregada: IS-LM e IS-MP {#sec-mac-g05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAC-G05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-g04 (*Moeda, inflação e bancos centrais*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Moeda, inflação e bancos centrais* (MAC-G04)
+:::
+
+**Leituras principais:** @blanchard2021, @mankiw2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Mercado de bens e curva IS
+2. Mercado monetário: LM e regra de juros (MP)
+3. Equilíbrio e multiplicadores
+4. Políticas monetária e fiscal
+:::

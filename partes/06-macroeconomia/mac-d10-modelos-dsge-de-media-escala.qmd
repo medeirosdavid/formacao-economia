@@ -1,0 +1,26 @@
+# Modelos DSGE de média escala {#sec-mac-d10}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAC-D10`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m11 (*Política monetária: regras, determinação e política ótima*); @sec-mac-m05 (*Investimento: q de Tobin e custos de ajustamento*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Política monetária: regras, determinação e política ótima* (MAC-M11); *Investimento: q de Tobin e custos de ajustamento* (MAC-M05)
+:::
+
+**Leituras principais:** @christiano2005, @gali2015
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Hábitos, indexação e rigidez salarial
+2. Custos de ajuste do investimento e utilização
+3. Christiano–Eichenbaum–Evans
+4. Modelos de bancos centrais
+:::

@@ -1,0 +1,26 @@
+# Inferência no modelo de regressão {#sec-ecm-g03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `ECM-G03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-g02 (*Regressão linear múltipla*); @sec-est-g06 (*Testes de hipóteses*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Regressão linear múltipla* (ECM-G02); *Testes de hipóteses* (EST-G06)
+:::
+
+**Leituras principais:** @wooldridge2019, @stock2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Distribuição do MQO sob normalidade
+2. Testes t e intervalos de confiança
+3. Testes F e restrições lineares
+4. Inferência assintótica
+:::

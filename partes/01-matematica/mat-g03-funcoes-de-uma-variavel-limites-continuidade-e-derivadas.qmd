@@ -1,0 +1,28 @@
+# Funções de uma variável: limites, continuidade e derivadas {#sec-mat-g03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAT-G03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g02 (*Números reais, sequências e séries*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Números reais, sequências e séries* (MAT-G02)
+:::
+
+**Leituras principais:** @simon1994, @sydsaeter2016
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Limites e continuidade
+2. Valor intermediário e Weierstrass
+3. Derivada e regras de derivação
+4. Teorema do valor médio
+5. Fórmula de Taylor
+6. Concavidade, elasticidade e aplicações
+:::

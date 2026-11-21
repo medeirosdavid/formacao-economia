@@ -1,0 +1,28 @@
+# Probabilidade com teoria da medida {#sec-est-m01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `EST-M01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*); @sec-mat-m01 (*Análise real em $\mathbb{R}^n$ e espaços métricos*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Esperança, momentos e distribuições conjuntas* (EST-G03); *Análise real em $\mathbb{R}^n$ e espaços métricos* (MAT-M01)
+:::
+
+**Leituras principais:** @billingsley1995, @durrett2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. $\sigma$-álgebras e medidas
+2. Funções mensuráveis
+3. Integral de Lebesgue
+4. Convergência monótona e dominada
+5. Fubini
+6. Radon–Nikodym
+:::

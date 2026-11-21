@@ -1,0 +1,28 @@
+# Cálculo das variações e controle ótimo {#sec-mat-d01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAT-D01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-m03 (*Convexidade e otimização com restrições de desigualdade*); @sec-mat-m06 (*Sistemas dinâmicos: estabilidade, linearização e diagramas de fase*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Convexidade e otimização com restrições de desigualdade* (MAT-M03); *Sistemas dinâmicos: estabilidade, linearização e diagramas de fase* (MAT-M06)
+:::
+
+**Leituras principais:** @kamien1991, @acemoglu2009
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Equação de Euler–Lagrange
+2. Condições de transversalidade
+3. Princípio do máximo de Pontryagin
+4. Hamiltoniano a valor corrente
+5. Horizonte infinito
+6. Aplicação: Ramsey
+:::

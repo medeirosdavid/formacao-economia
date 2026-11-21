@@ -1,0 +1,27 @@
+# Oferta agregada, curva de Phillips e expectativas {#sec-mac-g06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAC-G06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-g03 (*Mercado de trabalho e desemprego*); @sec-mac-g05 (*Demanda agregada: IS-LM e IS-MP*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Mercado de trabalho e desemprego* (MAC-G03); *Demanda agregada: IS-LM e IS-MP* (MAC-G05)
+:::
+
+**Leituras principais:** @blanchard2021, @mankiw2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Curva de Phillips e suas versões
+2. Expectativas adaptativas e racionais
+3. Modelo OA-DA
+4. Desinflação e taxa de sacrifício
+5. Regime de metas de inflação
+:::

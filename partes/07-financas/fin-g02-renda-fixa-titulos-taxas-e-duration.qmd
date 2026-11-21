@@ -1,0 +1,27 @@
+# Renda fixa: títulos, taxas e duration {#sec-fin-g02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `FIN-G02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-g01 (*Valor do dinheiro no tempo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Valor do dinheiro no tempo* (FIN-G01)
+:::
+
+**Leituras principais:** @bodie2021
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Preço e taxa de um título
+2. Curva de juros: spot, a termo e par
+3. Duration e convexidade
+4. Títulos públicos brasileiros: LTN, NTN-F, NTN-B, LFT
+5. A curva de juros DI
+:::

@@ -1,0 +1,27 @@
+# Moeda em equilíbrio geral {#sec-mac-m09}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M09`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m06 (*Equilíbrio competitivo recursivo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Equilíbrio competitivo recursivo* (MAC-M06)
+:::
+
+**Leituras principais:** @walsh2017, @ljungqvist2018
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Moeda na utilidade
+2. Cash-in-advance
+3. Moeda em gerações sobrepostas
+4. Regra de Friedman
+5. Inflação ótima
+:::

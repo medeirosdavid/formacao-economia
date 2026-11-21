@@ -1,0 +1,26 @@
+# Dados em painel: introdução {#sec-ecm-g07}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `ECM-G07`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-g03 (*Inferência no modelo de regressão*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Inferência no modelo de regressão* (ECM-G03)
+:::
+
+**Leituras principais:** @wooldridge2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Primeiras diferenças
+2. Efeitos fixos
+3. Efeitos aleatórios
+4. Diferenças em diferenças
+:::

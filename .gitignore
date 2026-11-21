@@ -1,0 +1,20 @@
+# Saídas de renderização (o site é publicado pelo GitHub Actions)
+_book/
+_pdf/
+_anki/
+/.quarto/
+*.tex
+!tex/*.tex
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# Sistema
+.DS_Store
+
+# Versionar: _freeze/ (resultados congelados do código) e dados/cache/ (séries baixadas)
+
+**/*.quarto_ipynb

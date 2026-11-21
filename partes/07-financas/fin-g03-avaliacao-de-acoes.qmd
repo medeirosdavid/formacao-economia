@@ -1,0 +1,26 @@
+# Avaliação de ações {#sec-fin-g03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `FIN-G03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-g01 (*Valor do dinheiro no tempo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Valor do dinheiro no tempo* (FIN-G01)
+:::
+
+**Leituras principais:** @berk2020, @bodie2021
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Modelo de desconto de dividendos
+2. Modelo de Gordon
+3. Fluxo de caixa livre
+4. Múltiplos
+:::

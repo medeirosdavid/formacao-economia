@@ -1,0 +1,26 @@
+# Teoria dos jogos: jogos dinâmicos e bayesianos {#sec-mic-m05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MIC-M05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-g05 (*Introdução à teoria dos jogos*); @sec-mat-m05 (*Correspondências e teoremas de ponto fixo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Introdução à teoria dos jogos* (MIC-G05); *Correspondências e teoremas de ponto fixo* (MAT-M05)
+:::
+
+**Leituras principais:** @fudenberg1991, @osborne2020
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Perfeição em subjogos
+2. Jogos repetidos
+3. Jogos bayesianos
+4. Equilíbrio bayesiano perfeito
+:::

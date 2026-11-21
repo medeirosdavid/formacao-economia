@@ -1,0 +1,27 @@
+# Raiz unitária e cointegração {#sec-ecm-m10}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `ECM-M10`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m09 (*Modelos ARMA e previsão*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Modelos ARMA e previsão* (ECM-M09)
+:::
+
+**Leituras principais:** @hamilton1994
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Processos integrados e regressão espúria
+2. Testes de Dickey–Fuller e KPSS
+3. Cointegração e Engle–Granger
+4. Modelo de correção de erros
+5. Johansen
+:::

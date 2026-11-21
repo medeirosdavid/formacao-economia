@@ -1,0 +1,27 @@
+# Modos de convergência e teoremas-limite {#sec-est-m03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `EST-M03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-m01 (*Probabilidade com teoria da medida*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Probabilidade com teoria da medida* (EST-M01)
+:::
+
+**Leituras principais:** @durrett2019, @hansen2022
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Convergência quase certa, em probabilidade, em $L^p$ e em distribuição
+2. Teorema do mapeamento contínuo e Slutsky
+3. LGN forte e fraca
+4. TCL de Lindeberg–Lévy e Lindeberg–Feller
+5. Método delta
+:::

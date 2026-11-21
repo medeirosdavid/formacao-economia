@@ -1,0 +1,27 @@
+# Apreçamento baseado em consumo e o enigma do prêmio das ações {#sec-fin-m04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `FIN-M04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-m03 (*O fator estocástico de desconto*); @sec-mac-m04 (*Consumo: renda permanente, ciclo de vida e poupança precaucional*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *O fator estocástico de desconto* (FIN-M03); *Consumo: renda permanente, ciclo de vida e poupança precaucional* (MAC-M04)
+:::
+
+**Leituras principais:** @mehra1985, @cochrane2005, @campbell2018
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. CCAPM
+2. Modelo de Lucas (árvore)
+3. Enigma do prêmio das ações
+4. Enigma da taxa livre de risco
+5. Estimação por GMM da equação de Euler
+:::

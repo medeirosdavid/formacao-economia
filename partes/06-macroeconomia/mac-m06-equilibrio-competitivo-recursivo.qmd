@@ -1,0 +1,26 @@
+# Equilíbrio competitivo recursivo {#sec-mac-m06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-m04 (*Equilíbrio geral com tempo e incerteza*); @sec-mat-d03 (*Programação dinâmica estocástica*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Equilíbrio geral com tempo e incerteza* (MIC-M04); *Programação dinâmica estocástica* (MAT-D03)
+:::
+
+**Leituras principais:** @ljungqvist2018, @stokey1989
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Problema do planejador e equilíbrio descentralizado
+2. Lei de movimento agregada
+3. Definição de ECR
+4. Teoremas do bem-estar em economias dinâmicas
+:::

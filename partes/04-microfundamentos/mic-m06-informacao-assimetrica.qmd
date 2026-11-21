@@ -1,0 +1,26 @@
+# Informação assimétrica {#sec-mic-m06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MIC-M06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-m02 (*Escolha sob incerteza*); @sec-mic-m05 (*Teoria dos jogos: jogos dinâmicos e bayesianos*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Escolha sob incerteza* (MIC-M02); *Teoria dos jogos: jogos dinâmicos e bayesianos* (MIC-M05)
+:::
+
+**Leituras principais:** @mwg1995, @bolton2005
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Seleção adversa
+2. Sinalização e screening
+3. Risco moral
+4. Aplicações a crédito e seguros
+:::

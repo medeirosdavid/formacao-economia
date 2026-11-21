@@ -1,0 +1,27 @@
+# Economias abertas pequenas e emergentes {#sec-mac-d05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAC-D05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m07 (*Ciclos reais de negócios (RBC)*); @sec-mac-g07 (*Economia aberta: câmbio, balanço de pagamentos e Mundell–Fleming*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Ciclos reais de negócios (RBC)* (MAC-M07); *Economia aberta: câmbio, balanço de pagamentos e Mundell–Fleming* (MAC-G07)
+:::
+
+**Leituras principais:** @uribe2017, @obstfeld1996
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Modelo de economia aberta pequena
+2. Fechamento de modelos de economia aberta
+3. Ciclos em economias emergentes
+4. Sudden stops
+5. NK em economia aberta
+:::

@@ -1,0 +1,27 @@
+# Processos estacionários, ergodicidade e representação de Wold {#sec-est-d02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `EST-D02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-m03 (*Modos de convergência e teoremas-limite*); @sec-mat-d04 (*Espaços de funções e operadores*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Modos de convergência e teoremas-limite* (EST-M03); *Espaços de funções e operadores* (MAT-D04)
+:::
+
+**Leituras principais:** @hamilton1994, @hansen2022
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Estacionariedade forte e fraca
+2. Ergodicidade e LGN para dependência
+3. Processos lineares
+4. Teorema de Wold
+5. Densidade espectral
+:::

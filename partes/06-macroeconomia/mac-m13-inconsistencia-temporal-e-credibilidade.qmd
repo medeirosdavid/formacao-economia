@@ -1,0 +1,26 @@
+# Inconsistência temporal e credibilidade {#sec-mac-m13}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M13`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m11 (*Política monetária: regras, determinação e política ótima*); @sec-mic-m05 (*Teoria dos jogos: jogos dinâmicos e bayesianos*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Política monetária: regras, determinação e política ótima* (MAC-M11); *Teoria dos jogos: jogos dinâmicos e bayesianos* (MIC-M05)
+:::
+
+**Leituras principais:** @kydland1977, @walsh2017
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Kydland–Prescott
+2. Barro–Gordon e viés inflacionário
+3. Reputação
+4. Independência do banco central e delegação
+:::

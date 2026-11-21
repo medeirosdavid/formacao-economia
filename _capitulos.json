@@ -1,0 +1,866 @@
+{
+ "MAT-G01": {
+  "titulo": "Lógica, conjuntos e métodos de demonstração",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-G02": {
+  "titulo": "Números reais, sequências e séries",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-G03": {
+  "titulo": "Funções de uma variável: limites, continuidade e derivadas",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-G04": {
+  "titulo": "Integração e aplicações",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-G05": {
+  "titulo": "Álgebra linear I: vetores, matrizes e sistemas lineares",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-G06": {
+  "titulo": "Cálculo em várias variáveis",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-G07": {
+  "titulo": "Otimização: sem restrições e com restrições de igualdade",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-G08": {
+  "titulo": "Equações em diferenças e equações diferenciais lineares",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-M01": {
+  "titulo": "Análise real em $\\mathbb{R}^n$ e espaços métricos",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-M02": {
+  "titulo": "Álgebra linear II: autovalores, decomposições e formas quadráticas",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-M03": {
+  "titulo": "Convexidade e otimização com restrições de desigualdade",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-M04": {
+  "titulo": "Estática comparativa: função implícita, envelope e teorema do máximo",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-M05": {
+  "titulo": "Correspondências e teoremas de ponto fixo",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-M06": {
+  "titulo": "Sistemas dinâmicos: estabilidade, linearização e diagramas de fase",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-D01": {
+  "titulo": "Cálculo das variações e controle ótimo",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-D02": {
+  "titulo": "Programação dinâmica determinística",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-D03": {
+  "titulo": "Programação dinâmica estocástica",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-D04": {
+  "titulo": "Espaços de funções e operadores",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-G01": {
+  "titulo": "Probabilidade: axiomas, condicionamento e Bayes",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-G02": {
+  "titulo": "Variáveis aleatórias e distribuições",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-G03": {
+  "titulo": "Esperança, momentos e distribuições conjuntas",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-G04": {
+  "titulo": "Amostragem e teoremas-limite",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-G05": {
+  "titulo": "Estimação pontual e intervalar",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-G06": {
+  "titulo": "Testes de hipóteses",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-M01": {
+  "titulo": "Probabilidade com teoria da medida",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-M02": {
+  "titulo": "Esperança condicional",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-M03": {
+  "titulo": "Modos de convergência e teoremas-limite",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-M04": {
+  "titulo": "Inferência estatística: suficiência, verossimilhança e eficiência",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-M05": {
+  "titulo": "Testes ótimos e regiões de confiança",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-M06": {
+  "titulo": "Inferência bayesiana",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-D01": {
+  "titulo": "Cadeias de Markov",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-D02": {
+  "titulo": "Processos estacionários, ergodicidade e representação de Wold",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-D03": {
+  "titulo": "Martingais",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "EST-D04": {
+  "titulo": "Movimento browniano e cálculo de Itô",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "CMP-G01": {
+  "titulo": "Python para economistas",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "CMP-G02": {
+  "titulo": "Dados: pandas, APIs públicas brasileiras e visualização",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "CMP-G03": {
+  "titulo": "Reprodutibilidade: Git, Quarto e ambientes",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "CMP-M01": {
+  "titulo": "Métodos numéricos I: raízes, otimização e diferenciação",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "CMP-M02": {
+  "titulo": "Métodos numéricos II: integração, interpolação e aproximação",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "CMP-M03": {
+  "titulo": "Simulação e Monte Carlo",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "CMP-M04": {
+  "titulo": "Discretização de processos estocásticos",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "CMP-D01": {
+  "titulo": "Solução de modelos dinâmicos: VFI, PFI e EGM",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "CMP-D02": {
+  "titulo": "Métodos de perturbação e projeção",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "CMP-D03": {
+  "titulo": "Modelos de agentes heterogêneos: distribuição e equilíbrio",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "CMP-D04": {
+  "titulo": "Computação de alto desempenho",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-G01": {
+  "titulo": "Escolha do consumidor e demanda",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-G02": {
+  "titulo": "Produção, custos e a firma",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-G03": {
+  "titulo": "Mercados competitivos e bem-estar",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-G04": {
+  "titulo": "Escolha intertemporal",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-G05": {
+  "titulo": "Introdução à teoria dos jogos",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-M01": {
+  "titulo": "Teoria do consumidor",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-M02": {
+  "titulo": "Escolha sob incerteza",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-M03": {
+  "titulo": "Equilíbrio geral e teoremas do bem-estar",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-M04": {
+  "titulo": "Equilíbrio geral com tempo e incerteza",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-M05": {
+  "titulo": "Teoria dos jogos: jogos dinâmicos e bayesianos",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-M06": {
+  "titulo": "Informação assimétrica",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MIC-D01": {
+  "titulo": "Desenho de mecanismos e contratos dinâmicos",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-G01": {
+  "titulo": "Regressão linear simples",
+  "nivel": "G",
+  "status": "rascunho",
+  "no_pdf": true
+ },
+ "ECM-G02": {
+  "titulo": "Regressão linear múltipla",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-G03": {
+  "titulo": "Inferência no modelo de regressão",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-G04": {
+  "titulo": "Especificação: forma funcional, variáveis binárias e interações",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-G05": {
+  "titulo": "Heterocedasticidade e autocorrelação",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-G06": {
+  "titulo": "Endogeneidade e variáveis instrumentais",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-G07": {
+  "titulo": "Dados em painel: introdução",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-G08": {
+  "titulo": "Séries temporais: introdução",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-G09": {
+  "titulo": "Modelos de escolha binária",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-M01": {
+  "titulo": "O modelo linear em forma matricial",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-M02": {
+  "titulo": "Teoria assintótica do MQO e inferência robusta",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-M03": {
+  "titulo": "Mínimos quadrados generalizados",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-M04": {
+  "titulo": "Variáveis instrumentais: teoria e instrumentos fracos",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-M05": {
+  "titulo": "Máxima verossimilhança e a trindade de testes",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-M06": {
+  "titulo": "Método generalizado dos momentos (GMM)",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-M07": {
+  "titulo": "Dados em painel: efeitos fixos, aleatórios e painéis dinâmicos",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-M08": {
+  "titulo": "Inferência causal",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-M09": {
+  "titulo": "Modelos ARMA e previsão",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-M10": {
+  "titulo": "Raiz unitária e cointegração",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-M11": {
+  "titulo": "Vetores autorregressivos (VAR)",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-D01": {
+  "titulo": "Identificação estrutural em VARs",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-D02": {
+  "titulo": "Projeções locais",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-D03": {
+  "titulo": "Modelos de espaço de estados e filtro de Kalman",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-D04": {
+  "titulo": "Econometria bayesiana e MCMC",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-D05": {
+  "titulo": "Estimação de modelos DSGE",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-D06": {
+  "titulo": "Volatilidade: ARCH, GARCH e volatilidade estocástica",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-D07": {
+  "titulo": "Bootstrap e inferência por reamostragem",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-D08": {
+  "titulo": "Alta dimensão: fatores, regularização e aprendizado de máquina",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-D09": {
+  "titulo": "Previsão, avaliação de previsões e nowcasting",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "ECM-D10": {
+  "titulo": "Modelos não lineares de séries temporais",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-G01": {
+  "titulo": "Contas nacionais e medidas macroeconômicas",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-G02": {
+  "titulo": "Crescimento de longo prazo: fatos e o modelo de Solow",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-G03": {
+  "titulo": "Mercado de trabalho e desemprego",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-G04": {
+  "titulo": "Moeda, inflação e bancos centrais",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-G05": {
+  "titulo": "Demanda agregada: IS-LM e IS-MP",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-G06": {
+  "titulo": "Oferta agregada, curva de Phillips e expectativas",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-G07": {
+  "titulo": "Economia aberta: câmbio, balanço de pagamentos e Mundell–Fleming",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-G08": {
+  "titulo": "Política fiscal e dívida pública",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-G09": {
+  "titulo": "Consumo e investimento: microfundamentos",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-G10": {
+  "titulo": "Macroeconomia brasileira: dos planos de estabilização ao regime de metas",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M01": {
+  "titulo": "Crescimento neoclássico: Solow e Ramsey–Cass–Koopmans",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M02": {
+  "titulo": "Gerações sobrepostas",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M03": {
+  "titulo": "Crescimento endógeno",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M04": {
+  "titulo": "Consumo: renda permanente, ciclo de vida e poupança precaucional",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M05": {
+  "titulo": "Investimento: q de Tobin e custos de ajustamento",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M06": {
+  "titulo": "Equilíbrio competitivo recursivo",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M07": {
+  "titulo": "Ciclos reais de negócios (RBC)",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M08": {
+  "titulo": "Busca e matching: McCall e Diamond–Mortensen–Pissarides",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M09": {
+  "titulo": "Moeda em equilíbrio geral",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M10": {
+  "titulo": "O modelo Novo-Keynesiano básico",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M11": {
+  "titulo": "Política monetária: regras, determinação e política ótima",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M12": {
+  "titulo": "Política fiscal: equivalência ricardiana, suavização de impostos e tributação ótima",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-M13": {
+  "titulo": "Inconsistência temporal e credibilidade",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-D01": {
+  "titulo": "Agentes heterogêneos I: Bewley–Huggett–Aiyagari",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-D02": {
+  "titulo": "Agentes heterogêneos II: risco agregado e Krusell–Smith",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-D03": {
+  "titulo": "HANK: política monetária com agentes heterogêneos",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-D04": {
+  "titulo": "Fricções financeiras e o acelerador financeiro",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-D05": {
+  "titulo": "Economias abertas pequenas e emergentes",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-D06": {
+  "titulo": "Dívida soberana e default",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-D07": {
+  "titulo": "Limite inferior zero, forward guidance e política não convencional",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-D08": {
+  "titulo": "Interação monetário-fiscal",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-D09": {
+  "titulo": "Expectativas: aprendizagem e informação imperfeita",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAC-D10": {
+  "titulo": "Modelos DSGE de média escala",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-G01": {
+  "titulo": "Valor do dinheiro no tempo",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-G02": {
+  "titulo": "Renda fixa: títulos, taxas e duration",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-G03": {
+  "titulo": "Avaliação de ações",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-G04": {
+  "titulo": "Risco, retorno e diversificação",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-G05": {
+  "titulo": "CAPM e modelos de fatores: introdução",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-G06": {
+  "titulo": "Eficiência de mercado",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-G07": {
+  "titulo": "Derivativos: termos, futuros e opções",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-G08": {
+  "titulo": "Finanças corporativas: orçamento e estrutura de capital",
+  "nivel": "G",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-M01": {
+  "titulo": "Escolha de portfólio",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-M02": {
+  "titulo": "Preços de estado, mercados completos e não-arbitragem",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-M03": {
+  "titulo": "O fator estocástico de desconto",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-M04": {
+  "titulo": "Apreçamento baseado em consumo e o enigma do prêmio das ações",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-M05": {
+  "titulo": "Modelos de fatores: CAPM, APT e Fama–French",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-M06": {
+  "titulo": "Testes de modelos de apreçamento",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-M07": {
+  "titulo": "Previsibilidade de retornos",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-M08": {
+  "titulo": "Estrutura a termo das taxas de juros",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-M09": {
+  "titulo": "Escolha de portfólio intertemporal",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-D01": {
+  "titulo": "Preferências recursivas, risco de longo prazo, hábitos e desastres",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-D02": {
+  "titulo": "Tempo contínuo: não-arbitragem e Black–Scholes–Merton",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-D03": {
+  "titulo": "Modelos afins de estrutura a termo e prêmio a termo",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-D04": {
+  "titulo": "Macro-finanças: intermediários e apreçamento de ativos",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-D05": {
+  "titulo": "Limites à arbitragem e finanças comportamentais",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-D06": {
+  "titulo": "Risco de crédito",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "FIN-D07": {
+  "titulo": "Microestrutura de mercado",
+  "nivel": "D",
+  "status": "planejado",
+  "no_pdf": false
+ }
+}

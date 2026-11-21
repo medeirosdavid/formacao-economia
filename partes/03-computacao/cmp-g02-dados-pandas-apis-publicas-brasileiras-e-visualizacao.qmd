@@ -1,0 +1,26 @@
+# Dados: pandas, APIs públicas brasileiras e visualização {#sec-cmp-g02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `CMP-G02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-cmp-g01 (*Python para economistas*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Python para economistas* (CMP-G01)
+:::
+
+**Leituras principais:** @mckinney2022
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Séries e DataFrames
+2. Datas, frequências e reamostragem
+3. APIs do BCB (SGS), IBGE (SIDRA) e Ipeadata
+4. Visualização de séries macroeconômicas
+:::

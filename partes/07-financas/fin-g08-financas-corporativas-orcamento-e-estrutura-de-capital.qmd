@@ -1,0 +1,26 @@
+# Finanças corporativas: orçamento e estrutura de capital {#sec-fin-g08}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `FIN-G08`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-g03 (*Avaliação de ações*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Avaliação de ações* (FIN-G03)
+:::
+
+**Leituras principais:** @berk2020, @modigliani1958
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. VPL e TIR
+2. Custo de capital (WACC)
+3. Teoremas de Modigliani–Miller
+4. Impostos, falência e trade-off
+:::

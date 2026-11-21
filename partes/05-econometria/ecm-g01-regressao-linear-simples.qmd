@@ -1,0 +1,845 @@
+# Regressão linear simples {#sec-ecm-g01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [rascunho]{.status} · `ECM-G01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*); @sec-est-g05 (*Estimação pontual e intervalar*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Esperança, momentos e distribuições conjuntas* (EST-G03); *Estimação pontual e intervalar* (EST-G05)
+:::
+
+**Leituras principais:** @wooldridge2019, @stock2019, @hansen2022
+:::
+<!-- cabecalho:fim -->
+
+## Motivação {#sec-ecm-g01-motivacao}
+
+Em 1962, Arthur Okun observou que, nos Estados Unidos, anos de crescimento forte do produto vinham acompanhados de quedas do desemprego, e anos de crescimento fraco, de altas — uma relação aproximadamente linear que ficou conhecida como **lei de Okun** [@okun1962]. Meio século depois, a regularidade continua presente na maioria das economias avançadas, com coeficientes que variam de país para país [@ball2017].
+
+A pergunta é quantitativa: *quanto* o desemprego costuma variar quando o PIB cresce um ponto percentual a mais? E qual é o crescimento que, em média, mantém o desemprego estável? Para respondê-la com dados brasileiros precisamos de três coisas, que são o assunto deste capítulo:
+
+1. um **modelo** que diga o que o coeficiente procurado significa na população;
+2. um **estimador** — uma regra que transforma uma amostra num número;
+3. **propriedades** desse estimador — em que condições ele acerta em média, e com que precisão.
+
+O modelo de regressão linear simples é o ponto de partida de toda a econometria. Quase tudo o que vem depois — regressão múltipla, variáveis instrumentais, painéis, séries temporais, o *beta* do CAPM — é uma generalização das ideias deste capítulo.
+
+## O modelo populacional {#sec-ecm-g01-modelo}
+
+::: {#def-ecm-g01-modelo}
+## Modelo de regressão linear simples
+Sejam $y$ e $x$ duas variáveis aleatórias. O **modelo de regressão linear simples** postula que
+$$
+y = \beta_0 + \beta_1 x + u,
+$$ {#eq-ecm-g01-modelo}
+em que $\beta_0$ (o **intercepto**) e $\beta_1$ (a **inclinação**) são parâmetros desconhecidos e $u$ é o **erro**, que reúne todos os fatores que afetam $y$ além de $x$. Chamamos $y$ de variável **dependente** (ou explicada) e $x$ de variável **independente** (ou regressor).
+:::
+
+Sozinha, a @eq-ecm-g01-modelo não diz nada: para qualquer $\beta_0$ e $\beta_1$ é sempre possível *definir* $u \defeq y - \beta_0 - \beta_1 x$. O conteúdo do modelo está nas hipóteses sobre $u$.
+
+::: {#def-ecm-g01-hipoteses}
+## Hipóteses do modelo de regressão linear simples
+- **RLS.1 (linearidade nos parâmetros).** Na população, $y = \beta_0 + \beta_1 x + u$.
+- **RLS.2 (amostragem aleatória).** Observamos uma amostra $\{(x_i, y_i)\}_{i=1}^n$ de pares independentes e identicamente distribuídos, cada um com a distribuição populacional de $(x, y)$.
+- **RLS.3 (variação amostral do regressor).** Os valores $x_1, \dots, x_n$ não são todos iguais.
+- **RLS.4 (média condicional zero).** $\E[u \mid x] = 0$.
+- **RLS.5 (homocedasticidade).** $\Var(u \mid x) = \sigma^2$, uma constante.
+:::
+
+A hipótese decisiva é RLS.4. Ela implica que a função de esperança condicional de $y$ dado $x$ é linear,
+$$
+\E[y \mid x] = \beta_0 + \beta_1 x,
+$$ {#eq-ecm-g01-fec}
+e, portanto, que $\beta_1 = \dd\,\E[y \mid x] / \dd x$: a variação **média** de $y$ associada a uma variação unitária de $x$. Quando $u$ representa fatores omitidos que se correlacionam com $x$, RLS.4 falha e $\beta_1$ deixa de ter essa interpretação — o problema da endogeneidade, tratado no @sec-ecm-g06.
+
+### O melhor preditor linear
+
+Antes de usar RLS.4, vale perguntar o que uma reta *sempre* consegue resumir sobre a relação entre $y$ e $x$, quaisquer que sejam as hipóteses.
+
+::: {#prp-ecm-g01-blp}
+## Melhor preditor linear
+Suponha $\E[y^2] < \infty$, $\E[x^2] < \infty$ e $\Var(x) > 0$. O problema
+$$
+\min_{b_0,\, b_1 \in \R} \; \E\big[(y - b_0 - b_1 x)^2\big]
+$$
+tem solução única, dada por
+$$
+\beta_1^* = \frac{\Cov(x, y)}{\Var(x)}, \qquad \beta_0^* = \E[y] - \beta_1^* \E[x].
+$$ {#eq-ecm-g01-blp}
+Além disso, o erro de projeção $u^* \defeq y - \beta_0^* - \beta_1^* x$ satisfaz $\E[u^*] = 0$ e $\Cov(x, u^*) = 0$.
+:::
+
+::: {.proof}
+Seja $Q(b_0, b_1) \defeq \E[(y - b_0 - b_1 x)^2]$, finita pelas hipóteses de momentos. Fixe $b_1$ e escreva $z \defeq y - b_1 x$. Como $\E[(z - b_0)^2] = \Var(z) + (\E[z] - b_0)^2$, o mínimo em $b_0$ é atingido unicamente em $b_0 = \E[z] = \E[y] - b_1 \E[x]$, e o valor mínimo é
+$$
+\Var(y - b_1 x) = \Var(y) - 2 b_1 \Cov(x, y) + b_1^2 \Var(x).
+$$
+Essa é uma função quadrática estritamente convexa de $b_1$, pois $\Var(x) > 0$; seu único minimizador anula a derivada, $-2\Cov(x,y) + 2 b_1 \Var(x) = 0$, isto é, $b_1 = \beta_1^*$. O par $(\beta_0^*, \beta_1^*)$ é, então, o único minimizador de $Q$.
+
+Por construção, $\E[u^*] = \E[y] - \beta_0^* - \beta_1^* \E[x] = 0$ e $\Cov(x, u^*) = \Cov(x, y) - \beta_1^* \Var(x) = 0$.
+:::
+
+A reta $\beta_0^* + \beta_1^* x$ é a **projeção linear** de $y$ em $(1, x)$. Ela existe sempre que os segundos momentos são finitos; é uma *definição*, não uma hipótese. A proposição seguinte mostra que RLS.4 é exatamente o que liga os parâmetros do modelo à projeção.
+
+::: {#prp-ecm-g01-identificacao}
+## Identificação
+Sob RLS.1 e RLS.4, com $\Var(x) > 0$ e segundos momentos finitos, os parâmetros do modelo coincidem com os da projeção linear: $\beta_1 = \beta_1^*$ e $\beta_0 = \beta_0^*$.
+:::
+
+::: {.proof}
+Pela lei das expectativas iteradas, RLS.4 implica $\E[u] = \E\big[\E[u \mid x]\big] = 0$ e $\E[xu] = \E\big[x\,\E[u \mid x]\big] = 0$; logo $\Cov(x, u) = \E[xu] - \E[x]\E[u] = 0$. Então
+$$
+\Cov(x, y) = \Cov(x, \beta_0 + \beta_1 x + u) = \beta_1 \Var(x) + \Cov(x, u) = \beta_1 \Var(x),
+$$
+e, como $\Var(x) > 0$, $\beta_1 = \Cov(x,y)/\Var(x) = \beta_1^*$. Tomando esperanças na @eq-ecm-g01-modelo, $\beta_0 = \E[y] - \beta_1 \E[x] = \beta_0^*$.
+:::
+
+::: {.remark}
+A demonstração usou apenas $\E[u] = 0$ e $\Cov(x, u) = 0$, que são mais fracas que RLS.4. Para *identificar* $\beta_1$ basta a ausência de correlação; a hipótese mais forte de média condicional zero é o que garante a interpretação da @eq-ecm-g01-fec e a inexistência de viés em amostras finitas (@thm-ecm-g01-nao-viesado). A teoria assintótica do @sec-ecm-m02 trabalha só com a versão fraca.
+:::
+
+## O estimador de mínimos quadrados ordinários {#sec-ecm-g01-mqo}
+
+Dada a amostra, substituímos a esperança populacional da @prp-ecm-g01-blp pela média amostral. Ao longo do capítulo, $\bar x \defeq n^{-1}\sum_i x_i$, $\bar y \defeq n^{-1}\sum_i y_i$ e
+$$
+\SQT_x \defeq \sum_{i=1}^n (x_i - \bar x)^2, \qquad S_{xy} \defeq \sum_{i=1}^n (x_i - \bar x)(y_i - \bar y).
+$$
+
+::: {#def-ecm-g01-mqo}
+## Estimador de MQO
+A **soma dos quadrados dos resíduos** associada a uma reta candidata $(b_0, b_1)$ é
+$$
+\SQR(b_0, b_1) \defeq \sum_{i=1}^n (y_i - b_0 - b_1 x_i)^2.
+$$
+Os **estimadores de mínimos quadrados ordinários** (MQO) $(\hat\beta_0, \hat\beta_1)$ são os minimizadores de $\SQR$. Os **valores ajustados** são $\hat y_i \defeq \hat\beta_0 + \hat\beta_1 x_i$ e os **resíduos**, $\hat u_i \defeq y_i - \hat y_i$.
+:::
+
+O cálculo usa três identidades simples que reaparecerão o tempo todo.
+
+::: {#lem-ecm-g01-somas}
+## Somas centradas
+Para quaisquer números $x_1, \dots, x_n$ e $y_1, \dots, y_n$:
+
+(a) $\sum_i (x_i - \bar x) = 0$;
+(b) $\sum_i x_i (y_i - \bar y) = \sum_i (x_i - \bar x)(y_i - \bar y) = \sum_i (x_i - \bar x) y_i$;
+(c) $\sum_i x_i (x_i - \bar x) = \SQT_x$.
+:::
+
+::: {.proof}
+Para (a), basta notar que $\sum_i x_i - n \bar x = 0$. Para (b), por (a), $\sum_i \bar x (y_i - \bar y) = 0$ e $\sum_i (x_i - \bar x) \bar y = 0$; some ou subtraia esses termos nulos. Por fim, (c) é (b) com $y_i = x_i$.
+:::
+
+::: {#thm-ecm-g01-mqo}
+## Solução de mínimos quadrados
+Sob RLS.3, o problema $\min_{b_0, b_1} \SQR(b_0, b_1)$ tem solução única,
+$$
+\hat\beta_1 = \frac{S_{xy}}{\SQT_x} = \frac{\sum_{i}(x_i - \bar x)(y_i - \bar y)}{\sum_{i}(x_i - \bar x)^2}, \qquad \hat\beta_0 = \bar y - \hat\beta_1 \bar x.
+$$ {#eq-ecm-g01-estimadores}
+:::
+
+::: {.proof}
+As condições de primeira ordem — as **equações normais** — são
+$$
+\begin{aligned}
+\pd{\SQR}{b_0} &= -2 \sum_{i=1}^n (y_i - b_0 - b_1 x_i) = 0, \\
+\pd{\SQR}{b_1} &= -2 \sum_{i=1}^n x_i (y_i - b_0 - b_1 x_i) = 0.
+\end{aligned}
+$$ {#eq-ecm-g01-normais}
+A primeira dá $b_0 = \bar y - b_1 \bar x$. Substituindo na segunda,
+$$
+\sum_i x_i \big[(y_i - \bar y) - b_1 (x_i - \bar x)\big] = 0
+\quad\Longleftrightarrow\quad
+S_{xy} = b_1 \, \SQT_x,
+$$
+pelo @lem-ecm-g01-somas. RLS.3 equivale a $\SQT_x > 0$, de modo que $b_1 = S_{xy}/\SQT_x$ é a única solução.
+
+Resta ver que esse ponto crítico é o mínimo global. $\SQR$ é uma função quadrática com hessiana constante
+$$
+\vb{H} = 2 \begin{pmatrix} n & \sum_i x_i \\ \sum_i x_i & \sum_i x_i^2 \end{pmatrix},
+\qquad
+\det \vb{H} = 4\Big(n \sum_i x_i^2 - \big(\textstyle\sum_i x_i\big)^2\Big) = 4 n\, \SQT_x > 0.
+$$
+Como $\vb{H}_{11} = 2n > 0$ e $\det \vb{H} > 0$, $\vb{H}$ é definida positiva, $\SQR$ é estritamente convexa e o ponto crítico é o único minimizador global.
+:::
+
+::: {.remark}
+Dividindo numerador e denominador de $\hat\beta_1$ por $n-1$, obtemos a covariância amostral sobre a variância amostral: $\hat\beta_1$ é o **análogo amostral** de $\beta_1^* = \Cov(x,y)/\Var(x)$ na @eq-ecm-g01-blp. O MQO é, portanto, também um estimador pelo **método dos momentos**: as equações normais são as versões amostrais de $\E[u] = 0$ e $\E[xu] = 0$. Equivalentemente, $\hat\beta_1 = r_{xy}\, s_y / s_x$, em que $r_{xy}$ é a correlação amostral e $s_x, s_y$ são os desvios-padrão amostrais.
+:::
+
+## Propriedades algébricas e qualidade do ajuste {#sec-ecm-g01-algebra}
+
+As propriedades a seguir valem em **qualquer** amostra que satisfaça RLS.3: são consequências da álgebra dos mínimos quadrados, não de hipóteses estatísticas.
+
+::: {#prp-ecm-g01-algebricas}
+## Propriedades algébricas do MQO
+(i) $\sum_i \hat u_i = 0$;
+(ii) $\sum_i x_i \hat u_i = 0$;
+(iii) o ponto $(\bar x, \bar y)$ pertence à reta de regressão;
+(iv) a média dos valores ajustados é $\bar y$;
+(v) $\sum_i \hat y_i \hat u_i = 0$.
+:::
+
+::: {.proof}
+As propriedades (i) e (ii) são as equações normais (@eq-ecm-g01-normais) avaliadas em $(\hat\beta_0, \hat\beta_1)$. (iii) é a fórmula de $\hat\beta_0$. (iv) Como $y_i = \hat y_i + \hat u_i$, tirando médias e usando (i), $\bar y = n^{-1}\sum_i \hat y_i$. (v) $\sum_i \hat y_i \hat u_i = \hat\beta_0 \sum_i \hat u_i + \hat\beta_1 \sum_i x_i \hat u_i = 0$ por (i) e (ii).
+:::
+
+::: {#def-ecm-g01-somas}
+## Somas de quadrados e $R^2$
+$$
+\SQT \defeq \sum_i (y_i - \bar y)^2, \qquad
+\SQE \defeq \sum_i (\hat y_i - \bar y)^2, \qquad
+\SQR \defeq \sum_i \hat u_i^2 .
+$$
+Se $\SQT > 0$, o **coeficiente de determinação** é $R^2 \defeq \SQE / \SQT$.
+:::
+
+::: {#prp-ecm-g01-decomposicao}
+## Decomposição da variação
+$\SQT = \SQE + \SQR$. Em consequência, $R^2 = 1 - \SQR/\SQT \in [0, 1]$.
+:::
+
+::: {.proof}
+Escreva $y_i - \bar y = (\hat y_i - \bar y) + \hat u_i$, eleve ao quadrado e some:
+$$
+\SQT = \SQE + \SQR + 2\sum_i (\hat y_i - \bar y)\hat u_i .
+$$
+O termo cruzado é $2\sum_i \hat y_i \hat u_i - 2 \bar y \sum_i \hat u_i = 0$ pela @prp-ecm-g01-algebricas (i) e (v). Como $\SQE, \SQR \geq 0$, segue $0 \leq R^2 \leq 1$.
+:::
+
+::: {#prp-ecm-g01-r2}
+## $R^2$ e correlação
+Na regressão simples, $R^2 = r_{xy}^2$, o quadrado da correlação amostral entre $x$ e $y$.
+:::
+
+::: {.proof}
+Pela @prp-ecm-g01-algebricas (iii), $\hat y_i - \bar y = \hat\beta_1 (x_i - \bar x)$. Logo $\SQE = \hat\beta_1^2 \SQT_x = S_{xy}^2 / \SQT_x$ e
+$$
+R^2 = \frac{S_{xy}^2}{\SQT_x \cdot \SQT} = \left(\frac{S_{xy}}{\sqrt{\SQT_x}\sqrt{\SQT}}\right)^2 = r_{xy}^2.
+$$
+:::
+
+::: {.remark}
+Um $R^2$ baixo **não** invalida a regressão: ele mede quanto da variação amostral de $y$ a reta reproduz, não se $\hat\beta_1$ estima bem $\beta_1$. Em dados individuais, $R^2$ de 0,1 são comuns e compatíveis com estimativas precisas e não viesadas; inversamente, duas séries com tendência podem ter $R^2$ altíssimo sem relação alguma entre si (@sec-ecm-m10).
+:::
+
+## Unidades de medida e forma funcional {#sec-ecm-g01-forma}
+
+::: {#prp-ecm-g01-escala}
+## Mudanças de unidade
+Sejam $c_1, c_2 \neq 0$ e $d_1, d_2 \in \R$, e defina $y_i^\star = c_1 y_i + d_1$, $x_i^\star = c_2 x_i + d_2$. Os estimadores de MQO da regressão de $y^\star$ em $x^\star$ são
+$$
+\hat\beta_1^\star = \frac{c_1}{c_2}\,\hat\beta_1, \qquad
+\hat\beta_0^\star = c_1 \hat\beta_0 + d_1 - \frac{c_1}{c_2}\, d_2\,\hat\beta_1 ,
+$$
+e o $R^2$ não se altera.
+:::
+
+::: {.proof}
+Como $x_i^\star - \bar x^\star = c_2 (x_i - \bar x)$ e $y_i^\star - \bar y^\star = c_1(y_i - \bar y)$, temos $S_{x^\star y^\star} = c_1 c_2 S_{xy}$ e $\SQT_{x^\star} = c_2^2 \SQT_x$; daí $\hat\beta_1^\star = (c_1/c_2)\hat\beta_1$. Então $\hat\beta_0^\star = \bar y^\star - \hat\beta_1^\star \bar x^\star = c_1\bar y + d_1 - (c_1/c_2)\hat\beta_1 (c_2 \bar x + d_2)$, que é a expressão do enunciado, usando $\bar y - \hat\beta_1 \bar x = \hat\beta_0$. Por fim, $r_{x^\star y^\star} = \operatorname{sinal}(c_1 c_2)\, r_{xy}$, e o $R^2 = r^2$ fica inalterado (@prp-ecm-g01-r2).
+:::
+
+"Linear" no modelo significa linear **nos parâmetros**: $y$ e $x$ podem ser transformações não lineares das variáveis originais. As transformações logarítmicas são as mais usadas, porque convertem variações absolutas em relativas. Usando $100\,\Delta \log z \approx \%\Delta z$ para variações pequenas:
+
+| Modelo | Equação | Interpretação de $\beta_1$ |
+|:--|:--|:--|
+| nível–nível | $y = \beta_0 + \beta_1 x + u$ | $\Delta y = \beta_1 \Delta x$ |
+| log–nível | $\log y = \beta_0 + \beta_1 x + u$ | $\%\Delta y \approx (100\beta_1)\, \Delta x$ |
+| nível–log | $y = \beta_0 + \beta_1 \log x + u$ | $\Delta y \approx (\beta_1/100)\, \%\Delta x$ |
+| log–log | $\log y = \beta_0 + \beta_1 \log x + u$ | $\%\Delta y \approx \beta_1\, \%\Delta x$ (elasticidade) |
+
+: Formas funcionais e interpretação da inclinação. {#tbl-ecm-g01-formas}
+
+::: {#exm-ecm-g01-okun}
+## Unidades na lei de Okun
+Na aplicação deste capítulo, $y$ é a variação em quatro trimestres da taxa de desemprego, em **pontos percentuais**, e $x$ é o crescimento do PIB em quatro trimestres, em **por cento**. Ambos estão em pontos percentuais, e a forma é nível–nível: $\beta_1$ é a variação esperada do desemprego, em p.p., por ponto percentual adicional de crescimento. Se medíssemos o crescimento em fração (0,02 em vez de 2), a @prp-ecm-g01-escala com $c_2 = 1/100$ multiplicaria $\hat\beta_1$ por 100 — e nada de substantivo mudaria.
+:::
+
+## Propriedades estatísticas {#sec-ecm-g01-propriedades}
+
+Agora tratamos $(\hat\beta_0, \hat\beta_1)$ como variáveis aleatórias. Trabalhamos **condicionalmente** aos regressores, $\vb{x} \defeq (x_1, \dots, x_n)$: os resultados valem para cada configuração possível dos $x_i$ e, pela lei das expectativas iteradas, também incondicionalmente. Sob RLS.2 e RLS.4, a independência entre observações dá
+$$
+\E[u_i \mid \vb{x}] = \E[u_i \mid x_i] = 0, \qquad i = 1, \dots, n,
+$$
+e, acrescentando RLS.5, $\Var(u_i \mid \vb{x}) = \sigma^2$ e $\Cov(u_i, u_j \mid \vb{x}) = 0$ para $i \neq j$.
+
+::: {#lem-ecm-g01-representacao}
+## $\hat\beta_1$ como média ponderada dos erros
+Sob RLS.1 e RLS.3,
+$$
+\hat\beta_1 = \beta_1 + \sum_{i=1}^n w_i u_i, \qquad w_i \defeq \frac{x_i - \bar x}{\SQT_x},
+$$ {#eq-ecm-g01-representacao}
+e os pesos satisfazem $\sum_i w_i = 0$, $\sum_i w_i x_i = 1$ e $\sum_i w_i^2 = 1/\SQT_x$.
+:::
+
+::: {.proof}
+Pelo @lem-ecm-g01-somas (b), $\hat\beta_1 = \sum_i (x_i - \bar x) y_i / \SQT_x = \sum_i w_i y_i$. Substituindo $y_i = \beta_0 + \beta_1 x_i + u_i$,
+$$
+\hat\beta_1 = \beta_0 \sum_i w_i + \beta_1 \sum_i w_i x_i + \sum_i w_i u_i .
+$$
+Pelo @lem-ecm-g01-somas, $\sum_i w_i = 0$ e $\sum_i w_i x_i = \SQT_x / \SQT_x = 1$; e $\sum_i w_i^2 = \SQT_x/\SQT_x^2$.
+:::
+
+::: {#thm-ecm-g01-nao-viesado}
+## Inexistência de viés
+Sob RLS.1–RLS.4, $\E[\hat\beta_1 \mid \vb{x}] = \beta_1$ e $\E[\hat\beta_0 \mid \vb{x}] = \beta_0$. Em particular, $\E[\hat\beta_1] = \beta_1$ e $\E[\hat\beta_0] = \beta_0$.
+:::
+
+::: {.proof}
+Os pesos $w_i$ são funções de $\vb{x}$, logo, pela @eq-ecm-g01-representacao, $\E[\hat\beta_1 \mid \vb{x}] = \beta_1 + \sum_i w_i \E[u_i \mid \vb{x}] = \beta_1$. Para o intercepto, $\bar y = \beta_0 + \beta_1 \bar x + \bar u$, de modo que
+$$
+\hat\beta_0 = \bar y - \hat\beta_1 \bar x = \beta_0 + (\beta_1 - \hat\beta_1)\bar x + \bar u,
+$$ {#eq-ecm-g01-intercepto}
+e $\E[\hat\beta_0 \mid \vb{x}] = \beta_0 + 0 + 0$. Os resultados incondicionais seguem da lei das expectativas iteradas.
+:::
+
+::: {#thm-ecm-g01-variancia}
+## Variância do estimador
+Sob RLS.1–RLS.5,
+$$
+\Var(\hat\beta_1 \mid \vb{x}) = \frac{\sigma^2}{\SQT_x}, \qquad
+\Var(\hat\beta_0 \mid \vb{x}) = \frac{\sigma^2\, n^{-1} \sum_i x_i^2}{\SQT_x}.
+$$ {#eq-ecm-g01-variancias}
+:::
+
+::: {.proof}
+Como os $u_i$ são condicionalmente não correlacionados e homocedásticos, @eq-ecm-g01-representacao dá $\Var(\hat\beta_1 \mid \vb{x}) = \sum_i w_i^2 \sigma^2 = \sigma^2/\SQT_x$. Para o intercepto, combine @eq-ecm-g01-intercepto e @eq-ecm-g01-representacao: $\hat\beta_0 - \beta_0 = \sum_i (n^{-1} - \bar x\, w_i) u_i$. Logo
+$$
+\Var(\hat\beta_0 \mid \vb{x}) = \sigma^2 \sum_i \Big(\frac{1}{n} - \bar x\, w_i\Big)^2
+= \sigma^2\Big(\frac{1}{n} - \frac{2\bar x}{n}\sum_i w_i + \bar x^2 \sum_i w_i^2\Big)
+= \sigma^2\Big(\frac{1}{n} + \frac{\bar x^2}{\SQT_x}\Big),
+$$
+e $\frac{1}{n} + \frac{\bar x^2}{\SQT_x} = \frac{\SQT_x + n\bar x^2}{n\,\SQT_x} = \frac{\sum_i x_i^2}{n\,\SQT_x}$.
+:::
+
+::: {.remark}
+A fórmula $\sigma^2/\SQT_x$ diz tudo sobre precisão: o estimador é mais preciso quanto **menos ruído** há em $y$ (menor $\sigma^2$) e quanto **mais variação** há em $x$. Como $\SQT_x \approx n \Var(x)$, a variância cai à taxa $1/n$ e o erro-padrão, à taxa $1/\sqrt{n}$. O interativo da @sec-ecm-g01-interativo permite ver cada um desses efeitos.
+:::
+
+### Estimação de $\sigma^2$ e erros-padrão
+
+O erro $u_i$ não é observado, mas o resíduo $\hat u_i$ é. A relação entre os dois explica por que dividimos por $n - 2$.
+
+::: {#thm-ecm-g01-sigma2}
+## Estimador não viesado de $\sigma^2$
+Sob RLS.1–RLS.5 e $n > 2$, $\hat\sigma^2 \defeq \SQR/(n-2)$ satisfaz $\E[\hat\sigma^2 \mid \vb{x}] = \sigma^2$.
+:::
+
+::: {.proof}
+Subtraindo $\hat y_i$ de $y_i$ e usando @eq-ecm-g01-intercepto,
+$$
+\hat u_i = (u_i - \bar u) - (\hat\beta_1 - \beta_1)(x_i - \bar x).
+$$
+Elevando ao quadrado e somando,
+$$
+\SQR = \sum_i (u_i - \bar u)^2 + (\hat\beta_1 - \beta_1)^2 \SQT_x - 2 (\hat\beta_1 - \beta_1) \sum_i (x_i - \bar x)(u_i - \bar u).
+$$
+Pelo @lem-ecm-g01-somas e pela @eq-ecm-g01-representacao, $\sum_i (x_i - \bar x)(u_i - \bar u) = \sum_i (x_i - \bar x) u_i = \SQT_x (\hat\beta_1 - \beta_1)$; portanto
+$$
+\SQR = \sum_i (u_i - \bar u)^2 - (\hat\beta_1 - \beta_1)^2 \SQT_x .
+$$
+Para o primeiro termo, $\sum_i (u_i - \bar u)^2 = \sum_i u_i^2 - n \bar u^2$ e $\E[\bar u^2 \mid \vb{x}] = \Var(\bar u \mid \vb{x}) = \sigma^2/n$, de modo que sua esperança condicional é $n\sigma^2 - \sigma^2 = (n-1)\sigma^2$. Para o segundo, $\E[(\hat\beta_1 - \beta_1)^2 \mid \vb{x}] \SQT_x = \sigma^2$ pelo @thm-ecm-g01-variancia. Logo $\E[\SQR \mid \vb{x}] = (n-2)\sigma^2$.
+:::
+
+Os "dois graus de liberdade perdidos" correspondem às duas restrições lineares que os resíduos satisfazem — as equações normais. Substituindo $\sigma^2$ por $\hat\sigma^2$ na @eq-ecm-g01-variancias obtemos o **erro-padrão** de $\hat\beta_1$:
+$$
+\ep(\hat\beta_1) \defeq \frac{\hat\sigma}{\sqrt{\SQT_x}} .
+$$
+
+### O teorema de Gauss–Markov {#sec-ecm-g01-gauss-markov}
+
+Inexistência de viés não basta para escolher um estimador: há infinitos estimadores não viesados de $\beta_1$. O teorema de Gauss–Markov diz que, dentro de uma classe natural, o MQO é o mais preciso.
+
+::: {#thm-ecm-g01-gauss-markov}
+## Gauss–Markov (regressão simples)
+Considere os estimadores de $\beta_1$ **lineares em $y$**, $\tilde\beta_1 = \sum_i a_i y_i$ com pesos $a_i$ que dependem apenas de $\vb{x}$, e **condicionalmente não viesados** para quaisquer valores de $(\beta_0, \beta_1)$. Sob RLS.1–RLS.5, $\Var(\tilde\beta_1 \mid \vb{x}) \geq \Var(\hat\beta_1 \mid \vb{x})$, com igualdade se, e somente se, $\tilde\beta_1 = \hat\beta_1$. Diz-se que o MQO é o **melhor estimador linear não viesado** (MELNV, ou *BLUE*).
+:::
+
+::: {.proof}
+Como $\E[\tilde\beta_1 \mid \vb{x}] = \beta_0 \sum_i a_i + \beta_1 \sum_i a_i x_i$, a inexistência de viés para todo $(\beta_0, \beta_1)$ equivale a $\sum_i a_i = 0$ e $\sum_i a_i x_i = 1$. Nesse caso, $\tilde\beta_1 = \beta_1 + \sum_i a_i u_i$ e $\Var(\tilde\beta_1 \mid \vb{x}) = \sigma^2 \sum_i a_i^2$.
+
+Escreva $a_i = w_i + d_i$, com $w_i$ como no @lem-ecm-g01-representacao. Das restrições sobre $a_i$ e $w_i$, $\sum_i d_i = 0$ e $\sum_i d_i x_i = 0$; logo
+$$
+\sum_i w_i d_i = \frac{1}{\SQT_x}\Big(\sum_i x_i d_i - \bar x \sum_i d_i\Big) = 0
+\quad\Longrightarrow\quad
+\sum_i a_i^2 = \sum_i w_i^2 + \sum_i d_i^2 \;\geq\; \sum_i w_i^2,
+$$
+com igualdade se, e somente se, $d_i = 0$ para todo $i$, isto é, $\tilde\beta_1 = \hat\beta_1$.
+:::
+
+::: {.remark}
+Duas ressalvas. Primeiro, a classe é restrita: estimadores não lineares (por exemplo, robustos a *outliers*) podem ter variância menor quando os erros não são normais. Segundo, o teorema depende de RLS.5; com heterocedasticidade, o MQO continua não viesado mas deixa de ser o MELNV, e o estimador eficiente passa a ser o de mínimos quadrados ponderados (@sec-ecm-m03).
+:::
+
+### Inferência sob normalidade
+
+Para construir intervalos de confiança e testes em amostras pequenas precisamos da distribuição de $\hat\beta_1$, o que exige uma hipótese adicional:
+
+- **RLS.6 (normalidade).** $u \mid x \sim \Normal(0, \sigma^2)$.
+
+::: {#thm-ecm-g01-t}
+## Distribuição do MQO sob normalidade
+Sob RLS.1–RLS.6, $\hat\beta_1 \mid \vb{x} \sim \Normal\big(\beta_1, \sigma^2/\SQT_x\big)$ e
+$$
+t \defeq \frac{\hat\beta_1 - \beta_1}{\ep(\hat\beta_1)} \sim t_{n-2}.
+$$
+:::
+
+A primeira afirmação é imediata da @eq-ecm-g01-representacao: dado $\vb{x}$, $\hat\beta_1$ é uma combinação linear de normais independentes. A segunda exige mostrar que $(n-2)\hat\sigma^2/\sigma^2 \sim \chi^2_{n-2}$ e que $\hat\sigma^2$ é independente de $\hat\beta_1$; a demonstração, no caso geral de $k$ regressores, usa a geometria das projeções e está no @sec-ecm-m01. Sem normalidade, o resultado vale aproximadamente em amostras grandes (@sec-ecm-m02). Testes e intervalos são o assunto do @sec-ecm-g03.
+
+## Um caso especial: regressor binário {#sec-ecm-g01-binario}
+
+::: {#prp-ecm-g01-binario}
+## Regressão em uma variável binária
+Se $x_i \in \{0, 1\}$, com $n_1 \geq 1$ observações iguais a 1 e $n_0 \geq 1$ iguais a 0, então
+$$
+\hat\beta_0 = \bar y_0, \qquad \hat\beta_1 = \bar y_1 - \bar y_0,
+$$
+em que $\bar y_1$ e $\bar y_0$ são as médias de $y$ nos dois grupos.
+:::
+
+::: {.proof}
+Seja $p \defeq n_1/n = \bar x$. Então $\SQT_x = n_1(1-p)^2 + n_0 p^2 = np(1-p)$ e, pelo @lem-ecm-g01-somas,
+$$
+S_{xy} = \sum_i (x_i - p) y_i = (1-p)\, n_1 \bar y_1 - p\, n_0 \bar y_0 = np(1-p)\,(\bar y_1 - \bar y_0),
+$$
+usando $n_1 = np$ e $n_0 = n(1-p)$. Daí $\hat\beta_1 = \bar y_1 - \bar y_0$ e $\hat\beta_0 = \bar y - p\,\hat\beta_1 = p \bar y_1 + (1-p)\bar y_0 - p(\bar y_1 - \bar y_0) = \bar y_0$.
+:::
+
+Quando $x$ indica a participação num tratamento atribuído aleatoriamente, RLS.4 vale por construção e $\hat\beta_1$ — a diferença de médias — estima sem viés o efeito médio do tratamento. Essa é a porta de entrada para a inferência causal (@sec-ecm-m08).
+
+## Pontes {#sec-ecm-g01-pontes}
+
+- **Geometria (@sec-ecm-m01).** O vetor de valores ajustados é a projeção ortogonal de $\vb{y}$ no plano gerado por $\vb{1}$ e $\vb{x}$; as equações normais dizem que os resíduos são ortogonais a esse plano. Tudo neste capítulo é o caso $k = 2$ da álgebra matricial do MQO.
+- **Esperança condicional (@sec-est-m02).** A @prp-ecm-g01-blp é a projeção em $L^2$ no subespaço $\{b_0 + b_1 x\}$; a esperança condicional é a projeção em todas as funções de $x$. RLS.4 diz que as duas coincidem.
+- **Assintótica (@sec-ecm-m02).** Com apenas $\Cov(x, u) = 0$, $\hat\beta_1 \pto \beta_1$; erros-padrão robustos dispensam RLS.5.
+- **Endogeneidade (@sec-ecm-g06).** Se $\Cov(x, u) \neq 0$, $\hat\beta_1 \pto \beta_1 + \Cov(x,u)/\Var(x)$: o viés não desaparece com mais dados. Variáveis instrumentais resolvem isso.
+- **Finanças (@sec-fin-g05).** O *beta* de um ativo no CAPM, $\beta_i = \Cov(R^e_i, R^e_m)/\Var(R^e_m)$, é exatamente a inclinação $\beta_1^*$ da @prp-ecm-g01-blp com $y = R^e_i$ e $x = R^e_m$; estimá-lo é rodar uma regressão simples.
+- **Macroeconomia (@sec-mac-g03, @sec-mac-g06).** A lei de Okun liga o produto ao desemprego; combinada com a curva de Phillips, liga o produto à inflação.
+
+## Interativo {#sec-ecm-g01-interativo}
+
+::: {.content-visible when-format="html"}
+**Ajuste a reta você mesmo.** Os pontos foram gerados por $y = 1 + 0{,}8\,x + u$. Mova os controles para tentar minimizar a soma dos quadrados dos resíduos (segmentos em âmbar) e compare com o mínimo do MQO.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof b0 = Inputs.range([-2, 4], {value: 0, step: 0.05, label: "intercepto b₀"})
+viewof b1 = Inputs.range([-1, 2.5], {value: 0.3, step: 0.01, label: "inclinação b₁"})
+viewof mostrar = Inputs.toggle({label: "mostrar a reta de MQO", value: false})
+```
+
+```{ojs}
+//| echo: false
+md`**SQR da sua reta:** ${sqrA.toFixed(2)} · **SQR mínima (MQO):** ${mqoA.sqr.toFixed(2)}${mostrar ? ` — reta de MQO: ŷ = ${mqoA.b0.toFixed(2)} + ${mqoA.b1.toFixed(2)}·x` : ""}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 360, grid: true,
+  x: {domain: [0, 6], label: "x"}, y: {domain: [-2, 9], label: "y"},
+  marks: [
+    Plot.link(dadosA, {x1: "x", y1: "y", x2: "x", y2: d => b0 + b1 * d.x, stroke: "#B7791F", strokeOpacity: 0.8}),
+    Plot.dot(dadosA, {x: "x", y: "y", fill: "#2F5D8A", r: 3.5}),
+    Plot.line([[0, b0], [6, b0 + 6 * b1]], {stroke: "#8C2F39", strokeWidth: 2}),
+    mostrar ? Plot.line([[0, mqoA.b0], [6, mqoA.b0 + 6 * mqoA.b1]],
+                        {stroke: "#2E7D5B", strokeWidth: 2, strokeDasharray: "6,4"}) : null
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+dadosA = {
+  const rng = d3.randomLcg(20261121);
+  const erro = d3.randomNormal.source(rng)(0, 1.2);
+  const unif = d3.randomUniform.source(rng)(0, 6);
+  return Array.from({length: 30}, () => { const x = unif(); return {x, y: 1 + 0.8 * x + erro()}; });
+}
+mqoA = {
+  const xb = d3.mean(dadosA, d => d.x), yb = d3.mean(dadosA, d => d.y);
+  const sxy = d3.sum(dadosA, d => (d.x - xb) * (d.y - yb));
+  const sqtx = d3.sum(dadosA, d => (d.x - xb) ** 2);
+  const c1 = sxy / sqtx, c0 = yb - c1 * xb;
+  return {b0: c0, b1: c1, sqr: d3.sum(dadosA, d => (d.y - c0 - c1 * d.x) ** 2)};
+}
+sqrA = d3.sum(dadosA, d => (d.y - b0 - b1 * d.x) ** 2)
+```
+:::
+
+**A distribuição amostral de $\hat\beta_1$.** Fixados os regressores, simulamos 2.000 amostras de $y = 1 + 0{,}5\,x + u$ e estimamos $\hat\beta_1$ em cada uma. O histograma é a distribuição simulada; a curva é a normal teórica $\Normal(\beta_1, \sigma^2/\SQT_x)$ do @thm-ecm-g01-t. Veja o que acontece ao aumentar $n$, o ruído $\sigma$ ou a dispersão de $x$.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof nB = Inputs.range([5, 200], {value: 20, step: 1, label: "tamanho da amostra n"})
+viewof sigmaB = Inputs.range([0.2, 3], {value: 1, step: 0.1, label: "σ (ruído)"})
+viewof dispB = Inputs.range([0.2, 3], {value: 1, step: 0.1, label: "dispersão de x"})
+```
+
+```{ojs}
+//| echo: false
+md`Média simulada de β̂₁: **${d3.mean(simB.est).toFixed(3)}** (verdadeiro: 0,5) · desvio-padrão simulado: **${d3.deviation(simB.est).toFixed(3)}** · teórico σ/√SQTₓ: **${simB.dp.toFixed(3)}**`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 320, grid: true,
+  x: {label: "estimativa de β₁"}, y: {label: "densidade"},
+  marks: [
+    Plot.rectY(histB, {x1: "x1", x2: "x2", y: "dens", fill: "#2F5D8A", fillOpacity: 0.5}),
+    Plot.line(curvaB, {stroke: "#8C2F39", strokeWidth: 2}),
+    Plot.ruleX([0.5], {stroke: "#4A5568", strokeDasharray: "4,3"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+simB = {
+  const rng = d3.randomLcg(7);
+  const gx = d3.randomNormal.source(rng)(0, dispB), gu = d3.randomNormal.source(rng)(0, sigmaB);
+  const xs = Array.from({length: nB}, () => gx());
+  const xb = d3.mean(xs), sqtx = d3.sum(xs, x => (x - xb) ** 2);
+  const R = 2000, est = new Array(R);
+  for (let r = 0; r < R; r++) {
+    let sxy = 0;
+    for (let i = 0; i < nB; i++) sxy += (xs[i] - xb) * (1 + 0.5 * xs[i] + gu());
+    est[r] = sxy / sqtx;
+  }
+  return {est, dp: sigmaB / Math.sqrt(sqtx)};
+}
+histB = {
+  const lo = 0.5 - 4 * simB.dp, hi = 0.5 + 4 * simB.dp, larg = (hi - lo) / 40;
+  return d3.bin().domain([lo, hi]).thresholds(d3.range(lo, hi, larg))(simB.est)
+    .map(b => ({x1: b.x0, x2: b.x1, dens: b.length / (simB.est.length * (b.x1 - b.x0))}));
+}
+curvaB = d3.range(-4, 4.01, 0.05).map(z =>
+  [0.5 + z * simB.dp, Math.exp(-z * z / 2) / (Math.sqrt(2 * Math.PI) * simB.dp)])
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*As duas simulações interativas desta seção — ajuste manual da reta e distribuição amostral de $\hat\beta_1$ — estão disponíveis na versão web do livro. O laboratório a seguir reproduz a segunda em Python.*
+:::
+
+## Laboratório computacional {#sec-ecm-g01-laboratorio}
+
+Implementamos o MQO a partir das fórmulas do @thm-ecm-g01-mqo e conferimos o resultado com a biblioteca `statsmodels`.
+
+```{python}
+import numpy as np
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+from formacao import graficos
+
+graficos.estilo()
+rng = np.random.default_rng(2026)
+
+def mqo_simples(x, y):
+    """MQO na regressão simples, pelas fórmulas fechadas do capítulo."""
+    x, y = np.asarray(x, float), np.asarray(y, float)
+    n = len(x)
+    sqt_x = np.sum((x - x.mean())**2)
+    b1 = np.sum((x - x.mean()) * (y - y.mean())) / sqt_x
+    b0 = y.mean() - b1 * x.mean()
+    resid = y - b0 - b1 * x
+    sigma2 = resid @ resid / (n - 2)
+    r2 = 1 - resid @ resid / np.sum((y - y.mean())**2)
+    return {"b0": b0, "b1": b1, "ep_b1": np.sqrt(sigma2 / sqt_x),
+            "ep_b0": np.sqrt(sigma2 * np.mean(x**2) / sqt_x), "sigma2": sigma2, "R2": r2}
+
+# dados simulados: y = 1 + 0,5 x + u
+n = 100
+x = rng.normal(2, 1, n)
+y = 1 + 0.5 * x + rng.normal(0, 1, n)
+
+nosso = mqo_simples(x, y)
+sm_fit = sm.OLS(y, sm.add_constant(x)).fit()
+print(f"{'':>8}{'nosso':>10}{'statsmodels':>14}")
+print(f"{'b0':>8}{nosso['b0']:>10.4f}{sm_fit.params[0]:>14.4f}")
+print(f"{'b1':>8}{nosso['b1']:>10.4f}{sm_fit.params[1]:>14.4f}")
+print(f"{'ep(b1)':>8}{nosso['ep_b1']:>10.4f}{sm_fit.bse[1]:>14.4f}")
+print(f"{'R2':>8}{nosso['R2']:>10.4f}{sm_fit.rsquared:>14.4f}")
+```
+
+### Monte Carlo: inexistência de viés e variância
+
+Fixamos os regressores (estamos condicionando em $\vb{x}$) e simulamos muitas amostras dos erros. Pelo @thm-ecm-g01-nao-viesado e pelo @thm-ecm-g01-variancia, a média das estimativas deve ficar próxima de $\beta_1$ e a variância, de $\sigma^2/\SQT_x$.
+
+```{python}
+#| label: fig-ecm-g01-mc
+#| fig-cap: "Distribuição de 5.000 estimativas de MQO de $\\beta_1$ (histograma) e a normal teórica $\\mathcal{N}(\\beta_1, \\sigma^2/\\mathrm{SQT}_x)$ (curva)."
+beta0, beta1, sigma, n, R = 1.0, 0.5, 1.0, 30, 5000
+x = rng.normal(2, 1, n)                      # fixo em todas as replicações
+sqt_x = np.sum((x - x.mean())**2)
+w = (x - x.mean()) / sqt_x                   # pesos do lema de representação
+
+U = rng.normal(0, sigma, (R, n))             # R amostras de erros
+Y = beta0 + beta1 * x + U
+b1_hat = Y @ w                               # b1 = soma de w_i y_i, para cada amostra
+
+print(f"média das estimativas:  {b1_hat.mean():.4f}   (beta1 = {beta1})")
+print(f"variância simulada:     {b1_hat.var():.5f}")
+print(f"variância teórica:      {sigma**2 / sqt_x:.5f}")
+
+fig, ax = plt.subplots()
+ax.hist(b1_hat, bins=50, density=True, alpha=0.55, color=graficos.PALETA["azul"])
+grade = np.linspace(b1_hat.min(), b1_hat.max(), 300)
+dp = sigma / np.sqrt(sqt_x)
+ax.plot(grade, np.exp(-0.5 * ((grade - beta1) / dp)**2) / (dp * np.sqrt(2 * np.pi)),
+        color=graficos.PALETA["vinho"], lw=2)
+ax.axvline(beta1, color=graficos.PALETA["ardosia"], ls="--", lw=1)
+ax.set_xlabel(r"$\hat\beta_1$"); ax.set_ylabel("densidade")
+plt.show()
+```
+
+### Gauss–Markov na prática
+
+Um estimador alternativo, linear e não viesado, é o **estimador de agrupamento**: ordene as observações por $x$, divida-as em metade inferior ($L$) e superior ($H$) e calcule $\tilde\beta_1 = (\bar y_H - \bar y_L)/(\bar x_H - \bar x_L)$. Ele é da forma $\sum_i a_i y_i$ com $\sum_i a_i = 0$ e $\sum_i a_i x_i = 1$ (verifique; é o @exr-ecm-g01-agrupamento), logo não viesado — e o @thm-ecm-g01-gauss-markov garante que sua variância não é menor que a do MQO.
+
+```{python}
+ordem = np.argsort(x)
+L, H = ordem[: n // 2], ordem[n // 2 :]
+a = np.zeros(n)
+denom = x[H].mean() - x[L].mean()
+a[H], a[L] = 1 / (len(H) * denom), -1 / (len(L) * denom)
+print(f"restrições: soma a_i = {a.sum():.2e},  soma a_i x_i = {a @ x:.4f}")
+
+b1_tilde = Y @ a
+print(f"agrupamento: média {b1_tilde.mean():.4f}, variância {b1_tilde.var():.5f}")
+print(f"MQO:         média {b1_hat.mean():.4f}, variância {b1_hat.var():.5f}")
+print(f"variância teórica do agrupamento: {sigma**2 * a @ a:.5f}  (>= {sigma**2 / sqt_x:.5f})")
+```
+
+## Aplicação: a lei de Okun no Brasil {#sec-ecm-g01-aplicacao}
+
+Usamos a taxa de desocupação da PNAD Contínua (série 24369 do SGS, disponível desde 2012) e o índice de volume do PIB trimestral com ajuste sazonal (série 22109). Para cada trimestre $t$ calculamos
+
+- $y_t = u_t - u_{t-4}$: variação da taxa de desemprego em quatro trimestres, em p.p.;
+- $x_t = 100\,(\log Y_t - \log Y_{t-4})$: crescimento do PIB em quatro trimestres, em %.
+
+```{python}
+import pandas as pd
+from IPython.display import Markdown
+from formacao import dados
+
+try:
+    desoc = dados.sgs("desocupacao", inicio="2012-01-01")   # mensal, trimestre móvel
+    pib = dados.sgs("pib_dessaz", inicio="2011-01-01")      # trimestral, índice
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponíveis neste ambiente de renderização ({erro}).")
+    print("Renderize com acesso à internet para baixar as séries e preencher a cache.")
+
+if disponivel:
+    u = dados.trimestral(desoc, como="ultimo")   # trimestre móvel que termina em mar/jun/set/dez
+    pib_q = pib.copy()
+    pib_q.index = pib_q.index.to_period("Q")
+    okun = pd.DataFrame({"du": u - u.shift(4), "g": 100 * np.log(pib_q / pib_q.shift(4))}).dropna()
+    print(okun.tail())
+```
+
+```{python}
+if disponivel:
+    est = mqo_simples(okun["g"], okun["du"])
+    g_estavel = -est["b0"] / est["b1"]
+    periodo = f"{okun.index[0]}–{okun.index[-1]}".replace("Q", "T")
+    br = lambda v, d: f"{v:.{d}f}".replace(".", "{,}")   # vírgula decimal dentro de $...$
+    resumo = (f"Com {len(okun)} trimestres ({periodo}), a inclinação estimada é "
+              f"$\\hat\\beta_1 = {br(est['b1'], 3)}$ (erro-padrão usual ${br(est['ep_b1'], 3)}$), "
+              f"o intercepto é $\\hat\\beta_0 = {br(est['b0'], 2)}$ e $R^2 = {br(est['R2'], 2)}$. "
+              f"O crescimento que, pela reta estimada, mantém o desemprego estável é "
+              f"$-\\hat\\beta_0/\\hat\\beta_1 \\approx {br(g_estavel, 1)}\\%$ ao ano.")
+
+    fig, ax = plt.subplots()
+    pandemia = (okun.index >= pd.Period("2020Q2")) & (okun.index <= pd.Period("2021Q2"))
+    ax.scatter(okun["g"][~pandemia], okun["du"][~pandemia], s=22,
+               color=graficos.PALETA["azul"], label="trimestres")
+    ax.scatter(okun["g"][pandemia], okun["du"][pandemia], s=30, marker="D",
+               color=graficos.PALETA["ambar"], label="2020T2–2021T2")
+    grade = np.linspace(okun["g"].min(), okun["g"].max(), 100)
+    ax.plot(grade, est["b0"] + est["b1"] * grade, color=graficos.PALETA["vinho"], lw=2,
+            label="reta de MQO")
+    ax.axhline(0, color="#999", lw=0.8); ax.axvline(0, color="#999", lw=0.8)
+    ax.set_xlabel("crescimento do PIB em 4 trimestres (%)")
+    ax.set_ylabel("variação do desemprego em 4 trim. (p.p.)")
+    ax.legend()
+    graficos.fonte(ax, "IBGE (PNAD Contínua, Contas Nacionais Trimestrais), via SGS/BCB.")
+    plt.show()
+else:
+    resumo = "*(Os resultados aparecem quando o capítulo é renderizado com acesso aos dados.)*"
+Markdown(resumo)
+```
+
+**Como ler o resultado.** O sinal esperado de $\hat\beta_1$ é negativo: trimestres de crescimento forte vêm com queda do desemprego. O intercepto, dividido pela inclinação, dá uma estimativa grosseira do crescimento "neutro" para o mercado de trabalho. Três cautelas, que motivam capítulos adiante:
+
+1. **Dependência temporal.** Variações em quatro trimestres se sobrepõem: $y_t$ e $y_{t+1}$ compartilham três trimestres. Os erros são autocorrelacionados, RLS.2 não vale, e o erro-padrão usual subestima a incerteza. Erros-padrão de Newey–West (@sec-ecm-g05) corrigem isso.
+2. **Observações influentes.** Os trimestres da pandemia (em âmbar) combinam quedas e recuperações extremas. Vale reestimar sem eles e comparar (@exr-ecm-g01-okun-pandemia).
+3. **Interpretação.** A lei de Okun é uma relação estatística entre duas variáveis determinadas conjuntamente, não o efeito causal do crescimento sobre o desemprego; RLS.4 é, aqui, uma hipótese forte. O modelo descreve a esperança condicional de $\Delta u$ dado o crescimento — o que já é útil para previsão e para checar a consistência de projeções macroeconômicas.
+
+## Exercícios resolvidos {#sec-ecm-g01-exercicios}
+
+::: {#exr-ecm-g01-numerico}
+Para os dados $x = (1, 2, 3, 4, 5)$ e $y = (2, 4, 5, 4, 5)$, calcule $\hat\beta_0$, $\hat\beta_1$, os resíduos, $R^2$, $\hat\sigma^2$ e $\ep(\hat\beta_1)$. Verifique as propriedades (i) e (ii) da @prp-ecm-g01-algebricas e a @prp-ecm-g01-r2.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\bar x = 3$, $\bar y = 4$. Os desvios são $x_i - \bar x = (-2, -1, 0, 1, 2)$ e $y_i - \bar y = (-2, 0, 1, 0, 1)$; logo $S_{xy} = 4 + 0 + 0 + 0 + 2 = 6$ e $\SQT_x = 10$. Assim $\hat\beta_1 = 0{,}6$ e $\hat\beta_0 = 4 - 0{,}6 \cdot 3 = 2{,}2$.
+
+Valores ajustados: $(2{,}8;\ 3{,}4;\ 4{,}0;\ 4{,}6;\ 5{,}2)$; resíduos: $(-0{,}8;\ 0{,}6;\ 1{,}0;\ -0{,}6;\ -0{,}2)$. Conferindo: $\sum_i \hat u_i = 0$ e $\sum_i x_i \hat u_i = -0{,}8 + 1{,}2 + 3{,}0 - 2{,}4 - 1{,}0 = 0$.
+
+$\SQR = 0{,}64 + 0{,}36 + 1 + 0{,}36 + 0{,}04 = 2{,}4$ e $\SQT = 4 + 0 + 1 + 0 + 1 = 6$, de modo que $R^2 = 1 - 2{,}4/6 = 0{,}6$. A correlação amostral é $r_{xy} = 6/\sqrt{10 \cdot 6} = 6/\sqrt{60}$, e $r_{xy}^2 = 36/60 = 0{,}6$, como afirma a @prp-ecm-g01-r2.
+
+Por fim, $\hat\sigma^2 = 2{,}4/3 = 0{,}8$ e $\ep(\hat\beta_1) = \sqrt{0{,}8/10} \approx 0{,}283$.
+:::
+
+::: {#exr-ecm-g01-origem}
+**Regressão pela origem.** Considere o estimador $\tilde\beta_1$ que minimiza $\sum_i (y_i - b_1 x_i)^2$. (a) Encontre $\tilde\beta_1$. (b) Sob RLS.1–RLS.4 com $\beta_0 \neq 0$, calcule seu viés condicional. (c) Sob RLS.1–RLS.5, compare $\Var(\tilde\beta_1 \mid \vb{x})$ com $\Var(\hat\beta_1 \mid \vb{x})$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Item (a). A condição de primeira ordem $-2\sum_i x_i(y_i - b_1 x_i) = 0$ dá $\tilde\beta_1 = \sum_i x_i y_i / \sum_i x_i^2$ (supondo algum $x_i \neq 0$).
+
+Item (b). Substituindo $y_i = \beta_0 + \beta_1 x_i + u_i$: $\tilde\beta_1 = \beta_1 + \beta_0 \sum_i x_i / \sum_i x_i^2 + \sum_i x_i u_i / \sum_i x_i^2$. Logo $\E[\tilde\beta_1 \mid \vb{x}] - \beta_1 = \beta_0\, n \bar x / \sum_i x_i^2$, não nulo se $\beta_0 \neq 0$ e $\bar x \neq 0$.
+
+Item (c). $\Var(\tilde\beta_1 \mid \vb{x}) = \sigma^2 / \sum_i x_i^2$. Como $\sum_i x_i^2 = \SQT_x + n \bar x^2 \geq \SQT_x$, a variância de $\tilde\beta_1$ é **menor ou igual** à do MQO. Não há contradição com Gauss–Markov: $\tilde\beta_1$ é viesado quando $\beta_0 \neq 0$. É um primeiro exemplo do dilema entre viés e variância.
+:::
+
+::: {#exr-ecm-g01-reversa}
+**Regressão reversa.** Seja $\hat\gamma_1$ a inclinação de MQO da regressão de $x$ em $y$. Mostre que $\hat\beta_1 \hat\gamma_1 = R^2$ e conclua que $\hat\gamma_1 \neq 1/\hat\beta_1$, salvo se o ajuste for perfeito.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Trocando os papéis de $x$ e $y$ no @thm-ecm-g01-mqo, $\hat\gamma_1 = S_{xy}/\SQT$. Então $\hat\beta_1 \hat\gamma_1 = S_{xy}^2/(\SQT_x \SQT) = r_{xy}^2 = R^2$ (@prp-ecm-g01-r2). Logo $\hat\gamma_1 = R^2/\hat\beta_1$, que só é igual a $1/\hat\beta_1$ se $R^2 = 1$. Quando $R^2 < 1$, as duas retas de regressão são diferentes; ambas passam por $(\bar x, \bar y)$, mas a regressão de $y$ em $x$ é mais "achatada" do que a inversa da regressão de $x$ em $y$ — o fenômeno de **regressão à média** que dá nome ao método.
+:::
+
+::: {#exr-ecm-g01-covariancia}
+Sob RLS.1–RLS.5, mostre que $\Cov(\hat\beta_0, \hat\beta_1 \mid \vb{x}) = -\bar x\, \sigma^2 / \SQT_x$. Interprete o sinal quando $\bar x > 0$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Da demonstração do @thm-ecm-g01-variancia, $\hat\beta_0 - \beta_0 = \sum_i (n^{-1} - \bar x w_i) u_i$ e $\hat\beta_1 - \beta_1 = \sum_i w_i u_i$. Como os erros são condicionalmente não correlacionados e homocedásticos,
+$$
+\Cov(\hat\beta_0, \hat\beta_1 \mid \vb{x}) = \sigma^2 \sum_i \Big(\frac{1}{n} - \bar x w_i\Big) w_i = \sigma^2\Big(\frac{1}{n}\sum_i w_i - \bar x \sum_i w_i^2\Big) = -\frac{\bar x\, \sigma^2}{\SQT_x}.
+$$
+Com $\bar x > 0$, a covariância é negativa: como a reta estimada passa obrigatoriamente por $(\bar x, \bar y)$, uma inclinação superestimada "gira" a reta em torno desse ponto e reduz o intercepto. Se $x$ for centrado ($\bar x = 0$), os dois estimadores são não correlacionados e $\hat\beta_0 = \bar y$.
+:::
+
+::: {#exr-ecm-g01-log}
+Uma regressão de $\log(\text{salário-hora})$ em anos de estudo fornece $\widehat{\log w} = 1{,}20 + 0{,}080\,\text{educ}$. Interprete a inclinação de forma aproximada e exata.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+É um modelo log–nível (@tbl-ecm-g01-formas): cada ano adicional de estudo está associado, em média, a um salário cerca de $100 \times 0{,}080 = 8\%$ maior. A variação exata implicada é $100\,(e^{0{,}080} - 1) \approx 8{,}33\%$. A aproximação piora quando o coeficiente é grande: com $0{,}30$, a aproximação daria 30% e o valor exato é cerca de 35%.
+:::
+
+::: {#exr-ecm-g01-agrupamento}
+Mostre que o estimador de agrupamento do laboratório, $\tilde\beta_1 = (\bar y_H - \bar y_L)/(\bar x_H - \bar x_L)$, é linear em $y$ e condicionalmente não viesado sob RLS.1–RLS.4, e calcule sua variância sob RLS.5.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $D \defeq \bar x_H - \bar x_L > 0$ (positivo pela ordenação, desde que os $x_i$ não sejam todos iguais). Então $\tilde\beta_1 = \sum_i a_i y_i$ com $a_i = 1/(n_H D)$ para $i \in H$ e $a_i = -1/(n_L D)$ para $i \in L$ — pesos que dependem só de $\vb{x}$. Verificamos as condições da demonstração do @thm-ecm-g01-gauss-markov: $\sum_i a_i = 1/D - 1/D = 0$ e $\sum_i a_i x_i = (\bar x_H - \bar x_L)/D = 1$. Portanto $\tilde\beta_1$ é não viesado, e $\Var(\tilde\beta_1 \mid \vb{x}) = \sigma^2 \sum_i a_i^2 = \frac{\sigma^2}{D^2}\big(\frac{1}{n_H} + \frac{1}{n_L}\big)$, que, pelo teorema, é pelo menos $\sigma^2/\SQT_x$.
+:::
+
+::: {#exr-ecm-g01-okun-pandemia}
+No laboratório de aplicação, reestime a lei de Okun excluindo os trimestres de 2020T2 a 2021T2. O que acontece com $\hat\beta_1$ e com o $R^2$? Que propriedade do MQO explica a sensibilidade a poucas observações?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Basta filtrar o `DataFrame` antes de estimar:
+
+```python
+sem_pandemia = okun[~pandemia]
+mqo_simples(sem_pandemia["g"], sem_pandemia["du"])
+```
+
+Os números dependem da amostra disponível na renderização. A lição geral é que o MQO minimiza a **soma dos quadrados**: observações com $x_i$ longe de $\bar x$ têm peso $w_i \propto x_i - \bar x$ grande (@lem-ecm-g01-representacao) e resíduos grandes contam ao quadrado. Poucos pontos extremos podem, então, mover bastante a inclinação. Quando os pontos extremos seguem a mesma relação que os demais, eles *aumentam* a precisão (aumentam $\SQT_x$); quando não seguem, distorcem a estimativa. Comparar as duas estimativas é a forma mais simples de diagnóstico.
+:::
+
+## Flashcards {#sec-ecm-g01-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a fórmula do estimador de MQO da inclinação na regressão simples?
+$\hat\beta_1 = \sum_i (x_i - \bar x)(y_i - \bar y) \big/ \sum_i (x_i - \bar x)^2$, a covariância amostral sobre a variância amostral de $x$; e $\hat\beta_0 = \bar y - \hat\beta_1 \bar x$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais duas restrições os resíduos de MQO sempre satisfazem?
+$\sum_i \hat u_i = 0$ e $\sum_i x_i \hat u_i = 0$ — as equações normais.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O melhor preditor linear de $y$ dado $x$ exige $\E[u \mid x] = 0$?
+Não. Com segundos momentos finitos e $\Var(x) > 0$, ele sempre existe e tem inclinação $\Cov(x,y)/\Var(x)$. A hipótese $\E[u \mid x] = 0$ faz com que ele coincida com $\E[y \mid x]$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais hipóteses garantem que o MQO é não viesado?
+RLS.1–RLS.4: linearidade, amostragem aleatória, variação em $x$ e, sobretudo, $\E[u \mid x] = 0$. A homocedasticidade não é necessária.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é $\Var(\hat\beta_1 \mid \vb{x})$ sob homocedasticidade?
+$\sigma^2 / \SQT_x$, com $\SQT_x = \sum_i (x_i - \bar x)^2$: menor com menos ruído e mais variação em $x$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que o estimador de $\sigma^2$ divide a SQR por $n - 2$?
+Porque os resíduos satisfazem duas restrições lineares (as equações normais); com isso $\E[\SQR \mid \vb{x}] = (n-2)\sigma^2$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que afirma o teorema de Gauss–Markov?
+Sob RLS.1–RLS.5, o MQO tem a menor variância condicional entre os estimadores lineares em $y$ e condicionalmente não viesados: é o MELNV (*BLUE*).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Na regressão simples, a que é igual o $R^2$?
+Ao quadrado da correlação amostral entre $x$ e $y$: $R^2 = r_{xy}^2$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se interpreta $\beta_1$ num modelo log–log?
+Como uma elasticidade: $\%\Delta y \approx \beta_1 \, \%\Delta x$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que estima $\hat\beta_1$ quando $x$ é uma variável binária?
+A diferença de médias $\bar y_1 - \bar y_0$; o intercepto é $\bar y_0$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que um $R^2$ baixo não invalida uma regressão?
+Porque o $R^2$ mede o ajuste aos dados, não a qualidade da estimativa de $\beta_1$; o MQO pode ser não viesado e preciso com $R^2$ baixo.
+:::
+
+## Ficha-resumo {#sec-ecm-g01-ficha}
+
+::: {.ficha-resumo}
+**Modelo.** $y = \beta_0 + \beta_1 x + u$. Hipóteses: RLS.1 linearidade; RLS.2 amostra iid; RLS.3 $\SQT_x > 0$; RLS.4 $\E[u \mid x] = 0$; RLS.5 $\Var(u \mid x) = \sigma^2$; (RLS.6 normalidade).
+
+**População.** Melhor preditor linear: $\beta_1^* = \Cov(x,y)/\Var(x)$, $\beta_0^* = \E y - \beta_1^* \E x$. Sob RLS.4, $\beta = \beta^*$ e $\E[y \mid x] = \beta_0 + \beta_1 x$.
+
+**Estimadores.** $\hat\beta_1 = S_{xy}/\SQT_x$, $\hat\beta_0 = \bar y - \hat\beta_1 \bar x$; $\hat\beta_1 = \beta_1 + \sum_i w_i u_i$, $w_i = (x_i - \bar x)/\SQT_x$.
+
+**Álgebra.** $\sum \hat u_i = 0$, $\sum x_i \hat u_i = 0$, $(\bar x, \bar y)$ na reta; $\SQT = \SQE + \SQR$; $R^2 = \SQE/\SQT = r_{xy}^2$.
+
+**Estatística.** RLS.1–4: $\E[\hat\beta_j \mid \vb{x}] = \beta_j$. RLS.1–5: $\Var(\hat\beta_1 \mid \vb{x}) = \sigma^2/\SQT_x$; $\Var(\hat\beta_0 \mid \vb{x}) = \sigma^2 \overline{x^2}/\SQT_x$; $\hat\sigma^2 = \SQR/(n-2)$ não viesado; $\ep(\hat\beta_1) = \hat\sigma/\sqrt{\SQT_x}$; Gauss–Markov: MQO é MELNV. RLS.1–6: $(\hat\beta_1 - \beta_1)/\ep(\hat\beta_1) \sim t_{n-2}$.
+
+**Formas funcionais.** log–nível: $\%\Delta y \approx 100\beta_1 \Delta x$; nível–log: $\Delta y \approx (\beta_1/100)\%\Delta x$; log–log: elasticidade.
+
+**Cuidado.** $R^2$ mede ajuste, não causalidade; erros dependentes no tempo invalidam o erro-padrão usual; observações extremas pesam muito.
+:::
+
+## Notas bibliográficas {#sec-ecm-g01-notas}
+
+O tratamento deste capítulo segue de perto o capítulo 2 de @wooldridge2019, que organiza a regressão simples pelas hipóteses RLS.1–RLS.5. @stock2019 (cap. 4) apresenta o mesmo material com ênfase em amostras grandes e erros-padrão robustos desde o início. Para a visão da regressão como aproximação da esperança condicional — o ponto de vista da @prp-ecm-g01-blp —, o capítulo 2 de @hansen2022 é a melhor referência e prepara o terreno para o @sec-ecm-m01; @angrist2009 (cap. 3) desenvolve a mesma ideia com foco em causalidade. A lei de Okun nasce em @okun1962; @ball2017 documentam sua estabilidade numa amostra ampla de países.

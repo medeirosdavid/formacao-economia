@@ -1,0 +1,26 @@
+# Computação de alto desempenho {#sec-cmp-d04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `CMP-D04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-cmp-d01 (*Solução de modelos dinâmicos: VFI, PFI e EGM*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Solução de modelos dinâmicos: VFI, PFI e EGM* (CMP-D01)
+:::
+
+**Leituras principais:** @quantecon
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Compilação JIT com Numba
+2. JAX e diferenciação automática
+3. Paralelização e GPU
+4. Perfilamento de código
+:::

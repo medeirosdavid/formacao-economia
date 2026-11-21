@@ -1,0 +1,28 @@
+# Matemática {.unnumbered}
+
+<!-- ARQUIVO GERADO por scripts/gerar_estrutura.py — edite curriculo.yml, não este arquivo -->
+
+Ferramentas de análise, álgebra linear, otimização e dinâmica usadas no resto do livro. Do cálculo de graduação à programação dinâmica estocástica.
+
+::: {.content-visible when-format="html"}
+| Código | Nível | Capítulo | Status |
+|:--|:--|:--|:--|
+| MAT-G01 | G | [Lógica, conjuntos e métodos de demonstração](mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd) | ○ planejado |
+| MAT-G02 | G | [Números reais, sequências e séries](mat-g02-numeros-reais-sequencias-e-series.qmd) | ○ planejado |
+| MAT-G03 | G | [Funções de uma variável: limites, continuidade e derivadas](mat-g03-funcoes-de-uma-variavel-limites-continuidade-e-derivadas.qmd) | ○ planejado |
+| MAT-G04 | G | [Integração e aplicações](mat-g04-integracao-e-aplicacoes.qmd) | ○ planejado |
+| MAT-G05 | G | [Álgebra linear I: vetores, matrizes e sistemas lineares](mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd) | ○ planejado |
+| MAT-G06 | G | [Cálculo em várias variáveis](mat-g06-calculo-em-varias-variaveis.qmd) | ○ planejado |
+| MAT-G07 | G | [Otimização: sem restrições e com restrições de igualdade](mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) | ○ planejado |
+| MAT-G08 | G | [Equações em diferenças e equações diferenciais lineares](mat-g08-equacoes-em-diferencas-e-equacoes-diferenciais-lineares.qmd) | ○ planejado |
+| MAT-M01 | M | [Análise real em $\mathbb{R}^n$ e espaços métricos](mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) | ○ planejado |
+| MAT-M02 | M | [Álgebra linear II: autovalores, decomposições e formas quadráticas](mat-m02-algebra-linear-ii-autovalores-decomposicoes-e-formas.qmd) | ○ planejado |
+| MAT-M03 | M | [Convexidade e otimização com restrições de desigualdade](mat-m03-convexidade-e-otimizacao-com-restricoes-de-desigualdade.qmd) | ○ planejado |
+| MAT-M04 | M | [Estática comparativa: função implícita, envelope e teorema do máximo](mat-m04-estatica-comparativa-funcao-implicita-envelope-e-teorema-do.qmd) | ○ planejado |
+| MAT-M05 | M | [Correspondências e teoremas de ponto fixo](mat-m05-correspondencias-e-teoremas-de-ponto-fixo.qmd) | ○ planejado |
+| MAT-M06 | M | [Sistemas dinâmicos: estabilidade, linearização e diagramas de fase](mat-m06-sistemas-dinamicos-estabilidade-linearizacao-e-diagramas-de.qmd) | ○ planejado |
+| MAT-D01 | D | [Cálculo das variações e controle ótimo](mat-d01-calculo-das-variacoes-e-controle-otimo.qmd) | ○ planejado |
+| MAT-D02 | D | [Programação dinâmica determinística](mat-d02-programacao-dinamica-deterministica.qmd) | ○ planejado |
+| MAT-D03 | D | [Programação dinâmica estocástica](mat-d03-programacao-dinamica-estocastica.qmd) | ○ planejado |
+| MAT-D04 | D | [Espaços de funções e operadores](mat-d04-espacos-de-funcoes-e-operadores.qmd) | ○ planejado |
+:::

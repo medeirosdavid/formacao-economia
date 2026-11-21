@@ -1,0 +1,27 @@
+# Economia aberta: câmbio, balanço de pagamentos e Mundell–Fleming {#sec-mac-g07}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAC-G07`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-g05 (*Demanda agregada: IS-LM e IS-MP*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Demanda agregada: IS-LM e IS-MP* (MAC-G05)
+:::
+
+**Leituras principais:** @blanchard2021, @mankiw2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Câmbio nominal e real
+2. Paridades de juros e de poder de compra
+3. Modelo Mundell–Fleming
+4. Regimes cambiais
+5. Crises cambiais
+:::

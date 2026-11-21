@@ -1,0 +1,26 @@
+# Projeções locais {#sec-ecm-d02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `ECM-D02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-d01 (*Identificação estrutural em VARs*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Identificação estrutural em VARs* (ECM-D01)
+:::
+
+**Leituras principais:** @jorda2005, @kilian2017
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Estimação de impulso-resposta por projeções locais
+2. LP com instrumentos
+3. Inferência
+4. Projeções locais versus VAR
+:::

@@ -1,0 +1,27 @@
+# Modelos afins de estrutura a termo e prêmio a termo {#sec-fin-d03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `FIN-D03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-m08 (*Estrutura a termo das taxas de juros*); @sec-ecm-d03 (*Modelos de espaço de estados e filtro de Kalman*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Estrutura a termo das taxas de juros* (FIN-M08); *Modelos de espaço de estados e filtro de Kalman* (ECM-D03)
+:::
+
+**Leituras principais:** @singleton2006, @diebold2006
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Modelos afins de estrutura a termo
+2. Estimação com filtro de Kalman
+3. Decomposição expectativas versus prêmio
+4. Nelson–Siegel dinâmico
+5. Aplicação à curva DI
+:::

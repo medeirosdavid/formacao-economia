@@ -1,0 +1,27 @@
+# Teoria assintótica do MQO e inferência robusta {#sec-ecm-m02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `ECM-M02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m01 (*O modelo linear em forma matricial*); @sec-est-m03 (*Modos de convergência e teoremas-limite*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *O modelo linear em forma matricial* (ECM-M01); *Modos de convergência e teoremas-limite* (EST-M03)
+:::
+
+**Leituras principais:** @hayashi2000, @hansen2022
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Consistência
+2. Normalidade assintótica
+3. Matriz de covariância robusta (White)
+4. HAC e Newey–West
+5. Erros-padrão por cluster
+:::

@@ -1,0 +1,28 @@
+# Análise real em $\mathbb{R}^n$ e espaços métricos {#sec-mat-m01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g02 (*Números reais, sequências e séries*); @sec-mat-g06 (*Cálculo em várias variáveis*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Números reais, sequências e séries* (MAT-G02); *Cálculo em várias variáveis* (MAT-G06)
+:::
+
+**Leituras principais:** @ok2007, @rudin1976, @delafuente2000
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Espaços métricos e normados
+2. Abertos, fechados e compactos
+3. Completude
+4. Continuidade e continuidade uniforme
+5. Teorema de Weierstrass em espaços métricos
+6. Conexidade
+:::

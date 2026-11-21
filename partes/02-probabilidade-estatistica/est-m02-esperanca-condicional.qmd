@@ -1,0 +1,26 @@
+# Esperança condicional {#sec-est-m02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `EST-M02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-m01 (*Probabilidade com teoria da medida*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Probabilidade com teoria da medida* (EST-M01)
+:::
+
+**Leituras principais:** @durrett2019, @billingsley1995
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Definição via Radon–Nikodym
+2. Propriedades e lei das expectativas iteradas
+3. Esperança condicional como projeção em $L^2$
+4. Independência condicional
+:::

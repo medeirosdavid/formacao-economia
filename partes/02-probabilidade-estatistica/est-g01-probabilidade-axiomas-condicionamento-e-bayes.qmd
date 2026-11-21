@@ -1,0 +1,27 @@
+# Probabilidade: axiomas, condicionamento e Bayes {#sec-est-g01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `EST-G01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g01 (*Lógica, conjuntos e métodos de demonstração*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Lógica, conjuntos e métodos de demonstração* (MAT-G01)
+:::
+
+**Leituras principais:** @degroot2012, @bussab2017
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Espaço amostral e eventos
+2. Axiomas de Kolmogorov
+3. Probabilidade condicional
+4. Independência
+5. Teorema de Bayes
+:::

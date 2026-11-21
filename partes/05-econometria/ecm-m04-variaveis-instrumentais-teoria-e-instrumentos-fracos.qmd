@@ -1,0 +1,26 @@
+# Variáveis instrumentais: teoria e instrumentos fracos {#sec-ecm-m04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `ECM-M04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m02 (*Teoria assintótica do MQO e inferência robusta*); @sec-ecm-g06 (*Endogeneidade e variáveis instrumentais*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Teoria assintótica do MQO e inferência robusta* (ECM-M02); *Endogeneidade e variáveis instrumentais* (ECM-G06)
+:::
+
+**Leituras principais:** @hayashi2000, @hansen2022, @angrist2009
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Identificação
+2. 2SLS e propriedades assintóticas
+3. LATE e heterogeneidade de efeitos
+4. Instrumentos fracos e inferência robusta (Anderson–Rubin)
+:::

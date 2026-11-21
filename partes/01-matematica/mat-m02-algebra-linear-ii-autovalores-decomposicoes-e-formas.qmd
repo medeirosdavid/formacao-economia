@@ -1,0 +1,28 @@
+# Álgebra linear II: autovalores, decomposições e formas quadráticas {#sec-mat-m02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g05 (*Álgebra linear I: vetores, matrizes e sistemas lineares*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Álgebra linear I: vetores, matrizes e sistemas lineares* (MAT-G05)
+:::
+
+**Leituras principais:** @strang2016, @delafuente2000
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Autovalores e autovetores
+2. Diagonalização e teorema espectral
+3. Formas quadráticas e definição de matrizes
+4. Decomposições: Cholesky, QR, SVD
+5. Projeções ortogonais
+6. Cálculo matricial
+:::

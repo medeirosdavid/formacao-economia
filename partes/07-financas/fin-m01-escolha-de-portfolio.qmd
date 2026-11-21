@@ -1,0 +1,26 @@
+# Escolha de portfólio {#sec-fin-m01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `FIN-M01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-g04 (*Risco, retorno e diversificação*); @sec-mic-m02 (*Escolha sob incerteza*); @sec-mat-m03 (*Convexidade e otimização com restrições de desigualdade*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Risco, retorno e diversificação* (FIN-G04); *Escolha sob incerteza* (MIC-M02); *Convexidade e otimização com restrições de desigualdade* (MAT-M03)
+:::
+
+**Leituras principais:** @back2017, @campbell2018
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Média-variância como problema de otimização
+2. Separação em dois fundos
+3. Utilidade esperada e portfólio ótimo
+4. Aversão ao risco e participação no mercado
+:::

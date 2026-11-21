@@ -1,0 +1,26 @@
+# Endogeneidade e variáveis instrumentais {#sec-ecm-g06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `ECM-G06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-g03 (*Inferência no modelo de regressão*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Inferência no modelo de regressão* (ECM-G03)
+:::
+
+**Leituras principais:** @wooldridge2019, @angrist2009
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Fontes de endogeneidade
+2. Instrumentos: relevância e exogeneidade
+3. Mínimos quadrados em dois estágios
+4. Testes de endogeneidade e sobreidentificação
+:::

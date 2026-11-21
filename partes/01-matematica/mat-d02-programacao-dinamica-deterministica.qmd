@@ -1,0 +1,28 @@
+# Programação dinâmica determinística {#sec-mat-d02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAT-D02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-m04 (*Estática comparativa: função implícita, envelope e teorema do máximo*); @sec-mat-m05 (*Correspondências e teoremas de ponto fixo*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Estática comparativa: função implícita, envelope e teorema do máximo* (MAT-M04); *Correspondências e teoremas de ponto fixo* (MAT-M05)
+:::
+
+**Leituras principais:** @stokey1989, @ljungqvist2018
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Problema sequencial e equação de Bellman
+2. Princípio da otimalidade
+3. Operador de Bellman e contração
+4. Condições de Blackwell
+5. Propriedades da função valor
+6. Teorema do envelope de Benveniste–Scheinkman
+:::

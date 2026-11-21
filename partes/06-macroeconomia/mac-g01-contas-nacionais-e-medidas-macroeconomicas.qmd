@@ -1,0 +1,21 @@
+# Contas nacionais e medidas macroeconômicas {#sec-mac-g01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAC-G01`
+
+**Pré-requisitos:** nenhum
+
+**Leituras principais:** @blanchard2021, @mankiw2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. PIB: ótica da produção, renda e despesa
+2. Índices de preços e inflação
+3. Desemprego e mercado de trabalho
+4. Balanço de pagamentos
+5. As contas nacionais do IBGE
+:::

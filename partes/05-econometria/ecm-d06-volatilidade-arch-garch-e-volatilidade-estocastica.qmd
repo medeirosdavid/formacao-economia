@@ -1,0 +1,27 @@
+# Volatilidade: ARCH, GARCH e volatilidade estocástica {#sec-ecm-d06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `ECM-D06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m09 (*Modelos ARMA e previsão*); @sec-ecm-m05 (*Máxima verossimilhança e a trindade de testes*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Modelos ARMA e previsão* (ECM-M09); *Máxima verossimilhança e a trindade de testes* (ECM-M05)
+:::
+
+**Leituras principais:** @tsay2010, @hamilton1994
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Fatos estilizados de retornos
+2. ARCH e GARCH
+3. Extensões assimétricas
+4. Volatilidade estocástica
+5. Volatilidade realizada
+:::

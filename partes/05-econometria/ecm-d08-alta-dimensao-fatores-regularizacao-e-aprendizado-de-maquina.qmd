@@ -1,0 +1,27 @@
+# Alta dimensão: fatores, regularização e aprendizado de máquina {#sec-ecm-d08}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `ECM-D08`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m02 (*Teoria assintótica do MQO e inferência robusta*); @sec-mat-m02 (*Álgebra linear II: autovalores, decomposições e formas quadráticas*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Teoria assintótica do MQO e inferência robusta* (ECM-M02); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02)
+:::
+
+**Leituras principais:** @hastie2009
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Modelos de fatores e componentes principais
+2. Ridge, LASSO e elastic net
+3. Validação cruzada
+4. Árvores e florestas aleatórias
+5. Inferência pós-seleção
+:::

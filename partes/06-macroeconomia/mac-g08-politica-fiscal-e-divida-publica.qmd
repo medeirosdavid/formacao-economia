@@ -1,0 +1,27 @@
+# Política fiscal e dívida pública {#sec-mac-g08}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAC-G08`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-g05 (*Demanda agregada: IS-LM e IS-MP*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Demanda agregada: IS-LM e IS-MP* (MAC-G05)
+:::
+
+**Leituras principais:** @blanchard2021, @mankiw2019
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Restrição orçamentária do governo
+2. Dinâmica da dívida e resultado primário
+3. Equivalência ricardiana (introdução)
+4. Regras fiscais
+5. A política fiscal no Brasil
+:::

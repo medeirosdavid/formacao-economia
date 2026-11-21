@@ -1,0 +1,27 @@
+# Escolha do consumidor e demanda {#sec-mic-g01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MIC-G01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-g07 (*Otimização: sem restrições e com restrições de igualdade*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Otimização: sem restrições e com restrições de igualdade* (MAT-G07)
+:::
+
+**Leituras principais:** @varian2014
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Preferências e utilidade
+2. Restrição orçamentária
+3. Demanda marshalliana
+4. Efeitos renda e substituição
+5. Excedente do consumidor
+:::

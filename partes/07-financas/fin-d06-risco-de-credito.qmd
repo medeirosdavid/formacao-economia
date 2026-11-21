@@ -1,0 +1,26 @@
+# Risco de crédito {#sec-fin-d06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `FIN-D06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-d02 (*Tempo contínuo: não-arbitragem e Black–Scholes–Merton*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Tempo contínuo: não-arbitragem e Black–Scholes–Merton* (FIN-D02)
+:::
+
+**Leituras principais:** @duffie2001
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Modelo estrutural de Merton
+2. Modelos de forma reduzida
+3. Spreads de crédito
+4. Derivativos de crédito
+:::

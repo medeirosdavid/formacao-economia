@@ -1,0 +1,21 @@
+# Computação {.unnumbered}
+
+<!-- ARQUIVO GERADO por scripts/gerar_estrutura.py — edite curriculo.yml, não este arquivo -->
+
+Programação científica, dados e métodos numéricos — o que é preciso para que cada laboratório do livro rode, e para resolver modelos de verdade.
+
+::: {.content-visible when-format="html"}
+| Código | Nível | Capítulo | Status |
+|:--|:--|:--|:--|
+| CMP-G01 | G | [Python para economistas](cmp-g01-python-para-economistas.qmd) | ○ planejado |
+| CMP-G02 | G | [Dados: pandas, APIs públicas brasileiras e visualização](cmp-g02-dados-pandas-apis-publicas-brasileiras-e-visualizacao.qmd) | ○ planejado |
+| CMP-G03 | G | [Reprodutibilidade: Git, Quarto e ambientes](cmp-g03-reprodutibilidade-git-quarto-e-ambientes.qmd) | ○ planejado |
+| CMP-M01 | M | [Métodos numéricos I: raízes, otimização e diferenciação](cmp-m01-metodos-numericos-i-raizes-otimizacao-e-diferenciacao.qmd) | ○ planejado |
+| CMP-M02 | M | [Métodos numéricos II: integração, interpolação e aproximação](cmp-m02-metodos-numericos-ii-integracao-interpolacao-e-aproximacao.qmd) | ○ planejado |
+| CMP-M03 | M | [Simulação e Monte Carlo](cmp-m03-simulacao-e-monte-carlo.qmd) | ○ planejado |
+| CMP-M04 | M | [Discretização de processos estocásticos](cmp-m04-discretizacao-de-processos-estocasticos.qmd) | ○ planejado |
+| CMP-D01 | D | [Solução de modelos dinâmicos: VFI, PFI e EGM](cmp-d01-solucao-de-modelos-dinamicos-vfi-pfi-e-egm.qmd) | ○ planejado |
+| CMP-D02 | D | [Métodos de perturbação e projeção](cmp-d02-metodos-de-perturbacao-e-projecao.qmd) | ○ planejado |
+| CMP-D03 | D | [Modelos de agentes heterogêneos: distribuição e equilíbrio](cmp-d03-modelos-de-agentes-heterogeneos-distribuicao-e-equilibrio.qmd) | ○ planejado |
+| CMP-D04 | D | [Computação de alto desempenho](cmp-d04-computacao-de-alto-desempenho.qmd) | ○ planejado |
+:::

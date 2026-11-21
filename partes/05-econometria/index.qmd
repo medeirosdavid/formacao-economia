@@ -1,0 +1,40 @@
+# Econometria {.unnumbered}
+
+<!-- ARQUIVO GERADO por scripts/gerar_estrutura.py — edite curriculo.yml, não este arquivo -->
+
+Do modelo de regressão à identificação estrutural em macro: inferência, causalidade, séries temporais, métodos bayesianos e previsão.
+
+::: {.content-visible when-format="html"}
+| Código | Nível | Capítulo | Status |
+|:--|:--|:--|:--|
+| ECM-G01 | G | [Regressão linear simples](ecm-g01-regressao-linear-simples.qmd) | ◔ rascunho |
+| ECM-G02 | G | [Regressão linear múltipla](ecm-g02-regressao-linear-multipla.qmd) | ○ planejado |
+| ECM-G03 | G | [Inferência no modelo de regressão](ecm-g03-inferencia-no-modelo-de-regressao.qmd) | ○ planejado |
+| ECM-G04 | G | [Especificação: forma funcional, variáveis binárias e interações](ecm-g04-especificacao-forma-funcional-variaveis-binarias-e.qmd) | ○ planejado |
+| ECM-G05 | G | [Heterocedasticidade e autocorrelação](ecm-g05-heterocedasticidade-e-autocorrelacao.qmd) | ○ planejado |
+| ECM-G06 | G | [Endogeneidade e variáveis instrumentais](ecm-g06-endogeneidade-e-variaveis-instrumentais.qmd) | ○ planejado |
+| ECM-G07 | G | [Dados em painel: introdução](ecm-g07-dados-em-painel-introducao.qmd) | ○ planejado |
+| ECM-G08 | G | [Séries temporais: introdução](ecm-g08-series-temporais-introducao.qmd) | ○ planejado |
+| ECM-G09 | G | [Modelos de escolha binária](ecm-g09-modelos-de-escolha-binaria.qmd) | ○ planejado |
+| ECM-M01 | M | [O modelo linear em forma matricial](ecm-m01-o-modelo-linear-em-forma-matricial.qmd) | ○ planejado |
+| ECM-M02 | M | [Teoria assintótica do MQO e inferência robusta](ecm-m02-teoria-assintotica-do-mqo-e-inferencia-robusta.qmd) | ○ planejado |
+| ECM-M03 | M | [Mínimos quadrados generalizados](ecm-m03-minimos-quadrados-generalizados.qmd) | ○ planejado |
+| ECM-M04 | M | [Variáveis instrumentais: teoria e instrumentos fracos](ecm-m04-variaveis-instrumentais-teoria-e-instrumentos-fracos.qmd) | ○ planejado |
+| ECM-M05 | M | [Máxima verossimilhança e a trindade de testes](ecm-m05-maxima-verossimilhanca-e-a-trindade-de-testes.qmd) | ○ planejado |
+| ECM-M06 | M | [Método generalizado dos momentos (GMM)](ecm-m06-metodo-generalizado-dos-momentos-gmm.qmd) | ○ planejado |
+| ECM-M07 | M | [Dados em painel: efeitos fixos, aleatórios e painéis dinâmicos](ecm-m07-dados-em-painel-efeitos-fixos-aleatorios-e-paineis-dinamicos.qmd) | ○ planejado |
+| ECM-M08 | M | [Inferência causal](ecm-m08-inferencia-causal.qmd) | ○ planejado |
+| ECM-M09 | M | [Modelos ARMA e previsão](ecm-m09-modelos-arma-e-previsao.qmd) | ○ planejado |
+| ECM-M10 | M | [Raiz unitária e cointegração](ecm-m10-raiz-unitaria-e-cointegracao.qmd) | ○ planejado |
+| ECM-M11 | M | [Vetores autorregressivos (VAR)](ecm-m11-vetores-autorregressivos-var.qmd) | ○ planejado |
+| ECM-D01 | D | [Identificação estrutural em VARs](ecm-d01-identificacao-estrutural-em-vars.qmd) | ○ planejado |
+| ECM-D02 | D | [Projeções locais](ecm-d02-projecoes-locais.qmd) | ○ planejado |
+| ECM-D03 | D | [Modelos de espaço de estados e filtro de Kalman](ecm-d03-modelos-de-espaco-de-estados-e-filtro-de-kalman.qmd) | ○ planejado |
+| ECM-D04 | D | [Econometria bayesiana e MCMC](ecm-d04-econometria-bayesiana-e-mcmc.qmd) | ○ planejado |
+| ECM-D05 | D | [Estimação de modelos DSGE](ecm-d05-estimacao-de-modelos-dsge.qmd) | ○ planejado |
+| ECM-D06 | D | [Volatilidade: ARCH, GARCH e volatilidade estocástica](ecm-d06-volatilidade-arch-garch-e-volatilidade-estocastica.qmd) | ○ planejado |
+| ECM-D07 | D | [Bootstrap e inferência por reamostragem](ecm-d07-bootstrap-e-inferencia-por-reamostragem.qmd) | ○ planejado |
+| ECM-D08 | D | [Alta dimensão: fatores, regularização e aprendizado de máquina](ecm-d08-alta-dimensao-fatores-regularizacao-e-aprendizado-de-maquina.qmd) | ○ planejado |
+| ECM-D09 | D | [Previsão, avaliação de previsões e nowcasting](ecm-d09-previsao-avaliacao-de-previsoes-e-nowcasting.qmd) | ○ planejado |
+| ECM-D10 | D | [Modelos não lineares de séries temporais](ecm-d10-modelos-nao-lineares-de-series-temporais.qmd) | ○ planejado |
+:::

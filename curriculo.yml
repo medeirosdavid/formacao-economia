@@ -1,0 +1,980 @@
+# =============================================================================
+# CURRÍCULO — fonte única da estrutura do livro
+# -----------------------------------------------------------------------------
+# Tudo o que descreve a estrutura (partes, capítulos, nível, pré-requisitos,
+# leituras, tópicos planejados e status) mora AQUI. Depois de editar, rode:
+#
+#     python scripts/gerar_estrutura.py
+#
+# O script cria os capítulos que ainda não existem (nunca sobrescreve texto
+# escrito), atualiza o cabeçalho de cada capítulo, as listas de capítulos do
+# site e do PDF, as páginas de abertura das partes e o plano mestre.
+#
+# Campos de cada capítulo
+#   id       código estável (ÁREA-NÍVELnn); vira o rótulo #sec-<id em minúsculas>
+#   titulo   título do capítulo
+#   nivel    G (graduação) | M (mestrado) | D (doutorado)
+#   prereq   ids de capítulos que devem vir antes
+#   leituras chaves de referencias.bib
+#   topicos  seções planejadas (viram o roteiro do capítulo-esboço)
+#   status   planejado | rascunho | revisao | completo   (padrão: planejado)
+#
+# Para ADICIONAR um tópico: acrescente um item na parte certa, com um id novo
+# (ex.: MAC-M14). A ordem no arquivo é a ordem no livro.
+# =============================================================================
+
+titulo: "Formação em Economia"
+subtitulo: "Macroeconomia, Finanças e Econometria — da graduação ao doutorado"
+autor: "David Medeiros"
+
+niveis:
+  G: Graduação
+  M: Mestrado
+  D: Doutorado
+
+trilhas:
+  - nome: "Base quantitativa"
+    descricao: "Matemática, probabilidade e computação até o nível de mestrado — o mínimo para ler qualquer outra parte com conforto."
+    capitulos: [MAT-G01, MAT-G05, MAT-G06, MAT-G07, EST-G01, EST-G02, EST-G03, EST-G05, EST-G06, CMP-G01, CMP-G02, MAT-M01, MAT-M02, MAT-M03, EST-M02, EST-M03]
+  - nome: "Graduação completa"
+    descricao: "Todos os capítulos de nível G, na ordem do livro."
+    filtro_nivel: G
+  - nome: "Núcleo de macro quantitativa"
+    descricao: "Do equilíbrio recursivo aos agentes heterogêneos, com as ferramentas que o caminho exige."
+    capitulos: [MAT-D02, MAT-D03, MIC-M04, MAC-M01, MAC-M04, MAC-M06, MAC-M07, CMP-M04, CMP-D01, MAC-M10, MAC-M11, MAC-D01, MAC-D02, MAC-D03]
+  - nome: "Macroeconometria"
+    descricao: "Séries temporais, identificação e estimação de modelos estruturais."
+    capitulos: [ECM-M02, ECM-M09, ECM-M10, ECM-M11, ECM-D01, ECM-D02, ECM-D03, ECM-D04, ECM-D05, ECM-D09]
+  - nome: "Apreçamento de ativos"
+    descricao: "Do fator estocástico de desconto aos modelos de estrutura a termo e macro-finanças."
+    capitulos: [MIC-M02, FIN-M02, FIN-M03, FIN-M04, FIN-M05, FIN-M06, FIN-M07, FIN-M08, FIN-D01, FIN-D03, FIN-D04]
+
+partes:
+
+  # ---------------------------------------------------------------------------
+  - id: MAT
+    titulo: "Matemática"
+    pasta: "01-matematica"
+    descricao: >-
+      Ferramentas de análise, álgebra linear, otimização e dinâmica usadas no
+      resto do livro. Do cálculo de graduação à programação dinâmica estocástica.
+    capitulos:
+      - id: MAT-G01
+        titulo: "Lógica, conjuntos e métodos de demonstração"
+        nivel: G
+        prereq: []
+        leituras: [simon1994, lima1989]
+        topicos: ["Proposições, conectivos e quantificadores", "Conjuntos, relações e funções", "Cardinalidade", "Demonstração direta, contrapositiva, por absurdo e por indução"]
+      - id: MAT-G02
+        titulo: "Números reais, sequências e séries"
+        nivel: G
+        prereq: [MAT-G01]
+        leituras: [lima1989, rudin1976]
+        topicos: ["Axioma do supremo", "Sequências e limites", "Subsequências e Bolzano–Weierstrass", "Sequências de Cauchy", "Séries e critérios de convergência", "Séries geométricas e valor presente"]
+      - id: MAT-G03
+        titulo: "Funções de uma variável: limites, continuidade e derivadas"
+        nivel: G
+        prereq: [MAT-G02]
+        leituras: [simon1994, sydsaeter2016]
+        topicos: ["Limites e continuidade", "Valor intermediário e Weierstrass", "Derivada e regras de derivação", "Teorema do valor médio", "Fórmula de Taylor", "Concavidade, elasticidade e aplicações"]
+      - id: MAT-G04
+        titulo: "Integração e aplicações"
+        nivel: G
+        prereq: [MAT-G03]
+        leituras: [simon1994, sydsaeter2016]
+        topicos: ["Integral de Riemann", "Teorema fundamental do cálculo", "Técnicas de integração", "Integrais impróprias", "Regra de Leibniz", "Aplicações: excedentes, valor presente contínuo"]
+      - id: MAT-G05
+        titulo: "Álgebra linear I: vetores, matrizes e sistemas lineares"
+        nivel: G
+        prereq: [MAT-G01]
+        leituras: [strang2016, simon1994]
+        topicos: ["Vetores e o espaço $\\mathbb{R}^n$", "Operações com matrizes", "Eliminação gaussiana e posto", "Determinante e inversa", "Independência linear, base e dimensão", "Aplicação: modelo insumo-produto"]
+      - id: MAT-G06
+        titulo: "Cálculo em várias variáveis"
+        nivel: G
+        prereq: [MAT-G03, MAT-G05]
+        leituras: [simon1994, sydsaeter2016]
+        topicos: ["Funções de $\\mathbb{R}^n$ em $\\mathbb{R}$", "Derivadas parciais, gradiente e diferencial", "Regra da cadeia", "Matriz hessiana", "Funções homogêneas e teorema de Euler", "Integrais múltiplas"]
+      - id: MAT-G07
+        titulo: "Otimização: sem restrições e com restrições de igualdade"
+        nivel: G
+        prereq: [MAT-G06]
+        leituras: [simon1994, sundaram1996]
+        topicos: ["Condições de primeira e segunda ordem", "Concavidade e ótimos globais", "Método de Lagrange", "Interpretação dos multiplicadores", "Hessiana orlada", "Aplicações: consumidor e firma"]
+      - id: MAT-G08
+        titulo: "Equações em diferenças e equações diferenciais lineares"
+        nivel: G
+        prereq: [MAT-G04, MAT-G05]
+        leituras: [simon1994, sydsaeter2016]
+        topicos: ["Equações em diferenças de 1ª e 2ª ordem", "Equações diferenciais de 1ª e 2ª ordem", "Estado estacionário e estabilidade", "Sistemas lineares", "Aplicações: teia de aranha, Solow"]
+      - id: MAT-M01
+        titulo: "Análise real em $\\mathbb{R}^n$ e espaços métricos"
+        nivel: M
+        prereq: [MAT-G02, MAT-G06]
+        leituras: [ok2007, rudin1976, delafuente2000]
+        topicos: ["Espaços métricos e normados", "Abertos, fechados e compactos", "Completude", "Continuidade e continuidade uniforme", "Teorema de Weierstrass em espaços métricos", "Conexidade"]
+      - id: MAT-M02
+        titulo: "Álgebra linear II: autovalores, decomposições e formas quadráticas"
+        nivel: M
+        prereq: [MAT-G05]
+        leituras: [strang2016, delafuente2000]
+        topicos: ["Autovalores e autovetores", "Diagonalização e teorema espectral", "Formas quadráticas e definição de matrizes", "Decomposições: Cholesky, QR, SVD", "Projeções ortogonais", "Cálculo matricial"]
+      - id: MAT-M03
+        titulo: "Convexidade e otimização com restrições de desigualdade"
+        nivel: M
+        prereq: [MAT-G07, MAT-M01]
+        leituras: [sundaram1996, delafuente2000]
+        topicos: ["Conjuntos e funções convexas", "Quase-concavidade", "Teoremas de separação", "Condições de Kuhn–Tucker", "Qualificação de restrições", "Dualidade"]
+      - id: MAT-M04
+        titulo: "Estática comparativa: função implícita, envelope e teorema do máximo"
+        nivel: M
+        prereq: [MAT-M03]
+        leituras: [sundaram1996, simon1994]
+        topicos: ["Teorema da função implícita", "Teorema do envelope", "Correspondências e continuidade", "Teorema do máximo de Berge", "Estática comparativa monótona"]
+      - id: MAT-M05
+        titulo: "Correspondências e teoremas de ponto fixo"
+        nivel: M
+        prereq: [MAT-M01, MAT-M04]
+        leituras: [ok2007, sundaram1996]
+        topicos: ["Teorema do ponto fixo de Banach", "Teorema de Brouwer", "Teorema de Kakutani", "Ponto fixo de Tarski", "Aplicações a existência de equilíbrio"]
+      - id: MAT-M06
+        titulo: "Sistemas dinâmicos: estabilidade, linearização e diagramas de fase"
+        nivel: M
+        prereq: [MAT-G08, MAT-M02]
+        leituras: [delafuente2000, acemoglu2009]
+        topicos: ["Sistemas lineares em tempo discreto e contínuo", "Linearização e teorema de Hartman–Grobman", "Pontos de sela e variedades estáveis", "Diagramas de fase", "Condições de Blanchard–Kahn"]
+      - id: MAT-D01
+        titulo: "Cálculo das variações e controle ótimo"
+        nivel: D
+        prereq: [MAT-M03, MAT-M06]
+        leituras: [kamien1991, acemoglu2009]
+        topicos: ["Equação de Euler–Lagrange", "Condições de transversalidade", "Princípio do máximo de Pontryagin", "Hamiltoniano a valor corrente", "Horizonte infinito", "Aplicação: Ramsey"]
+      - id: MAT-D02
+        titulo: "Programação dinâmica determinística"
+        nivel: D
+        prereq: [MAT-M04, MAT-M05]
+        leituras: [stokey1989, ljungqvist2018]
+        topicos: ["Problema sequencial e equação de Bellman", "Princípio da otimalidade", "Operador de Bellman e contração", "Condições de Blackwell", "Propriedades da função valor", "Teorema do envelope de Benveniste–Scheinkman"]
+      - id: MAT-D03
+        titulo: "Programação dinâmica estocástica"
+        nivel: D
+        prereq: [MAT-D02, EST-D01]
+        leituras: [stokey1989, ljungqvist2018]
+        topicos: ["Choques markovianos", "Bellman estocástico", "Funções política e equação de Euler estocástica", "Distribuições invariantes", "Convergência fraca"]
+      - id: MAT-D04
+        titulo: "Espaços de funções e operadores"
+        nivel: D
+        prereq: [MAT-M01, MAT-M02]
+        leituras: [ok2007, stokey1989]
+        topicos: ["Espaços de Banach e de Hilbert", "Operadores lineares", "O espaço $L^2$ e projeções", "Teorema de representação de Riesz", "Aplicações a econometria e dinâmica"]
+
+  # ---------------------------------------------------------------------------
+  - id: EST
+    titulo: "Probabilidade e Estatística"
+    pasta: "02-probabilidade-estatistica"
+    descricao: >-
+      Da probabilidade elementar à teoria da medida, inferência estatística e
+      processos estocásticos — a base de toda a econometria e das finanças.
+    capitulos:
+      - id: EST-G01
+        titulo: "Probabilidade: axiomas, condicionamento e Bayes"
+        nivel: G
+        prereq: [MAT-G01]
+        leituras: [degroot2012, bussab2017]
+        topicos: ["Espaço amostral e eventos", "Axiomas de Kolmogorov", "Probabilidade condicional", "Independência", "Teorema de Bayes"]
+      - id: EST-G02
+        titulo: "Variáveis aleatórias e distribuições"
+        nivel: G
+        prereq: [EST-G01, MAT-G04]
+        leituras: [degroot2012, casella2002]
+        topicos: ["Variáveis discretas e contínuas", "Funções de distribuição e densidade", "Distribuições usuais", "Transformações de variáveis"]
+      - id: EST-G03
+        titulo: "Esperança, momentos e distribuições conjuntas"
+        nivel: G
+        prereq: [EST-G02, MAT-G06]
+        leituras: [degroot2012, casella2002]
+        topicos: ["Esperança e variância", "Distribuições conjuntas, marginais e condicionais", "Covariância e correlação", "Esperança condicional (versão elementar)", "Normal multivariada"]
+      - id: EST-G04
+        titulo: "Amostragem e teoremas-limite"
+        nivel: G
+        prereq: [EST-G03]
+        leituras: [degroot2012, casella2002]
+        topicos: ["Amostra aleatória e estatísticas", "Desigualdades de Markov e Chebyshev", "Lei dos grandes números", "Teorema central do limite", "Distribuições qui-quadrado, t e F"]
+      - id: EST-G05
+        titulo: "Estimação pontual e intervalar"
+        nivel: G
+        prereq: [EST-G04]
+        leituras: [casella2002, bussab2017]
+        topicos: ["Estimadores e suas propriedades", "Método dos momentos", "Máxima verossimilhança (introdução)", "Intervalos de confiança"]
+      - id: EST-G06
+        titulo: "Testes de hipóteses"
+        nivel: G
+        prereq: [EST-G05]
+        leituras: [casella2002, bussab2017]
+        topicos: ["Hipóteses, erros e poder", "Valor-p", "Testes para médias e proporções", "Relação entre testes e intervalos"]
+      - id: EST-M01
+        titulo: "Probabilidade com teoria da medida"
+        nivel: M
+        prereq: [EST-G03, MAT-M01]
+        leituras: [billingsley1995, durrett2019]
+        topicos: ["$\\sigma$-álgebras e medidas", "Funções mensuráveis", "Integral de Lebesgue", "Convergência monótona e dominada", "Fubini", "Radon–Nikodym"]
+      - id: EST-M02
+        titulo: "Esperança condicional"
+        nivel: M
+        prereq: [EST-M01]
+        leituras: [durrett2019, billingsley1995]
+        topicos: ["Definição via Radon–Nikodym", "Propriedades e lei das expectativas iteradas", "Esperança condicional como projeção em $L^2$", "Independência condicional"]
+      - id: EST-M03
+        titulo: "Modos de convergência e teoremas-limite"
+        nivel: M
+        prereq: [EST-M01]
+        leituras: [durrett2019, hansen2022]
+        topicos: ["Convergência quase certa, em probabilidade, em $L^p$ e em distribuição", "Teorema do mapeamento contínuo e Slutsky", "LGN forte e fraca", "TCL de Lindeberg–Lévy e Lindeberg–Feller", "Método delta"]
+      - id: EST-M04
+        titulo: "Inferência estatística: suficiência, verossimilhança e eficiência"
+        nivel: M
+        prereq: [EST-G05, EST-M03]
+        leituras: [casella2002]
+        topicos: ["Suficiência e fatoração", "Completude e Rao–Blackwell", "Informação de Fisher e Cramér–Rao", "Propriedades assintóticas do EMV"]
+      - id: EST-M05
+        titulo: "Testes ótimos e regiões de confiança"
+        nivel: M
+        prereq: [EST-M04]
+        leituras: [casella2002]
+        topicos: ["Lema de Neyman–Pearson", "Testes uniformemente mais poderosos", "Razão de verossimilhança", "Inversão de testes"]
+      - id: EST-M06
+        titulo: "Inferência bayesiana"
+        nivel: M
+        prereq: [EST-M04]
+        leituras: [gelman2013, koop2003]
+        topicos: ["Priori, verossimilhança e posteriori", "Famílias conjugadas", "Estimadores de Bayes e funções perda", "Intervalos de credibilidade", "Comparação de modelos e fator de Bayes"]
+      - id: EST-D01
+        titulo: "Cadeias de Markov"
+        nivel: D
+        prereq: [EST-G03, MAT-M02]
+        leituras: [ljungqvist2018, durrett2019]
+        topicos: ["Matriz de transição", "Distribuições estacionárias", "Irredutibilidade, aperiodicidade e ergodicidade", "Cadeias em espaço contínuo", "Aplicação: ciclos de negócios"]
+      - id: EST-D02
+        titulo: "Processos estacionários, ergodicidade e representação de Wold"
+        nivel: D
+        prereq: [EST-M03, MAT-D04]
+        leituras: [hamilton1994, hansen2022]
+        topicos: ["Estacionariedade forte e fraca", "Ergodicidade e LGN para dependência", "Processos lineares", "Teorema de Wold", "Densidade espectral"]
+      - id: EST-D03
+        titulo: "Martingais"
+        nivel: D
+        prereq: [EST-M02]
+        leituras: [durrett2019, shreve2004]
+        topicos: ["Filtrações e tempos de parada", "Martingais em tempo discreto", "Teorema da parada opcional", "Convergência de martingais", "TCL para diferenças de martingal"]
+      - id: EST-D04
+        titulo: "Movimento browniano e cálculo de Itô"
+        nivel: D
+        prereq: [EST-D03]
+        leituras: [shreve2004, oksendal2003]
+        topicos: ["Movimento browniano", "Integral de Itô", "Lema de Itô", "Equações diferenciais estocásticas", "Mudança de medida e Girsanov"]
+
+  # ---------------------------------------------------------------------------
+  - id: CMP
+    titulo: "Computação"
+    pasta: "03-computacao"
+    descricao: >-
+      Programação científica, dados e métodos numéricos — o que é preciso para
+      que cada laboratório do livro rode, e para resolver modelos de verdade.
+    capitulos:
+      - id: CMP-G01
+        titulo: "Python para economistas"
+        nivel: G
+        prereq: []
+        leituras: [mckinney2022, quantecon]
+        topicos: ["Tipos, controle de fluxo e funções", "NumPy e vetorização", "Matplotlib", "Boas práticas de código científico"]
+      - id: CMP-G02
+        titulo: "Dados: pandas, APIs públicas brasileiras e visualização"
+        nivel: G
+        prereq: [CMP-G01]
+        leituras: [mckinney2022]
+        topicos: ["Séries e DataFrames", "Datas, frequências e reamostragem", "APIs do BCB (SGS), IBGE (SIDRA) e Ipeadata", "Visualização de séries macroeconômicas"]
+      - id: CMP-G03
+        titulo: "Reprodutibilidade: Git, Quarto e ambientes"
+        nivel: G
+        prereq: [CMP-G01]
+        leituras: [quantecon]
+        topicos: ["Controle de versão com Git", "Documentos executáveis com Quarto", "Ambientes virtuais e dependências", "Organização de projetos de pesquisa"]
+      - id: CMP-M01
+        titulo: "Métodos numéricos I: raízes, otimização e diferenciação"
+        nivel: M
+        prereq: [CMP-G01, MAT-G07]
+        leituras: [judd1998, miranda2002]
+        topicos: ["Bisseção, Newton e quase-Newton", "Otimização sem derivadas", "Diferenciação numérica e automática", "Sistemas não lineares", "Condicionamento e erros de ponto flutuante"]
+      - id: CMP-M02
+        titulo: "Métodos numéricos II: integração, interpolação e aproximação"
+        nivel: M
+        prereq: [CMP-M01]
+        leituras: [judd1998, miranda2002]
+        topicos: ["Quadratura de Newton–Cotes e gaussiana", "Interpolação polinomial e splines", "Polinômios de Chebyshev", "Aproximação de funções"]
+      - id: CMP-M03
+        titulo: "Simulação e Monte Carlo"
+        nivel: M
+        prereq: [CMP-G01, EST-G04]
+        leituras: [judd1998, quantecon]
+        topicos: ["Geradores de números aleatórios", "Integração de Monte Carlo", "Redução de variância", "Desenho de experimentos de Monte Carlo em econometria"]
+      - id: CMP-M04
+        titulo: "Discretização de processos estocásticos"
+        nivel: M
+        prereq: [CMP-M03, EST-D01]
+        leituras: [quantecon, heer2009]
+        topicos: ["Método de Tauchen", "Método de Rouwenhorst", "Comparação de precisão", "Processos persistentes"]
+      - id: CMP-D01
+        titulo: "Solução de modelos dinâmicos: VFI, PFI e EGM"
+        nivel: D
+        prereq: [MAT-D03, CMP-M02]
+        leituras: [heer2009, quantecon]
+        topicos: ["Iteração da função valor", "Iteração da função política", "Método dos pontos endógenos (EGM)", "Precisão: erros na equação de Euler"]
+      - id: CMP-D02
+        titulo: "Métodos de perturbação e projeção"
+        nivel: D
+        prereq: [CMP-D01, MAT-M06]
+        leituras: [fernandezvillaverde2016, judd1998]
+        topicos: ["Linearização e solução de Blanchard–Kahn/Klein", "Perturbação de ordem superior", "Métodos de projeção e colocação", "Comparação de métodos"]
+      - id: CMP-D03
+        titulo: "Modelos de agentes heterogêneos: distribuição e equilíbrio"
+        nivel: D
+        prereq: [CMP-D01, MAC-D01]
+        leituras: [auclert2021, heer2009]
+        topicos: ["Método do histograma (Young)", "Equilíbrio estacionário", "Transições determinísticas", "Jacobianos no espaço de sequências"]
+      - id: CMP-D04
+        titulo: "Computação de alto desempenho"
+        nivel: D
+        prereq: [CMP-D01]
+        leituras: [quantecon]
+        topicos: ["Compilação JIT com Numba", "JAX e diferenciação automática", "Paralelização e GPU", "Perfilamento de código"]
+
+  # ---------------------------------------------------------------------------
+  - id: MIC
+    titulo: "Microfundamentos"
+    pasta: "04-microfundamentos"
+    descricao: >-
+      A microeconomia que a macro e as finanças pressupõem: escolha individual,
+      incerteza, equilíbrio geral, jogos e informação.
+    capitulos:
+      - id: MIC-G01
+        titulo: "Escolha do consumidor e demanda"
+        nivel: G
+        prereq: [MAT-G07]
+        leituras: [varian2014]
+        topicos: ["Preferências e utilidade", "Restrição orçamentária", "Demanda marshalliana", "Efeitos renda e substituição", "Excedente do consumidor"]
+      - id: MIC-G02
+        titulo: "Produção, custos e a firma"
+        nivel: G
+        prereq: [MAT-G07]
+        leituras: [varian2014]
+        topicos: ["Tecnologia e funções de produção", "Minimização de custos", "Maximização de lucro", "Curto e longo prazo"]
+      - id: MIC-G03
+        titulo: "Mercados competitivos e bem-estar"
+        nivel: G
+        prereq: [MIC-G01, MIC-G02]
+        leituras: [varian2014]
+        topicos: ["Equilíbrio parcial", "Eficiência e excedentes", "Caixa de Edgeworth", "Externalidades e bens públicos"]
+      - id: MIC-G04
+        titulo: "Escolha intertemporal"
+        nivel: G
+        prereq: [MIC-G01]
+        leituras: [varian2014]
+        topicos: ["Restrição orçamentária intertemporal", "Taxa de juros e poupança", "Modelo de Fisher", "Valor presente e decisões de investimento"]
+      - id: MIC-G05
+        titulo: "Introdução à teoria dos jogos"
+        nivel: G
+        prereq: [MIC-G01]
+        leituras: [varian2014, osborne2020]
+        topicos: ["Jogos na forma normal", "Equilíbrio de Nash", "Estratégias mistas", "Jogos sequenciais", "Oligopólio"]
+      - id: MIC-M01
+        titulo: "Teoria do consumidor"
+        nivel: M
+        prereq: [MIC-G01, MAT-M04]
+        leituras: [mwg1995, jehle2011]
+        topicos: ["Preferências e representação", "Utilidade indireta e função dispêndio", "Dualidade, Roy e Shephard", "Equação de Slutsky", "Agregação"]
+      - id: MIC-M02
+        titulo: "Escolha sob incerteza"
+        nivel: M
+        prereq: [MIC-M01, EST-G03]
+        leituras: [mwg1995, gollier2001]
+        topicos: ["Loterias e utilidade esperada", "Aversão ao risco: Arrow–Pratt", "Equivalente certo e prêmio de risco", "Dominância estocástica", "Poupança precaucional e prudência"]
+      - id: MIC-M03
+        titulo: "Equilíbrio geral e teoremas do bem-estar"
+        nivel: M
+        prereq: [MIC-M01, MAT-M05]
+        leituras: [mwg1995, jehle2011]
+        topicos: ["Economias de troca e produção", "Existência de equilíbrio", "Primeiro e segundo teoremas do bem-estar", "Unicidade e estabilidade"]
+      - id: MIC-M04
+        titulo: "Equilíbrio geral com tempo e incerteza"
+        nivel: M
+        prereq: [MIC-M03, MIC-M02]
+        leituras: [mwg1995, ljungqvist2018]
+        topicos: ["Mercados de Arrow–Debreu", "Mercados sequenciais e títulos de Arrow", "Equivalência entre as estruturas de mercado", "Compartilhamento de risco", "Mercados incompletos"]
+      - id: MIC-M05
+        titulo: "Teoria dos jogos: jogos dinâmicos e bayesianos"
+        nivel: M
+        prereq: [MIC-G05, MAT-M05]
+        leituras: [fudenberg1991, osborne2020]
+        topicos: ["Perfeição em subjogos", "Jogos repetidos", "Jogos bayesianos", "Equilíbrio bayesiano perfeito"]
+      - id: MIC-M06
+        titulo: "Informação assimétrica"
+        nivel: M
+        prereq: [MIC-M02, MIC-M05]
+        leituras: [mwg1995, bolton2005]
+        topicos: ["Seleção adversa", "Sinalização e screening", "Risco moral", "Aplicações a crédito e seguros"]
+      - id: MIC-D01
+        titulo: "Desenho de mecanismos e contratos dinâmicos"
+        nivel: D
+        prereq: [MIC-M06]
+        leituras: [bolton2005, ljungqvist2018]
+        topicos: ["Princípio da revelação", "Incentivos e compatibilidade", "Contratos recursivos", "Seguro com informação privada"]
+
+  # ---------------------------------------------------------------------------
+  - id: ECM
+    titulo: "Econometria"
+    pasta: "05-econometria"
+    descricao: >-
+      Do modelo de regressão à identificação estrutural em macro: inferência,
+      causalidade, séries temporais, métodos bayesianos e previsão.
+    capitulos:
+      - id: ECM-G01
+        titulo: "Regressão linear simples"
+        nivel: G
+        prereq: [EST-G03, EST-G05]
+        leituras: [wooldridge2019, stock2019, hansen2022]
+        status: rascunho
+        topicos: ["O modelo populacional e o melhor preditor linear", "O estimador de MQO", "Propriedades algébricas e R²", "Unidades e forma funcional", "Inexistência de viés, variância e Gauss–Markov", "Aplicação: lei de Okun no Brasil"]
+      - id: ECM-G02
+        titulo: "Regressão linear múltipla"
+        nivel: G
+        prereq: [ECM-G01, MAT-G05]
+        leituras: [wooldridge2019, stock2019]
+        topicos: ["Interpretação ceteris paribus", "Estimador de MQO com vários regressores", "Partialling out", "Viés de variável omitida", "Multicolinearidade"]
+      - id: ECM-G03
+        titulo: "Inferência no modelo de regressão"
+        nivel: G
+        prereq: [ECM-G02, EST-G06]
+        leituras: [wooldridge2019, stock2019]
+        topicos: ["Distribuição do MQO sob normalidade", "Testes t e intervalos de confiança", "Testes F e restrições lineares", "Inferência assintótica"]
+      - id: ECM-G04
+        titulo: "Especificação: forma funcional, variáveis binárias e interações"
+        nivel: G
+        prereq: [ECM-G03]
+        leituras: [wooldridge2019]
+        topicos: ["Logaritmos e polinômios", "Variáveis binárias", "Interações", "Teste RESET", "Erros de medida"]
+      - id: ECM-G05
+        titulo: "Heterocedasticidade e autocorrelação"
+        nivel: G
+        prereq: [ECM-G03]
+        leituras: [wooldridge2019, stock2019]
+        topicos: ["Consequências para a inferência", "Erros-padrão robustos", "Testes de Breusch–Pagan e White", "Autocorrelação em séries temporais", "Erros-padrão de Newey–West"]
+      - id: ECM-G06
+        titulo: "Endogeneidade e variáveis instrumentais"
+        nivel: G
+        prereq: [ECM-G03]
+        leituras: [wooldridge2019, angrist2009]
+        topicos: ["Fontes de endogeneidade", "Instrumentos: relevância e exogeneidade", "Mínimos quadrados em dois estágios", "Testes de endogeneidade e sobreidentificação"]
+      - id: ECM-G07
+        titulo: "Dados em painel: introdução"
+        nivel: G
+        prereq: [ECM-G03]
+        leituras: [wooldridge2019]
+        topicos: ["Primeiras diferenças", "Efeitos fixos", "Efeitos aleatórios", "Diferenças em diferenças"]
+      - id: ECM-G08
+        titulo: "Séries temporais: introdução"
+        nivel: G
+        prereq: [ECM-G05]
+        leituras: [wooldridge2019, stock2019]
+        topicos: ["Tendência e sazonalidade", "Estacionariedade e dependência fraca", "Modelos autorregressivos", "Defasagens distribuídas", "Previsão"]
+      - id: ECM-G09
+        titulo: "Modelos de escolha binária"
+        nivel: G
+        prereq: [ECM-G03]
+        leituras: [wooldridge2019, stock2019]
+        topicos: ["Modelo de probabilidade linear", "Probit e logit", "Efeitos marginais", "Estimação por máxima verossimilhança"]
+      - id: ECM-M01
+        titulo: "O modelo linear em forma matricial"
+        nivel: M
+        prereq: [ECM-G02, MAT-M02]
+        leituras: [hayashi2000, hansen2022]
+        topicos: ["MQO como projeção", "Teorema de Frisch–Waugh–Lovell", "Gauss–Markov geral", "Distribuição exata sob normalidade", "Mínimos quadrados restritos"]
+      - id: ECM-M02
+        titulo: "Teoria assintótica do MQO e inferência robusta"
+        nivel: M
+        prereq: [ECM-M01, EST-M03]
+        leituras: [hayashi2000, hansen2022]
+        topicos: ["Consistência", "Normalidade assintótica", "Matriz de covariância robusta (White)", "HAC e Newey–West", "Erros-padrão por cluster"]
+      - id: ECM-M03
+        titulo: "Mínimos quadrados generalizados"
+        nivel: M
+        prereq: [ECM-M02]
+        leituras: [hayashi2000, greene2018]
+        topicos: ["GLS e o teorema de Aitken", "GLS factível", "Ponderação por heterocedasticidade", "Correlação serial e Cochrane–Orcutt", "SUR"]
+      - id: ECM-M04
+        titulo: "Variáveis instrumentais: teoria e instrumentos fracos"
+        nivel: M
+        prereq: [ECM-M02, ECM-G06]
+        leituras: [hayashi2000, hansen2022, angrist2009]
+        topicos: ["Identificação", "2SLS e propriedades assintóticas", "LATE e heterogeneidade de efeitos", "Instrumentos fracos e inferência robusta (Anderson–Rubin)"]
+      - id: ECM-M05
+        titulo: "Máxima verossimilhança e a trindade de testes"
+        nivel: M
+        prereq: [ECM-M02, EST-M04]
+        leituras: [hayashi2000, hansen2022]
+        topicos: ["Consistência e normalidade assintótica do EMV", "Matriz de informação", "Testes de Wald, LR e LM", "Quase-máxima verossimilhança"]
+      - id: ECM-M06
+        titulo: "Método generalizado dos momentos (GMM)"
+        nivel: M
+        prereq: [ECM-M04]
+        leituras: [hansen1982, hayashi2000, hansen2022]
+        topicos: ["Condições de momento", "Estimador GMM e matriz de ponderação ótima", "GMM em dois passos e iterado", "Teste J de sobreidentificação", "Aplicação: equação de Euler do consumo"]
+      - id: ECM-M07
+        titulo: "Dados em painel: efeitos fixos, aleatórios e painéis dinâmicos"
+        nivel: M
+        prereq: [ECM-M02, ECM-G07]
+        leituras: [wooldridge2010, hansen2022]
+        topicos: ["Efeitos fixos e aleatórios", "Teste de Hausman", "Painéis dinâmicos e viés de Nickell", "Arellano–Bond e Blundell–Bond"]
+      - id: ECM-M08
+        titulo: "Inferência causal"
+        nivel: M
+        prereq: [ECM-M04, ECM-M07]
+        leituras: [angrist2009, cunningham2021]
+        topicos: ["Resultados potenciais", "Seleção em observáveis e pareamento", "Diferenças em diferenças e estudos de evento", "Regressão descontínua", "Controle sintético"]
+      - id: ECM-M09
+        titulo: "Modelos ARMA e previsão"
+        nivel: M
+        prereq: [ECM-M02, EST-D02]
+        leituras: [hamilton1994]
+        topicos: ["Processos AR, MA e ARMA", "Funções de autocorrelação", "Estimação", "Previsão ótima e erro de previsão", "Seleção de modelos"]
+      - id: ECM-M10
+        titulo: "Raiz unitária e cointegração"
+        nivel: M
+        prereq: [ECM-M09]
+        leituras: [hamilton1994]
+        topicos: ["Processos integrados e regressão espúria", "Testes de Dickey–Fuller e KPSS", "Cointegração e Engle–Granger", "Modelo de correção de erros", "Johansen"]
+      - id: ECM-M11
+        titulo: "Vetores autorregressivos (VAR)"
+        nivel: M
+        prereq: [ECM-M09]
+        leituras: [kilian2017, lutkepohl2005]
+        topicos: ["VAR na forma reduzida", "Estimação e seleção de defasagens", "Causalidade de Granger", "Funções impulso-resposta e decomposição da variância", "VAR recursivo"]
+      - id: ECM-D01
+        titulo: "Identificação estrutural em VARs"
+        nivel: D
+        prereq: [ECM-M11]
+        leituras: [kilian2017]
+        topicos: ["O problema de identificação", "Restrições de curto e longo prazo", "Restrições de sinal", "Instrumentos externos (proxy-SVAR)", "Identificação por heterocedasticidade"]
+      - id: ECM-D02
+        titulo: "Projeções locais"
+        nivel: D
+        prereq: [ECM-D01]
+        leituras: [jorda2005, kilian2017]
+        topicos: ["Estimação de impulso-resposta por projeções locais", "LP com instrumentos", "Inferência", "Projeções locais versus VAR"]
+      - id: ECM-D03
+        titulo: "Modelos de espaço de estados e filtro de Kalman"
+        nivel: D
+        prereq: [ECM-M09, ECM-M05]
+        leituras: [durbin2012, hamilton1994]
+        topicos: ["Forma de espaço de estados", "Filtro de Kalman", "Suavização", "Verossimilhança e estimação", "Aplicações: tendência-ciclo, juro neutro"]
+      - id: ECM-D04
+        titulo: "Econometria bayesiana e MCMC"
+        nivel: D
+        prereq: [EST-M06, ECM-M11]
+        leituras: [koop2003, gelman2013]
+        topicos: ["Amostrador de Gibbs", "Metropolis–Hastings", "Diagnósticos de convergência", "VAR bayesiano e priori de Minnesota"]
+      - id: ECM-D05
+        titulo: "Estimação de modelos DSGE"
+        nivel: D
+        prereq: [ECM-D03, ECM-D04, CMP-D02]
+        leituras: [herbst2016, fernandezvillaverde2016, canova2007]
+        topicos: ["Solução linearizada e espaço de estados", "Verossimilhança via filtro de Kalman", "Estimação bayesiana com Random-Walk Metropolis", "Identificação em DSGE", "Calibração e momentos simulados"]
+      - id: ECM-D06
+        titulo: "Volatilidade: ARCH, GARCH e volatilidade estocástica"
+        nivel: D
+        prereq: [ECM-M09, ECM-M05]
+        leituras: [tsay2010, hamilton1994]
+        topicos: ["Fatos estilizados de retornos", "ARCH e GARCH", "Extensões assimétricas", "Volatilidade estocástica", "Volatilidade realizada"]
+      - id: ECM-D07
+        titulo: "Bootstrap e inferência por reamostragem"
+        nivel: D
+        prereq: [ECM-M02]
+        leituras: [efron1993, hansen2022]
+        topicos: ["Bootstrap não paramétrico", "Bootstrap de resíduos e selvagem", "Bootstrap em blocos", "Refinamentos assintóticos"]
+      - id: ECM-D08
+        titulo: "Alta dimensão: fatores, regularização e aprendizado de máquina"
+        nivel: D
+        prereq: [ECM-M02, MAT-M02]
+        leituras: [hastie2009]
+        topicos: ["Modelos de fatores e componentes principais", "Ridge, LASSO e elastic net", "Validação cruzada", "Árvores e florestas aleatórias", "Inferência pós-seleção"]
+      - id: ECM-D09
+        titulo: "Previsão, avaliação de previsões e nowcasting"
+        nivel: D
+        prereq: [ECM-M09, ECM-D03]
+        leituras: [elliott2016]
+        topicos: ["Funções perda e previsão ótima", "Avaliação fora da amostra", "Teste de Diebold–Mariano", "Combinação de previsões", "Nowcasting e dados de frequência mista"]
+      - id: ECM-D10
+        titulo: "Modelos não lineares de séries temporais"
+        nivel: D
+        prereq: [ECM-D03]
+        leituras: [hamilton1994]
+        topicos: ["Mudança de regime markoviana", "Modelos de limiar (TAR)", "Transição suave (STAR)", "Aplicação: datação de ciclos"]
+
+  # ---------------------------------------------------------------------------
+  - id: MAC
+    titulo: "Macroeconomia"
+    pasta: "06-macroeconomia"
+    descricao: >-
+      Da contabilidade nacional e do IS-LM aos modelos de agentes heterogêneos:
+      crescimento, ciclos, moeda, política monetária e fiscal, economia aberta.
+    capitulos:
+      - id: MAC-G01
+        titulo: "Contas nacionais e medidas macroeconômicas"
+        nivel: G
+        prereq: []
+        leituras: [blanchard2021, mankiw2019]
+        topicos: ["PIB: ótica da produção, renda e despesa", "Índices de preços e inflação", "Desemprego e mercado de trabalho", "Balanço de pagamentos", "As contas nacionais do IBGE"]
+      - id: MAC-G02
+        titulo: "Crescimento de longo prazo: fatos e o modelo de Solow"
+        nivel: G
+        prereq: [MAC-G01, MAT-G08]
+        leituras: [blanchard2021, mankiw2019, barro2004]
+        topicos: ["Fatos estilizados de Kaldor", "O modelo de Solow", "Regra de ouro", "Progresso técnico", "Contabilidade do crescimento"]
+      - id: MAC-G03
+        titulo: "Mercado de trabalho e desemprego"
+        nivel: G
+        prereq: [MAC-G01]
+        leituras: [blanchard2021]
+        topicos: ["Fluxos no mercado de trabalho", "Determinação de salários e preços", "Taxa natural de desemprego", "O mercado de trabalho brasileiro"]
+      - id: MAC-G04
+        titulo: "Moeda, inflação e bancos centrais"
+        nivel: G
+        prereq: [MAC-G01]
+        leituras: [mankiw2019, blanchard2021]
+        topicos: ["Funções da moeda e agregados monetários", "Teoria quantitativa", "Senhoriagem e imposto inflacionário", "Custos da inflação", "Bancos centrais e o sistema financeiro"]
+      - id: MAC-G05
+        titulo: "Demanda agregada: IS-LM e IS-MP"
+        nivel: G
+        prereq: [MAC-G04]
+        leituras: [blanchard2021, mankiw2019]
+        topicos: ["Mercado de bens e curva IS", "Mercado monetário: LM e regra de juros (MP)", "Equilíbrio e multiplicadores", "Políticas monetária e fiscal"]
+      - id: MAC-G06
+        titulo: "Oferta agregada, curva de Phillips e expectativas"
+        nivel: G
+        prereq: [MAC-G03, MAC-G05]
+        leituras: [blanchard2021, mankiw2019]
+        topicos: ["Curva de Phillips e suas versões", "Expectativas adaptativas e racionais", "Modelo OA-DA", "Desinflação e taxa de sacrifício", "Regime de metas de inflação"]
+      - id: MAC-G07
+        titulo: "Economia aberta: câmbio, balanço de pagamentos e Mundell–Fleming"
+        nivel: G
+        prereq: [MAC-G05]
+        leituras: [blanchard2021, mankiw2019]
+        topicos: ["Câmbio nominal e real", "Paridades de juros e de poder de compra", "Modelo Mundell–Fleming", "Regimes cambiais", "Crises cambiais"]
+      - id: MAC-G08
+        titulo: "Política fiscal e dívida pública"
+        nivel: G
+        prereq: [MAC-G05]
+        leituras: [blanchard2021, mankiw2019]
+        topicos: ["Restrição orçamentária do governo", "Dinâmica da dívida e resultado primário", "Equivalência ricardiana (introdução)", "Regras fiscais", "A política fiscal no Brasil"]
+      - id: MAC-G09
+        titulo: "Consumo e investimento: microfundamentos"
+        nivel: G
+        prereq: [MIC-G04, MAC-G05]
+        leituras: [mankiw2019, romer2019]
+        topicos: ["Consumo keynesiano e evidências", "Renda permanente e ciclo de vida", "Investimento e custo de uso do capital", "q de Tobin (introdução)"]
+      - id: MAC-G10
+        titulo: "Macroeconomia brasileira: dos planos de estabilização ao regime de metas"
+        nivel: G
+        prereq: [MAC-G06, MAC-G07, MAC-G08]
+        leituras: [giambiagi2011, abreu2014]
+        topicos: ["Industrialização e crise da dívida", "Alta inflação e planos heterodoxos", "Plano Real", "Tripé macroeconômico", "Ciclos e crises recentes"]
+      - id: MAC-M01
+        titulo: "Crescimento neoclássico: Solow e Ramsey–Cass–Koopmans"
+        nivel: M
+        prereq: [MAC-G02, MAT-D01]
+        leituras: [acemoglu2009, romer2019, barro2004]
+        topicos: ["Solow em tempo contínuo", "Ramsey–Cass–Koopmans: planejador e equilíbrio descentralizado", "Equação de Euler e transversalidade", "Dinâmica de sela", "Política fiscal no modelo de Ramsey"]
+      - id: MAC-M02
+        titulo: "Gerações sobrepostas"
+        nivel: M
+        prereq: [MAC-M01, MIC-M03]
+        leituras: [acemoglu2009, romer2019]
+        topicos: ["O modelo de Diamond", "Ineficiência dinâmica", "Previdência: repartição e capitalização", "Dívida pública e bolhas"]
+      - id: MAC-M03
+        titulo: "Crescimento endógeno"
+        nivel: M
+        prereq: [MAC-M01]
+        leituras: [acemoglu2009, barro2004]
+        topicos: ["Modelo AK", "Externalidades e learning-by-doing", "Variedade de produtos (Romer)", "Crescimento schumpeteriano", "Capital humano e Mankiw–Romer–Weil"]
+      - id: MAC-M04
+        titulo: "Consumo: renda permanente, ciclo de vida e poupança precaucional"
+        nivel: M
+        prereq: [MAC-G09, MIC-M02, MAT-D02]
+        leituras: [romer2019, ljungqvist2018]
+        topicos: ["Hall (1978) e passeio aleatório do consumo", "Excesso de sensibilidade e suavidade", "Poupança precaucional", "Restrições de liquidez", "Buffer-stock"]
+      - id: MAC-M05
+        titulo: "Investimento: q de Tobin e custos de ajustamento"
+        nivel: M
+        prereq: [MAC-G09, MAT-D01]
+        leituras: [romer2019]
+        topicos: ["Custos de ajustamento convexos", "q marginal e q médio (Hayashi)", "Irreversibilidade e opções reais", "Investimento e incerteza"]
+      - id: MAC-M06
+        titulo: "Equilíbrio competitivo recursivo"
+        nivel: M
+        prereq: [MIC-M04, MAT-D03]
+        leituras: [ljungqvist2018, stokey1989]
+        topicos: ["Problema do planejador e equilíbrio descentralizado", "Lei de movimento agregada", "Definição de ECR", "Teoremas do bem-estar em economias dinâmicas"]
+      - id: MAC-M07
+        titulo: "Ciclos reais de negócios (RBC)"
+        nivel: M
+        prereq: [MAC-M06]
+        leituras: [kydland1982, romer2019, ljungqvist2018]
+        topicos: ["Fatos estilizados dos ciclos", "O modelo RBC básico", "Calibração", "Log-linearização e impulso-resposta", "Críticas e extensões"]
+      - id: MAC-M08
+        titulo: "Busca e matching: McCall e Diamond–Mortensen–Pissarides"
+        nivel: M
+        prereq: [MAT-D03]
+        leituras: [ljungqvist2018, pissarides2000]
+        topicos: ["Modelo de McCall e salário de reserva", "Função de matching", "Modelo DMP: criação e destruição de empregos", "Barganha de Nash", "O enigma de Shimer"]
+      - id: MAC-M09
+        titulo: "Moeda em equilíbrio geral"
+        nivel: M
+        prereq: [MAC-M06]
+        leituras: [walsh2017, ljungqvist2018]
+        topicos: ["Moeda na utilidade", "Cash-in-advance", "Moeda em gerações sobrepostas", "Regra de Friedman", "Inflação ótima"]
+      - id: MAC-M10
+        titulo: "O modelo Novo-Keynesiano básico"
+        nivel: M
+        prereq: [MAC-M07, MAC-M09]
+        leituras: [gali2015, woodford2003]
+        topicos: ["Competição monopolística", "Rigidez de preços à Calvo", "Curva de Phillips Novo-Keynesiana", "IS dinâmica", "Equilíbrio com regra de juros"]
+      - id: MAC-M11
+        titulo: "Política monetária: regras, determinação e política ótima"
+        nivel: M
+        prereq: [MAC-M10]
+        leituras: [gali2015, woodford2003, walsh2017]
+        topicos: ["Princípio de Taylor e determinação", "Função perda de bem-estar", "Discrição versus compromisso", "Metas de inflação flexíveis", "Taxa de juros neutra"]
+      - id: MAC-M12
+        titulo: "Política fiscal: equivalência ricardiana, suavização de impostos e tributação ótima"
+        nivel: M
+        prereq: [MAC-M06]
+        leituras: [ljungqvist2018, barro1979]
+        topicos: ["Equivalência ricardiana", "Suavização de impostos (Barro)", "Tributação ótima à Ramsey", "Tributação do capital (Chamley–Judd)", "Multiplicadores fiscais"]
+      - id: MAC-M13
+        titulo: "Inconsistência temporal e credibilidade"
+        nivel: M
+        prereq: [MAC-M11, MIC-M05]
+        leituras: [kydland1977, walsh2017]
+        topicos: ["Kydland–Prescott", "Barro–Gordon e viés inflacionário", "Reputação", "Independência do banco central e delegação"]
+      - id: MAC-D01
+        titulo: "Agentes heterogêneos I: Bewley–Huggett–Aiyagari"
+        nivel: D
+        prereq: [MAC-M04, MAC-M06, CMP-D01]
+        leituras: [aiyagari1994, ljungqvist2018, heer2009]
+        topicos: ["Mercados incompletos e risco idiossincrático", "Problema do indivíduo e limite de endividamento", "Distribuição estacionária", "Equilíbrio de Huggett e de Aiyagari", "Desigualdade de renda e riqueza"]
+      - id: MAC-D02
+        titulo: "Agentes heterogêneos II: risco agregado e Krusell–Smith"
+        nivel: D
+        prereq: [MAC-D01]
+        leituras: [krusell1998, heer2009]
+        topicos: ["A distribuição como variável de estado", "Agregação aproximada", "Algoritmo de Krusell–Smith", "Precisão e alternativas"]
+      - id: MAC-D03
+        titulo: "HANK: política monetária com agentes heterogêneos"
+        nivel: D
+        prereq: [MAC-D02, MAC-M10]
+        leituras: [kaplan2018, auclert2021]
+        topicos: ["Canais diretos e indiretos da política monetária", "Propensões marginais a consumir e liquidez", "Modelos de dois ativos", "Solução no espaço de sequências"]
+      - id: MAC-D04
+        titulo: "Fricções financeiras e o acelerador financeiro"
+        nivel: D
+        prereq: [MAC-M07, MIC-M06]
+        leituras: [bernanke1999, kiyotaki1997]
+        topicos: ["Verificação custosa de estado", "Acelerador financeiro (BGG)", "Restrições de colateral (Kiyotaki–Moore)", "Intermediários financeiros (Gertler–Karadi)"]
+      - id: MAC-D05
+        titulo: "Economias abertas pequenas e emergentes"
+        nivel: D
+        prereq: [MAC-M07, MAC-G07]
+        leituras: [uribe2017, obstfeld1996]
+        topicos: ["Modelo de economia aberta pequena", "Fechamento de modelos de economia aberta", "Ciclos em economias emergentes", "Sudden stops", "NK em economia aberta"]
+      - id: MAC-D06
+        titulo: "Dívida soberana e default"
+        nivel: D
+        prereq: [MAC-D05, CMP-D01]
+        leituras: [arellano2008, uribe2017]
+        topicos: ["Modelo de Eaton–Gersovitz", "Arellano (2008)", "Spreads e ciclos", "Dívida de longo prazo"]
+      - id: MAC-D07
+        titulo: "Limite inferior zero, forward guidance e política não convencional"
+        nivel: D
+        prereq: [MAC-M11]
+        leituras: [gali2015, woodford2003]
+        topicos: ["O limite inferior da taxa de juros", "Armadilha da liquidez", "Forward guidance e seu enigma", "Afrouxamento quantitativo"]
+      - id: MAC-D08
+        titulo: "Interação monetário-fiscal"
+        nivel: D
+        prereq: [MAC-M11, MAC-M12]
+        leituras: [sargent1981, walsh2017]
+        topicos: ["Aritmética monetarista desagradável", "Políticas ativas e passivas (Leeper)", "Teoria fiscal do nível de preços", "Dominância fiscal"]
+      - id: MAC-D09
+        titulo: "Expectativas: aprendizagem e informação imperfeita"
+        nivel: D
+        prereq: [MAC-M10]
+        leituras: [woodford2003, walsh2017]
+        topicos: ["Expectativas racionais e suas alternativas", "Aprendizagem adaptativa e E-estabilidade", "Informação rígida e desatenção", "Evidência de pesquisas de expectativas (Focus)"]
+      - id: MAC-D10
+        titulo: "Modelos DSGE de média escala"
+        nivel: D
+        prereq: [MAC-M11, MAC-M05]
+        leituras: [christiano2005, gali2015]
+        topicos: ["Hábitos, indexação e rigidez salarial", "Custos de ajuste do investimento e utilização", "Christiano–Eichenbaum–Evans", "Modelos de bancos centrais"]
+
+  # ---------------------------------------------------------------------------
+  - id: FIN
+    titulo: "Finanças"
+    pasta: "07-financas"
+    descricao: >-
+      Do valor presente aos modelos dinâmicos de apreçamento: renda fixa,
+      portfólio, fator estocástico de desconto, estrutura a termo e macro-finanças.
+    capitulos:
+      - id: FIN-G01
+        titulo: "Valor do dinheiro no tempo"
+        nivel: G
+        prereq: [MAT-G02]
+        leituras: [berk2020, bodie2021]
+        topicos: ["Juros simples e compostos", "Valor presente e futuro", "Anuidades e perpetuidades", "Taxas nominais, reais e efetivas", "Convenções brasileiras: dias úteis/252"]
+      - id: FIN-G02
+        titulo: "Renda fixa: títulos, taxas e duration"
+        nivel: G
+        prereq: [FIN-G01]
+        leituras: [bodie2021]
+        topicos: ["Preço e taxa de um título", "Curva de juros: spot, a termo e par", "Duration e convexidade", "Títulos públicos brasileiros: LTN, NTN-F, NTN-B, LFT", "A curva de juros DI"]
+      - id: FIN-G03
+        titulo: "Avaliação de ações"
+        nivel: G
+        prereq: [FIN-G01]
+        leituras: [berk2020, bodie2021]
+        topicos: ["Modelo de desconto de dividendos", "Modelo de Gordon", "Fluxo de caixa livre", "Múltiplos"]
+      - id: FIN-G04
+        titulo: "Risco, retorno e diversificação"
+        nivel: G
+        prereq: [FIN-G01, EST-G03]
+        leituras: [bodie2021, markowitz1952]
+        topicos: ["Retornos e suas medidas", "Risco e diversificação", "Fronteira eficiente", "Ativo livre de risco e linha de mercado de capitais"]
+      - id: FIN-G05
+        titulo: "CAPM e modelos de fatores: introdução"
+        nivel: G
+        prereq: [FIN-G04, ECM-G01]
+        leituras: [bodie2021]
+        topicos: ["O CAPM", "Beta e a linha do mercado de títulos", "Estimação do beta por regressão", "Modelos multifatoriais"]
+      - id: FIN-G06
+        titulo: "Eficiência de mercado"
+        nivel: G
+        prereq: [FIN-G05]
+        leituras: [bodie2021]
+        topicos: ["Formas de eficiência", "Estudos de evento", "Anomalias", "Finanças comportamentais (introdução)"]
+      - id: FIN-G07
+        titulo: "Derivativos: termos, futuros e opções"
+        nivel: G
+        prereq: [FIN-G01]
+        leituras: [hull2022]
+        topicos: ["Contratos a termo e futuros", "Precificação por não-arbitragem", "Opções: payoffs e estratégias", "Paridade put-call", "Árvore binomial"]
+      - id: FIN-G08
+        titulo: "Finanças corporativas: orçamento e estrutura de capital"
+        nivel: G
+        prereq: [FIN-G03]
+        leituras: [berk2020, modigliani1958]
+        topicos: ["VPL e TIR", "Custo de capital (WACC)", "Teoremas de Modigliani–Miller", "Impostos, falência e trade-off"]
+      - id: FIN-M01
+        titulo: "Escolha de portfólio"
+        nivel: M
+        prereq: [FIN-G04, MIC-M02, MAT-M03]
+        leituras: [back2017, campbell2018]
+        topicos: ["Média-variância como problema de otimização", "Separação em dois fundos", "Utilidade esperada e portfólio ótimo", "Aversão ao risco e participação no mercado"]
+      - id: FIN-M02
+        titulo: "Preços de estado, mercados completos e não-arbitragem"
+        nivel: M
+        prereq: [MIC-M04, MAT-M03]
+        leituras: [back2017, duffie2001]
+        topicos: ["Preços de estado", "Mercados completos e ativos de Arrow", "Teorema fundamental do apreçamento", "Medida neutra ao risco"]
+      - id: FIN-M03
+        titulo: "O fator estocástico de desconto"
+        nivel: M
+        prereq: [FIN-M02]
+        leituras: [cochrane2005]
+        topicos: ["Equação básica de apreçamento p = E[mx]", "Existência e unicidade do SDF", "Fronteira de média-variância e SDF", "Limites de Hansen–Jagannathan", "Beta-representações"]
+      - id: FIN-M04
+        titulo: "Apreçamento baseado em consumo e o enigma do prêmio das ações"
+        nivel: M
+        prereq: [FIN-M03, MAC-M04]
+        leituras: [mehra1985, cochrane2005, campbell2018]
+        topicos: ["CCAPM", "Modelo de Lucas (árvore)", "Enigma do prêmio das ações", "Enigma da taxa livre de risco", "Estimação por GMM da equação de Euler"]
+      - id: FIN-M05
+        titulo: "Modelos de fatores: CAPM, APT e Fama–French"
+        nivel: M
+        prereq: [FIN-M03]
+        leituras: [cochrane2005, fama1993]
+        topicos: ["CAPM como modelo de equilíbrio", "Arbitrage Pricing Theory", "Fatores de Fama–French", "Zoológico de fatores"]
+      - id: FIN-M06
+        titulo: "Testes de modelos de apreçamento"
+        nivel: M
+        prereq: [FIN-M05, ECM-M06]
+        leituras: [cochrane2005, fama1973, campbell1997]
+        topicos: ["Regressões de séries temporais e teste GRS", "Regressões cross-section", "Fama–MacBeth", "GMM em apreçamento de ativos"]
+      - id: FIN-M07
+        titulo: "Previsibilidade de retornos"
+        nivel: M
+        prereq: [FIN-M03, ECM-M09]
+        leituras: [campbell1988, cochrane2005]
+        topicos: ["Decomposição de Campbell–Shiller", "Regressões preditivas", "Viés de Stambaugh", "Volatilidade excessiva", "Previsão fora da amostra"]
+      - id: FIN-M08
+        titulo: "Estrutura a termo das taxas de juros"
+        nivel: M
+        prereq: [FIN-G02, FIN-M03]
+        leituras: [campbell1997, vasicek1977, cox1985]
+        topicos: ["Hipótese das expectativas", "Prêmio a termo", "Modelos de Vasicek e CIR", "Nelson–Siegel", "A curva de juros brasileira"]
+      - id: FIN-M09
+        titulo: "Escolha de portfólio intertemporal"
+        nivel: M
+        prereq: [FIN-M01, MAT-D03]
+        leituras: [campbell2018, back2017]
+        topicos: ["Samuelson e Merton em tempo discreto", "Demanda de hedge intertemporal", "Retornos previsíveis e alocação", "Ciclo de vida e capital humano"]
+      - id: FIN-D01
+        titulo: "Preferências recursivas, risco de longo prazo, hábitos e desastres"
+        nivel: D
+        prereq: [FIN-M04]
+        leituras: [epstein1989, bansal2004, campbell1999, barro2006]
+        topicos: ["Preferências de Epstein–Zin", "Risco de longo prazo (Bansal–Yaron)", "Formação de hábito (Campbell–Cochrane)", "Desastres raros", "Avaliação comparativa dos modelos"]
+      - id: FIN-D02
+        titulo: "Tempo contínuo: não-arbitragem e Black–Scholes–Merton"
+        nivel: D
+        prereq: [EST-D04, FIN-M02]
+        leituras: [shreve2004, black1973, duffie2001]
+        topicos: ["Portfólio replicante", "Equação de Black–Scholes", "Medida neutra ao risco em tempo contínuo", "Gregas", "Volatilidade implícita"]
+      - id: FIN-D03
+        titulo: "Modelos afins de estrutura a termo e prêmio a termo"
+        nivel: D
+        prereq: [FIN-M08, ECM-D03]
+        leituras: [singleton2006, diebold2006]
+        topicos: ["Modelos afins de estrutura a termo", "Estimação com filtro de Kalman", "Decomposição expectativas versus prêmio", "Nelson–Siegel dinâmico", "Aplicação à curva DI"]
+      - id: FIN-D04
+        titulo: "Macro-finanças: intermediários e apreçamento de ativos"
+        nivel: D
+        prereq: [FIN-D01, MAC-D04]
+        leituras: [he2013]
+        topicos: ["Apreçamento por intermediários", "Restrições de capital e prêmios de risco", "Política monetária e prêmios de risco", "Sistemas de demanda por ativos"]
+      - id: FIN-D05
+        titulo: "Limites à arbitragem e finanças comportamentais"
+        nivel: D
+        prereq: [FIN-M05]
+        leituras: [shleifer1997]
+        topicos: ["Limites à arbitragem", "Crenças e extrapolação", "Preferências não convencionais", "Bolhas"]
+      - id: FIN-D06
+        titulo: "Risco de crédito"
+        nivel: D
+        prereq: [FIN-D02]
+        leituras: [duffie2001]
+        topicos: ["Modelo estrutural de Merton", "Modelos de forma reduzida", "Spreads de crédito", "Derivativos de crédito"]
+      - id: FIN-D07
+        titulo: "Microestrutura de mercado"
+        nivel: D
+        prereq: [MIC-M06, FIN-G06]
+        leituras: [ohara1995]
+        topicos: ["Modelo de Kyle", "Glosten–Milgrom", "Liquidez e custos de transação", "Livro de ofertas"]

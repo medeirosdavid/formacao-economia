@@ -1,0 +1,38 @@
+# ARQUIVO GERADO por scripts/gerar_estrutura.py — edite curriculo.yml, não este arquivo
+# Perfil pdf: apenas capítulos com status diferente de 'planejado'.
+book:
+  chapters:
+  - index.qmd
+  - part: partes/05-econometria/index.qmd
+    chapters:
+    - partes/05-econometria/ecm-g01-regressao-linear-simples.qmd
+  - referencias.qmd
+  appendices:
+  - apendices/notacao.qmd
+  - apendices/guia-de-autoria.qmd
+  - apendices/dados.qmd
+  output-file: formacao-economia
+project:
+  output-dir: _pdf
+
+# ---- formato (copiado de _formato-pdf.yml)
+# Formato do PDF. Copiado para _quarto-pdf.yml por scripts/gerar_estrutura.py.
+format:
+  pdf:
+    documentclass: scrbook
+    classoption: [oneside, open=any, parskip=half]
+    papersize: a4
+    fontsize: 11pt
+    pdf-engine: xelatex
+    toc-depth: 2
+    number-depth: 3
+    colorlinks: true
+    fig-format: pdf
+    keep-tex: false
+    code-overflow: wrap
+    filters:
+      - filtros/refs-pendentes.lua
+      - filtros/caixas-pdf.lua
+    include-in-header:
+      - file: tex/preambulo.tex
+      - file: tex/macros.tex

@@ -1,0 +1,27 @@
+# Esperança, momentos e distribuições conjuntas {#sec-est-g03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `EST-G03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-g02 (*Variáveis aleatórias e distribuições*); @sec-mat-g06 (*Cálculo em várias variáveis*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Variáveis aleatórias e distribuições* (EST-G02); *Cálculo em várias variáveis* (MAT-G06)
+:::
+
+**Leituras principais:** @degroot2012, @casella2002
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Esperança e variância
+2. Distribuições conjuntas, marginais e condicionais
+3. Covariância e correlação
+4. Esperança condicional (versão elementar)
+5. Normal multivariada
+:::

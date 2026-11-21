@@ -1,0 +1,51 @@
+# Prefácio {.unnumbered}
+
+Este livro é um material de formação unificado em **macroeconomia, finanças e econometria**, escrito ao longo de uma revisão completa da formação de um economista — do primeiro curso de graduação aos temas de fronteira do doutorado. Ele tem dois propósitos que se reforçam: servir de **material de estudo** enquanto a revisão acontece e de **obra de referência** depois dela.
+
+## Por que um único livro?
+
+Macro, finanças e econometria compartilham quase todas as ferramentas: programação dinâmica, processos estocásticos, esperança condicional, o filtro de Kalman, o método generalizado dos momentos. Estudadas em cadernos separados, essas ferramentas aparecem com três notações diferentes e são reaprendidas três vezes. Aqui, cada ideia é desenvolvida **uma vez**, com **uma notação** (@sec-notacao), e as demais partes apontam para ela por meio das seções *Pontes*.
+
+## Organização
+
+O livro tem sete partes, ordenadas por dependência:
+
+| Parte | Conteúdo |
+|:--|:--|
+| Matemática | análise, álgebra linear, otimização, dinâmica, programação dinâmica |
+| Probabilidade e Estatística | de Kolmogorov ao cálculo de Itô, passando por inferência |
+| Computação | Python, dados brasileiros, métodos numéricos, solução de modelos |
+| Microfundamentos | escolha, incerteza, equilíbrio geral, jogos, informação |
+| Econometria | regressão, causalidade, séries temporais, métodos bayesianos, previsão |
+| Macroeconomia | crescimento, ciclos, moeda, política, agentes heterogêneos |
+| Finanças | renda fixa, portfólio, fator estocástico de desconto, estrutura a termo |
+
+Cada capítulo tem um código estável (por exemplo, `ECM-G01`) e um **nível**: [G]{.nivel .nivel-G} graduação, [M]{.nivel .nivel-M} mestrado ou [D]{.nivel .nivel-D} doutorado. O [Mapa do curso](plano.qmd) mostra o grafo de pré-requisitos, o progresso e **trilhas de leitura** — percursos sugeridos que atravessam as partes.
+
+## Anatomia de um capítulo
+
+Todo capítulo segue o mesmo roteiro:
+
+1. **Cabeçalho** — nível, status, pré-requisitos e leituras principais.
+2. **Motivação** — a pergunta econômica que o capítulo responde.
+3. **Teoria** — definições, resultados e demonstrações completas.
+4. **Pontes** — onde a ideia reaparece nas outras partes do livro.
+5. **Interativo** — simulações manipuláveis (apenas na versão web).
+6. **Laboratório computacional** — código que reproduz os resultados.
+7. **Aplicação com dados brasileiros** — o método aplicado a séries do BCB, IBGE e outras fontes públicas.
+8. **Exercícios resolvidos** — com soluções recolhidas, para tentar antes de ver.
+9. **Flashcards** — perguntas de revisão, exportáveis para o Anki.
+10. **Ficha-resumo** — uma página com o essencial.
+11. **Notas bibliográficas**.
+
+## Formatos
+
+O mesmo texto-fonte produz três saídas:
+
+- **Site** — o livro completo, inclusive os capítulos ainda em esboço, com busca, interativos e código.
+- **PDF** — apenas os capítulos já escritos, com o estilo de caixas usado nas notas impressas.
+- **Baralho Anki** — os flashcards de todos os capítulos (`python scripts/flashcards_anki.py`).
+
+## Status
+
+Este é um livro em construção. Os capítulos passam por quatro estágios — *planejado*, *rascunho*, *em revisão* e *completo* — registrados em `curriculo.yml` e exibidos no cabeçalho de cada capítulo.

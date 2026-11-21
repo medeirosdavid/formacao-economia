@@ -1,0 +1,26 @@
+# Simulação e Monte Carlo {#sec-cmp-m03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `CMP-M03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-cmp-g01 (*Python para economistas*); @sec-est-g04 (*Amostragem e teoremas-limite*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Python para economistas* (CMP-G01); *Amostragem e teoremas-limite* (EST-G04)
+:::
+
+**Leituras principais:** @judd1998, @quantecon
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Geradores de números aleatórios
+2. Integração de Monte Carlo
+3. Redução de variância
+4. Desenho de experimentos de Monte Carlo em econometria
+:::

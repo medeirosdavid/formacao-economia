@@ -1,0 +1,27 @@
+# Previsão, avaliação de previsões e nowcasting {#sec-ecm-d09}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `ECM-D09`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m09 (*Modelos ARMA e previsão*); @sec-ecm-d03 (*Modelos de espaço de estados e filtro de Kalman*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Modelos ARMA e previsão* (ECM-M09); *Modelos de espaço de estados e filtro de Kalman* (ECM-D03)
+:::
+
+**Leituras principais:** @elliott2016
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Funções perda e previsão ótima
+2. Avaliação fora da amostra
+3. Teste de Diebold–Mariano
+4. Combinação de previsões
+5. Nowcasting e dados de frequência mista
+:::

@@ -1,0 +1,27 @@
+# Tempo contínuo: não-arbitragem e Black–Scholes–Merton {#sec-fin-d02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `FIN-D02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-d04 (*Movimento browniano e cálculo de Itô*); @sec-fin-m02 (*Preços de estado, mercados completos e não-arbitragem*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Movimento browniano e cálculo de Itô* (EST-D04); *Preços de estado, mercados completos e não-arbitragem* (FIN-M02)
+:::
+
+**Leituras principais:** @shreve2004, @black1973, @duffie2001
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Portfólio replicante
+2. Equação de Black–Scholes
+3. Medida neutra ao risco em tempo contínuo
+4. Gregas
+5. Volatilidade implícita
+:::

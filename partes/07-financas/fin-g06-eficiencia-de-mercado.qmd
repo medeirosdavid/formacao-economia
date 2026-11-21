@@ -1,0 +1,26 @@
+# Eficiência de mercado {#sec-fin-g06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `FIN-G06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-g05 (*CAPM e modelos de fatores: introdução*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *CAPM e modelos de fatores: introdução* (FIN-G05)
+:::
+
+**Leituras principais:** @bodie2021
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Formas de eficiência
+2. Estudos de evento
+3. Anomalias
+4. Finanças comportamentais (introdução)
+:::

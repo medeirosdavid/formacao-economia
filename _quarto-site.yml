@@ -1,0 +1,194 @@
+# ARQUIVO GERADO por scripts/gerar_estrutura.py — edite curriculo.yml, não este arquivo
+# Perfil site: todos os capítulos, inclusive esboços.
+book:
+  chapters:
+  - index.qmd
+  - plano.qmd
+  - part: partes/01-matematica/index.qmd
+    chapters:
+    - partes/01-matematica/mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd
+    - partes/01-matematica/mat-g02-numeros-reais-sequencias-e-series.qmd
+    - partes/01-matematica/mat-g03-funcoes-de-uma-variavel-limites-continuidade-e-derivadas.qmd
+    - partes/01-matematica/mat-g04-integracao-e-aplicacoes.qmd
+    - partes/01-matematica/mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd
+    - partes/01-matematica/mat-g06-calculo-em-varias-variaveis.qmd
+    - partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd
+    - partes/01-matematica/mat-g08-equacoes-em-diferencas-e-equacoes-diferenciais-lineares.qmd
+    - partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd
+    - partes/01-matematica/mat-m02-algebra-linear-ii-autovalores-decomposicoes-e-formas.qmd
+    - partes/01-matematica/mat-m03-convexidade-e-otimizacao-com-restricoes-de-desigualdade.qmd
+    - partes/01-matematica/mat-m04-estatica-comparativa-funcao-implicita-envelope-e-teorema-do.qmd
+    - partes/01-matematica/mat-m05-correspondencias-e-teoremas-de-ponto-fixo.qmd
+    - partes/01-matematica/mat-m06-sistemas-dinamicos-estabilidade-linearizacao-e-diagramas-de.qmd
+    - partes/01-matematica/mat-d01-calculo-das-variacoes-e-controle-otimo.qmd
+    - partes/01-matematica/mat-d02-programacao-dinamica-deterministica.qmd
+    - partes/01-matematica/mat-d03-programacao-dinamica-estocastica.qmd
+    - partes/01-matematica/mat-d04-espacos-de-funcoes-e-operadores.qmd
+  - part: partes/02-probabilidade-estatistica/index.qmd
+    chapters:
+    - partes/02-probabilidade-estatistica/est-g01-probabilidade-axiomas-condicionamento-e-bayes.qmd
+    - partes/02-probabilidade-estatistica/est-g02-variaveis-aleatorias-e-distribuicoes.qmd
+    - partes/02-probabilidade-estatistica/est-g03-esperanca-momentos-e-distribuicoes-conjuntas.qmd
+    - partes/02-probabilidade-estatistica/est-g04-amostragem-e-teoremas-limite.qmd
+    - partes/02-probabilidade-estatistica/est-g05-estimacao-pontual-e-intervalar.qmd
+    - partes/02-probabilidade-estatistica/est-g06-testes-de-hipoteses.qmd
+    - partes/02-probabilidade-estatistica/est-m01-probabilidade-com-teoria-da-medida.qmd
+    - partes/02-probabilidade-estatistica/est-m02-esperanca-condicional.qmd
+    - partes/02-probabilidade-estatistica/est-m03-modos-de-convergencia-e-teoremas-limite.qmd
+    - partes/02-probabilidade-estatistica/est-m04-inferencia-estatistica-suficiencia-verossimilhanca-e.qmd
+    - partes/02-probabilidade-estatistica/est-m05-testes-otimos-e-regioes-de-confianca.qmd
+    - partes/02-probabilidade-estatistica/est-m06-inferencia-bayesiana.qmd
+    - partes/02-probabilidade-estatistica/est-d01-cadeias-de-markov.qmd
+    - partes/02-probabilidade-estatistica/est-d02-processos-estacionarios-ergodicidade-e-representacao-de-wold.qmd
+    - partes/02-probabilidade-estatistica/est-d03-martingais.qmd
+    - partes/02-probabilidade-estatistica/est-d04-movimento-browniano-e-calculo-de-ito.qmd
+  - part: partes/03-computacao/index.qmd
+    chapters:
+    - partes/03-computacao/cmp-g01-python-para-economistas.qmd
+    - partes/03-computacao/cmp-g02-dados-pandas-apis-publicas-brasileiras-e-visualizacao.qmd
+    - partes/03-computacao/cmp-g03-reprodutibilidade-git-quarto-e-ambientes.qmd
+    - partes/03-computacao/cmp-m01-metodos-numericos-i-raizes-otimizacao-e-diferenciacao.qmd
+    - partes/03-computacao/cmp-m02-metodos-numericos-ii-integracao-interpolacao-e-aproximacao.qmd
+    - partes/03-computacao/cmp-m03-simulacao-e-monte-carlo.qmd
+    - partes/03-computacao/cmp-m04-discretizacao-de-processos-estocasticos.qmd
+    - partes/03-computacao/cmp-d01-solucao-de-modelos-dinamicos-vfi-pfi-e-egm.qmd
+    - partes/03-computacao/cmp-d02-metodos-de-perturbacao-e-projecao.qmd
+    - partes/03-computacao/cmp-d03-modelos-de-agentes-heterogeneos-distribuicao-e-equilibrio.qmd
+    - partes/03-computacao/cmp-d04-computacao-de-alto-desempenho.qmd
+  - part: partes/04-microfundamentos/index.qmd
+    chapters:
+    - partes/04-microfundamentos/mic-g01-escolha-do-consumidor-e-demanda.qmd
+    - partes/04-microfundamentos/mic-g02-producao-custos-e-a-firma.qmd
+    - partes/04-microfundamentos/mic-g03-mercados-competitivos-e-bem-estar.qmd
+    - partes/04-microfundamentos/mic-g04-escolha-intertemporal.qmd
+    - partes/04-microfundamentos/mic-g05-introducao-a-teoria-dos-jogos.qmd
+    - partes/04-microfundamentos/mic-m01-teoria-do-consumidor.qmd
+    - partes/04-microfundamentos/mic-m02-escolha-sob-incerteza.qmd
+    - partes/04-microfundamentos/mic-m03-equilibrio-geral-e-teoremas-do-bem-estar.qmd
+    - partes/04-microfundamentos/mic-m04-equilibrio-geral-com-tempo-e-incerteza.qmd
+    - partes/04-microfundamentos/mic-m05-teoria-dos-jogos-jogos-dinamicos-e-bayesianos.qmd
+    - partes/04-microfundamentos/mic-m06-informacao-assimetrica.qmd
+    - partes/04-microfundamentos/mic-d01-desenho-de-mecanismos-e-contratos-dinamicos.qmd
+  - part: partes/05-econometria/index.qmd
+    chapters:
+    - partes/05-econometria/ecm-g01-regressao-linear-simples.qmd
+    - partes/05-econometria/ecm-g02-regressao-linear-multipla.qmd
+    - partes/05-econometria/ecm-g03-inferencia-no-modelo-de-regressao.qmd
+    - partes/05-econometria/ecm-g04-especificacao-forma-funcional-variaveis-binarias-e.qmd
+    - partes/05-econometria/ecm-g05-heterocedasticidade-e-autocorrelacao.qmd
+    - partes/05-econometria/ecm-g06-endogeneidade-e-variaveis-instrumentais.qmd
+    - partes/05-econometria/ecm-g07-dados-em-painel-introducao.qmd
+    - partes/05-econometria/ecm-g08-series-temporais-introducao.qmd
+    - partes/05-econometria/ecm-g09-modelos-de-escolha-binaria.qmd
+    - partes/05-econometria/ecm-m01-o-modelo-linear-em-forma-matricial.qmd
+    - partes/05-econometria/ecm-m02-teoria-assintotica-do-mqo-e-inferencia-robusta.qmd
+    - partes/05-econometria/ecm-m03-minimos-quadrados-generalizados.qmd
+    - partes/05-econometria/ecm-m04-variaveis-instrumentais-teoria-e-instrumentos-fracos.qmd
+    - partes/05-econometria/ecm-m05-maxima-verossimilhanca-e-a-trindade-de-testes.qmd
+    - partes/05-econometria/ecm-m06-metodo-generalizado-dos-momentos-gmm.qmd
+    - partes/05-econometria/ecm-m07-dados-em-painel-efeitos-fixos-aleatorios-e-paineis-dinamicos.qmd
+    - partes/05-econometria/ecm-m08-inferencia-causal.qmd
+    - partes/05-econometria/ecm-m09-modelos-arma-e-previsao.qmd
+    - partes/05-econometria/ecm-m10-raiz-unitaria-e-cointegracao.qmd
+    - partes/05-econometria/ecm-m11-vetores-autorregressivos-var.qmd
+    - partes/05-econometria/ecm-d01-identificacao-estrutural-em-vars.qmd
+    - partes/05-econometria/ecm-d02-projecoes-locais.qmd
+    - partes/05-econometria/ecm-d03-modelos-de-espaco-de-estados-e-filtro-de-kalman.qmd
+    - partes/05-econometria/ecm-d04-econometria-bayesiana-e-mcmc.qmd
+    - partes/05-econometria/ecm-d05-estimacao-de-modelos-dsge.qmd
+    - partes/05-econometria/ecm-d06-volatilidade-arch-garch-e-volatilidade-estocastica.qmd
+    - partes/05-econometria/ecm-d07-bootstrap-e-inferencia-por-reamostragem.qmd
+    - partes/05-econometria/ecm-d08-alta-dimensao-fatores-regularizacao-e-aprendizado-de-maquina.qmd
+    - partes/05-econometria/ecm-d09-previsao-avaliacao-de-previsoes-e-nowcasting.qmd
+    - partes/05-econometria/ecm-d10-modelos-nao-lineares-de-series-temporais.qmd
+  - part: partes/06-macroeconomia/index.qmd
+    chapters:
+    - partes/06-macroeconomia/mac-g01-contas-nacionais-e-medidas-macroeconomicas.qmd
+    - partes/06-macroeconomia/mac-g02-crescimento-de-longo-prazo-fatos-e-o-modelo-de-solow.qmd
+    - partes/06-macroeconomia/mac-g03-mercado-de-trabalho-e-desemprego.qmd
+    - partes/06-macroeconomia/mac-g04-moeda-inflacao-e-bancos-centrais.qmd
+    - partes/06-macroeconomia/mac-g05-demanda-agregada-is-lm-e-is-mp.qmd
+    - partes/06-macroeconomia/mac-g06-oferta-agregada-curva-de-phillips-e-expectativas.qmd
+    - partes/06-macroeconomia/mac-g07-economia-aberta-cambio-balanco-de-pagamentos-e-mundell.qmd
+    - partes/06-macroeconomia/mac-g08-politica-fiscal-e-divida-publica.qmd
+    - partes/06-macroeconomia/mac-g09-consumo-e-investimento-microfundamentos.qmd
+    - partes/06-macroeconomia/mac-g10-macroeconomia-brasileira-dos-planos-de-estabilizacao-ao.qmd
+    - partes/06-macroeconomia/mac-m01-crescimento-neoclassico-solow-e-ramsey-cass-koopmans.qmd
+    - partes/06-macroeconomia/mac-m02-geracoes-sobrepostas.qmd
+    - partes/06-macroeconomia/mac-m03-crescimento-endogeno.qmd
+    - partes/06-macroeconomia/mac-m04-consumo-renda-permanente-ciclo-de-vida-e-poupanca.qmd
+    - partes/06-macroeconomia/mac-m05-investimento-q-de-tobin-e-custos-de-ajustamento.qmd
+    - partes/06-macroeconomia/mac-m06-equilibrio-competitivo-recursivo.qmd
+    - partes/06-macroeconomia/mac-m07-ciclos-reais-de-negocios-rbc.qmd
+    - partes/06-macroeconomia/mac-m08-busca-e-matching-mccall-e-diamond-mortensen-pissarides.qmd
+    - partes/06-macroeconomia/mac-m09-moeda-em-equilibrio-geral.qmd
+    - partes/06-macroeconomia/mac-m10-o-modelo-novo-keynesiano-basico.qmd
+    - partes/06-macroeconomia/mac-m11-politica-monetaria-regras-determinacao-e-politica-otima.qmd
+    - partes/06-macroeconomia/mac-m12-politica-fiscal-equivalencia-ricardiana-suavizacao-de.qmd
+    - partes/06-macroeconomia/mac-m13-inconsistencia-temporal-e-credibilidade.qmd
+    - partes/06-macroeconomia/mac-d01-agentes-heterogeneos-i-bewley-huggett-aiyagari.qmd
+    - partes/06-macroeconomia/mac-d02-agentes-heterogeneos-ii-risco-agregado-e-krusell-smith.qmd
+    - partes/06-macroeconomia/mac-d03-hank-politica-monetaria-com-agentes-heterogeneos.qmd
+    - partes/06-macroeconomia/mac-d04-friccoes-financeiras-e-o-acelerador-financeiro.qmd
+    - partes/06-macroeconomia/mac-d05-economias-abertas-pequenas-e-emergentes.qmd
+    - partes/06-macroeconomia/mac-d06-divida-soberana-e-default.qmd
+    - partes/06-macroeconomia/mac-d07-limite-inferior-zero-forward-guidance-e-politica-nao.qmd
+    - partes/06-macroeconomia/mac-d08-interacao-monetario-fiscal.qmd
+    - partes/06-macroeconomia/mac-d09-expectativas-aprendizagem-e-informacao-imperfeita.qmd
+    - partes/06-macroeconomia/mac-d10-modelos-dsge-de-media-escala.qmd
+  - part: partes/07-financas/index.qmd
+    chapters:
+    - partes/07-financas/fin-g01-valor-do-dinheiro-no-tempo.qmd
+    - partes/07-financas/fin-g02-renda-fixa-titulos-taxas-e-duration.qmd
+    - partes/07-financas/fin-g03-avaliacao-de-acoes.qmd
+    - partes/07-financas/fin-g04-risco-retorno-e-diversificacao.qmd
+    - partes/07-financas/fin-g05-capm-e-modelos-de-fatores-introducao.qmd
+    - partes/07-financas/fin-g06-eficiencia-de-mercado.qmd
+    - partes/07-financas/fin-g07-derivativos-termos-futuros-e-opcoes.qmd
+    - partes/07-financas/fin-g08-financas-corporativas-orcamento-e-estrutura-de-capital.qmd
+    - partes/07-financas/fin-m01-escolha-de-portfolio.qmd
+    - partes/07-financas/fin-m02-precos-de-estado-mercados-completos-e-nao-arbitragem.qmd
+    - partes/07-financas/fin-m03-o-fator-estocastico-de-desconto.qmd
+    - partes/07-financas/fin-m04-aprecamento-baseado-em-consumo-e-o-enigma-do-premio-das.qmd
+    - partes/07-financas/fin-m05-modelos-de-fatores-capm-apt-e-fama-french.qmd
+    - partes/07-financas/fin-m06-testes-de-modelos-de-aprecamento.qmd
+    - partes/07-financas/fin-m07-previsibilidade-de-retornos.qmd
+    - partes/07-financas/fin-m08-estrutura-a-termo-das-taxas-de-juros.qmd
+    - partes/07-financas/fin-m09-escolha-de-portfolio-intertemporal.qmd
+    - partes/07-financas/fin-d01-preferencias-recursivas-risco-de-longo-prazo-habitos-e.qmd
+    - partes/07-financas/fin-d02-tempo-continuo-nao-arbitragem-e-black-scholes-merton.qmd
+    - partes/07-financas/fin-d03-modelos-afins-de-estrutura-a-termo-e-premio-a-termo.qmd
+    - partes/07-financas/fin-d04-macro-financas-intermediarios-e-aprecamento-de-ativos.qmd
+    - partes/07-financas/fin-d05-limites-a-arbitragem-e-financas-comportamentais.qmd
+    - partes/07-financas/fin-d06-risco-de-credito.qmd
+    - partes/07-financas/fin-d07-microestrutura-de-mercado.qmd
+  - referencias.qmd
+  appendices:
+  - apendices/notacao.qmd
+  - apendices/guia-de-autoria.qmd
+  - apendices/dados.qmd
+  sidebar:
+    tools:
+    - icon: file-earmark-pdf
+      href: pdf/formacao-economia.pdf
+      text: PDF
+
+# ---- formato (copiado de _formato-html.yml)
+# Formato do site. Copiado para _quarto-site.yml por scripts/gerar_estrutura.py.
+format:
+  html:
+    theme:
+      light: [cosmo, estilos/tema.scss]
+    toc: true
+    toc-depth: 3
+    toc-title: "Nesta página"
+    number-depth: 3
+    html-math-method: mathjax
+    include-in-header:
+      - file: estilos/mathjax-macros.html   # gerado de tex/macros.tex
+    crossrefs-hover: true
+    code-copy: true
+    code-overflow: wrap
+    fig-format: svg
+    fig-responsive: true
+    lightbox: true

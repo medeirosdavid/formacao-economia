@@ -1,0 +1,26 @@
+# Econometria bayesiana e MCMC {#sec-ecm-d04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `ECM-D04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-m06 (*Inferência bayesiana*); @sec-ecm-m11 (*Vetores autorregressivos (VAR)*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Inferência bayesiana* (EST-M06); *Vetores autorregressivos (VAR)* (ECM-M11)
+:::
+
+**Leituras principais:** @koop2003, @gelman2013
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Amostrador de Gibbs
+2. Metropolis–Hastings
+3. Diagnósticos de convergência
+4. VAR bayesiano e priori de Minnesota
+:::

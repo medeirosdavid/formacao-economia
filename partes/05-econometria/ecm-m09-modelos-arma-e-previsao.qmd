@@ -1,0 +1,27 @@
+# Modelos ARMA e previsão {#sec-ecm-m09}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `ECM-M09`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m02 (*Teoria assintótica do MQO e inferência robusta*); @sec-est-d02 (*Processos estacionários, ergodicidade e representação de Wold*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Teoria assintótica do MQO e inferência robusta* (ECM-M02); *Processos estacionários, ergodicidade e representação de Wold* (EST-D02)
+:::
+
+**Leituras principais:** @hamilton1994
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Processos AR, MA e ARMA
+2. Funções de autocorrelação
+3. Estimação
+4. Previsão ótima e erro de previsão
+5. Seleção de modelos
+:::

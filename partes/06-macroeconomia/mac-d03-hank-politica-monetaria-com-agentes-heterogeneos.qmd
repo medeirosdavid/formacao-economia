@@ -1,0 +1,26 @@
+# HANK: política monetária com agentes heterogêneos {#sec-mac-d03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAC-D03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-d02 (*Agentes heterogêneos II: risco agregado e Krusell–Smith*); @sec-mac-m10 (*O modelo Novo-Keynesiano básico*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Agentes heterogêneos II: risco agregado e Krusell–Smith* (MAC-D02); *O modelo Novo-Keynesiano básico* (MAC-M10)
+:::
+
+**Leituras principais:** @kaplan2018, @auclert2021
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Canais diretos e indiretos da política monetária
+2. Propensões marginais a consumir e liquidez
+3. Modelos de dois ativos
+4. Solução no espaço de sequências
+:::

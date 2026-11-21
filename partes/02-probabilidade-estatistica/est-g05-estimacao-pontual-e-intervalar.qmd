@@ -1,0 +1,26 @@
+# Estimação pontual e intervalar {#sec-est-g05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `EST-G05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-est-g04 (*Amostragem e teoremas-limite*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Amostragem e teoremas-limite* (EST-G04)
+:::
+
+**Leituras principais:** @casella2002, @bussab2017
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Estimadores e suas propriedades
+2. Método dos momentos
+3. Máxima verossimilhança (introdução)
+4. Intervalos de confiança
+:::

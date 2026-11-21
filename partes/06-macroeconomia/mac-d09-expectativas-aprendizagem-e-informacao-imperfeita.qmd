@@ -1,0 +1,26 @@
+# Expectativas: aprendizagem e informação imperfeita {#sec-mac-d09}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAC-D09`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m10 (*O modelo Novo-Keynesiano básico*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *O modelo Novo-Keynesiano básico* (MAC-M10)
+:::
+
+**Leituras principais:** @woodford2003, @walsh2017
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Expectativas racionais e suas alternativas
+2. Aprendizagem adaptativa e E-estabilidade
+3. Informação rígida e desatenção
+4. Evidência de pesquisas de expectativas (Focus)
+:::

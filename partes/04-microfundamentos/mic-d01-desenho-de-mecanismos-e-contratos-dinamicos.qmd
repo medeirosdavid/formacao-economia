@@ -1,0 +1,26 @@
+# Desenho de mecanismos e contratos dinâmicos {#sec-mic-d01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MIC-D01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-m06 (*Informação assimétrica*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Informação assimétrica* (MIC-M06)
+:::
+
+**Leituras principais:** @bolton2005, @ljungqvist2018
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Princípio da revelação
+2. Incentivos e compatibilidade
+3. Contratos recursivos
+4. Seguro com informação privada
+:::

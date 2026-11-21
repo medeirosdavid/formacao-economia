@@ -1,0 +1,56 @@
+# =============================================================================
+# Configuração-base do livro (comum ao site e ao PDF).
+# As LISTAS DE CAPÍTULOS ficam nos perfis, gerados por scripts/gerar_estrutura.py:
+#   _quarto-site.yml  → todos os capítulos (inclusive esboços)   [perfil padrão]
+#   _quarto-pdf.yml   → apenas capítulos com status ≠ planejado
+# Renderizar:
+#   quarto render                          # site completo (HTML)
+#   quarto render --profile pdf --to pdf   # PDF só com o que já foi escrito
+#   quarto preview                         # pré-visualização ao vivo
+# =============================================================================
+
+project:
+  type: book
+  output-dir: _book
+  execute-dir: project   # o código roda a partir da raiz: `from formacao import dados` funciona
+  pre-render: python scripts/gerar_estrutura.py --silencioso
+
+profile:
+  default: site
+
+lang: pt-BR
+language:
+  environment-proof-title: "Demonstração"
+  environment-remark-title: "Observação"
+  environment-solution-title: "Solução"
+
+book:
+  title: "Formação em Economia"
+  subtitle: "Macroeconomia, Finanças e Econometria — da graduação ao doutorado"
+  author: "David Medeiros"
+  date: last-modified
+  date-format: "DD/MM/YYYY"
+  search: true
+  repo-url: https://github.com/medeirosdavid/formacao-economia
+  repo-actions: [source, issue]
+  sidebar:
+    style: docked
+    collapse-level: 1
+  page-navigation: true
+
+bibliography: referencias.bib
+link-citations: true
+
+crossref:
+  chapters: true
+
+execute:
+  freeze: auto        # o código de um capítulo só roda de novo quando ele muda
+  echo: true
+  warning: false
+  message: false
+
+jupyter: python3
+
+# Os formatos ficam em _formato-html.yml (perfil site) e _formato-pdf.yml (perfil pdf),
+# para que `quarto render` gere só o site e o PDF só tenha capítulos escritos.

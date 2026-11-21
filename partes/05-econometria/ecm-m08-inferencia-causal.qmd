@@ -1,0 +1,27 @@
+# Inferência causal {#sec-ecm-m08}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `ECM-M08`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-ecm-m04 (*Variáveis instrumentais: teoria e instrumentos fracos*); @sec-ecm-m07 (*Dados em painel: efeitos fixos, aleatórios e painéis dinâmicos*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Variáveis instrumentais: teoria e instrumentos fracos* (ECM-M04); *Dados em painel: efeitos fixos, aleatórios e painéis dinâmicos* (ECM-M07)
+:::
+
+**Leituras principais:** @angrist2009, @cunningham2021
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Resultados potenciais
+2. Seleção em observáveis e pareamento
+3. Diferenças em diferenças e estudos de evento
+4. Regressão descontínua
+5. Controle sintético
+:::

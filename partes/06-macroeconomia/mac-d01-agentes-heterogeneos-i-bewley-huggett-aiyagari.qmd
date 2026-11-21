@@ -1,0 +1,27 @@
+# Agentes heterogêneos I: Bewley–Huggett–Aiyagari {#sec-mac-d01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAC-D01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m04 (*Consumo: renda permanente, ciclo de vida e poupança precaucional*); @sec-mac-m06 (*Equilíbrio competitivo recursivo*); @sec-cmp-d01 (*Solução de modelos dinâmicos: VFI, PFI e EGM*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Consumo: renda permanente, ciclo de vida e poupança precaucional* (MAC-M04); *Equilíbrio competitivo recursivo* (MAC-M06); *Solução de modelos dinâmicos: VFI, PFI e EGM* (CMP-D01)
+:::
+
+**Leituras principais:** @aiyagari1994, @ljungqvist2018, @heer2009
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Mercados incompletos e risco idiossincrático
+2. Problema do indivíduo e limite de endividamento
+3. Distribuição estacionária
+4. Equilíbrio de Huggett e de Aiyagari
+5. Desigualdade de renda e riqueza
+:::

@@ -1,0 +1,22 @@
+# Microfundamentos {.unnumbered}
+
+<!-- ARQUIVO GERADO por scripts/gerar_estrutura.py — edite curriculo.yml, não este arquivo -->
+
+A microeconomia que a macro e as finanças pressupõem: escolha individual, incerteza, equilíbrio geral, jogos e informação.
+
+::: {.content-visible when-format="html"}
+| Código | Nível | Capítulo | Status |
+|:--|:--|:--|:--|
+| MIC-G01 | G | [Escolha do consumidor e demanda](mic-g01-escolha-do-consumidor-e-demanda.qmd) | ○ planejado |
+| MIC-G02 | G | [Produção, custos e a firma](mic-g02-producao-custos-e-a-firma.qmd) | ○ planejado |
+| MIC-G03 | G | [Mercados competitivos e bem-estar](mic-g03-mercados-competitivos-e-bem-estar.qmd) | ○ planejado |
+| MIC-G04 | G | [Escolha intertemporal](mic-g04-escolha-intertemporal.qmd) | ○ planejado |
+| MIC-G05 | G | [Introdução à teoria dos jogos](mic-g05-introducao-a-teoria-dos-jogos.qmd) | ○ planejado |
+| MIC-M01 | M | [Teoria do consumidor](mic-m01-teoria-do-consumidor.qmd) | ○ planejado |
+| MIC-M02 | M | [Escolha sob incerteza](mic-m02-escolha-sob-incerteza.qmd) | ○ planejado |
+| MIC-M03 | M | [Equilíbrio geral e teoremas do bem-estar](mic-m03-equilibrio-geral-e-teoremas-do-bem-estar.qmd) | ○ planejado |
+| MIC-M04 | M | [Equilíbrio geral com tempo e incerteza](mic-m04-equilibrio-geral-com-tempo-e-incerteza.qmd) | ○ planejado |
+| MIC-M05 | M | [Teoria dos jogos: jogos dinâmicos e bayesianos](mic-m05-teoria-dos-jogos-jogos-dinamicos-e-bayesianos.qmd) | ○ planejado |
+| MIC-M06 | M | [Informação assimétrica](mic-m06-informacao-assimetrica.qmd) | ○ planejado |
+| MIC-D01 | D | [Desenho de mecanismos e contratos dinâmicos](mic-d01-desenho-de-mecanismos-e-contratos-dinamicos.qmd) | ○ planejado |
+:::

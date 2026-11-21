@@ -1,0 +1,26 @@
+# Fricções financeiras e o acelerador financeiro {#sec-mac-d04}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAC-D04`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m07 (*Ciclos reais de negócios (RBC)*); @sec-mic-m06 (*Informação assimétrica*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Ciclos reais de negócios (RBC)* (MAC-M07); *Informação assimétrica* (MIC-M06)
+:::
+
+**Leituras principais:** @bernanke1999, @kiyotaki1997
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Verificação custosa de estado
+2. Acelerador financeiro (BGG)
+3. Restrições de colateral (Kiyotaki–Moore)
+4. Intermediários financeiros (Gertler–Karadi)
+:::

@@ -1,0 +1,27 @@
+# O fator estocástico de desconto {#sec-fin-m03}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `FIN-M03`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-m02 (*Preços de estado, mercados completos e não-arbitragem*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Preços de estado, mercados completos e não-arbitragem* (FIN-M02)
+:::
+
+**Leituras principais:** @cochrane2005
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Equação básica de apreçamento p = E[mx]
+2. Existência e unicidade do SDF
+3. Fronteira de média-variância e SDF
+4. Limites de Hansen–Jagannathan
+5. Beta-representações
+:::

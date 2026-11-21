@@ -1,0 +1,27 @@
+# Crescimento de longo prazo: fatos e o modelo de Solow {#sec-mac-g02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAC-G02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-g01 (*Contas nacionais e medidas macroeconômicas*); @sec-mat-g08 (*Equações em diferenças e equações diferenciais lineares*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Contas nacionais e medidas macroeconômicas* (MAC-G01); *Equações em diferenças e equações diferenciais lineares* (MAT-G08)
+:::
+
+**Leituras principais:** @blanchard2021, @mankiw2019, @barro2004
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Fatos estilizados de Kaldor
+2. O modelo de Solow
+3. Regra de ouro
+4. Progresso técnico
+5. Contabilidade do crescimento
+:::

@@ -1,0 +1,50 @@
+% =============================================================================
+% PREÂMBULO DO PDF — estilo sóbrio com caixas sutis (tcolorbox).
+% Os ambientes (definition, theorem, …) são criados pelo Quarto; aqui só os
+% "embrulhamos" em caixas. As cores são as mesmas de estilos/tema.scss.
+% =============================================================================
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+
+\definecolor{cor-definicao}{HTML}{2F5D8A}
+\definecolor{cor-resultado}{HTML}{8C2F39}
+\definecolor{cor-exemplo}{HTML}{2E7D5B}
+\definecolor{cor-observacao}{HTML}{B7791F}
+\definecolor{cor-exercicio}{HTML}{4A5568}
+\definecolor{cor-prova}{HTML}{9AA5B1}
+
+% Caixa fechada, fundo levemente tingido
+\tcbset{
+  caixa/.style={enhanced jigsaw, breakable, colback=#1!4!white, colframe=#1!70!white,
+    boxrule=0.4pt, arc=1.2pt, left=6pt, right=6pt, top=4pt, bottom=4pt,
+    before skip=8pt, after skip=8pt},
+  filete/.style={enhanced jigsaw, breakable, blanker, borderline west={1.2pt}{0pt}{#1},
+    left=8pt, before skip=6pt, after skip=6pt}
+}
+
+\AtBeginDocument{%
+  \tcolorboxenvironment{definition}{caixa=cor-definicao}
+  \tcolorboxenvironment{theorem}{caixa=cor-resultado}
+  \tcolorboxenvironment{proposition}{caixa=cor-resultado}
+  \tcolorboxenvironment{lemma}{caixa=cor-resultado}
+  \tcolorboxenvironment{corollary}{caixa=cor-resultado}
+  \tcolorboxenvironment{example}{caixa=cor-exemplo}
+  \tcolorboxenvironment{remark}{filete=cor-observacao}
+  \tcolorboxenvironment{exercise}{filete=cor-exercicio}
+  \tcolorboxenvironment{proof}{filete=cor-prova}
+}
+
+% Ficha-resumo e cabeçalho de capítulo (usados por filtros/caixas-pdf.lua)
+\newtcolorbox{caixaficha}{enhanced, colback=black!2, colframe=black!35,
+  boxrule=0.5pt, arc=1.5pt, left=8pt, right=8pt, top=6pt, bottom=6pt,
+  before upper={\setlength{\parskip}{5pt}}}  % inteira numa página, como uma ficha
+\newtcolorbox{caixacabecalho}{enhanced, blanker, borderline north={0.4pt}{0pt}{black!25},
+  borderline south={0.4pt}{0pt}{black!25}, top=4pt, bottom=4pt, fontupper=\small}
+
+% Títulos de capítulo e seção sem serifa, discretos
+\addtokomafont{disposition}{\rmfamily\bfseries}
+\setkomafont{chapter}{\Huge\rmfamily\bfseries}
+
+% Pequenos ajustes
+\usepackage{microtype}
+\setlength{\emergencystretch}{2em}

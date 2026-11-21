@@ -1,0 +1,27 @@
+# Política monetária: regras, determinação e política ótima {#sec-mac-m11}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAC-M11`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-m10 (*O modelo Novo-Keynesiano básico*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *O modelo Novo-Keynesiano básico* (MAC-M10)
+:::
+
+**Leituras principais:** @gali2015, @woodford2003, @walsh2017
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Princípio de Taylor e determinação
+2. Função perda de bem-estar
+3. Discrição versus compromisso
+4. Metas de inflação flexíveis
+5. Taxa de juros neutra
+:::

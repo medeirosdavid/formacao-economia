@@ -1,0 +1,27 @@
+# Escolha sob incerteza {#sec-mic-m02}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MIC-M02`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-m01 (*Teoria do consumidor*); @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Teoria do consumidor* (MIC-M01); *Esperança, momentos e distribuições conjuntas* (EST-G03)
+:::
+
+**Leituras principais:** @mwg1995, @gollier2001
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Loterias e utilidade esperada
+2. Aversão ao risco: Arrow–Pratt
+3. Equivalente certo e prêmio de risco
+4. Dominância estocástica
+5. Poupança precaucional e prudência
+:::

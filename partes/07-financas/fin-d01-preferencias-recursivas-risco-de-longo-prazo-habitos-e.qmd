@@ -1,0 +1,27 @@
+# Preferências recursivas, risco de longo prazo, hábitos e desastres {#sec-fin-d01}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `FIN-D01`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-fin-m04 (*Apreçamento baseado em consumo e o enigma do prêmio das ações*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Apreçamento baseado em consumo e o enigma do prêmio das ações* (FIN-M04)
+:::
+
+**Leituras principais:** @epstein1989, @bansal2004, @campbell1999, @barro2006
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Preferências de Epstein–Zin
+2. Risco de longo prazo (Bansal–Yaron)
+3. Formação de hábito (Campbell–Cochrane)
+4. Desastres raros
+5. Avaliação comparativa dos modelos
+:::

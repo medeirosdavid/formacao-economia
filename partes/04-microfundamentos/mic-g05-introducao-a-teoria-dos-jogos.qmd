@@ -1,0 +1,27 @@
+# Introdução à teoria dos jogos {#sec-mic-g05}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MIC-G05`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mic-g01 (*Escolha do consumidor e demanda*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Escolha do consumidor e demanda* (MIC-G01)
+:::
+
+**Leituras principais:** @varian2014, @osborne2020
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Jogos na forma normal
+2. Equilíbrio de Nash
+3. Estratégias mistas
+4. Jogos sequenciais
+5. Oligopólio
+:::

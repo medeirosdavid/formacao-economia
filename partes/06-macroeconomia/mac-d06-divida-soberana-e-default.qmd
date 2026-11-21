@@ -1,0 +1,26 @@
+# Dívida soberana e default {#sec-mac-d06}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAC-D06`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mac-d05 (*Economias abertas pequenas e emergentes*); @sec-cmp-d01 (*Solução de modelos dinâmicos: VFI, PFI e EGM*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Economias abertas pequenas e emergentes* (MAC-D05); *Solução de modelos dinâmicos: VFI, PFI e EGM* (CMP-D01)
+:::
+
+**Leituras principais:** @arellano2008, @uribe2017
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Modelo de Eaton–Gersovitz
+2. Arellano (2008)
+3. Spreads e ciclos
+4. Dívida de longo prazo
+:::

@@ -1,0 +1,67 @@
+# Renderiza o site, o PDF e o baralho do Anki e publica tudo no GitHub Pages.
+# Pré-requisito: em Settings → Pages, escolha "Source: GitHub Actions".
+name: Publicar livro
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  renderizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Dependências Python
+        run: pip install -r requirements.txt
+
+      - uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          tinytex: true
+
+      - name: Estrutura (currículo → capítulos, perfis)
+        run: python scripts/gerar_estrutura.py
+
+      - name: Site
+        run: quarto render
+
+      - name: PDF
+        run: quarto render --profile pdf --to pdf
+
+      - name: Baralho do Anki
+        run: python scripts/flashcards_anki.py
+
+      - name: Junta PDF e Anki ao site
+        run: |
+          mkdir -p _book/pdf
+          cp _pdf/formacao-economia.pdf _book/pdf/
+          cp _anki/formacao-economia.apkg _book/ || true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _book
+
+  publicar:
+    needs: renderizar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
