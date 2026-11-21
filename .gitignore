@@ -18,3 +18,6 @@ __pycache__/
 # Versionar: _freeze/ (resultados congelados do código) e dados/cache/ (séries baixadas)
 
 **/*.quarto_ipynb
+
+# Subprodutos da renderização ao lado dos .qmd
+*_files/
