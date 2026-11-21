@@ -60,6 +60,8 @@ Arquivos **gerados** pelo script (não edite à mão): `_quarto-site.yml`, `_qua
 
 ## Publicação
 
-O workflow `.github/workflows/publicar.yml` renderiza tudo e publica no GitHub Pages (em *Settings → Pages*, escolha *Source: GitHub Actions*). Em repositórios privados, o GitHub Pages exige um plano pago; sem ele, use `quarto preview` localmente ou torne o repositório público.
+O workflow `.github/workflows/publicar.yml` roda a cada *push*: renderiza o site, o PDF e o baralho do Anki e guarda tudo como artefato **livro** na página da execução (aba *Actions*), mesmo com o repositório privado.
+
+Para publicar também no GitHub Pages: em *Settings → Pages*, escolha *Source: GitHub Actions* e crie a variável de repositório `PUBLICAR_PAGES = true` (*Settings → Secrets and variables → Actions → Variables*). Em repositórios privados, o Pages exige um plano pago.
 
 Os resultados do código ficam congelados em `_freeze/` (versione essa pasta depois da primeira renderização local) e as séries de dados em `dados/cache/`.

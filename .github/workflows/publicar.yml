@@ -1,5 +1,9 @@
-# Renderiza o site, o PDF e o baralho do Anki e publica tudo no GitHub Pages.
-# Pré-requisito: em Settings → Pages, escolha "Source: GitHub Actions".
+# Renderiza o site, o PDF e o baralho do Anki a cada push.
+# • Sempre: o resultado fica disponível como artefato "livro" na página da execução
+#   (aba Actions → execução → Artifacts), inclusive em repositório privado.
+# • GitHub Pages (opcional): em Settings → Pages escolha "Source: GitHub Actions" e
+#   crie a variável de repositório PUBLICAR_PAGES = true (Settings → Secrets and
+#   variables → Actions → Variables). Em repositório privado, o Pages exige plano pago.
 name: Publicar livro
 
 on:
@@ -13,7 +17,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: livro
   cancel-in-progress: true
 
 jobs:
@@ -52,11 +56,20 @@ jobs:
           cp _pdf/formacao-economia.pdf _book/pdf/
           cp _anki/formacao-economia.apkg _book/ || true
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Guarda o livro como artefato da execução
+        uses: actions/upload-artifact@v4
+        with:
+          name: livro
+          path: _book
+          retention-days: 30
+
+      - if: vars.PUBLICAR_PAGES == 'true'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: _book
 
   publicar:
+    if: vars.PUBLICAR_PAGES == 'true'
     needs: renderizar
     runs-on: ubuntu-latest
     environment:
