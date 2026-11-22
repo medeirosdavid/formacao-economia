@@ -2,8 +2,8 @@
  "MAT-G01": {
   "titulo": "Lógica, conjuntos e métodos de demonstração",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "MAT-G02": {
   "titulo": "Números reais, sequências e séries",

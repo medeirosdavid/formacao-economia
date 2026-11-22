@@ -104,4 +104,6 @@ form.controle {
   input[type=range] { width: 100%; accent-color: $cor-definicao; }
   output { font-variant-numeric: tabular-nums; text-align: right; color: $cor-exercicio; }
   &.controle-alternador { display: block; input { accent-color: $cor-definicao; margin-right: .3rem; } }
+  &.controle-seletor { grid-template-columns: 11rem 1fr; max-width: 40rem;
+    select { font-family: $font-family-monospace; font-size: .85rem; padding: .15rem .3rem; } }
 }

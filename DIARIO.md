@@ -2,6 +2,30 @@
 
 Registro curto de cada sessão: o que foi feito, decisões e pendências. Entradas mais recentes no topo.
 
+## 22/11/2026 — MAT-G01 Lógica, conjuntos e métodos de demonstração
+
+**Feito**
+
+- Decisão: a revisão começa pela base quantitativa (trilha "Base quantitativa"), acompanhando o que David está estudando.
+- ECM-G01 aprovado por David como padrão de estilo e profundidade.
+- Skill `capitulo-formacao-economia` salva: roteiro fixo de cada sessão de estudo.
+- Capítulo **MAT-G01** escrito (status: rascunho), com fonte principal em Morais Filho, *Um Convite à Matemática*:
+  - lógica proposicional, quantificadores e técnicas de demonstração;
+  - conjuntos, relações (equivalência ↔ partição; ordens; preferências racionais e dominância de Pareto) e funções (imagens e pré-imagens, inversa, utilidade ordinal);
+  - indução e boa ordenação (soma geométrica e valor presente, Bernoulli, decomposição em primos);
+  - cardinalidade (casa dos pombos; $\Z$, $\N\times\N$ e $\Q$ enumeráveis; teorema de Cantor; $\R$ não enumerável);
+  - 3 interativos (tabelas-verdade, enumeração de $\N\times\N$, argumento diagonal), laboratório, 9 exercícios resolvidos, 15 flashcards e ficha-resumo.
+- Infraestrutura:
+  - novo controle `seletor` em `ojs/controles.js`;
+  - no PDF, código e saídas quebram linhas longas (fvextra), a numeração ficou sem ponto final e o sumário passou a se chamar "Sumário";
+  - `_freeze/` foi para o `.gitignore`;
+  - convenção $\N = \{1, 2, \dots\}$ registrada na notação.
+
+**Pendências**
+
+- [ ] David revisar o MAT-G01 e apontar o que faltar em relação ao livro do Daniel Cordeiro.
+- [ ] Próximo capítulo da trilha: definir com David (candidatos: MAT-G02 *Números reais, sequências e séries* ou MAT-G05 *Álgebra linear I*).
+
 ## 21/11/2026 — Fundação do projeto
 
 **Feito**
@@ -30,7 +54,7 @@ Registro curto de cada sessão: o que foi feito, decisões e pendências. Entrad
 
 **Pendências**
 
-- [ ] Ativar o Pages uma única vez (*Settings → Pages → Source: GitHub Actions*) e conferir o primeiro build: o site deve abrir e trazer os números reais da lei de Okun.
-- [ ] Primeira renderização local com internet, para preencher `dados/cache/` e `_freeze/` e versioná-los.
-- [ ] Revisar o ECM-G01: estilo, profundidade e exercícios. O resultado calibra todos os capítulos seguintes.
-- [ ] Decidir por onde a revisão começa: base quantitativa (MAT/EST) ou econometria de graduação em sequência.
+- [x] Pages ativado e site publicado (21/11).
+- [ ] (Adiado por decisão de David) Ambiente local com Quarto.
+- [x] ECM-G01 revisado e aprovado por David (22/11).
+- [x] Começar pela base quantitativa (22/11).

@@ -3,6 +3,9 @@
 book:
   chapters:
   - index.qmd
+  - part: partes/01-matematica/index.qmd
+    chapters:
+    - partes/01-matematica/mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd
   - part: partes/05-econometria/index.qmd
     chapters:
     - partes/05-econometria/ecm-g01-regressao-linear-simples.qmd
@@ -20,16 +23,16 @@ project:
 format:
   pdf:
     documentclass: scrbook
-    classoption: [oneside, open=any, parskip=half]
+    classoption: [oneside, open=any, parskip=half, numbers=noenddot]
     papersize: a4
     fontsize: 11pt
     pdf-engine: xelatex
     toc-depth: 2
+    toc-title: Sumário
     number-depth: 3
     colorlinks: true
     fig-format: pdf
     keep-tex: false
-    code-overflow: wrap
     filters:
       - filtros/refs-pendentes.lua
       - filtros/caixas-pdf.lua

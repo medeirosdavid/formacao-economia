@@ -63,8 +63,9 @@ partes:
         titulo: "Lógica, conjuntos e métodos de demonstração"
         nivel: G
         prereq: []
-        leituras: [simon1994, lima1989]
-        topicos: ["Proposições, conectivos e quantificadores", "Conjuntos, relações e funções", "Cardinalidade", "Demonstração direta, contrapositiva, por absurdo e por indução"]
+        leituras: [moraisfilho2012, velleman2019, lima1989]
+        status: rascunho
+        topicos: ["Proposições, conectivos e quantificadores", "Técnicas de demonstração", "Conjuntos, relações e funções", "Relações de preferência", "Indução e boa ordenação", "Cardinalidade"]
       - id: MAT-G02
         titulo: "Números reais, sequências e séries"
         nivel: G

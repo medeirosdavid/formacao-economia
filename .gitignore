@@ -15,7 +15,11 @@ __pycache__/
 # Sistema
 .DS_Store
 
-# Versionar: _freeze/ (resultados congelados do código) e dados/cache/ (séries baixadas)
+# Resultados congelados do código: a CI executa os capítulos com acesso à internet.
+# (Para versioná-los depois de uma renderização local com dados, remova esta linha.)
+_freeze/
+
+# Versionar: dados/cache/ (séries baixadas)
 
 **/*.quarto_ipynb
 

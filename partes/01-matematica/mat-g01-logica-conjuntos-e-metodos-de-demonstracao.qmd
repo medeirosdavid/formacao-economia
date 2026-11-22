@@ -2,19 +2,1066 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAT-G01`
+[Graduação]{.nivel .nivel-G} · [rascunho]{.status} · `MAT-G01`
 
 **Pré-requisitos:** nenhum
 
-**Leituras principais:** @simon1994, @lima1989
+**Leituras principais:** @moraisfilho2012, @velleman2019, @lima1989
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-mat-g01-motivacao}
 
-1. Proposições, conectivos e quantificadores
-2. Conjuntos, relações e funções
-3. Cardinalidade
-4. Demonstração direta, contrapositiva, por absurdo e por indução
+Quase tudo o que este livro afirma vem na forma de **teoremas**: o estimador de MQO é não viesado, o equilíbrio competitivo é eficiente, a função valor é a única solução da equação de Bellman. Cada um tem a mesma estrutura — *se* certas hipóteses valem, *então* certa conclusão vale — e entender essa estrutura é entender o que o resultado diz e, tão importante quanto, o que ele **não** diz.
+
+Considere o @thm-ecm-g01-nao-viesado: sob as hipóteses RLS.1–RLS.4, o estimador de MQO é não viesado. O teorema garante que, se o estimador for viesado, alguma hipótese falhou. Ele **não** garante que, se o estimador for não viesado, as hipóteses valem. Ou considere a condição de primeira ordem da otimização: se $x^*$ maximiza uma função diferenciável no interior do domínio, então $f'(x^*) = 0$. A condição é **necessária**, não **suficiente**: $f(x) = x^3$ tem derivada nula em $0$, e $0$ não é máximo. Confundir uma afirmação com sua recíproca é o erro de raciocínio mais comum em economia — e é um erro de lógica, não de economia.
+
+Este capítulo fixa a linguagem do resto do livro:
+
+1. a **lógica proposicional** e os **quantificadores**, que dão a forma de toda afirmação matemática;
+2. as **técnicas de demonstração** — direta, contrapositiva, por absurdo, por casos, por indução;
+3. **conjuntos, relações e funções**, os objetos sobre os quais toda a teoria é construída — incluindo as **relações de preferência**, ponto de partida da microeconomia;
+4. a **cardinalidade**, que separa o infinito "contável" do infinito "contínuo" e reaparece em probabilidade e em teoria da medida.
+
+## Proposições e conectivos {#sec-mat-g01-logica}
+
+::: {#def-mat-g01-proposicao}
+## Proposição
+Uma **proposição** é uma afirmação que é verdadeira (V) ou falsa (F), e não ambas.
 :::
+
+"2 é primo" é uma proposição verdadeira; "todo número par é maior que 3" é uma proposição falsa. Já "$x > 2$" não é uma proposição: seu valor depende de $x$. Afirmações desse tipo são tratadas na @sec-mat-g01-quantificadores.
+
+Proposições se combinam por meio de **conectivos**. Dadas proposições $p$ e $q$, definimos a **negação** $\neg p$ ("não $p$"), a **conjunção** $p \wedge q$ ("$p$ e $q$"), a **disjunção** $p \vee q$ ("$p$ ou $q$", no sentido inclusivo), a **condicional** $p \to q$ ("se $p$, então $q$") e a **bicondicional** $p \leftrightarrow q$ ("$p$ se, e somente se, $q$"). O valor de cada uma é dado, por definição, pela tabela-verdade:
+
+| $p$ | $q$ | $\neg p$ | $p \wedge q$ | $p \vee q$ | $p \to q$ | $p \leftrightarrow q$ |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| V | V | F | V | V | V | V |
+| V | F | F | F | V | F | F |
+| F | V | V | F | V | V | F |
+| F | F | V | F | F | V | V |
+
+: Tabela-verdade dos conectivos. {#tbl-mat-g01-conectivos}
+
+::: {.remark}
+A condicional $p \to q$ só é falsa quando $p$ é verdadeira e $q$ é falsa. Em particular, ela é verdadeira sempre que $p$ é falsa — diz-se que é *verdadeira por vacuidade*. A convenção é a de uma promessa: "se chover, levo o guarda-chuva" só é quebrada se chover e eu não levar o guarda-chuva; se não chover, a promessa foi cumprida, leve eu o guarda-chuva ou não.
+:::
+
+::: {#def-mat-g01-equivalencia}
+## Tautologia e equivalência lógica
+Uma fórmula construída a partir de proposições $p, q, r, \dots$ com conectivos é uma **tautologia** se é verdadeira para quaisquer valores de $p, q, r, \dots$, e uma **contradição** se é sempre falsa. Duas fórmulas $\varphi$ e $\psi$ são **logicamente equivalentes**, $\varphi \equiv \psi$, se $\varphi \leftrightarrow \psi$ é uma tautologia — isto é, se têm o mesmo valor em todas as linhas da tabela-verdade.
+:::
+
+::: {#prp-mat-g01-equivalencias}
+## Equivalências fundamentais
+Para quaisquer proposições $p$, $q$ e $r$:
+
+(a) $\neg(\neg p) \equiv p$ (dupla negação);
+(b) $\neg(p \wedge q) \equiv \neg p \vee \neg q$ e $\neg(p \vee q) \equiv \neg p \wedge \neg q$ (leis de De Morgan);
+(c) $p \to q \equiv \neg p \vee q$;
+(d) $p \to q \equiv \neg q \to \neg p$ (contrapositiva);
+(e) $\neg(p \to q) \equiv p \wedge \neg q$;
+(f) $p \leftrightarrow q \equiv (p \to q) \wedge (q \to p)$;
+(g) $p \wedge (q \vee r) \equiv (p \wedge q) \vee (p \wedge r)$ e $p \vee (q \wedge r) \equiv (p \vee q) \wedge (p \vee r)$ (distributividade).
+:::
+
+::: {.proof}
+Para (a), $\neg p$ troca V por F e vice-versa; trocar duas vezes devolve o valor original. Para (b), (c) e (d), comparamos as colunas das tabelas abaixo, construídas a partir da @tbl-mat-g01-conectivos:
+
+| $p$ | $q$ | $p \to q$ | $\neg p \vee q$ | $\neg q \to \neg p$ | $q \to p$ |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| V | V | V | V | V | V |
+| V | F | F | F | F | V |
+| F | V | V | V | V | F |
+| F | F | V | V | V | V |
+
+| $p$ | $q$ | $\neg(p \wedge q)$ | $\neg p \vee \neg q$ | $\neg(p \vee q)$ | $\neg p \wedge \neg q$ |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| V | V | F | F | F | F |
+| V | F | V | V | F | F |
+| F | V | V | V | F | F |
+| F | F | V | V | V | V |
+
+Na primeira tabela, as colunas de $p \to q$, $\neg p \vee q$ e $\neg q \to \neg p$ coincidem, o que prova (c) e (d); na segunda, as duas duplas de colunas provam (b). Para (e), por (c), (b) e (a): $\neg(p \to q) \equiv \neg(\neg p \vee q) \equiv \neg\neg p \wedge \neg q \equiv p \wedge \neg q$. Para (f), $(p \to q) \wedge (q \to p)$ é verdadeira exatamente quando nenhuma das duas condicionais falha, isto é, quando $p$ e $q$ têm o mesmo valor — que é a definição de $p \leftrightarrow q$.
+
+Para (g), separamos dois casos. Se $p$ é verdadeira, $p \wedge (q \vee r)$ e $(p \wedge q) \vee (p \wedge r)$ têm ambas o valor de $q \vee r$; se $p$ é falsa, ambas são falsas. Na segunda lei, se $p$ é verdadeira, os dois lados são verdadeiros; se $p$ é falsa, ambos têm o valor de $q \wedge r$.
+:::
+
+A primeira tabela da demonstração mostra também que a **recíproca** $q \to p$ *não* é equivalente a $p \to q$: as colunas diferem na segunda e na terceira linhas. Essa é a origem da distinção entre condições necessárias e suficientes. Em $p \to q$, dizemos que
+
+- $p$ é **condição suficiente** para $q$ (basta $p$ para garantir $q$);
+- $q$ é **condição necessária** para $p$ (sem $q$ não há $p$, pela contrapositiva);
+- "$p$ somente se $q$" e "$q$ se $p$" são outras formas de dizer $p \to q$.
+
+Uma condição é **necessária e suficiente** quando vale a bicondicional.
+
+::: {#exm-mat-g01-otimizacao}
+## Condições de primeira ordem
+Seja $f$ diferenciável num intervalo aberto e $x^*$ um ponto desse intervalo. A afirmação "se $x^*$ é ponto de máximo de $f$, então $f'(x^*) = 0$" é verdadeira (é o teorema de Fermat, demonstrado no @sec-mat-g03). Ela diz que $f'(x^*) = 0$ é condição **necessária** para máximo interior. Sua contrapositiva — "se $f'(x^*) \neq 0$, então $x^*$ não é máximo" — é igualmente verdadeira e é a que usamos na prática para descartar candidatos. Já a recíproca, "se $f'(x^*) = 0$, então $x^*$ é máximo", é falsa: basta $f(x) = x^3$ e $x^* = 0$. Condições **suficientes** exigem informação adicional, como a concavidade de $f$ (@sec-mat-g07).
+:::
+
+## Quantificadores {#sec-mat-g01-quantificadores}
+
+Uma **sentença aberta** $P(x)$ é uma afirmação que se torna uma proposição quando a variável $x$ assume um valor num conjunto $U$, o **universo**. "$x > 2$", com $U = \R$, é uma sentença aberta.
+
+::: {#def-mat-g01-quantificadores}
+## Quantificadores
+Seja $P(x)$ uma sentença aberta com universo $U$.
+
+- O **quantificador universal**: $\forall x \in U,\ P(x)$ ("para todo $x$ em $U$, $P(x)$") é verdadeira se $P(a)$ é verdadeira para todo $a \in U$.
+- O **quantificador existencial**: $\exists x \in U,\ P(x)$ ("existe $x$ em $U$ tal que $P(x)$") é verdadeira se $P(a)$ é verdadeira para pelo menos um $a \in U$.
+- $\exists!\, x \in U,\ P(x)$ significa que existe **exatamente um** tal $x$.
+:::
+
+::: {#prp-mat-g01-negacao}
+## Negação de quantificadores
+$\neg\big(\forall x,\ P(x)\big) \equiv \exists x,\ \neg P(x)$ e $\neg\big(\exists x,\ P(x)\big) \equiv \forall x,\ \neg P(x)$.
+:::
+
+::: {.proof}
+"$\forall x,\ P(x)$" é falsa se, e somente se, nem todo $a \in U$ satisfaz $P$, isto é, se existe $a$ com $P(a)$ falsa — que é exatamente "$\exists x,\ \neg P(x)$". Aplicando essa equivalência à sentença $\neg P$, obtemos $\neg(\forall x,\ \neg P(x)) \equiv \exists x,\ \neg\neg P(x) \equiv \exists x,\ P(x)$; negando os dois lados, segue a segunda equivalência.
+:::
+
+Daí a regra prática: **para negar, percorra a fórmula da esquerda para a direita, troque cada $\forall$ por $\exists$ e vice-versa, e negue a sentença final.** Quantificadores restritos seguem a mesma regra: "$\forall \varepsilon > 0,\ P(\varepsilon)$" abrevia $\forall \varepsilon,\ (\varepsilon > 0 \to P(\varepsilon))$, cuja negação, pela @prp-mat-g01-equivalencias (e), é $\exists \varepsilon,\ (\varepsilon > 0 \wedge \neg P(\varepsilon))$ — ou seja, "$\exists \varepsilon > 0,\ \neg P(\varepsilon)$". A restrição não é negada.
+
+**A ordem dos quantificadores importa.** Com $U = \R$, a afirmação $\forall x\ \exists y,\ y > x$ é verdadeira (para cada $x$, tome $y = x + 1$), mas $\exists y\ \forall x,\ y > x$ é falsa (nenhum $y$ é maior que todos os reais — em particular, não é maior que si mesmo). Na primeira, $y$ pode depender de $x$; na segunda, o mesmo $y$ precisa servir para todo $x$.
+
+::: {#exm-mat-g01-convergencia}
+## Convergência e sua negação
+Uma sequência $(x_n)$ de números reais **converge** para $L$ se
+$$
+\forall \varepsilon > 0\ \ \exists N \in \N\ \ \forall n \geq N:\ \abs{x_n - L} < \varepsilon .
+$$
+Pela regra, $(x_n)$ **não** converge para $L$ se, e somente se,
+$$
+\exists \varepsilon > 0\ \ \forall N \in \N\ \ \exists n \geq N:\ \abs{x_n - L} \geq \varepsilon ,
+$$
+isto é, existe uma distância fixa $\varepsilon$ tal que, por mais adiante que se vá na sequência, sempre aparece algum termo a pelo menos $\varepsilon$ de $L$. Essa é a forma com que se demonstra que uma sequência diverge (@sec-mat-g02).
+:::
+
+## Técnicas de demonstração {#sec-mat-g01-demonstracoes}
+
+A maior parte dos teoremas tem a forma $\forall x,\ (P(x) \to Q(x))$. Para demonstrá-la, tomamos um $x$ **arbitrário** que satisfaz $P$ e mostramos que ele satisfaz $Q$. As técnicas abaixo são maneiras diferentes de fazer isso. Nos exemplos usamos fatos elementares sobre inteiros: um inteiro $n$ é **par** se $n = 2k$ para algum $k \in \Z$ e **ímpar** se $n = 2k + 1$ para algum $k \in \Z$; todo inteiro é par ou ímpar, e não ambos.
+
+### Demonstração direta
+
+Supomos $P(x)$ e encadeamos implicações até $Q(x)$.
+
+::: {#prp-mat-g01-impar}
+## Quadrado de ímpar
+Se $n \in \Z$ é ímpar, então $n^2$ é ímpar.
+:::
+
+::: {.proof}
+Se $n = 2k + 1$, então $n^2 = 4k^2 + 4k + 1 = 2(2k^2 + 2k) + 1$, que é ímpar.
+:::
+
+### Demonstração pela contrapositiva
+
+Pela @prp-mat-g01-equivalencias (d), provar $P \to Q$ é o mesmo que provar $\neg Q \to \neg P$. A técnica é útil quando a negação da conclusão dá mais informação do que a hipótese.
+
+::: {#prp-mat-g01-par}
+## Paridade do quadrado
+Se $n \in \Z$ e $n^2$ é par, então $n$ é par.
+:::
+
+::: {.proof}
+A contrapositiva é "se $n$ é ímpar, então $n^2$ é ímpar", que é a @prp-mat-g01-impar.
+:::
+
+Uma demonstração direta aqui seria desajeitada: de $n^2 = 2k$ não se extrai facilmente informação sobre $n$.
+
+### Demonstração por absurdo
+
+Supomos a hipótese **e** a negação da conclusão e derivamos uma contradição — uma afirmação da forma $r \wedge \neg r$. Como $P \wedge \neg Q$ é a negação de $P \to Q$ (pela @prp-mat-g01-equivalencias (e)), concluir que $P \wedge \neg Q$ é impossível é concluir $P \to Q$.
+
+::: {#thm-mat-g01-raiz2}
+## Irracionalidade de $\sqrt 2$
+Não existe número racional $r$ com $r^2 = 2$.
+:::
+
+::: {.proof}
+Suponha, por absurdo, que $r = a/b$ com $a \in \Z$, $b \in \N$ e $r^2 = 2$. Dividindo $a$ e $b$ pelo seu máximo divisor comum, podemos supor que $a$ e $b$ não têm fator comum maior que 1. De $a^2 = 2b^2$, $a^2$ é par; pela @prp-mat-g01-par, $a$ é par, digamos $a = 2c$. Então $4c^2 = 2b^2$, ou seja, $b^2 = 2c^2$, e $b$ também é par. Assim, $2$ divide $a$ e $b$, contradizendo a escolha de $a$ e $b$ sem fator comum.
+:::
+
+### Demonstração por casos
+
+Se $P$ implica $C_1 \vee C_2$ e cada caso $C_i$ implica $Q$, então $P$ implica $Q$. Os casos precisam cobrir todas as possibilidades.
+
+::: {#prp-mat-g01-triangular}
+## Desigualdade triangular
+Para quaisquer $x, y \in \R$, $\abs{x + y} \leq \abs{x} + \abs{y}$.
+:::
+
+::: {.proof}
+Primeiro, para $z \in \R$ e $c \geq 0$, vale $\abs{z} \leq c \iff -c \leq z \leq c$. Se $z \geq 0$, então $\abs{z} = z$ e $-c \leq 0 \leq z$, logo ambos os lados equivalem a $z \leq c$. Se $z < 0$, então $\abs{z} = -z$ e $z < 0 \leq c$, logo ambos os lados equivalem a $-z \leq c$. Aplicando com $c = \abs{x}$ e $c = \abs{y}$, temos $-\abs{x} \leq x \leq \abs{x}$ e $-\abs{y} \leq y \leq \abs{y}$. Somando, $-(\abs{x} + \abs{y}) \leq x + y \leq \abs{x} + \abs{y}$, e, pela equivalência inicial com $c = \abs{x} + \abs{y}$, $\abs{x + y} \leq \abs{x} + \abs{y}$.
+:::
+
+### Existência, unicidade e contraexemplos
+
+Para provar $\exists x,\ P(x)$, basta exibir um $x$ — prova **construtiva** — ou mostrar que a inexistência leva a um absurdo — prova **não construtiva**. Para provar unicidade, supomos dois objetos com a propriedade e mostramos que são iguais.
+
+::: {#exm-mat-g01-nao-construtiva}
+## Uma prova não construtiva
+Existem números irracionais $a$ e $b$ tais que $a^b$ é racional. Considere $\sqrt2^{\sqrt2}$. Se for racional, tome $a = b = \sqrt 2$. Se for irracional, tome $a = \sqrt2^{\sqrt2}$ e $b = \sqrt 2$: então $a^b = \sqrt2^{\sqrt2 \cdot \sqrt2} = \sqrt2^{2} = 2$. Em ambos os casos o par existe — e a prova não diz qual dos dois casos ocorre.
+:::
+
+Provas de existência não construtivas são onipresentes em economia: a existência de equilíbrio geral é obtida de teoremas de ponto fixo (@sec-mat-m05) que garantem que o equilíbrio existe sem dizer qual é. Calculá-lo é outro problema, de natureza computacional (@sec-cmp-m01).
+
+Para **refutar** uma afirmação universal $\forall x,\ P(x)$, basta um **contraexemplo**: um $x$ com $\neg P(x)$ (@prp-mat-g01-negacao). Inversamente, nenhuma quantidade de exemplos *prova* uma afirmação universal.
+
+::: {#exm-mat-g01-euler}
+## Evidência não é prova
+O polinômio $n^2 + n + 41$ produz um número primo para $n = 0, 1, 2, \dots, 39$ — quarenta casos seguidos. Mas, para $n = 40$, $40^2 + 40 + 41 = 1681 = 41^2$. A afirmação "$n^2 + n + 41$ é primo para todo $n \in \N_0$" é falsa. O laboratório (@sec-mat-g01-laboratorio) reproduz a verificação.
+:::
+
+::: {.remark}
+Três erros frequentes: **afirmar o consequente** (de $p \to q$ e $q$, concluir $p$); **provar a recíproca** no lugar do enunciado; e o **raciocínio circular**, que usa a conclusão, de forma disfarçada, como passo da prova.
+:::
+
+## Conjuntos {#sec-mat-g01-conjuntos}
+
+Trabalhamos com a teoria "ingênua" dos conjuntos: um **conjunto** é uma coleção de objetos, seus **elementos**; $a \in A$ significa que $a$ pertence a $A$. Para evitar paradoxos — como o de Russell, que surge ao considerar "o conjunto de todos os conjuntos que não pertencem a si mesmos" —, os conjuntos de cada discussão são sempre subconjuntos de um **universo** $U$ fixado. Escrevemos $\{x \in U : P(x)\}$ para o conjunto dos elementos de $U$ que satisfazem $P$.
+
+::: {#def-mat-g01-conjuntos}
+## Inclusão, igualdade e operações
+Sejam $A, B \subseteq U$.
+
+- $A \subseteq B$ ($A$ é **subconjunto** de $B$) se $\forall x,\ (x \in A \to x \in B)$.
+- $A = B$ se $A \subseteq B$ e $B \subseteq A$.
+- $\emptyset$ é o **conjunto vazio**, e $\mathcal{P}(A) \defeq \{S : S \subseteq A\}$ é o **conjunto das partes** de $A$.
+- **União**: $A \cup B \defeq \{x : x \in A \vee x \in B\}$.
+- **Interseção**: $A \cap B \defeq \{x : x \in A \wedge x \in B\}$.
+- **Diferença**: $A \setminus B \defeq \{x : x \in A \wedge x \notin B\}$.
+- **Complementar**: $A^c \defeq U \setminus A$.
+- Para uma **família indexada** $(A_i)_{i \in I}$ de subconjuntos de $U$: $\bigcup_{i \in I} A_i \defeq \{x : \exists i \in I,\ x \in A_i\}$ e $\bigcap_{i \in I} A_i \defeq \{x \in U : \forall i \in I,\ x \in A_i\}$.
+:::
+
+A definição de igualdade fornece o método-padrão para provar $A = B$: a **dupla inclusão**. Mostramos que um elemento arbitrário de $A$ está em $B$ e, depois, que um elemento arbitrário de $B$ está em $A$. As operações de conjuntos espelham os conectivos — $\cup$ corresponde a $\vee$, $\cap$ a $\wedge$, o complementar a $\neg$, $\subseteq$ a $\to$, $\bigcup$ a $\exists$ e $\bigcap$ a $\forall$ — e por isso as propriedades das operações vêm das equivalências lógicas.
+
+::: {#prp-mat-g01-de-morgan}
+## Leis de De Morgan para conjuntos
+Para qualquer família $(A_i)_{i \in I}$ de subconjuntos de $U$,
+$$
+\Big(\bigcup_{i \in I} A_i\Big)^c = \bigcap_{i \in I} A_i^c
+\qquad\text{e}\qquad
+\Big(\bigcap_{i \in I} A_i\Big)^c = \bigcup_{i \in I} A_i^c .
+$$
+:::
+
+::: {.proof}
+Para $x \in U$, pela @prp-mat-g01-negacao,
+$$
+x \in \Big(\bigcup_i A_i\Big)^c \iff \neg\big(\exists i,\ x \in A_i\big) \iff \forall i,\ x \notin A_i \iff x \in \bigcap_i A_i^c .
+$$
+A segunda igualdade é análoga, trocando os papéis de $\forall$ e $\exists$.
+:::
+
+::: {#prp-mat-g01-distributiva}
+## Distributividade
+Para $A, B, C \subseteq U$: $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$ e $A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$.
+:::
+
+::: {.proof}
+Pela @prp-mat-g01-equivalencias (g), $x \in A \cap (B \cup C) \iff x \in A \wedge (x \in B \vee x \in C) \iff (x \in A \wedge x \in B) \vee (x \in A \wedge x \in C) \iff x \in (A \cap B) \cup (A \cap C)$. A segunda igualdade usa a outra lei distributiva da mesma forma.
+:::
+
+::: {#def-mat-g01-produto}
+## Produto cartesiano
+O **par ordenado** $(a, b)$ é caracterizado por $(a, b) = (c, d) \iff a = c$ e $b = d$. O **produto cartesiano** de $A$ e $B$ é $A \times B \defeq \{(a, b) : a \in A,\ b \in B\}$. Analogamente, $A_1 \times \dots \times A_n$ é o conjunto das $n$-uplas $(a_1, \dots, a_n)$ com $a_k \in A_k$, e $\R^n \defeq \R \times \dots \times \R$.
+:::
+
+## Relações {#sec-mat-g01-relacoes}
+
+::: {#def-mat-g01-relacao}
+## Relação binária e propriedades
+Uma **relação binária** num conjunto $A$ é um subconjunto $R \subseteq A \times A$; escrevemos $a \mathrel{R} b$ para $(a, b) \in R$. A relação $R$ é
+
+- **reflexiva** se $a \mathrel{R} a$ para todo $a \in A$;
+- **simétrica** se $a \mathrel{R} b \to b \mathrel{R} a$;
+- **antissimétrica** se $(a \mathrel{R} b \wedge b \mathrel{R} a) \to a = b$;
+- **transitiva** se $(a \mathrel{R} b \wedge b \mathrel{R} c) \to a \mathrel{R} c$;
+- **completa** se $a \mathrel{R} b \vee b \mathrel{R} a$ para quaisquer $a, b \in A$;
+
+com as variáveis quantificadas universalmente em $A$.
+:::
+
+::: {#def-mat-g01-equivalencia-particao}
+## Relação de equivalência e partição
+Uma **relação de equivalência** é uma relação reflexiva, simétrica e transitiva; a **classe de equivalência** de $a$ é $[a] \defeq \{b \in A : a \mathrel{R} b\}$. Uma **partição** de $A$ é uma família de subconjuntos de $A$ não vazios, dois a dois disjuntos, cuja união é $A$.
+:::
+
+::: {#thm-mat-g01-particao}
+## Equivalências e partições
+Se $R$ é uma relação de equivalência em $A$, as classes de equivalência formam uma partição de $A$. Reciprocamente, toda partição $\mathcal{P}$ de $A$ define a relação de equivalência "$a \sim b$ se $a$ e $b$ estão no mesmo bloco de $\mathcal{P}$", cujas classes são os blocos de $\mathcal{P}$.
+:::
+
+::: {.proof}
+Seja $R$ uma relação de equivalência. Por reflexividade, $a \in [a]$; logo cada classe é não vazia e a união das classes é $A$. Resta ver que duas classes distintas são disjuntas, ou seja, que $[a] \cap [b] \neq \emptyset$ implica $[a] = [b]$. Seja $c \in [a] \cap [b]$: então $a \mathrel{R} c$ e $b \mathrel{R} c$; por simetria $c \mathrel{R} b$ e, por transitividade, $a \mathrel{R} b$. Se $x \in [b]$, então $b \mathrel{R} x$ e, de $a \mathrel{R} b$, $a \mathrel{R} x$, isto é, $x \in [a]$; logo $[b] \subseteq [a]$. Como também $b \mathrel{R} a$ (simetria), o mesmo argumento dá $[a] \subseteq [b]$.
+
+Reciprocamente, seja $\mathcal{P}$ uma partição. A relação $\sim$ é reflexiva porque todo $a$ está em algum bloco (a união dos blocos é $A$) e simétrica por definição. Para a transitividade, se $a, b \in P$ e $b, c \in P'$ com $P, P' \in \mathcal{P}$, então $b \in P \cap P'$; como blocos distintos são disjuntos, $P = P'$ e $a, c \in P$. A classe de $a$ é o bloco que contém $a$.
+:::
+
+::: {#def-mat-g01-ordens}
+## Relações de ordem
+Uma relação reflexiva e transitiva é uma **pré-ordem**; uma pré-ordem antissimétrica é uma **ordem parcial**; uma ordem parcial completa é uma **ordem total**.
+:::
+
+A relação $\leq$ em $\R$ é uma ordem total. A inclusão $\subseteq$ em $\mathcal{P}(A)$ é uma ordem parcial, mas não é completa se $A$ tem dois elementos distintos $a$ e $b$: nem $\{a\} \subseteq \{b\}$ nem $\{b\} \subseteq \{a\}$.
+
+### Aplicação: relações de preferência {#sec-mat-g01-preferencias}
+
+::: {#def-mat-g01-preferencia}
+## Relação de preferência racional
+Seja $X$ um conjunto de alternativas. Uma **relação de preferência** é uma relação binária $\succsim$ em $X$, lida "$x \succsim y$: $x$ é pelo menos tão bom quanto $y$". Ela é **racional** se é completa e transitiva. A partir de $\succsim$ definimos a **preferência estrita**, $x \succ y \iff (x \succsim y \wedge \neg(y \succsim x))$, e a **indiferença**, $x \sim y \iff (x \succsim y \wedge y \succsim x)$.
+:::
+
+::: {#prp-mat-g01-preferencias}
+## Propriedades das preferências racionais
+Se $\succsim$ é racional, então:
+
+(i) $\succsim$ é reflexiva — portanto, uma pré-ordem completa;
+(ii) $\sim$ é uma relação de equivalência;
+(iii) $\succ$ não é reflexiva em nenhum ponto ($x \succ x$ é sempre falsa) e é transitiva;
+(iv) se $x \succ y$ e $y \succsim z$, então $x \succ z$.
+:::
+
+::: {.proof}
+Para (i), a completude com $a = b = x$ dá $x \succsim x \vee x \succsim x$, isto é, $x \succsim x$.
+
+Para (ii), $\sim$ é reflexiva por (i) e simétrica porque sua definição é simétrica em $x$ e $y$. Se $x \sim y$ e $y \sim z$, então $x \succsim y$ e $y \succsim z$, logo $x \succsim z$; e $z \succsim y$ e $y \succsim x$, logo $z \succsim x$. Portanto $x \sim z$.
+
+Para (iii), $x \succ x$ exigiria $x \succsim x$ e $\neg(x \succsim x)$ ao mesmo tempo. Para a transitividade, sejam $x \succ y$ e $y \succ z$. De $x \succsim y$ e $y \succsim z$, segue $x \succsim z$. Se valesse $z \succsim x$, então, com $x \succsim y$, teríamos $z \succsim y$, contradizendo $y \succ z$. Logo $\neg(z \succsim x)$ e $x \succ z$.
+
+Para (iv), de $x \succsim y$ e $y \succsim z$ segue $x \succsim z$. Se valesse $z \succsim x$, então, com $y \succsim z$, teríamos $y \succsim x$, contradizendo $x \succ y$. Logo $x \succ z$.
+:::
+
+Pelo @thm-mat-g01-particao, as classes de indiferença $\{y \in X : y \sim x\}$ formam uma **partição** de $X$. Quando $X = \R^2_+$, essas classes são as **curvas de indiferença**; o teorema explica por que duas curvas de indiferença de uma preferência racional nunca se cruzam: se tivessem um ponto em comum, seriam a mesma classe.
+
+::: {#exm-mat-g01-pareto}
+## Dominância de Pareto
+Considere $n$ consumidores, cada um com uma preferência racional $\succsim_i$ sobre um conjunto $X$ de alocações. Defina $y \succsim_P x$ se $y \succsim_i x$ para todo $i$. A relação $\succsim_P$ é reflexiva e transitiva — porque cada $\succsim_i$ é —, portanto uma pré-ordem. Mas, em geral, **não é completa**: se o consumidor 1 prefere estritamente $x$ a $y$ e o consumidor 2 prefere estritamente $y$ a $x$, nem $x \succsim_P y$ nem $y \succsim_P x$.
+
+Uma alocação $x$ num conjunto factível $F$ é **Pareto-ótima** se não existe $y \in F$ com $y \succsim_i x$ para todo $i$ e $y \succ_j x$ para algum $j$. Negando com a @prp-mat-g01-negacao: $x$ **não** é Pareto-ótima se, e somente se,
+$$
+\exists\, y \in F:\ \big(\forall i,\ y \succsim_i x\big) \wedge \big(\exists j,\ y \succ_j x\big),
+$$
+isto é, se existe uma alocação factível que não piora ninguém e melhora alguém. É essa a forma usada nas demonstrações dos teoremas do bem-estar (@sec-mic-m03).
+:::
+
+## Funções {#sec-mat-g01-funcoes}
+
+::: {#def-mat-g01-funcao}
+## Função, imagem e pré-imagem
+Uma **função** $f: A \to B$ é uma relação $f \subseteq A \times B$ tal que, para cada $a \in A$, existe exatamente um $b \in B$ com $(a, b) \in f$; escrevemos $f(a) = b$. $A$ é o **domínio** e $B$ o **contradomínio**. Para $S \subseteq A$ e $T \subseteq B$, a **imagem** de $S$ e a **pré-imagem** de $T$ são
+$$
+f(S) \defeq \{f(a) : a \in S\}, \qquad f^{-1}(T) \defeq \{a \in A : f(a) \in T\}.
+$$
+:::
+
+A pré-imagem $f^{-1}(T)$ está definida para **qualquer** função, invertível ou não.
+
+::: {#prp-mat-g01-imagens}
+## Imagens e pré-imagens
+Seja $f: A \to B$, com $S_1, S_2 \subseteq A$ e $T, T_1, T_2 \subseteq B$.
+
+(a) A pré-imagem preserva as operações: $f^{-1}(T_1 \cup T_2) = f^{-1}(T_1) \cup f^{-1}(T_2)$, $f^{-1}(T_1 \cap T_2) = f^{-1}(T_1) \cap f^{-1}(T_2)$ e $f^{-1}(B \setminus T) = A \setminus f^{-1}(T)$.
+(b) A imagem preserva uniões, $f(S_1 \cup S_2) = f(S_1) \cup f(S_2)$, mas, em geral, só vale $f(S_1 \cap S_2) \subseteq f(S_1) \cap f(S_2)$; a igualdade vale se $f$ é injetiva (@def-mat-g01-injetiva).
+:::
+
+::: {.proof}
+Para (a), $a \in f^{-1}(T_1 \cup T_2) \iff f(a) \in T_1 \vee f(a) \in T_2 \iff a \in f^{-1}(T_1) \cup f^{-1}(T_2)$; a interseção é igual, com $\wedge$ no lugar de $\vee$; e $a \in f^{-1}(B \setminus T) \iff f(a) \notin T \iff a \notin f^{-1}(T)$.
+
+Para (b), $b \in f(S_1 \cup S_2)$ se, e somente se, existe $a \in S_1 \cup S_2$ com $f(a) = b$, o que equivale a existir tal $a$ em $S_1$ ou em $S_2$, isto é, $b \in f(S_1) \cup f(S_2)$. Se $b = f(a)$ com $a \in S_1 \cap S_2$, então $b \in f(S_1)$ e $b \in f(S_2)$. Se $f$ é injetiva e $b \in f(S_1) \cap f(S_2)$, então $b = f(a_1) = f(a_2)$ com $a_1 \in S_1$ e $a_2 \in S_2$; a injetividade dá $a_1 = a_2 \in S_1 \cap S_2$. Sem injetividade, a inclusão pode ser estrita: com $f(x) = x^2$, $S_1 = \{-1\}$ e $S_2 = \{1\}$, temos $f(S_1 \cap S_2) = \emptyset$, mas $f(S_1) \cap f(S_2) = \{1\}$.
+:::
+
+::: {.remark}
+A assimetria da @prp-mat-g01-imagens é a razão pela qual a continuidade é definida por pré-imagens: $f$ é contínua se a pré-imagem de todo aberto é aberta (@sec-mat-m01). Como pré-imagens preservam uniões, interseções e complementos, as propriedades topológicas "passam" pela função. O mesmo ocorre com a mensurabilidade em probabilidade (@sec-est-m01).
+:::
+
+::: {#def-mat-g01-injetiva}
+## Injetiva, sobrejetiva, bijetiva
+$f: A \to B$ é **injetiva** se $f(a_1) = f(a_2) \to a_1 = a_2$; **sobrejetiva** se $f(A) = B$; **bijetiva** se é injetiva e sobrejetiva. A **composta** de $f: A \to B$ e $g: B \to C$ é $g \circ f: A \to C$, $(g \circ f)(a) \defeq g(f(a))$. A **identidade** de $A$ é $\mathrm{id}_A(a) \defeq a$.
+:::
+
+::: {#prp-mat-g01-composta}
+## Composição
+A composta de funções injetivas é injetiva; a de sobrejetivas é sobrejetiva; logo, a de bijetivas é bijetiva.
+:::
+
+::: {.proof}
+Se $f$ e $g$ são injetivas e $g(f(a_1)) = g(f(a_2))$, a injetividade de $g$ dá $f(a_1) = f(a_2)$, e a de $f$ dá $a_1 = a_2$. Se $f$ e $g$ são sobrejetivas e $c \in C$, existe $b$ com $g(b) = c$ e $a$ com $f(a) = b$; logo $(g \circ f)(a) = c$.
+:::
+
+::: {#thm-mat-g01-inversa}
+## Função inversa
+Uma função $f: A \to B$ admite uma **inversa** — uma função $g: B \to A$ com $g \circ f = \mathrm{id}_A$ e $f \circ g = \mathrm{id}_B$ — se, e somente se, $f$ é bijetiva. Nesse caso, a inversa é única e denotada $f^{-1}$.
+:::
+
+::: {.proof}
+Suponha que $g$ é inversa de $f$. Se $f(a_1) = f(a_2)$, então $a_1 = g(f(a_1)) = g(f(a_2)) = a_2$; logo $f$ é injetiva. Para $b \in B$, $b = f(g(b))$; logo $f$ é sobrejetiva.
+
+Reciprocamente, se $f$ é bijetiva, para cada $b \in B$ existe (sobrejetividade) um único (injetividade) $a \in A$ com $f(a) = b$; defina $g(b) \defeq a$. Por construção, $f(g(b)) = b$; e, como $a$ é o único elemento levado em $f(a)$, $g(f(a)) = a$.
+
+Para a unicidade, se $g$ e $h$ são inversas de $f$, então $g = g \circ \mathrm{id}_B = g \circ (f \circ h) = (g \circ f) \circ h = \mathrm{id}_A \circ h = h$, usando a associatividade da composição, imediata da definição.
+:::
+
+Quando $f$ é bijetiva, a pré-imagem $f^{-1}(T)$ coincide com a imagem de $T$ pela função inversa, de modo que a notação não gera ambiguidade.
+
+::: {#prp-mat-g01-utilidade}
+## Utilidade é ordinal
+Seja $\succsim$ uma preferência em $X$ e $u: X \to \R$ uma função que a **representa**: $x \succsim y \iff u(x) \geq u(y)$. Se $\varphi: \R \to \R$ é estritamente crescente, então $\varphi \circ u$ também representa $\succsim$.
+:::
+
+::: {.proof}
+Basta mostrar que $u(x) \geq u(y) \iff \varphi(u(x)) \geq \varphi(u(y))$. Se $u(x) \geq u(y)$, então $\varphi(u(x)) \geq \varphi(u(y))$, porque $\varphi$ é crescente (no caso de igualdade, os valores são iguais). Para a recíproca, usamos a contrapositiva: se $u(x) < u(y)$, então $\varphi(u(x)) < \varphi(u(y))$, porque $\varphi$ é estritamente crescente.
+:::
+
+Os números produzidos por uma função utilidade não têm significado em si; só a **ordem** importa. Por isso, $u(x) = x_1 x_2$ e $\log u(x) = \log x_1 + \log x_2$ descrevem o mesmo consumidor em $\R^2_{++}$.
+
+## Indução e boa ordenação {#sec-mat-g01-inducao}
+
+Usamos a convenção $\N = \{1, 2, 3, \dots\}$, com $\N_0 \defeq \N \cup \{0\}$ e $I_n \defeq \{1, \dots, n\}$. Tomamos como axioma da estrutura de $\N$ o seguinte princípio.
+
+::: {#def-mat-g01-boa-ordem}
+## Princípio da boa ordenação
+Todo subconjunto não vazio de $\N$ tem um menor elemento.
+:::
+
+::: {#thm-mat-g01-inducao}
+## Princípio de indução
+Seja $P(n)$ uma sentença aberta em $\N$. Se (i) $P(1)$ é verdadeira e (ii) para todo $n \in \N$, $P(n) \to P(n+1)$, então $P(n)$ é verdadeira para todo $n \in \N$.
+:::
+
+::: {.proof}
+Suponha, por absurdo, que $S \defeq \{n \in \N : \neg P(n)\}$ é não vazio. Pela boa ordenação, $S$ tem um menor elemento $m$. Por (i), $m \neq 1$, então $m - 1 \in \N$; e $m - 1 \notin S$, pela minimalidade de $m$. Logo $P(m-1)$ é verdadeira e, por (ii), $P(m)$ também — contradizendo $m \in S$.
+:::
+
+Duas variantes são usadas com frequência. A indução pode começar em qualquer $n_0 \in \Z$: basta aplicar o teorema a $Q(n) \defeq P(n + n_0 - 1)$. E a **indução forte** permite usar, no passo, todos os casos anteriores: se $P(1)$ vale e $(P(1) \wedge \dots \wedge P(n)) \to P(n+1)$ para todo $n$, então $P(n)$ vale para todo $n$ — para ver isso, aplique o @thm-mat-g01-inducao a $Q(n) \defeq P(1) \wedge \dots \wedge P(n)$.
+
+::: {#prp-mat-g01-geometrica}
+## Soma geométrica
+Para todo $r \in \R$ com $r \neq 1$ e todo $n \in \N_0$,
+$$
+\sum_{t=0}^{n} r^t = \frac{1 - r^{n+1}}{1 - r} .
+$$ {#eq-mat-g01-geometrica}
+:::
+
+::: {.proof}
+Por indução em $n$, a partir de $n = 0$. Para $n = 0$, os dois lados valem 1. Supondo a fórmula para $n$,
+$$
+\sum_{t=0}^{n+1} r^t = \frac{1 - r^{n+1}}{1 - r} + r^{n+1} = \frac{1 - r^{n+1} + r^{n+1} - r^{n+2}}{1 - r} = \frac{1 - r^{n+2}}{1 - r},
+$$
+que é a fórmula para $n + 1$.
+:::
+
+A @eq-mat-g01-geometrica é a fórmula do **valor presente** de uma anuidade. Um título que paga 1 por período durante $n + 1$ períodos, descontado pelo fator $\beta = 1/(1+i)$, vale $\sum_{t=0}^{n} \beta^t = (1 - \beta^{n+1})/(1 - \beta)$. Quando $n \to \infty$ e $0 < \beta < 1$, obtemos a perpetuidade, $1/(1-\beta)$ — um limite que será justificado no @sec-mat-g02 e usado em todo o @sec-fin-g01.
+
+::: {#prp-mat-g01-bernoulli}
+## Desigualdade de Bernoulli
+Para todo $x \geq -1$ e todo $n \in \N$, $(1 + x)^n \geq 1 + nx$.
+:::
+
+::: {.proof}
+Para $n = 1$, vale a igualdade. Supondo a desigualdade para $n$, e como $1 + x \geq 0$,
+$$
+(1+x)^{n+1} = (1+x)^n (1+x) \geq (1 + nx)(1 + x) = 1 + (n+1)x + nx^2 \geq 1 + (n+1)x .
+$$
+A primeira desigualdade usa a hipótese de indução multiplicada pelo número não negativo $1 + x$; a segunda usa $nx^2 \geq 0$.
+:::
+
+Com $x = i > 0$, a desigualdade diz que **juros compostos rendem pelo menos tanto quanto juros simples**: $(1 + i)^n \geq 1 + ni$.
+
+::: {#prp-mat-g01-primos}
+## Decomposição em primos (existência)
+Todo inteiro $n \geq 2$ é primo ou produto de primos.
+:::
+
+::: {.proof}
+Por indução forte, a partir de $n = 2$. O número 2 é primo. Suponha a afirmação verdadeira para todos os inteiros de 2 a $n$ e considere $n + 1$. Se $n + 1$ é primo, nada há a provar. Caso contrário, $n + 1 = ab$ com $2 \leq a, b \leq n$, e, pela hipótese de indução, $a$ e $b$ são primos ou produtos de primos; logo $n + 1$ também é produto de primos.
+:::
+
+## Cardinalidade {#sec-mat-g01-cardinalidade}
+
+Quando dois conjuntos têm "o mesmo número de elementos"? Para conjuntos finitos, contamos. Para conjuntos infinitos, a resposta de Cantor é: quando seus elementos podem ser **emparelhados**.
+
+::: {#def-mat-g01-cardinalidade}
+## Conjuntos finitos, enumeráveis e não enumeráveis
+Dois conjuntos $A$ e $B$ têm a **mesma cardinalidade**, $A \approx B$, se existe uma bijeção $f: A \to B$. Um conjunto $A$ é **finito** se $A = \emptyset$ ou $A \approx I_n$ para algum $n \in \N$, e **infinito** caso contrário. $A$ é **enumerável** se $A \approx \N$; é **contável** se é finito ou enumerável; e é **não enumerável** se é infinito e não é enumerável.
+:::
+
+Pela @prp-mat-g01-composta e pelo @thm-mat-g01-inversa, $\approx$ é reflexiva (identidade), simétrica (inversa) e transitiva (composta). Para que "o número de elementos" de um conjunto finito esteja bem definido, precisamos do princípio da casa dos pombos.
+
+::: {#lem-mat-g01-pombos}
+## Casa dos pombos
+Se $m > n$, não existe função injetiva $f: I_m \to I_n$.
+:::
+
+::: {.proof}
+Por indução em $n$. Para $n = 1$: como $m \geq 2$, $f(1) = f(2) = 1$, e $f$ não é injetiva. Suponha o resultado para $n$ e seja, por absurdo, $f: I_m \to I_{n+1}$ injetiva com $m > n + 1$. Se $n + 1 \notin f(I_m)$, a restrição de $f$ a $I_{m-1}$ é uma injeção de $I_{m-1}$ em $I_n$, com $m - 1 > n$ — contradição com a hipótese de indução. Se $n + 1 = f(k)$ para algum $k$ (único, pela injetividade), seja $\tau: I_m \to I_m$ a bijeção que troca $k$ e $m$ e fixa os demais elementos. Então $f \circ \tau$ é injetiva (@prp-mat-g01-composta), leva $m$ em $n + 1$ e nenhum outro elemento em $n + 1$; sua restrição a $I_{m-1}$ é uma injeção em $I_n$ — novamente uma contradição.
+:::
+
+::: {#cor-mat-g01-finitos}
+## Consequências
+(a) Se $I_m \approx I_n$, então $m = n$; portanto, o número de elementos de um conjunto finito está bem definido.
+(b) $\N$ é infinito.
+:::
+
+::: {.proof}
+Para (a), se $f: I_m \to I_n$ é bijetiva, o @lem-mat-g01-pombos aplicado a $f$ dá $m \leq n$ e, aplicado a $f^{-1}$, dá $n \leq m$. Para (b), se houvesse uma bijeção $f: \N \to I_n$, sua restrição a $I_{n+1}$ seria uma injeção de $I_{n+1}$ em $I_n$, o que o lema proíbe.
+:::
+
+::: {#lem-mat-g01-subconjuntos}
+## Subconjuntos de $\N$
+Todo subconjunto infinito de $\N$ é enumerável. Em consequência: (a) todo subconjunto de um conjunto contável é contável; (b) se existe uma injeção $f: A \to \N$, então $A$ é contável; (c) se $A \neq \emptyset$ e existe uma sobrejeção $g: \N \to A$, então $A$ é contável.
+:::
+
+::: {.proof}
+Seja $S \subseteq \N$ infinito. Defina recursivamente $s_1 \defeq \min S$ e $s_{k+1} \defeq \min\big(S \setminus \{s_1, \dots, s_k\}\big)$. Os mínimos existem pela boa ordenação, pois $S \setminus \{s_1, \dots, s_k\}$ é não vazio — do contrário, $S$ seria finito. A sequência é estritamente crescente: $s_{k+1}$ pertence ao conjunto do qual $s_k$ é o mínimo e é diferente de $s_k$, logo $s_{k+1} > s_k$. Portanto $k \mapsto s_k$ é injetiva e, por indução, $s_k \geq k$. Ela também é sobrejetiva sobre $S$: se algum $t \in S$ não fosse da forma $s_k$, então $t \in S \setminus \{s_1, \dots, s_k\}$ para todo $k$, de modo que $s_{k+1} \leq t$ para todo $k$ — impossível, pois $s_{t+1} \geq t + 1$.
+
+Para (a), se $B \subseteq A$ e $h: A \to \N$ é injetiva (o que existe se $A$ é contável), então $B \approx h(B) \subseteq \N$, que é finito ou, pelo que acabamos de provar, enumerável. O item (b) é o mesmo argumento com $B = A$. Para (c), defina $f(a) \defeq \min\{n \in \N : g(n) = a\}$ — o conjunto é não vazio pela sobrejetividade e tem mínimo pela boa ordenação. Se $f(a_1) = f(a_2) = n$, então $a_1 = g(n) = a_2$; logo $f$ é injetiva e (b) se aplica.
+:::
+
+::: {#thm-mat-g01-enumeraveis}
+## Enumeráveis clássicos
+Os conjuntos $\Z$, $\N \times \N$ e $\Q$ são enumeráveis.
+:::
+
+::: {.proof}
+**$\Z$.** A função $f: \N \to \Z$ dada por $f(n) = n/2$ se $n$ é par e $f(n) = -(n-1)/2$ se $n$ é ímpar enumera os inteiros na ordem $0, 1, -1, 2, -2, \dots$. Ela é bijetiva: os pares vão bijetivamente nos inteiros positivos, e os ímpares, nos não positivos.
+
+**$\N \times \N$.** A função $h(m, n) \defeq 2^m 3^n$ é uma injeção de $\N \times \N$ em $\N$, pela unicidade da decomposição em primos (o teorema fundamental da aritmética). Pelo @lem-mat-g01-subconjuntos (b), $\N \times \N$ é contável e, como é infinito (contém $\{(n, 1) : n \in \N\} \approx \N$), é enumerável.
+
+**$\Q$.** Todo racional se escreve de modo único como $a/b$ com $a \in \Z$, $b \in \N$ e $a$, $b$ sem fator comum maior que 1. A função $q \mapsto (a, b)$ é, portanto, uma injeção de $\Q$ em $\Z \times \N$, que é enumerável por ser equipotente a $\N \times \N$ (via $(a, b) \mapsto (f^{-1}(a), b)$). Logo $\Q$ é contável (@lem-mat-g01-subconjuntos) e, sendo infinito, enumerável.
+:::
+
+O resultado é surpreendente: entre dois racionais quaisquer há infinitos outros racionais, e ainda assim eles podem ser postos numa lista $q_1, q_2, q_3, \dots$. O interativo da @sec-mat-g01-interativo mostra a enumeração "em diagonais" de $\N \times \N$ imaginada por Cantor. Os próximos dois teoremas mostram que nem todo infinito é desse tamanho.
+
+::: {#thm-mat-g01-cantor}
+## Teorema de Cantor
+Para qualquer conjunto $A$, não existe sobrejeção $f: A \to \mathcal{P}(A)$. Em particular, $\mathcal{P}(\N)$ não é enumerável.
+:::
+
+::: {.proof}
+Dada $f: A \to \mathcal{P}(A)$, considere $D \defeq \{a \in A : a \notin f(a)\}$. Se existisse $d \in A$ com $f(d) = D$, teríamos $d \in D \iff d \notin f(d) \iff d \notin D$ — uma contradição. Logo $D$ não está na imagem de $f$. Como $\mathcal{P}(\N)$ é infinito (contém os conjuntos unitários $\{n\}$) e não há bijeção de $\N$ sobre ele, $\mathcal{P}(\N)$ é não enumerável.
+:::
+
+::: {#thm-mat-g01-reais}
+## $\R$ não é enumerável
+O intervalo $(0, 1)$ — e, portanto, $\R$ — não é enumerável.
+:::
+
+::: {.proof}
+Usamos um fato sobre expansões decimais, demonstrado no @sec-mat-g02: todo $x \in (0, 1)$ tem uma expansão $x = 0{,}d_1 d_2 d_3 \dots$ com dígitos $d_k \in \{0, \dots, 9\}$, e um número tem duas expansões diferentes somente quando uma delas termina em zeros repetidos e a outra em noves repetidos.
+
+Suponha, por absurdo, que $x_1, x_2, x_3, \dots$ enumera $(0,1)$. Escreva $x_k = 0{,}d_{k1} d_{k2} d_{k3} \dots$, escolhendo, quando houver duas, a expansão que não termina em noves. Defina $y = 0{,}e_1 e_2 e_3 \dots$ com $e_k = 5$ se $d_{kk} \neq 5$ e $e_k = 4$ se $d_{kk} = 5$. Então $y \in (0, 1)$, e, como $y$ só tem os dígitos 4 e 5, sua expansão é única. Para cada $k$, a expansão de $y$ difere da de $x_k$ no $k$-ésimo dígito; como a expansão de $y$ é a única que ele tem, $y \neq x_k$. Assim, $y$ não está na lista — contradição.
+
+Por fim, $\R$ é infinito e contém $(0,1)$; se $\R$ fosse contável, $(0, 1)$ também seria (@lem-mat-g01-subconjuntos (a)).
+:::
+
+::: {.remark}
+A distinção entre contável e não contável é central em probabilidade. Uma medida de probabilidade é **enumeravelmente aditiva** (@sec-est-m01): a probabilidade de uma união enumerável de eventos disjuntos é a soma das probabilidades. Daí decorre, por exemplo, que um conjunto enumerável de pontos tem probabilidade zero sob qualquer distribuição contínua, e que uma função de distribuição — sendo monótona — tem no máximo uma quantidade enumerável de saltos (@sec-est-g02).
+:::
+
+## Pontes {#sec-mat-g01-pontes}
+
+- **Microeconomia (@sec-mic-g01, @sec-mic-m01).** Preferências racionais são pré-ordens completas (@prp-mat-g01-preferencias); a representação por utilidade é ordinal (@prp-mat-g01-utilidade). A ordem lexicográfica (@exr-mat-g01-lexicografica) é racional, mas não pode ser representada por nenhuma função utilidade — um resultado do @sec-mic-m01 que usa a não enumerabilidade de $\R$.
+- **Bem-estar (@sec-mic-m03).** A definição de ótimo de Pareto e sua negação (@exm-mat-g01-pareto) são a espinha das demonstrações dos teoremas do bem-estar.
+- **Análise (@sec-mat-g02, @sec-mat-m01).** Convergência, continuidade e completude são definidas com quantificadores alternados (@exm-mat-g01-convergencia); a continuidade é definida por pré-imagens (@prp-mat-g01-imagens).
+- **Probabilidade (@sec-est-g01, @sec-est-m01).** Eventos são conjuntos; as leis de De Morgan (@prp-mat-g01-de-morgan) traduzem "nem A nem B" em probabilidades; $\sigma$-álgebras são fechadas por uniões enumeráveis.
+- **Finanças (@sec-fin-g01).** A soma geométrica (@prp-mat-g01-geometrica) dá o valor de anuidades e perpetuidades; a desigualdade de Bernoulli compara juros compostos e simples.
+- **Econometria (@sec-ecm-g01).** Cada teorema é uma condicional: as hipóteses RLS são suficientes, não necessárias, para as conclusões.
+- **Existência (@sec-mat-m05).** Equilíbrios são obtidos por provas de existência não construtivas (@exm-mat-g01-nao-construtiva).
+
+## Interativo {#sec-mat-g01-interativo}
+
+::: {.content-visible when-format="html"}
+**Explorador de tabelas-verdade.** Escolha uma fórmula e veja a tabela-verdade completa. As linhas em que a fórmula é falsa aparecem destacadas; uma fórmula sem nenhuma linha destacada é uma tautologia.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof formulaEscolhida = seletor("fórmula", formulas.map(f => f.texto), {valor: formulas[0].texto})
+```
+
+```{ojs}
+//| echo: false
+tabelaVerdade(formulas.find(f => f.texto === formulaEscolhida))
+```
+
+```{ojs}
+//| echo: false
+formulas = [
+  {texto: "(p → q) ↔ (¬q → ¬p)", nota: "contrapositiva", vars: ["p", "q"], f: (p, q) => (!p || q) === (q || !p)},
+  {texto: "(p → q) ↔ (q → p)", nota: "recíproca", vars: ["p", "q"], f: (p, q) => (!p || q) === (!q || p)},
+  {texto: "(p → q) ↔ (¬p ∨ q)", nota: "condicional como disjunção", vars: ["p", "q"], f: (p, q) => (!p || q) === (!p || q)},
+  {texto: "¬(p → q) ↔ (p ∧ ¬q)", nota: "negação da condicional", vars: ["p", "q"], f: (p, q) => !(!p || q) === (p && !q)},
+  {texto: "¬(p ∧ q) ↔ (¬p ∨ ¬q)", nota: "De Morgan", vars: ["p", "q"], f: (p, q) => !(p && q) === (!p || !q)},
+  {texto: "(p ∧ (q ∨ r)) ↔ ((p ∧ q) ∨ (p ∧ r))", nota: "distributividade", vars: ["p", "q", "r"], f: (p, q, r) => (p && (q || r)) === ((p && q) || (p && r))},
+  {texto: "((p → q) ∧ (q → r)) → (p → r)", nota: "transitividade da condicional", vars: ["p", "q", "r"], f: (p, q, r) => !((!p || q) && (!q || r)) || (!p || r)},
+  {texto: "((p → q) ∧ ¬q) → ¬p", nota: "modus tollens", vars: ["p", "q"], f: (p, q) => !((!p || q) && !q) || !p},
+  {texto: "((p → q) ∧ q) → p", nota: "afirmação do consequente, uma falácia", vars: ["p", "q"], f: (p, q) => !((!p || q) && q) || p}
+]
+function el(tag, props = {}, ...filhos) {
+  const e = document.createElement(tag);
+  Object.assign(e, props);
+  for (const c of filhos) e.append(c);
+  return e;
+}
+function tabelaVerdade(fm) {
+  const k = fm.vars.length, linhas = [];
+  for (let i = 0; i < 2 ** k; i++) {
+    const vals = fm.vars.map((_, j) => !((i >> (k - 1 - j)) & 1));
+    linhas.push({vals, res: fm.f(...vals)});
+  }
+  const VF = b => (b ? "V" : "F");
+  const cab = el("tr", {}, ...fm.vars.map(v => el("th", {textContent: v})), el("th", {textContent: fm.texto}));
+  const corpo = linhas.map(l => {
+    const tr = el("tr", {}, ...l.vals.map(v => el("td", {textContent: VF(v)})), el("td", {textContent: VF(l.res)}));
+    if (!l.res) tr.style.background = "rgba(140, 47, 57, .12)";
+    return tr;
+  });
+  const tabela = el("table", {className: "table table-sm"}, el("thead", {}, cab), el("tbody", {}, ...corpo));
+  tabela.style.width = "auto";
+  tabela.style.textAlign = "center";
+  const taut = linhas.every(l => l.res);
+  const veredito = el("p", {},
+    el("strong", {textContent: taut ? "Tautologia. " : "Não é tautologia. "}),
+    `(${fm.nota}) ` + (taut ? "A fórmula é verdadeira em todas as linhas."
+      : `Falha em ${linhas.filter(l => !l.res).length} de ${linhas.length} linhas.`));
+  return el("div", {}, tabela, veredito);
+}
+```
+:::
+
+**Enumerando $\N \times \N$.** Cantor percorre os pares $(m, n)$ por diagonais $m + n = 2, 3, 4, \dots$ Cada par é alcançado após um número finito de passos — é isso que torna $\N \times \N$ enumerável. Mova o controle para ver a ordem.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof passosCantor = controle("pares listados", [1, 55], {valor: 12, passo: 1})
+```
+
+```{ojs}
+//| echo: false
+md`O ${passosCantor}º par da lista é **(${paresCantor[passosCantor - 1].m}, ${paresCantor[passosCantor - 1].n})**.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 420, height: 420, grid: true,
+  x: {domain: [0.5, 10.5], label: "m", ticks: 10}, y: {domain: [0.5, 10.5], label: "n", ticks: 10},
+  marks: [
+    Plot.dot(gradeCantor, {x: "m", y: "n", r: 2.5, fill: "#cbd2d9"}),
+    Plot.line(paresCantor.slice(0, passosCantor), {x: "m", y: "n", stroke: "#2F5D8A", strokeWidth: 1.5}),
+    Plot.dot(paresCantor.slice(0, passosCantor), {x: "m", y: "n", r: 4, fill: "#2F5D8A"}),
+    Plot.dot([paresCantor[passosCantor - 1]], {x: "m", y: "n", r: 7, fill: "#8C2F39"}),
+    Plot.text(paresCantor.slice(0, passosCantor), {x: "m", y: "n", text: (d, i) => String(i + 1), dy: -11, fontSize: 9})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+paresCantor = {
+  const lista = [];
+  for (let s = 2; lista.length < 60; s++)
+    for (let m = 1; m < s; m++) lista.push({m, n: s - m});
+  return lista;
+}
+gradeCantor = d3.cross(d3.range(1, 11), d3.range(1, 11)).map(([m, n]) => ({m, n}))
+```
+:::
+
+**O argumento diagonal.** Abaixo, uma lista de números em $(0,1)$ (com 12 dígitos visíveis). O número $y$ é construído trocando o $k$-ésimo dígito do $k$-ésimo número: 5 vira 4, qualquer outro dígito vira 5. Por construção, $y$ difere de todos os números da lista — qualquer que seja a lista.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof nLista = controle("números na lista", [3, 12], {valor: 8, passo: 1})
+viewof semente = controle("sorteio da lista", [1, 50], {valor: 1, passo: 1})
+```
+
+```{ojs}
+//| echo: false
+{
+  const rng = d3.randomLcg(semente * 7919);
+  const linhas = Array.from({length: nLista}, () => Array.from({length: 12}, () => Math.floor(rng() * 10)));
+  const diag = linhas.map((l, k) => l[k]);
+  const y = diag.map(d => (d === 5 ? 4 : 5));
+  const caixa = document.createElement("div");
+  caixa.style.fontFamily = "JetBrains Mono, monospace";
+  caixa.style.fontSize = ".95rem";
+  caixa.style.lineHeight = "1.7";
+  const linha = (rotulo, digitos, destaque, cor) => {
+    const p = document.createElement("div");
+    p.append(document.createTextNode(rotulo + " 0,"));
+    digitos.forEach((d, j) => {
+      const s = document.createElement("span");
+      s.textContent = d;
+      if (j === destaque) { s.style.background = cor; s.style.color = "white"; s.style.padding = "0 2px"; }
+      p.append(s);
+    });
+    return p;
+  };
+  linhas.forEach((l, k) => caixa.append(linha(`x${String(k + 1).padStart(2, " ")} =`, l, k, "#2F5D8A")));
+  const sep = document.createElement("hr");
+  sep.style.margin = ".4rem 0";
+  caixa.append(sep);
+  const yDig = y.concat(Array(12 - y.length).fill("·"));
+  const ly = linha("y   =", yDig, -1, "");
+  caixa.append(ly);
+  return caixa;
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os três interativos desta seção — o explorador de tabelas-verdade, a enumeração de $\N \times \N$ e o argumento diagonal — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os três em Python.*
+:::
+
+## Laboratório computacional {#sec-mat-g01-laboratorio}
+
+### Tabelas-verdade
+
+Uma fórmula com $k$ variáveis tem $2^k$ linhas. Verificar uma equivalência é percorrê-las todas — exatamente o que faz a demonstração da @prp-mat-g01-equivalencias.
+
+```{python}
+from itertools import product
+
+def implica(p, q):
+    return (not p) or q
+
+def tabela(formula, nvars):
+    """Lista de (valores, resultado) para todas as 2^nvars combinações."""
+    return [(vals, formula(*vals)) for vals in product([True, False], repeat=nvars)]
+
+def tautologia(formula, nvars):
+    return all(res for _, res in tabela(formula, nvars))
+
+VF = lambda b: "V" if b else "F"
+
+contrapositiva = lambda p, q: implica(p, q) == implica(not q, not p)
+reciproca = lambda p, q: implica(p, q) == implica(q, p)
+distributiva = lambda p, q, r: (p and (q or r)) == ((p and q) or (p and r))
+silogismo = lambda p, q, r: implica(implica(p, q) and implica(q, r), implica(p, r))
+afirma_consequente = lambda p, q: implica(implica(p, q) and q, p)
+
+for nome, f, k in [("(p -> q) <-> (~q -> ~p)", contrapositiva, 2),
+                   ("(p -> q) <-> (q -> p)", reciproca, 2),
+                   ("distributividade", distributiva, 3),
+                   ("silogismo", silogismo, 3),
+                   ("afirmacao do consequente", afirma_consequente, 2)]:
+    print(f"{nome:<28} tautologia? {tautologia(f, k)}")
+
+print("\np q | p->q  q->p")
+for (p, q), _ in tabela(reciproca, 2):
+    print(f"{VF(p)} {VF(q)} |  {VF(implica(p, q))}     {VF(implica(q, p))}")
+```
+
+### Conjuntos, imagens e pré-imagens
+
+Os conjuntos do Python implementam as operações da @def-mat-g01-conjuntos. Verificamos as leis de De Morgan em subconjuntos sorteados e procuramos, por força bruta, um contraexemplo para $f(S_1 \cap S_2) = f(S_1) \cap f(S_2)$.
+
+```{python}
+import random
+
+random.seed(2026)
+U = set(range(20))
+for _ in range(1000):
+    A, B = set(random.sample(sorted(U), 8)), set(random.sample(sorted(U), 8))
+    assert U - (A | B) == (U - A) & (U - B)
+    assert U - (A & B) == (U - A) | (U - B)
+print("De Morgan verificada em 1000 pares de subconjuntos.")
+
+f = lambda x: x**2
+imagem = lambda S: {f(x) for x in S}
+preimagem = lambda T, dominio: {x for x in dominio if f(x) in T}
+
+dominio = set(range(-5, 6))
+for _ in range(1000):
+    S1, S2 = set(random.sample(sorted(dominio), 4)), set(random.sample(sorted(dominio), 4))
+    if imagem(S1 & S2) != imagem(S1) & imagem(S2):
+        print(f"contraexemplo: S1={sorted(S1)}, S2={sorted(S2)}")
+        print(f"  f(S1 & S2) = {sorted(imagem(S1 & S2))},  f(S1) & f(S2) = {sorted(imagem(S1) & imagem(S2))}")
+        break
+
+T1, T2 = {0, 1, 4}, {4, 9, 16}
+print("pre-imagem preserva a intersecao:",
+      preimagem(T1 & T2, dominio) == preimagem(T1, dominio) & preimagem(T2, dominio))
+```
+
+### Relações e preferências
+
+Uma relação num conjunto finito é um conjunto de pares, e cada propriedade da @def-mat-g01-relacao vira uma verificação direta. Aplicamos às relações do texto e à dominância de Pareto num exemplo com dois consumidores.
+
+```{python}
+def propriedades(R, A):
+    return {
+        "reflexiva": all((a, a) in R for a in A),
+        "simetrica": all((b, a) in R for (a, b) in R),
+        "antissimetrica": all(a == b for (a, b) in R if (b, a) in R),
+        "transitiva": all((a, d) in R for (a, b) in R for (c, d) in R if b == c),
+        "completa": all((a, b) in R or (b, a) in R for a in A for b in A),
+    }
+
+def mostra(nome, R, A):
+    props = propriedades(R, A)
+    marcas = "  ".join(f"{k[:5]}={'s' if v else 'n'}" for k, v in props.items())
+    print(f"{nome:<21}{marcas}")
+
+A = range(1, 6)
+mostra("<= em {1,...,5}", {(a, b) for a in A for b in A if a <= b}, A)
+
+partes = [frozenset(s) for s in [(), (1,), (2,), (1, 2)]]
+mostra("inclusao em P({1,2})", {(s, t) for s in partes for t in partes if s <= t}, partes)
+
+# dois consumidores, quatro alocações; ordem = posição no ranking (0 = melhor)
+ranking = {1: ["a", "b", "c", "d"], 2: ["c", "b", "a", "d"]}
+X = ["a", "b", "c", "d"]
+pref = lambda i: {(x, y) for x in X for y in X if ranking[i].index(x) <= ranking[i].index(y)}
+pareto = pref(1) & pref(2)
+mostra("preferencia de 1", pref(1), X)
+mostra("dominancia de Pareto", pareto, X)
+dominadas = {y for y in X for x in X
+             if (x, y) in pareto and any((x, y) in pref(i) and (y, x) not in pref(i) for i in (1, 2))}
+print("Pareto-otimas:", sorted(set(X) - dominadas))
+```
+
+### Cardinalidade: enumerando $\N \times \N$ e $\Q$
+
+A enumeração por diagonais do interativo é a função de emparelhamento de Cantor, $\pi(m, n) = \frac{(m+n-1)(m+n-2)}{2} + m$. Verificamos numericamente que ela é uma bijeção sobre os primeiros pares e usamos a mesma ideia para listar os racionais positivos, pulando frações não reduzidas.
+
+```{python}
+from math import gcd
+
+def cantor(m, n):
+    s = m + n
+    return (s - 1) * (s - 2) // 2 + m
+
+valores = sorted(cantor(m, n) for m in range(1, 200) for n in range(1, 200) if m + n <= 200)
+print("pi leva os pares com m+n <= 200 exatamente em {1, ..., N}:",
+      valores == list(range(1, len(valores) + 1)))
+
+racionais, s = [], 2
+while len(racionais) < 20:
+    for m in range(1, s):
+        n = s - m
+        if gcd(m, n) == 1:
+            racionais.append(f"{m}/{n}")
+    s += 1
+print("primeiros racionais positivos:")
+print("  " + ", ".join(racionais[:10]))
+print("  " + ", ".join(racionais[10:20]))
+```
+
+### Evidência não é prova
+
+Verificar uma fórmula para muitos casos não a demonstra, como mostra o @exm-mat-g01-euler — mas é uma boa maneira de procurar contraexemplos antes de tentar uma prova.
+
+```{python}
+def primo(n):
+    return n >= 2 and all(n % d for d in range(2, int(n**0.5) + 1))
+
+falhas = [n for n in range(0, 100) if not primo(n**2 + n + 41)]
+print("n^2 + n + 41 e primo para n = 0, ..., 39:", all(primo(n**2 + n + 41) for n in range(40)))
+print("primeiros n em que falha:", falhas[:5])
+print("40^2 + 40 + 41 =", 40**2 + 40 + 41, "= 41^2")
+
+ok_soma = all(sum(range(1, n + 1)) == n * (n + 1) // 2 for n in range(1, 5001))
+ok_bern = all((1 + x) ** n >= 1 + n * x - 1e-9 for x in [-1, -0.5, 0, 0.03, 0.1, 2] for n in range(1, 60))
+print("1 + ... + n = n(n+1)/2 para n <= 5000:", ok_soma)
+print("Bernoulli numa grade de (x, n):", ok_bern)
+```
+
+## Exercícios resolvidos {#sec-mat-g01-exercicios}
+
+::: {#exr-mat-g01-silogismo}
+Mostre, sem tabela-verdade, que $\big((p \to q) \wedge (q \to r)\big) \to (p \to r)$ é uma tautologia.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Suponha, por absurdo, que a fórmula seja falsa para alguma atribuição de valores. Uma condicional só é falsa quando o antecedente é verdadeiro e o consequente é falso; logo $(p \to q) \wedge (q \to r)$ é verdadeira e $p \to r$ é falsa. Esta última exige $p$ verdadeira e $r$ falsa. De $p$ verdadeira e $p \to q$, segue $q$ verdadeira; de $q$ verdadeira e $q \to r$, segue $r$ verdadeira — contradição com $r$ falsa. Portanto a fórmula nunca é falsa. É a **transitividade da implicação**, que usamos ao encadear passos numa demonstração direta.
+:::
+
+::: {#exr-mat-g01-continuidade}
+Uma função $f: \R \to \R$ é **contínua em $a$** se $\forall \varepsilon > 0\ \exists \delta > 0\ \forall x \in \R:\ \abs{x - a} < \delta \to \abs{f(x) - f(a)} < \varepsilon$. Escreva a negação e interprete-a. Use-a para mostrar que $f(x) = \ind{x \geq 0}$ não é contínua em $0$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela regra dos quantificadores e pela @prp-mat-g01-equivalencias (e), $f$ **não** é contínua em $a$ se, e somente se,
+$$
+\exists \varepsilon > 0\ \forall \delta > 0\ \exists x \in \R:\ \abs{x - a} < \delta \ \wedge\ \abs{f(x) - f(a)} \geq \varepsilon .
+$$
+Existe uma "altura" $\varepsilon$ tal que, por menor que seja a vizinhança de $a$, há pontos nela cuja imagem está a pelo menos $\varepsilon$ de $f(a)$.
+
+Para $f(x) = \ind{x \geq 0}$ e $a = 0$, tome $\varepsilon = 1/2$. Dado $\delta > 0$, o ponto $x = -\delta/2$ satisfaz $\abs{x - 0} < \delta$ e $\abs{f(x) - f(0)} = \abs{0 - 1} = 1 \geq 1/2$. Logo $f$ não é contínua em $0$.
+:::
+
+::: {#exr-mat-g01-diferenca}
+Prove que $A \setminus (B \cup C) = (A \setminus B) \cap (A \setminus C)$ e $A \setminus (B \cap C) = (A \setminus B) \cup (A \setminus C)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Note que $A \setminus D = A \cap D^c$, com complementares tomados num universo que contém todos os conjuntos. Pela @prp-mat-g01-de-morgan, $A \setminus (B \cup C) = A \cap (B \cup C)^c = A \cap B^c \cap C^c = (A \cap B^c) \cap (A \cap C^c) = (A \setminus B) \cap (A \setminus C)$, usando $A = A \cap A$ e a comutatividade e associatividade da interseção. Para a segunda, $A \setminus (B \cap C) = A \cap (B^c \cup C^c) = (A \cap B^c) \cup (A \cap C^c)$ pela @prp-mat-g01-distributiva.
+:::
+
+::: {#exr-mat-g01-composicao}
+Sejam $f: A \to B$ e $g: B \to C$. Mostre que (a) se $g \circ f$ é injetiva, então $f$ é injetiva; (b) se $g \circ f$ é sobrejetiva, então $g$ é sobrejetiva. Dê exemplos mostrando que, nessas condições, $g$ não precisa ser injetiva e $f$ não precisa ser sobrejetiva.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para (a), se $f(a_1) = f(a_2)$, então $g(f(a_1)) = g(f(a_2))$ e, pela injetividade de $g \circ f$, $a_1 = a_2$. Para (b), dado $c \in C$, existe $a$ com $g(f(a)) = c$; então $b = f(a)$ satisfaz $g(b) = c$.
+
+Exemplo: $A = \{1\}$, $B = \{1, 2\}$, $C = \{1\}$, $f(1) = 1$ e $g(1) = g(2) = 1$. Então $g \circ f: \{1\} \to \{1\}$ é bijetiva, mas $g$ não é injetiva e $f$ não é sobrejetiva.
+:::
+
+::: {#exr-mat-g01-lexicografica}
+A **ordem lexicográfica** em $\R^2$ é definida por $(x_1, x_2) \succsim_L (y_1, y_2)$ se $x_1 > y_1$, ou se $x_1 = y_1$ e $x_2 \geq y_2$. Mostre que $\succsim_L$ é completa, transitiva e antissimétrica, e conclua que cada classe de indiferença tem um único elemento.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+**Completa.** Dados $x, y$: se $x_1 \neq y_1$, o maior primeiro componente define a comparação; se $x_1 = y_1$, comparamos $x_2$ e $y_2$, e $\geq$ é completa em $\R$.
+
+**Transitiva.** Sejam $x \succsim_L y$ e $y \succsim_L z$. Como $x \succsim_L y$ implica $x_1 \geq y_1$, temos $x_1 \geq y_1 \geq z_1$. Se $x_1 > z_1$, então $x \succsim_L z$. Se $x_1 = z_1$, então $x_1 = y_1 = z_1$, e as duas comparações foram decididas pelo segundo componente: $x_2 \geq y_2 \geq z_2$, logo $x \succsim_L z$.
+
+**Antissimétrica.** Se $x \succsim_L y$ e $y \succsim_L x$, então $x_1 \geq y_1$ e $y_1 \geq x_1$, logo $x_1 = y_1$; daí $x_2 \geq y_2$ e $y_2 \geq x_2$, logo $x = y$.
+
+Como $x \sim_L y$ significa $x \succsim_L y$ e $y \succsim_L x$, a antissimetria dá $x = y$: a classe de indiferença de $x$ é $\{x\}$. Não há "curvas" de indiferença, apenas pontos — e é por isso que nenhuma função utilidade representa essa preferência (@sec-mic-m01).
+:::
+
+::: {#exr-mat-g01-impares}
+Prove por indução que $1 + 3 + 5 + \dots + (2n - 1) = n^2$ para todo $n \in \N$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para $n = 1$: $1 = 1^2$. Supondo $\sum_{k=1}^{n} (2k - 1) = n^2$, temos $\sum_{k=1}^{n+1} (2k - 1) = n^2 + (2n + 1) = (n+1)^2$. Geometricamente: um quadrado $n \times n$ vira um quadrado $(n+1) \times (n+1)$ acrescentando uma faixa em forma de L com $2n + 1$ quadradinhos.
+:::
+
+::: {#exr-mat-g01-cavalos}
+Encontre o erro no seguinte "argumento". *Afirmação: em qualquer grupo de $n$ cavalos, todos têm a mesma cor. Para $n = 1$, é óbvio. Suponha que vale para $n$ e considere $n + 1$ cavalos. Retirando o primeiro, os $n$ restantes têm a mesma cor; retirando o último, os $n$ restantes também têm a mesma cor. Como os dois grupos se sobrepõem, todos os $n + 1$ têm a mesma cor.*
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A base está correta. O passo $P(n) \to P(n+1)$, porém, não vale para **todo** $n$: ele usa que os dois grupos de $n$ cavalos têm um cavalo em comum, o que só ocorre se $n + 1 \geq 3$. Para $n = 1$, os grupos $\{c_2\}$ e $\{c_1\}$ são disjuntos, e nada liga a cor de $c_1$ à de $c_2$. Como a implicação $P(1) \to P(2)$ falha, a cadeia de implicações se rompe logo no primeiro elo. O exemplo mostra por que o passo de indução precisa ser verificado para todo $n$ a partir da base, inclusive o primeiro.
+:::
+
+::: {#exr-mat-g01-euclides}
+Prove, por absurdo, que existem infinitos números primos.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Suponha que os primos sejam apenas $p_1, \dots, p_k$. Considere $N = p_1 p_2 \cdots p_k + 1 \geq 3$. Pela @prp-mat-g01-primos, $N$ é primo ou produto de primos; em qualquer caso, algum primo $p_j$ da lista divide $N$. Como $p_j$ também divide $p_1 \cdots p_k$, ele divide a diferença $N - p_1 \cdots p_k = 1$ — impossível, pois $p_j \geq 2$. Logo a lista não pode conter todos os primos.
+:::
+
+::: {#exr-mat-g01-uniao}
+Mostre que a união de dois conjuntos enumeráveis é enumerável.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Sejam $a: \N \to A$ e $b: \N \to B$ bijeções. Defina $h: \N \to A \cup B$ por $h(2k - 1) = a(k)$ e $h(2k) = b(k)$. A função $h$ é sobrejetiva: todo elemento de $A$ é algum $a(k)$, e todo elemento de $B$ é algum $b(k)$. Pelo @lem-mat-g01-subconjuntos (c), $A \cup B$ é contável; como contém o conjunto infinito $A$, é infinita — se fosse finita, $A$ também seria, pelo item (a) do mesmo lema. Logo $A \cup B$ é enumerável. (A função $h$ pode não ser injetiva, se $A \cap B \neq \emptyset$; por isso usamos a sobrejeção.)
+:::
+
+## Flashcards {#sec-mat-g01-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a contrapositiva de $p \to q$, e ela é equivalente a $p \to q$?
+$\neg q \to \neg p$. Sim, é logicamente equivalente.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## A recíproca $q \to p$ é equivalente a $p \to q$?
+Não. Elas diferem quando $p$ e $q$ têm valores diferentes; confundi-las é o erro de "afirmar o consequente".
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a negação de $p \to q$?
+$p \wedge \neg q$: a hipótese vale e a conclusão falha.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Em $p \to q$, qual é a condição necessária e qual é a suficiente?
+$p$ é suficiente para $q$; $q$ é necessária para $p$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se nega uma fórmula com quantificadores?
+Da esquerda para a direita, troque cada $\forall$ por $\exists$ e vice-versa e negue a sentença final; as restrições ($\varepsilon > 0$) não são negadas.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o método-padrão para provar que $A = B$?
+Dupla inclusão: mostrar $A \subseteq B$ e $B \subseteq A$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Que relação há entre relações de equivalência e partições?
+As classes de uma relação de equivalência formam uma partição; toda partição define uma relação de equivalência.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é uma preferência racional?
+Uma relação $\succsim$ completa e transitiva (portanto, uma pré-ordem completa).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que duas curvas de indiferença não se cruzam?
+Porque são classes de equivalência da indiferença $\sim$, e classes distintas são disjuntas.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Que operações de conjuntos a pré-imagem preserva? E a imagem?
+A pré-imagem preserva uniões, interseções e complementos. A imagem preserva uniões; para interseções, só vale a inclusão $f(S_1 \cap S_2) \subseteq f(S_1) \cap f(S_2)$, com igualdade se $f$ é injetiva.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando uma função tem inversa?
+Se, e somente se, é bijetiva; a inversa é única.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que se diz que a utilidade é ordinal?
+Porque qualquer transformação estritamente crescente de uma função utilidade representa a mesma preferência.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## $\Q$ é enumerável? E $\R$?
+$\Q$ é enumerável (injeta-se em $\Z \times \N$). $\R$ não é: o argumento diagonal de Cantor constrói um número fora de qualquer lista.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema de Cantor sobre $\mathcal{P}(A)$?
+Não existe sobrejeção de $A$ em $\mathcal{P}(A)$; em particular, $\mathcal{P}(\N)$ não é enumerável.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como o princípio de indução decorre da boa ordenação?
+Se $P$ falhasse para algum $n$, haveria um menor contraexemplo $m > 1$; mas $P(m-1)$ vale e implica $P(m)$ — contradição.
+:::
+
+## Ficha-resumo {#sec-mat-g01-ficha}
+
+::: {.ficha-resumo}
+**Lógica.** $p \to q$ só é falsa com $p$ V e $q$ F. $p \to q \equiv \neg p \vee q \equiv \neg q \to \neg p$ (contrapositiva); a recíproca $q \to p$ **não** é equivalente. $\neg(p \to q) \equiv p \wedge \neg q$; De Morgan: $\neg(p \wedge q) \equiv \neg p \vee \neg q$. Em $p \to q$: $p$ é suficiente, $q$ é necessária.
+
+**Quantificadores.** $\neg \forall x\, P \equiv \exists x\, \neg P$; $\neg \exists x\, P \equiv \forall x\, \neg P$. A ordem importa ($\forall x \exists y$ vs. $\exists y \forall x$). Não convergência: $\exists \varepsilon > 0\ \forall N\ \exists n \geq N: \abs{x_n - L} \geq \varepsilon$.
+
+**Técnicas.** Direta; contrapositiva; absurdo (supor $P \wedge \neg Q$); por casos; existência construtiva ou não; contraexemplo para refutar $\forall$; indução (base + passo), forte, boa ordenação.
+
+**Conjuntos.** Igualdade por dupla inclusão; $\cup, \cap, {}^c, \subseteq$ espelham $\vee, \wedge, \neg, \to$; De Morgan para famílias; distributividade.
+
+**Relações.** Equivalência (refl., sim., trans.) $\leftrightarrow$ partição. Pré-ordem (refl., trans.), ordem parcial (+ antissim.), total (+ completa). Preferência racional: completa e transitiva; $\sim$ é equivalência; $\succ$ é transitiva; curvas de indiferença não se cruzam; Pareto é pré-ordem incompleta.
+
+**Funções.** $f^{-1}(T)$ preserva $\cup, \cap, {}^c$; $f(S_1 \cap S_2) \subseteq f(S_1) \cap f(S_2)$. Inversa existe $\iff$ bijetiva. Utilidade é ordinal.
+
+**Indução.** $\sum_{t=0}^{n} r^t = (1 - r^{n+1})/(1-r)$; $(1+x)^n \geq 1 + nx$ para $x \geq -1$.
+
+**Cardinalidade.** $A \approx B$ se há bijeção. Casa dos pombos. Subconjunto de contável é contável. $\Z$, $\N \times \N$, $\Q$ enumeráveis; $\mathcal{P}(\N)$ e $\R$ não (Cantor, diagonal).
+:::
+
+## Notas bibliográficas {#sec-mat-g01-notas}
+
+@moraisfilho2012 é uma introdução cuidadosa, em português, à linguagem matemática e às técnicas de demonstração, com muitos exemplos e notas históricas; é a leitura natural para acompanhar as três primeiras seções. @velleman2019 trata o mesmo material com ênfase na *estrutura* das demonstrações — como a forma lógica do enunciado determina o esqueleto da prova — e é a melhor referência para quem quer treinar a escrita de provas. O capítulo 1 de @lima1989 apresenta conjuntos finitos, enumeráveis e não enumeráveis com o rigor que será usado em análise real (@sec-mat-g02, @sec-mat-m01). Para as relações de preferência, o capítulo 1 de @mwg1995 é o ponto de partida da microeconomia de pós-graduação (@sec-mic-m01).

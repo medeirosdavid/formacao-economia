@@ -9,14 +9,14 @@ Legenda de status: ○ planejado · ◔ rascunho · ◑ em revisão · ● compl
 
 | Parte | Capítulos | G | M | D | Escritos | Completos |
 |:--|--:|--:|--:|--:|--:|--:|
-| Matemática | 18 | 8 | 6 | 4 | 0 | 0 |
+| Matemática | 18 | 8 | 6 | 4 | 1 | 0 |
 | Probabilidade e Estatística | 16 | 6 | 6 | 4 | 0 | 0 |
 | Computação | 11 | 3 | 4 | 4 | 0 | 0 |
 | Microfundamentos | 12 | 5 | 6 | 1 | 0 | 0 |
 | Econometria | 30 | 9 | 11 | 10 | 1 | 0 |
 | Macroeconomia | 33 | 10 | 13 | 10 | 0 | 0 |
 | Finanças | 24 | 8 | 9 | 7 | 0 | 0 |
-| **Total** | **144** | 49 | 55 | 40 | 1 | 0 |
+| **Total** | **144** | 49 | 55 | 40 | 2 | 0 |
 
 ## Trilhas de leitura
 
@@ -24,7 +24,7 @@ Legenda de status: ○ planejado · ◔ rascunho · ◑ em revisão · ● compl
 
 Matemática, probabilidade e computação até o nível de mestrado — o mínimo para ler qualquer outra parte com conforto.
 
-1. ○ [Lógica, conjuntos e métodos de demonstração](partes/01-matematica/mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd) `MAT-G01`
+1. ◔ [Lógica, conjuntos e métodos de demonstração](partes/01-matematica/mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd) `MAT-G01`
 2. ○ [Álgebra linear I: vetores, matrizes e sistemas lineares](partes/01-matematica/mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd) `MAT-G05`
 3. ○ [Cálculo em várias variáveis](partes/01-matematica/mat-g06-calculo-em-varias-variaveis.qmd) `MAT-G06`
 4. ○ [Otimização: sem restrições e com restrições de igualdade](partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) `MAT-G07`
@@ -105,7 +105,7 @@ Ferramentas de análise, álgebra linear, otimização e dinâmica usadas no res
 
 | Código | Nível | Capítulo | Pré-requisitos | Status |
 |:--|:--|:--|:--|:--|
-| MAT-G01 | G | [Lógica, conjuntos e métodos de demonstração](partes/01-matematica/mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd) | — | ○ planejado |
+| MAT-G01 | G | [Lógica, conjuntos e métodos de demonstração](partes/01-matematica/mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd) | — | ◔ rascunho |
 | MAT-G02 | G | [Números reais, sequências e séries](partes/01-matematica/mat-g02-numeros-reais-sequencias-e-series.qmd) | MAT-G01 | ○ planejado |
 | MAT-G03 | G | [Funções de uma variável: limites, continuidade e derivadas](partes/01-matematica/mat-g03-funcoes-de-uma-variavel-limites-continuidade-e-derivadas.qmd) | MAT-G02 | ○ planejado |
 | MAT-G04 | G | [Integração e aplicações](partes/01-matematica/mat-g04-integracao-e-aplicacoes.qmd) | MAT-G03 | ○ planejado |

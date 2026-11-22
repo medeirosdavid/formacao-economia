@@ -68,4 +68,4 @@ O workflow `.github/workflows/publicar.yml` roda a cada *push*: renderiza o site
 
 Pré-requisito, uma única vez: *Settings → Pages → Build and deployment → Source: GitHub Actions*. Se o repositório voltar a ser privado, a publicação para (a menos que a variável de repositório `PUBLICAR_PAGES` seja `true` e a conta tenha plano com Pages privado).
 
-Os resultados do código ficam congelados em `_freeze/` (versione essa pasta depois da primeira renderização local) e as séries de dados em `dados/cache/`.
+A CI executa o código dos capítulos a cada publicação; `_freeze/` fica fora do Git (veja o `.gitignore`). As séries baixadas ficam em `dados/cache/`.

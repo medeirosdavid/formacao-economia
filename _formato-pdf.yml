@@ -2,16 +2,16 @@
 format:
   pdf:
     documentclass: scrbook
-    classoption: [oneside, open=any, parskip=half]
+    classoption: [oneside, open=any, parskip=half, numbers=noenddot]
     papersize: a4
     fontsize: 11pt
     pdf-engine: xelatex
     toc-depth: 2
+    toc-title: Sumário
     number-depth: 3
     colorlinks: true
     fig-format: pdf
     keep-tex: false
-    code-overflow: wrap
     filters:
       - filtros/refs-pendentes.lua
       - filtros/caixas-pdf.lua

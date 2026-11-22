@@ -1,9 +1,10 @@
 // Controles dos interativos (OJS) sem depender de @observablehq/inputs:
 // funcionam em qualquer hospedagem, inclusive com política de segurança restrita.
 // Uso numa célula {ojs}:
-//   import {controle, alternador} from "/ojs/controles.js"
+//   import {controle, alternador, seletor} from "/ojs/controles.js"
 //   viewof a = controle("rótulo", [0, 1], {valor: 0.5, passo: 0.01, casas: 2})
 //   viewof b = alternador("rótulo", {valor: false})
+//   viewof c = seletor("rótulo", ["opção 1", "opção 2"], {valor: "opção 1"})
 
 export function controle(rotulo, [min, max], {valor = min, passo = 1, casas} = {}) {
   const form = document.createElement("form");
@@ -34,6 +35,28 @@ export function alternador(rotulo, {valor = false} = {}) {
   form.append(label);
   form.value = valor;
   input.addEventListener("input", () => { form.value = input.checked; });
+  form.addEventListener("submit", e => e.preventDefault());
+  return form;
+}
+
+export function seletor(rotulo, opcoes, {valor = opcoes[0]} = {}) {
+  // opcoes: lista de strings; o valor do controle é a string escolhida
+  const form = document.createElement("form");
+  form.className = "controle controle-seletor";
+  const nome = document.createElement("span");
+  nome.className = "controle-rotulo";
+  nome.textContent = rotulo;
+  const select = document.createElement("select");
+  for (const o of opcoes) {
+    const opt = document.createElement("option");
+    opt.value = o;
+    opt.textContent = o;
+    if (o === valor) opt.selected = true;
+    select.append(opt);
+  }
+  form.append(nome, select);
+  form.value = valor;
+  select.addEventListener("input", () => { form.value = select.value; });
   form.addEventListener("submit", e => e.preventDefault());
   return form;
 }

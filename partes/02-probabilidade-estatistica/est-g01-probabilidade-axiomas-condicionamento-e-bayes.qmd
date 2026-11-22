@@ -4,13 +4,7 @@
 ::: {.cabecalho-capitulo}
 [Graduação]{.nivel .nivel-G} · [planejado]{.status} · `EST-G01`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-mat-g01 (*Lógica, conjuntos e métodos de demonstração*)
-:::
-
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Lógica, conjuntos e métodos de demonstração* (MAT-G01)
-:::
 
 **Leituras principais:** @degroot2012, @bussab2017
 :::

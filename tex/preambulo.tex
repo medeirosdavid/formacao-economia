@@ -45,6 +45,11 @@
 \addtokomafont{disposition}{\rmfamily\bfseries}
 \setkomafont{chapter}{\Huge\rmfamily\bfseries}
 
+% Código e saídas quebram linhas longas em vez de ultrapassar a margem
+\usepackage{fvextra}
+\RecustomVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
+\RecustomVerbatimEnvironment{verbatim}{Verbatim}{breaklines,breakanywhere}
+
 % Pequenos ajustes
 \usepackage{microtype}
 \setlength{\emergencystretch}{2em}

@@ -7,7 +7,7 @@ Ferramentas de análise, álgebra linear, otimização e dinâmica usadas no res
 ::: {.content-visible when-format="html"}
 | Código | Nível | Capítulo | Status |
 |:--|:--|:--|:--|
-| MAT-G01 | G | [Lógica, conjuntos e métodos de demonstração](mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd) | ○ planejado |
+| MAT-G01 | G | [Lógica, conjuntos e métodos de demonstração](mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd) | ◔ rascunho |
 | MAT-G02 | G | [Números reais, sequências e séries](mat-g02-numeros-reais-sequencias-e-series.qmd) | ○ planejado |
 | MAT-G03 | G | [Funções de uma variável: limites, continuidade e derivadas](mat-g03-funcoes-de-uma-variavel-limites-continuidade-e-derivadas.qmd) | ○ planejado |
 | MAT-G04 | G | [Integração e aplicações](mat-g04-integracao-e-aplicacoes.qmd) | ○ planejado |

@@ -18,6 +18,10 @@ Este apêndice fixa a notação usada em **todo** o livro. Quando um capítulo p
 
 **Definições.** "$\defeq$" define o lado esquerdo pelo direito. "$\iff$" e "se, e somente se" são equivalentes.
 
+**Números naturais.** $\N = \{1, 2, 3, \dots\}$ e $\N_0 \defeq \N \cup \{0\}$; $I_n \defeq \{1, \dots, n\}$.
+
+**Lógica.** Conectivos $\neg$, $\wedge$, $\vee$, $\to$, $\leftrightarrow$ dentro de fórmulas; $\equiv$ para equivalência lógica; $\Rightarrow$ e $\iff$ entre afirmações no texto matemático.
+
 ## Macros
 
 As macros abaixo estão definidas em `tex/macros.tex` e funcionam igualmente no site e no PDF.
