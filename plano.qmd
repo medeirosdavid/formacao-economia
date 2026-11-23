@@ -25,21 +25,24 @@ Legenda de status: ○ planejado · ◔ rascunho · ◑ em revisão · ● compl
 Matemática, probabilidade e computação até o nível de mestrado — o mínimo para ler qualquer outra parte com conforto.
 
 1. ◔ [Lógica, conjuntos e métodos de demonstração](partes/01-matematica/mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd) `MAT-G01`
-2. ○ [Álgebra linear I: vetores, matrizes e sistemas lineares](partes/01-matematica/mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd) `MAT-G05`
-3. ○ [Cálculo em várias variáveis](partes/01-matematica/mat-g06-calculo-em-varias-variaveis.qmd) `MAT-G06`
-4. ○ [Otimização: sem restrições e com restrições de igualdade](partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) `MAT-G07`
-5. ○ [Probabilidade: axiomas, condicionamento e Bayes](partes/02-probabilidade-estatistica/est-g01-probabilidade-axiomas-condicionamento-e-bayes.qmd) `EST-G01`
-6. ○ [Variáveis aleatórias e distribuições](partes/02-probabilidade-estatistica/est-g02-variaveis-aleatorias-e-distribuicoes.qmd) `EST-G02`
-7. ○ [Esperança, momentos e distribuições conjuntas](partes/02-probabilidade-estatistica/est-g03-esperanca-momentos-e-distribuicoes-conjuntas.qmd) `EST-G03`
-8. ○ [Estimação pontual e intervalar](partes/02-probabilidade-estatistica/est-g05-estimacao-pontual-e-intervalar.qmd) `EST-G05`
-9. ○ [Testes de hipóteses](partes/02-probabilidade-estatistica/est-g06-testes-de-hipoteses.qmd) `EST-G06`
-10. ○ [Python para economistas](partes/03-computacao/cmp-g01-python-para-economistas.qmd) `CMP-G01`
-11. ○ [Dados: pandas, APIs públicas brasileiras e visualização](partes/03-computacao/cmp-g02-dados-pandas-apis-publicas-brasileiras-e-visualizacao.qmd) `CMP-G02`
-12. ○ [Análise real em $\mathbb{R}^n$ e espaços métricos](partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) `MAT-M01`
-13. ○ [Álgebra linear II: autovalores, decomposições e formas quadráticas](partes/01-matematica/mat-m02-algebra-linear-ii-autovalores-decomposicoes-e-formas.qmd) `MAT-M02`
-14. ○ [Convexidade e otimização com restrições de desigualdade](partes/01-matematica/mat-m03-convexidade-e-otimizacao-com-restricoes-de-desigualdade.qmd) `MAT-M03`
-15. ○ [Esperança condicional](partes/02-probabilidade-estatistica/est-m02-esperanca-condicional.qmd) `EST-M02`
-16. ○ [Modos de convergência e teoremas-limite](partes/02-probabilidade-estatistica/est-m03-modos-de-convergencia-e-teoremas-limite.qmd) `EST-M03`
+2. ◔ [Números reais, sequências e séries](partes/01-matematica/mat-g02-numeros-reais-sequencias-e-series.qmd) `MAT-G02`
+3. ◔ [Funções de uma variável: limites, continuidade e derivadas](partes/01-matematica/mat-g03-funcoes-de-uma-variavel-limites-continuidade-e-derivadas.qmd) `MAT-G03`
+4. ○ [Integração e aplicações](partes/01-matematica/mat-g04-integracao-e-aplicacoes.qmd) `MAT-G04`
+5. ○ [Álgebra linear I: vetores, matrizes e sistemas lineares](partes/01-matematica/mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd) `MAT-G05`
+6. ○ [Cálculo em várias variáveis](partes/01-matematica/mat-g06-calculo-em-varias-variaveis.qmd) `MAT-G06`
+7. ○ [Otimização: sem restrições e com restrições de igualdade](partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) `MAT-G07`
+8. ○ [Probabilidade: axiomas, condicionamento e Bayes](partes/02-probabilidade-estatistica/est-g01-probabilidade-axiomas-condicionamento-e-bayes.qmd) `EST-G01`
+9. ○ [Variáveis aleatórias e distribuições](partes/02-probabilidade-estatistica/est-g02-variaveis-aleatorias-e-distribuicoes.qmd) `EST-G02`
+10. ○ [Esperança, momentos e distribuições conjuntas](partes/02-probabilidade-estatistica/est-g03-esperanca-momentos-e-distribuicoes-conjuntas.qmd) `EST-G03`
+11. ○ [Estimação pontual e intervalar](partes/02-probabilidade-estatistica/est-g05-estimacao-pontual-e-intervalar.qmd) `EST-G05`
+12. ○ [Testes de hipóteses](partes/02-probabilidade-estatistica/est-g06-testes-de-hipoteses.qmd) `EST-G06`
+13. ○ [Python para economistas](partes/03-computacao/cmp-g01-python-para-economistas.qmd) `CMP-G01`
+14. ○ [Dados: pandas, APIs públicas brasileiras e visualização](partes/03-computacao/cmp-g02-dados-pandas-apis-publicas-brasileiras-e-visualizacao.qmd) `CMP-G02`
+15. ○ [Análise real em $\mathbb{R}^n$ e espaços métricos](partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) `MAT-M01`
+16. ○ [Álgebra linear II: autovalores, decomposições e formas quadráticas](partes/01-matematica/mat-m02-algebra-linear-ii-autovalores-decomposicoes-e-formas.qmd) `MAT-M02`
+17. ○ [Convexidade e otimização com restrições de desigualdade](partes/01-matematica/mat-m03-convexidade-e-otimizacao-com-restricoes-de-desigualdade.qmd) `MAT-M03`
+18. ○ [Esperança condicional](partes/02-probabilidade-estatistica/est-m02-esperanca-condicional.qmd) `EST-M02`
+19. ○ [Modos de convergência e teoremas-limite](partes/02-probabilidade-estatistica/est-m03-modos-de-convergencia-e-teoremas-limite.qmd) `EST-M03`
 
 ### Graduação completa
 

@@ -35,7 +35,7 @@ niveis:
 trilhas:
   - nome: "Base quantitativa"
     descricao: "Matemática, probabilidade e computação até o nível de mestrado — o mínimo para ler qualquer outra parte com conforto."
-    capitulos: [MAT-G01, MAT-G05, MAT-G06, MAT-G07, EST-G01, EST-G02, EST-G03, EST-G05, EST-G06, CMP-G01, CMP-G02, MAT-M01, MAT-M02, MAT-M03, EST-M02, EST-M03]
+    capitulos: [MAT-G01, MAT-G02, MAT-G03, MAT-G04, MAT-G05, MAT-G06, MAT-G07, EST-G01, EST-G02, EST-G03, EST-G05, EST-G06, CMP-G01, CMP-G02, MAT-M01, MAT-M02, MAT-M03, EST-M02, EST-M03]
   - nome: "Graduação completa"
     descricao: "Todos os capítulos de nível G, na ordem do livro."
     filtro_nivel: G

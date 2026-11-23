@@ -23,6 +23,7 @@ Registro curto de cada sessão: o que foi feito, decisões e pendências. Entrad
   - concavidade (quatro caracterizações), máximo global, elasticidade, receita e regra de Lerner;
   - aplicação: IPCA mensal desde 1980 (SGS 433), soma das taxas × inflação acumulada exata;
   - 3 interativos (secante → tangente, polinômios de Taylor, elasticidade e receita), laboratório, 9 exercícios, 14 flashcards.
+- Trilha "Base quantitativa": MAT-G02, MAT-G03 e MAT-G04 incluídos entre MAT-G01 e MAT-G05, a pedido de David.
 
 **Pendências**
 
