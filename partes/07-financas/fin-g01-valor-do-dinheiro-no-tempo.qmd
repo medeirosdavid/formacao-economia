@@ -4,13 +4,7 @@
 ::: {.cabecalho-capitulo}
 [Graduação]{.nivel .nivel-G} · [planejado]{.status} · `FIN-G01`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-mat-g02 (*Números reais, sequências e séries*)
-:::
-
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Números reais, sequências e séries* (MAT-G02)
-:::
 
 **Leituras principais:** @berk2020, @bodie2021
 :::

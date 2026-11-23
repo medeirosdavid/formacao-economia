@@ -2,27 +2,964 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAT-G03`
+[Graduação]{.nivel .nivel-G} · [rascunho]{.status} · `MAT-G03`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-mat-g02 (*Números reais, sequências e séries*)
-:::
 
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Números reais, sequências e séries* (MAT-G02)
-:::
-
-**Leituras principais:** @simon1994, @sydsaeter2016
+**Leituras principais:** @lima1989, @simon1994, @sydsaeter2016
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-mat-g03-motivacao}
 
-1. Limites e continuidade
-2. Valor intermediário e Weierstrass
-3. Derivada e regras de derivação
-4. Teorema do valor médio
-5. Fórmula de Taylor
-6. Concavidade, elasticidade e aplicações
+A economia raciocina **na margem**: o consumidor compara a utilidade marginal com o preço, a firma iguala receita marginal e custo marginal, o banco central pergunta quanto a inflação responde a um ponto a mais de juros. Cada uma dessas frases é uma afirmação sobre **derivadas**. Antes delas, porém, vêm duas perguntas de existência que a teoria não pode pular:
+
+- **Existe equilíbrio?** Se o excesso de demanda é positivo a preços baixos e negativo a preços altos, há um preço que zera o mercado? Só se o excesso de demanda for **contínuo** — e a garantia é o teorema do valor intermediário.
+- **Existe solução ótima?** O @exm-mat-g02-sup-sem-max mostrou um problema cujo valor ótimo não é atingido. O teorema de **Weierstrass** dá condições para que o máximo exista; o teorema de **Fermat** diz onde procurá-lo.
+
+Por fim, economistas aproximam o tempo todo: "o PIB cresceu 2%" é, quase sempre, uma diferença de logaritmos; "a inflação do ano é a soma das inflações mensais" é uma aproximação de primeira ordem. A **fórmula de Taylor** diz quando essas aproximações são boas e quanto erram — e a experiência brasileira com alta inflação mostra que, às vezes, erram muito.
+
+Este capítulo desenvolve, sobre a base de sequências do @sec-mat-g02:
+
+1. **limites** e **continuidade**, com a caracterização por sequências;
+2. os três grandes teoremas sobre funções contínuas em intervalos: **valor intermediário**, **ponto fixo** e **Weierstrass**;
+3. a **derivada**, suas regras e a derivada da função inversa;
+4. os teoremas de **Fermat**, **Rolle** e do **valor médio**, com suas consequências para monotonia;
+5. a **fórmula de Taylor** com resto, condições de segunda ordem e aproximações logarítmicas;
+6. **concavidade** e **elasticidade**.
+
+## Limites de funções {#sec-mat-g03-limites}
+
+Ao longo do capítulo, $X \subseteq \R$ é o domínio de uma função $f: X \to \R$; na maioria dos casos, $X$ é um intervalo.
+
+::: {#def-mat-g03-limite}
+## Limite de uma função
+Um ponto $a \in \R$ é **ponto de acumulação** de $X$ se todo intervalo $(a - \delta, a + \delta)$, $\delta > 0$, contém algum ponto de $X$ diferente de $a$. Se $a$ é ponto de acumulação de $X$, dizemos que $f$ tem **limite** $L$ quando $x$ tende a $a$, e escrevemos $\lim_{x \to a} f(x) = L$, se
+$$
+\forall \varepsilon > 0\ \ \exists \delta > 0\ \ \forall x \in X:\ 0 < \abs{x - a} < \delta \ \Rightarrow\ \abs{f(x) - L} < \varepsilon .
+$$
 :::
+
+O ponto $a$ não precisa pertencer a $X$, e, mesmo que pertença, o valor $f(a)$ não interfere no limite: a condição $0 < \abs{x - a}$ exclui $x = a$. Todo ponto de um intervalo não degenerado, inclusive as extremidades, é ponto de acumulação dele.
+
+::: {#thm-mat-g03-sequencial}
+## Caracterização por sequências
+Seja $a$ ponto de acumulação de $X$. Então $\lim_{x\to a} f(x) = L$ se, e somente se, para toda sequência $(x_n)$ em $X \setminus \{a\}$ com $x_n \to a$, vale $f(x_n) \to L$.
+:::
+
+::: {.proof}
+Suponha $\lim_{x\to a} f(x) = L$ e seja $(x_n)$ em $X \setminus \{a\}$ com $x_n \to a$. Dado $\varepsilon > 0$, tome $\delta$ como na definição e $N$ tal que $\abs{x_n - a} < \delta$ para $n \geq N$. Como $x_n \neq a$, temos $0 < \abs{x_n - a} < \delta$, logo $\abs{f(x_n) - L} < \varepsilon$ para $n \geq N$.
+
+Reciprocamente, suponha que o limite não seja $L$. Negando a definição (@prp-mat-g01-negacao), existe $\varepsilon > 0$ tal que, para todo $\delta > 0$, há $x \in X$ com $0 < \abs{x - a} < \delta$ e $\abs{f(x) - L} \geq \varepsilon$. Com $\delta = 1/n$, obtemos $x_n \in X \setminus \{a\}$ com $\abs{x_n - a} < 1/n$ — logo $x_n \to a$ — e $\abs{f(x_n) - L} \geq \varepsilon$ para todo $n$, de modo que $f(x_n) \not\to L$.
+:::
+
+Como $a$ é ponto de acumulação, existem sequências em $X \setminus \{a\}$ que convergem para $a$ (tome $x_n \in X$ com $0 < \abs{x_n - a} < 1/n$). Assim, o teorema transfere para funções tudo o que sabemos sobre sequências: o limite, se existe, é único, e valem as regras a seguir.
+
+::: {#cor-mat-g03-operacoes}
+## Operações com limites
+Se $\lim_{x\to a} f(x) = L$ e $\lim_{x \to a} g(x) = M$, então $\lim_{x\to a} (f + g)(x) = L + M$ e $\lim_{x \to a} (fg)(x) = LM$; se $M \neq 0$, então $\lim_{x \to a} f(x)/g(x) = L/M$. Se $f(x) \leq g(x)$ para $x$ próximo de $a$, então $L \leq M$, e vale o sanduíche.
+:::
+
+::: {.proof}
+Para cada sequência $x_n \to a$ em $X \setminus \{a\}$, temos $f(x_n) \to L$ e $g(x_n) \to M$ pelo @thm-mat-g03-sequencial; o @thm-mat-g02-operacoes e a @prp-mat-g02-ordem dão a conclusão para essa sequência, e o @thm-mat-g03-sequencial, aplicado de volta, dá a conclusão para a função. No caso do quociente, se $M \neq 0$, a permanência do sinal (@exr-mat-g02-permanencia, aplicada a $\abs{g}$) garante $g(x) \neq 0$ para $x$ próximo de $a$, e o quociente está definido numa vizinhança de $a$.
+:::
+
+Variações da definição são imediatas. O **limite à direita** $\lim_{x \to a^+} f(x)$ é o limite da restrição de $f$ a $X \cap (a, \infty)$; analogamente o limite à esquerda. Quando $a$ é ponto de acumulação dos dois lados, o limite existe se, e somente se, os dois limites laterais existem e são iguais. E $\lim_{x \to +\infty} f(x) = L$ significa que, para todo $\varepsilon > 0$, existe $M$ tal que $\abs{f(x) - L} < \varepsilon$ para todo $x \in X$ com $x > M$.
+
+::: {#exm-mat-g03-dirichlet}
+## Uma função sem limite em ponto algum
+Seja $f(x) = 1$ se $x \in \Q$ e $f(x) = 0$ caso contrário. Os irracionais também são densos em $\R$: dados $x < y$, a densidade dos racionais (@thm-mat-g02-densidade) dá $q \in \Q$ com $x - \sqrt 2 < q < y - \sqrt 2$, e $q + \sqrt 2 \in (x, y)$ é irracional (se fosse racional, $\sqrt 2$ também seria, contra o @thm-mat-g01-raiz2). Para qualquer $a$, escolha racionais $q_n$ e irracionais $r_n$ em $(a, a + 1/n)$. Ambas as sequências tendem a $a$ sem tocar $a$, mas $f(q_n) = 1$ e $f(r_n) = 0$; pelo @thm-mat-g03-sequencial, $f$ não tem limite em $a$.
+:::
+
+## Continuidade {#sec-mat-g03-continuidade}
+
+::: {#def-mat-g03-continuidade}
+## Continuidade
+$f: X \to \R$ é **contínua em** $a \in X$ se
+$$
+\forall \varepsilon > 0\ \ \exists \delta > 0\ \ \forall x \in X:\ \abs{x - a} < \delta \ \Rightarrow\ \abs{f(x) - f(a)} < \varepsilon .
+$$
+$f$ é **contínua** se é contínua em todo ponto de $X$.
+:::
+
+Se $a \in X$ é ponto de acumulação de $X$, a continuidade em $a$ equivale a $\lim_{x \to a} f(x) = f(a)$: o valor da função é o que os valores próximos "prometem".
+
+::: {#prp-mat-g03-continuidade-sequencial}
+## Continuidade por sequências
+$f$ é contínua em $a \in X$ se, e somente se, $f(x_n) \to f(a)$ para toda sequência $(x_n)$ em $X$ com $x_n \to a$.
+:::
+
+::: {.proof}
+Se $f$ é contínua em $a$ e $x_n \to a$, dado $\varepsilon > 0$ tome $\delta$ da definição e $N$ com $\abs{x_n - a} < \delta$ para $n \geq N$; então $\abs{f(x_n) - f(a)} < \varepsilon$ para $n \geq N$. Se $f$ não é contínua em $a$, existe $\varepsilon > 0$ tal que, para cada $n$, há $x_n \in X$ com $\abs{x_n - a} < 1/n$ e $\abs{f(x_n) - f(a)} \geq \varepsilon$; então $x_n \to a$ mas $f(x_n) \not\to f(a)$.
+:::
+
+::: {#prp-mat-g03-operacoes-continuas}
+## Operações com funções contínuas
+Se $f, g: X \to \R$ são contínuas em $a$, então $f + g$ e $fg$ são contínuas em $a$, e $f/g$ também, se $g(a) \neq 0$. Se $f: X \to Y$ é contínua em $a$ e $g: Y \to \R$ é contínua em $f(a)$, então $g \circ f$ é contínua em $a$.
+:::
+
+::: {.proof}
+Seja $x_n \to a$ em $X$. Pela @prp-mat-g03-continuidade-sequencial, $f(x_n) \to f(a)$ e $g(x_n) \to g(a)$, e o @thm-mat-g02-operacoes dá $f(x_n) + g(x_n) \to f(a) + g(a)$, $f(x_n) g(x_n) \to f(a) g(a)$ e, se $g(a) \neq 0$, $f(x_n)/g(x_n) \to f(a)/g(a)$. Para a composição, $f(x_n) \to f(a)$ é uma sequência em $Y$ que converge para $f(a)$; como $g$ é contínua em $f(a)$, $g(f(x_n)) \to g(f(a))$. Em cada caso, a @prp-mat-g03-continuidade-sequencial dá a continuidade.
+:::
+
+Como as funções constantes e a identidade $x \mapsto x$ são contínuas, todo **polinômio** é contínuo em $\R$ e toda função **racional** $p/q$ é contínua onde $q \neq 0$. O valor absoluto é contínuo, pois $\big\lvert \abs{x} - \abs{a} \big\rvert \leq \abs{x - a}$. Já a parte inteira $\lfloor x \rfloor$ é descontínua em cada inteiro, e a função do @exm-mat-g03-dirichlet é descontínua em todo ponto.
+
+Usaremos as funções exponencial e logaritmo antes de construí-las rigorosamente. O resultado a seguir reúne o que é admitido; a demonstração, a partir da definição $\log x \defeq \int_1^x \dd t/t$, está no @sec-mat-g04.
+
+::: {#prp-mat-g03-exp}
+## Exponencial e logaritmo (admitida)
+Existe uma função $\exp: \R \to (0, \infty)$ bijetiva, estritamente crescente, diferenciável, com $\exp' = \exp$, $\exp(0) = 1$ e $\exp(x + y) = \exp(x)\exp(y)$. Sua inversa, o **logaritmo natural** $\log: (0, \infty) \to \R$, satisfaz $\log(xy) = \log x + \log y$. Para $a > 0$ e $b \in \R$, define-se $a^b \defeq \exp(b \log a)$.
+:::
+
+Também escrevemos $e^x$ para $\exp(x)$; a notação se justifica no @exm-mat-g03-capitalizacao, que mostra que $\exp(1)$ é o número $e$ da @prp-mat-g02-e.
+
+## Valor intermediário, ponto fixo e existência de equilíbrio {#sec-mat-g03-tvi}
+
+::: {#thm-mat-g03-tvi}
+## Teorema do valor intermediário
+Seja $f: [a, b] \to \R$ contínua e $c$ um número estritamente entre $f(a)$ e $f(b)$. Então existe $x \in (a, b)$ com $f(x) = c$.
+:::
+
+::: {.proof}
+Suponha $f(a) < c < f(b)$ (o outro caso segue aplicando este a $-f$ e $-c$). Seja $S \defeq \{x \in [a, b] : f(x) < c\}$, não vazio ($a \in S$) e limitado por $b$, e $s \defeq \sup S \in [a, b]$. Mostramos que $f(s) = c$.
+
+Se $f(s) < c$, então $s < b$ (pois $f(b) > c$). Pela continuidade em $s$, com $\varepsilon = c - f(s)$, existe $\delta > 0$ tal que $f(x) < c$ para $x \in [a, b]$ com $\abs{x - s} < \delta$; tomando $x = \min\{s + \delta/2, b\} > s$, obtemos $x \in S$ — contradição com $s$ ser cota superior de $S$.
+
+Se $f(s) > c$, então $s > a$, e, com $\varepsilon = f(s) - c$, existe $\delta > 0$ tal que $f(x) > c$ para $x \in [a, b]$ com $\abs{x - s} < \delta$. Nenhum ponto de $(s - \delta, s]$ está em $S$, e nenhum ponto de $S$ excede $s$; logo $\max\{s - \delta/2, a\}$ é cota superior de $S$ menor que $s$ — contradição.
+
+Assim $f(s) = c$, e $s \neq a, b$ porque $f(a) < c < f(b)$.
+:::
+
+Uma consequência: a imagem de um intervalo por uma função contínua é um intervalo. A demonstração acima é existencial; a versão construtiva é a **bisseção** (@sec-mat-g03-laboratorio), que reduz à metade, a cada passo, um intervalo em cujas extremidades $f - c$ tem sinais opostos.
+
+::: {#cor-mat-g03-ponto-fixo}
+## Ponto fixo em um intervalo (Brouwer em dimensão 1)
+Toda função contínua $g: [a, b] \to [a, b]$ tem um ponto fixo: existe $x^* \in [a, b]$ com $g(x^*) = x^*$.
+:::
+
+::: {.proof}
+Seja $h(x) \defeq g(x) - x$, contínua. Como $g(a) \geq a$ e $g(b) \leq b$, temos $h(a) \geq 0 \geq h(b)$. Se $h(a) = 0$ ou $h(b) = 0$, uma extremidade é ponto fixo. Caso contrário, $h(a) > 0 > h(b)$, e o @thm-mat-g03-tvi dá $x^* \in (a, b)$ com $h(x^*) = 0$.
+:::
+
+Diferentemente do @thm-mat-g02-ponto-fixo, este resultado não garante unicidade nem convergência de iterações — apenas existência. Sua generalização a $\R^n$, o teorema de Brouwer, e a versão para correspondências, de Kakutani, são as ferramentas das demonstrações de existência de equilíbrio geral e de equilíbrio de Nash (@sec-mat-m05).
+
+::: {#prp-mat-g03-equilibrio}
+## Existência de preço de equilíbrio
+Seja $z: [p_0, p_1] \to \R$ o excesso de demanda de um mercado, contínuo, com $z(p_0) > 0$ e $z(p_1) < 0$. Então existe $p^* \in (p_0, p_1)$ com $z(p^*) = 0$. Se, além disso, $z$ é estritamente decrescente, $p^*$ é único.
+:::
+
+::: {.proof}
+A existência é o @thm-mat-g03-tvi com $c = 0$. Se $z$ é estritamente decrescente e $p < p'$, então $z(p) > z(p')$, e $z$ não pode se anular nos dois pontos.
+:::
+
+A continuidade não é um detalhe técnico: com uma oferta que salta (por exemplo, por indivisibilidades), o excesso de demanda pode passar de positivo a negativo sem passar por zero, e o mercado não tem preço que o equilibre.
+
+::: {#prp-mat-g03-inversa-continua}
+## Continuidade da inversa
+Seja $f: I \to \R$ contínua e estritamente crescente num intervalo $I$. Então $J \defeq f(I)$ é um intervalo e a inversa $f^{-1}: J \to I$ é contínua e estritamente crescente.
+:::
+
+::: {.proof}
+$J$ é um intervalo pela consequência do @thm-mat-g03-tvi notada acima, e $f^{-1}$ é estritamente crescente porque $f$ é. Seja $y_0 = f(x_0) \in J$ e $\varepsilon > 0$. Suponha primeiro que $x_0$ seja interior a $I$ e, diminuindo $\varepsilon$ se necessário, que $x_0 \pm \varepsilon \in I$. Então $f(x_0 - \varepsilon) < y_0 < f(x_0 + \varepsilon)$; com $\delta \defeq \min\{y_0 - f(x_0 - \varepsilon),\ f(x_0 + \varepsilon) - y_0\}$, todo $y \in J$ com $\abs{y - y_0} < \delta$ satisfaz $f(x_0 - \varepsilon) < y < f(x_0 + \varepsilon)$ e, aplicando a função crescente $f^{-1}$, $x_0 - \varepsilon < f^{-1}(y) < x_0 + \varepsilon$. Se $x_0$ é a extremidade esquerda de $I$, só o lado direito importa e $\delta \defeq f(x_0 + \varepsilon) - y_0$ funciona; a extremidade direita é análoga.
+:::
+
+## O teorema de Weierstrass {#sec-mat-g03-weierstrass}
+
+::: {#thm-mat-g03-weierstrass}
+## Weierstrass
+Toda função contínua $f: [a, b] \to \R$ é limitada e atinge máximo e mínimo: existem $x_*, x^* \in [a, b]$ com $f(x_*) \leq f(x) \leq f(x^*)$ para todo $x \in [a, b]$.
+:::
+
+::: {.proof}
+Se $f$ não fosse limitada superiormente, haveria $x_n \in [a, b]$ com $f(x_n) > n$ para cada $n$. Por Bolzano–Weierstrass (@thm-mat-g02-bolzano), uma subsequência $x_{n_k}$ converge para algum $\bar x$, e $\bar x \in [a, b]$ pela @prp-mat-g02-ordem. Pela continuidade, $f(x_{n_k}) \to f(\bar x)$; mas $f(x_{n_k}) > n_k \geq k$, e uma sequência convergente é limitada (@prp-mat-g02-unicidade) — contradição.
+
+Seja então $M \defeq \sup\{f(x) : x \in [a, b]\}$. Pela @prp-mat-g02-caracterizacao-sup, para cada $n$ existe $x_n \in [a, b]$ com $M - 1/n < f(x_n) \leq M$. Novamente, uma subsequência $x_{n_k} \to x^* \in [a, b]$, e $f(x^*) = \lim_k f(x_{n_k}) = M$ pelo sanduíche. O mínimo é obtido aplicando o mesmo argumento a $-f$.
+:::
+
+Cada hipótese é necessária. Em $(0, 1)$, a função $f(x) = x$ é contínua e limitada, mas não atinge o supremo (@exm-mat-g02-sup-sem-max); em $[0, \infty)$, $f(x) = x$ não é limitada; e em $[0, 1]$ a função igual a $x$ para $x < 1$ e a $0$ em $x = 1$ não atinge o supremo $1$. Em economia, o conjunto orçamentário é fechado e limitado justamente para que a utilidade contínua tenha máximo nele (@sec-mic-g01); a versão do teorema para conjuntos compactos de $\R^n$ está no @sec-mat-m01.
+
+## A derivada {#sec-mat-g03-derivada}
+
+::: {#def-mat-g03-derivada}
+## Derivada
+Seja $f: I \to \R$, $I$ um intervalo e $a \in I$. A **derivada** de $f$ em $a$ é
+$$
+f'(a) \defeq \lim_{h \to 0} \frac{f(a + h) - f(a)}{h},
+$$ {#eq-mat-g03-derivada}
+quando o limite existe (em $\R$); nesse caso, $f$ é **diferenciável** em $a$. Se $a$ é uma extremidade de $I$, o limite é lateral. $f$ é diferenciável em $I$ se o é em todo ponto, e $f': I \to \R$ é a função derivada; $f''$, $f'''$, $f^{(k)}$ são as derivadas sucessivas.
+:::
+
+O quociente em @eq-mat-g03-derivada é a inclinação da **reta secante** pelos pontos $(a, f(a))$ e $(a + h, f(a+h))$; a derivada é o limite dessas inclinações, a inclinação da **reta tangente**. Em economia, é a variação de $f$ por unidade de variação de $x$, na margem.
+
+A forma mais útil da definição é a seguinte, devida a Carathéodory: ela transforma a derivada numa questão de continuidade.
+
+::: {#lem-mat-g03-caratheodory}
+## Diferenciabilidade como continuidade
+$f$ é diferenciável em $a$ se, e somente se, existe uma função $\varphi: I \to \R$, contínua em $a$, com
+$$
+f(x) - f(a) = \varphi(x)\,(x - a) \qquad \text{para todo } x \in I .
+$$ {#eq-mat-g03-caratheodory}
+Nesse caso, $\varphi(a) = f'(a)$.
+:::
+
+::: {.proof}
+Se $f$ é diferenciável em $a$, defina $\varphi(x) \defeq (f(x) - f(a))/(x - a)$ para $x \neq a$ e $\varphi(a) \defeq f'(a)$. A identidade vale (trivialmente em $x = a$), e $\lim_{x \to a} \varphi(x) = f'(a) = \varphi(a)$, isto é, $\varphi$ é contínua em $a$. Reciprocamente, se vale a identidade com $\varphi$ contínua em $a$, então, para $x \neq a$, $(f(x) - f(a))/(x - a) = \varphi(x) \to \varphi(a)$ quando $x \to a$; logo $f'(a)$ existe e vale $\varphi(a)$.
+:::
+
+::: {#cor-mat-g03-continua}
+## Diferenciável implica contínua
+Se $f$ é diferenciável em $a$, então $f$ é contínua em $a$. Além disso, $f(a + h) = f(a) + f'(a)\,h + r(h)$ com $r(h)/h \to 0$ quando $h \to 0$.
+:::
+
+::: {.proof}
+Pela @eq-mat-g03-caratheodory, $f(x) = f(a) + \varphi(x)(x - a)$, e o lado direito é contínuo em $a$ (produto e soma de funções contínuas em $a$), com valor $f(a)$. Para a segunda afirmação, $r(h) = (\varphi(a + h) - \varphi(a))\,h$, e $r(h)/h = \varphi(a+h) - \varphi(a) \to 0$.
+:::
+
+A segunda afirmação diz que, perto de $a$, $f$ é bem aproximada pela reta $f(a) + f'(a)h$, com erro **pequeno em relação a $h$**. A recíproca da primeira é falsa: $\abs{x}$ é contínua em $0$, mas $(\abs{h} - 0)/h$ vale $1$ para $h > 0$ e $-1$ para $h < 0$, e não tem limite. O mesmo ocorre com o **imposto de renda progressivo**: o imposto devido é uma função contínua e linear por partes da renda, mas a alíquota **marginal** — a derivada — salta em cada mudança de faixa, onde o imposto não é diferenciável.
+
+::: {#thm-mat-g03-regras}
+## Regras de derivação
+Sejam $f, g$ diferenciáveis em $a$. Então:
+
+- **soma e produto:** $(f + g)'(a) = f'(a) + g'(a)$ e $(fg)'(a) = f'(a) g(a) + f(a) g'(a)$;
+- **quociente:** se $g(a) \neq 0$, $(f/g)'(a) = \dfrac{f'(a) g(a) - f(a) g'(a)}{g(a)^2}$;
+- **cadeia:** se $f$ é diferenciável em $a$ e $g$ é diferenciável em $f(a)$, então $(g \circ f)'(a) = g'(f(a))\, f'(a)$.
+:::
+
+::: {.proof}
+Sejam $\varphi$ e $\psi$ as funções do @lem-mat-g03-caratheodory para $f$ e $g$ em $a$. Para a soma, $(f + g)(x) - (f+g)(a) = (\varphi(x) + \psi(x))(x - a)$, e $\varphi + \psi$ é contínua em $a$ com valor $f'(a) + g'(a)$. Para o produto,
+$$
+f(x) g(x) - f(a) g(a) = \big(f(x) - f(a)\big) g(x) + f(a) \big(g(x) - g(a)\big) = \big[\varphi(x) g(x) + f(a) \psi(x)\big](x - a),
+$$
+e o colchete é contínuo em $a$ (pois $g$ é contínua em $a$, pelo @cor-mat-g03-continua), com valor $f'(a) g(a) + f(a) g'(a)$.
+
+Para o quociente, basta tratar $1/g$ e aplicar o produto. Como $g$ é contínua em $a$ e $g(a) \neq 0$, $g \neq 0$ perto de $a$, e
+$$
+\frac{1}{g(x)} - \frac{1}{g(a)} = -\frac{g(x) - g(a)}{g(x) g(a)} = -\frac{\psi(x)}{g(x) g(a)}\,(x - a),
+$$
+onde o fator de $(x - a)$ é contínuo em $a$ com valor $-g'(a)/g(a)^2$.
+
+Para a cadeia, seja $\chi$ a função do lema para $g$ no ponto $f(a)$: $g(y) - g(f(a)) = \chi(y)(y - f(a))$, com $\chi$ contínua em $f(a)$ e $\chi(f(a)) = g'(f(a))$. Com $y = f(x)$,
+$$
+g(f(x)) - g(f(a)) = \chi(f(x))\,\big(f(x) - f(a)\big) = \chi(f(x))\,\varphi(x)\,(x - a).
+$$
+A função $x \mapsto \chi(f(x))\varphi(x)$ é contínua em $a$ (composição e produto de funções contínuas em $a$) e vale $g'(f(a)) f'(a)$ em $a$.
+:::
+
+A versão de Carathéodory evita a armadilha da demonstração ingênua da regra da cadeia, que divide por $f(x) - f(a)$ — quantidade que pode se anular para $x$ arbitrariamente perto de $a$.
+
+::: {#thm-mat-g03-inversa}
+## Derivada da função inversa
+Seja $f: I \to \R$ contínua e estritamente monótona num intervalo $I$, diferenciável em $a$ com $f'(a) \neq 0$. Então $f^{-1}$ é diferenciável em $b \defeq f(a)$, e
+$$
+(f^{-1})'(b) = \frac{1}{f'(a)} = \frac{1}{f'(f^{-1}(b))} .
+$$
+:::
+
+::: {.proof}
+Seja $\varphi$ como no @lem-mat-g03-caratheodory. Para $x \neq a$, $\varphi(x) = (f(x) - f(a))/(x - a) \neq 0$, pois $f$ é injetiva; e $\varphi(a) = f'(a) \neq 0$. Para $y \in J = f(I)$, com $x = f^{-1}(y)$, a @eq-mat-g03-caratheodory dá $y - b = \varphi(f^{-1}(y))\,(f^{-1}(y) - a)$, isto é,
+$$
+f^{-1}(y) - f^{-1}(b) = \frac{1}{\varphi(f^{-1}(y))}\,(y - b).
+$$
+Pela @prp-mat-g03-inversa-continua (aplicada a $f$ ou a $-f$), $f^{-1}$ é contínua em $b$; como $\varphi$ é contínua em $a = f^{-1}(b)$ e não se anula, $y \mapsto 1/\varphi(f^{-1}(y))$ é contínua em $b$, com valor $1/f'(a)$. O lema conclui.
+:::
+
+::: {#exm-mat-g03-derivadas}
+## Derivadas usuais
+Funções constantes têm derivada zero e $(x)' = 1$. Pela regra do produto e indução, $(x^n)' = n x^{n-1}$ para $n \in \N$: se vale para $n$, então $(x^{n+1})' = (x^n \cdot x)' = n x^{n-1} \cdot x + x^n = (n+1) x^n$. Pela regra do quociente, $(x^{-n})' = -n x^{-n-1}$ para $x \neq 0$.
+
+Pela @prp-mat-g03-exp, $\exp' = \exp > 0$, e o @thm-mat-g03-inversa dá, para $y > 0$,
+$$
+\log'(y) = \frac{1}{\exp(\log y)} = \frac{1}{y}.
+$$
+Para $x > 0$ e $\alpha \in \R$, $x^\alpha = \exp(\alpha \log x)$ e, pela cadeia, $(x^\alpha)' = \exp(\alpha \log x) \cdot \alpha/x = \alpha x^{\alpha - 1}$. Também pela cadeia, $\big(\log f(x)\big)' = f'(x)/f(x)$ quando $f > 0$: a derivada do logaritmo é a **taxa de variação proporcional** de $f$.
+:::
+
+::: {#exm-mat-g03-capitalizacao}
+## Capitalização contínua
+Para todo $x \in \R$, $\lim_{n\to\infty} (1 + x/n)^n = e^x$. Em particular, com $x = 1$, $\exp(1)$ é o número $e = \lim (1 + 1/n)^n$ da @prp-mat-g02-e.
+
+Para $x = 0$, não há o que provar. Para $x \neq 0$ e $n > \abs{x}$, temos $1 + x/n > 0$ e
+$$
+\Big(1 + \frac{x}{n}\Big)^n = \exp\Big(n \log\Big(1 + \frac{x}{n}\Big)\Big), \qquad n \log\Big(1 + \frac{x}{n}\Big) = x \cdot \frac{\log(1 + h_n) - \log 1}{h_n}, \quad h_n \defeq \frac{x}{n} .
+$$
+Como $h_n \to 0$ e $h_n \neq 0$, o quociente converge para $\log'(1) = 1$ (@thm-mat-g03-sequencial); logo o expoente tende a $x$ e, pela continuidade de $\exp$, $(1 + x/n)^n \to e^x$. Um capital aplicado à taxa anual $i$, capitalizado $n$ vezes ao ano, rende $(1 + i/n)^n$ por real; no limite da capitalização contínua, $e^i$.
+:::
+
+## Fermat, Rolle e o valor médio {#sec-mat-g03-valor-medio}
+
+::: {#def-mat-g03-extremos-locais}
+## Extremos locais
+$f: X \to \R$ tem **máximo local** em $a \in X$ se existe $\delta > 0$ tal que $f(x) \leq f(a)$ para todo $x \in X$ com $\abs{x - a} < \delta$; analogamente, **mínimo local**. Se $f(x) \leq f(a)$ para todo $x \in X$, o máximo é **global**.
+:::
+
+::: {#thm-mat-g03-fermat}
+## Fermat
+Seja $f: I \to \R$ com máximo ou mínimo local num ponto $a$ **interior** ao intervalo $I$. Se $f$ é diferenciável em $a$, então $f'(a) = 0$.
+:::
+
+::: {.proof}
+Suponha máximo local (para mínimo, aplique a $-f$). Para $h \neq 0$ suficientemente pequeno, $a + h \in I$ e $f(a + h) - f(a) \leq 0$. Logo o quociente $(f(a + h) - f(a))/h$ é $\leq 0$ para $h > 0$ e $\geq 0$ para $h < 0$. Tomando $h_n = 1/n$ e $h_n = -1/n$ e passando ao limite (@prp-mat-g02-ordem), $f'(a) \leq 0$ e $f'(a) \geq 0$; portanto $f'(a) = 0$.
+:::
+
+A hipótese de que $a$ é interior é essencial: $f(x) = x$ em $[0, 1]$ tem máximo em $1$, onde $f'(1) = 1$. Em problemas econômicos com restrições de não negatividade, os máximos de fronteira levam às condições de Kuhn–Tucker (@sec-mat-m03). E, como discutido no @sec-mat-g01, a condição $f'(a) = 0$ é necessária, mas não suficiente: $x^3$ tem derivada nula em $0$ sem ter extremo ali.
+
+::: {#thm-mat-g03-rolle}
+## Rolle
+Seja $f$ contínua em $[a, b]$, diferenciável em $(a, b)$, com $f(a) = f(b)$. Então existe $c \in (a, b)$ com $f'(c) = 0$.
+:::
+
+::: {.proof}
+Pelo teorema de Weierstrass, $f$ atinge máximo e mínimo em $[a, b]$. Se ambos são atingidos nas extremidades, então, como $f(a) = f(b)$, máximo e mínimo coincidem, $f$ é constante e $f' = 0$ em todo $(a, b)$. Caso contrário, um deles é atingido em algum $c \in (a, b)$, e o @thm-mat-g03-fermat dá $f'(c) = 0$.
+:::
+
+::: {#thm-mat-g03-valor-medio}
+## Valor médio
+Seja $f$ contínua em $[a, b]$ e diferenciável em $(a, b)$. Então existe $c \in (a, b)$ com
+$$
+f(b) - f(a) = f'(c)\,(b - a).
+$$ {#eq-mat-g03-valor-medio}
+:::
+
+::: {.proof}
+A função $g(x) \defeq f(x) - f(a) - \dfrac{f(b) - f(a)}{b - a}(x - a)$ é contínua em $[a, b]$, diferenciável em $(a, b)$, e $g(a) = g(b) = 0$. Pelo @thm-mat-g03-rolle, existe $c \in (a, b)$ com $0 = g'(c) = f'(c) - \dfrac{f(b) - f(a)}{b - a}$.
+:::
+
+Geometricamente, há um ponto em que a tangente é paralela à secante. O teorema converte informação sobre a derivada — local — em informação sobre a função — global.
+
+::: {#cor-mat-g03-monotonia}
+## Consequências do valor médio
+Seja $f$ contínua num intervalo $I$ e diferenciável no seu interior.
+(a) Se $f' \geq 0$ no interior, $f$ é não decrescente; se $f' > 0$, é estritamente crescente. Analogamente para $f' \leq 0$ e $f' < 0$.
+(b) Se $f' = 0$ no interior, $f$ é constante.
+(c) Se $\abs{f'} \leq K$ no interior, então $\abs{f(x) - f(y)} \leq K \abs{x - y}$ para todos $x, y \in I$.
+:::
+
+::: {.proof}
+Sejam $x < y$ em $I$. Pelo @thm-mat-g03-valor-medio aplicado a $[x, y]$, $f(y) - f(x) = f'(c)(y - x)$ para algum $c \in (x, y)$, que é interior a $I$. Para (a), o sinal de $f(y) - f(x)$ é o de $f'(c)$. Para (b), $f(y) - f(x) = 0$. Para (c), $\abs{f(y) - f(x)} = \abs{f'(c)}\,\abs{y - x} \leq K \abs{y - x}$.
+:::
+
+A recíproca de (a), na versão estrita, é falsa: $x^3$ é estritamente crescente e $(x^3)'(0) = 0$. O item (c) com $K < 1$ é o modo usual de verificar que uma função é uma **contração** (@thm-mat-g02-ponto-fixo; veja o @exr-mat-g03-newton).
+
+::: {#prp-mat-g03-log}
+## Cotas para o logaritmo
+Para todo $x > -1$,
+$$
+\frac{x}{1 + x} \leq \log(1 + x) \leq x,
+$$ {#eq-mat-g03-cotas-log}
+com igualdades somente em $x = 0$. Em particular, $0 \leq x - \log(1 + x) \leq \dfrac{x^2}{1 + x}$.
+:::
+
+::: {.proof}
+Para $x = 0$, os três membros são nulos. Para $x \neq 0$, o @thm-mat-g03-valor-medio aplicado a $t \mapsto \log(1 + t)$ entre $0$ e $x$ dá $\log(1 + x) = x/(1 + c)$ para algum $c$ estritamente entre $0$ e $x$. Se $x > 0$, então $0 < c < x$ e $\frac{1}{1+x} < \frac{1}{1+c} < 1$; multiplicando por $x > 0$, obtemos as desigualdades estritas. Se $-1 < x < 0$, então $x < c < 0$ e $1 < \frac{1}{1+c} < \frac{1}{1+x}$; multiplicando por $x < 0$, as desigualdades se invertem e obtemos $\frac{x}{1+x} < \log(1+x) < x$. A última afirmação segue de $x - \frac{x}{1+x} = \frac{x^2}{1+x}$.
+:::
+
+## A fórmula de Taylor {#sec-mat-g03-taylor}
+
+A derivada aproxima $f$ por uma reta. Derivadas de ordem superior permitem aproximações por polinômios, com controle explícito do erro.
+
+::: {#def-mat-g03-taylor}
+## Polinômio de Taylor
+Se $f$ tem derivadas até a ordem $n$ em $a$, seu **polinômio de Taylor** de ordem $n$ em torno de $a$ é
+$$
+P_n(x) \defeq \sum_{k=0}^n \frac{f^{(k)}(a)}{k!}\,(x - a)^k = f(a) + f'(a)(x - a) + \frac{f''(a)}{2}(x - a)^2 + \dots + \frac{f^{(n)}(a)}{n!}(x - a)^n .
+$$
+É o único polinômio de grau $\leq n$ cujas derivadas em $a$, até a ordem $n$, coincidem com as de $f$.
+:::
+
+::: {#thm-mat-g03-taylor}
+## Taylor com resto de Lagrange
+Seja $f$ com derivadas até a ordem $n + 1$ num intervalo $I$, e $a, x \in I$. Então existe $c$ entre $a$ e $x$ tal que
+$$
+f(x) = P_n(x) + \frac{f^{(n+1)}(c)}{(n+1)!}\,(x - a)^{n+1} .
+$$ {#eq-mat-g03-taylor}
+:::
+
+::: {.proof}
+Se $x = a$, qualquer $c$ serve. Seja $x \neq a$ e defina $M$ pela igualdade $f(x) = P_n(x) + M (x - a)^{n+1}$. Considere
+$$
+g(t) \defeq f(t) - P_n(t) - M (t - a)^{n+1}, \qquad t \in I .
+$$
+Como $P_n^{(k)}(a) = f^{(k)}(a)$ para $k \leq n$ e as $n$ primeiras derivadas de $(t - a)^{n+1}$ se anulam em $a$, temos $g(a) = g'(a) = \dots = g^{(n)}(a) = 0$; e $g(x) = 0$ pela escolha de $M$. Além disso, $g^{(n+1)}(t) = f^{(n+1)}(t) - (n+1)!\,M$, pois $P_n^{(n+1)} = 0$.
+
+Aplicamos Rolle repetidamente (cada $g^{(k)}$ com $k \leq n$ é diferenciável, logo contínua). Como $g(a) = g(x) = 0$, existe $c_1$ estritamente entre $a$ e $x$ com $g'(c_1) = 0$. Como $g'(a) = g'(c_1) = 0$, existe $c_2$ estritamente entre $a$ e $c_1$ com $g''(c_2) = 0$. Prosseguindo, obtemos $c_{n+1}$ entre $a$ e $c_n$ — portanto entre $a$ e $x$ — com $g^{(n+1)}(c_{n+1}) = 0$, isto é, $M = f^{(n+1)}(c_{n+1})/(n+1)!$.
+:::
+
+Com $n = 0$, a fórmula é o teorema do valor médio. O resto mostra que o erro de $P_n$ é da ordem de $\abs{x - a}^{n+1}$: dividir a distância por 10 divide o erro por cerca de $10^{n+1}$.
+
+::: {#exm-mat-g03-series-taylor}
+## A exponencial e o logaritmo como séries
+**Exponencial.** Como todas as derivadas de $\exp$ são $\exp$, o polinômio de Taylor em $0$ é $\sum_{k=0}^n x^k/k!$ e, para algum $c$ entre $0$ e $x$,
+$$
+\Big\lvert e^x - \sum_{k=0}^n \frac{x^k}{k!} \Big\rvert = \frac{e^c\,\abs{x}^{n+1}}{(n+1)!} \leq e^{\abs{x}}\,\frac{\abs{x}^{n+1}}{(n+1)!} .
+$$
+A série $\sum_k \abs{x}^k/k!$ converge pelo teste da razão (a razão é $\abs{x}/(k+1) \to 0$), logo seu termo geral tende a zero (@prp-mat-g02-termo), e o resto também. Portanto $e^x = \sum_{k=0}^\infty x^k/k!$ para todo $x$; em particular, $e = \sum_{k \geq 0} 1/k!$, a série que o laboratório do @sec-mat-g02 usou.
+
+**Logaritmo.** Para $f(t) = \log(1 + t)$, por indução $f^{(k)}(t) = (-1)^{k+1}(k-1)!/(1+t)^k$, logo $f^{(k)}(0)/k! = (-1)^{k+1}/k$. Para $x \in [0, 1]$, o resto satisfaz
+$$
+\Big\lvert \log(1 + x) - \sum_{k=1}^n \frac{(-1)^{k+1} x^k}{k} \Big\rvert = \frac{n!}{(1 + c)^{n+1}} \cdot \frac{x^{n+1}}{(n+1)!} \leq \frac{1}{n+1},
+$$
+pois $c \geq 0$. Com $x = 1$, a série harmônica alternada soma $\log 2$, como anunciado após o @thm-mat-g02-leibniz.
+:::
+
+::: {#prp-mat-g03-segunda-ordem}
+## Condição de segunda ordem
+Seja $f$ duas vezes diferenciável num intervalo aberto $I$, com $f''$ contínua em $a \in I$. Se $f'(a) = 0$ e $f''(a) < 0$, então $f$ tem máximo local estrito em $a$. Se $f'(a) = 0$ e $f''(a) > 0$, mínimo local estrito.
+:::
+
+::: {.proof}
+Pela continuidade de $f''$ em $a$ e pela permanência do sinal, existe $\delta > 0$ tal que $f''(t) < 0$ para $\abs{t - a} < \delta$. Para $0 < \abs{x - a} < \delta$, o @thm-mat-g03-taylor com $n = 1$ dá $c$ entre $a$ e $x$ — logo $\abs{c - a} < \delta$ — com
+$$
+f(x) = f(a) + f'(a)(x - a) + \frac{f''(c)}{2}(x - a)^2 = f(a) + \frac{f''(c)}{2}(x - a)^2 < f(a).
+$$
+O caso de mínimo é análogo.
+:::
+
+**Aproximações logarítmicas.** Com $n = 1$ em torno de $0$, $\log(1 + x) \approx x$, com erro entre $0$ e $x^2/(1+x)$ (@prp-mat-g03-log); com $n = 2$, $\log(1 + x) \approx x - x^2/2$, com erro de ordem $x^3$. É por isso que a diferença de logaritmos $\log Y_t - \log Y_{t-1} = \log(1 + g_t)$ é usada como taxa de crescimento $g_t$: para $g_t = 2\%$, o erro é menor que $0{,}0004/1{,}02 \approx 0{,}04$ ponto percentual. A vantagem dos logaritmos é que eles **somam** o que as taxas **compõem**: como $\log$ transforma produtos em somas,
+$$
+\log \prod_{t=1}^n (1 + x_t) = \sum_{t=1}^n \log(1 + x_t)
+$$
+exatamente. A aproximação comum "a taxa acumulada é a soma das taxas" troca $\log(1 + x_t)$ por $x_t$ e é boa somente quando as taxas são pequenas. Quando são não negativas, ela sempre **subestima** a taxa acumulada:
+
+::: {#prp-mat-g03-acumulada}
+## Taxa acumulada e soma das taxas
+Se $x_1, \dots, x_n \geq 0$, então $\prod_{t=1}^n (1 + x_t) - 1 \geq \sum_{t=1}^n x_t$.
+:::
+
+::: {.proof}
+Por indução em $n$; o caso $n = 1$ é uma igualdade. Sejam $P_n \defeq \prod_{t \leq n} (1 + x_t) \geq 1$ e $S_n \defeq \sum_{t \leq n} x_t$, e suponha $P_n - 1 \geq S_n$. Então $P_{n+1} - 1 = (P_n - 1) + x_{n+1} P_n \geq S_n + x_{n+1} = S_{n+1}$.
+:::
+
+## Concavidade e elasticidade {#sec-mat-g03-concavidade}
+
+::: {#def-mat-g03-concava}
+## Funções côncavas e convexas
+$f: I \to \R$, $I$ um intervalo, é **côncava** se, para todos $x, y \in I$ e $\lambda \in [0, 1]$,
+$$
+f\big(\lambda x + (1 - \lambda) y\big) \geq \lambda f(x) + (1 - \lambda) f(y),
+$$
+e **estritamente côncava** se a desigualdade é estrita sempre que $x \neq y$ e $\lambda \in (0, 1)$. $f$ é (estritamente) **convexa** se $-f$ é (estritamente) côncava.
+:::
+
+A corda entre dois pontos do gráfico de uma função côncava fica abaixo do gráfico. Utilidades côncavas representam aversão ao risco e preferência por suavizar o consumo; funções de produção côncavas, rendimentos marginais decrescentes.
+
+::: {#thm-mat-g03-concavidade}
+## Caracterizações da concavidade
+Seja $f$ diferenciável num intervalo aberto $I$. São equivalentes:
+(a) $f$ é côncava;
+(b) $f(y) \leq f(x) + f'(x)(y - x)$ para todos $x, y \in I$ (o gráfico fica abaixo de cada tangente);
+(c) $f'$ é não crescente em $I$.
+Se $f$ é duas vezes diferenciável em $I$, elas equivalem ainda a (d) $f'' \leq 0$ em $I$.
+:::
+
+::: {.proof}
+Mostramos (a) $\Rightarrow$ (b) $\Rightarrow$ (c) $\Rightarrow$ (a), e depois (c) $\Leftrightarrow$ (d).
+
+Para (a) $\Rightarrow$ (b), sejam $x \neq y$ e $t \in (0, 1)$. A concavidade com $\lambda = 1 - t$ dá $f(x + t(y - x)) \geq f(x) + t\,(f(y) - f(x))$, ou seja,
+$$
+\frac{f(x + t(y - x)) - f(x)}{t\,(y - x)}\,(y - x) \geq f(y) - f(x).
+$$
+Quando $t \to 0^+$, com $h = t(y - x) \to 0$, a fração tende a $f'(x)$, e a desigualdade passa ao limite: $f'(x)(y - x) \geq f(y) - f(x)$.
+
+Para (b) $\Rightarrow$ (c), sejam $x < y$. Por (b), $f(y) \leq f(x) + f'(x)(y - x)$ e $f(x) \leq f(y) + f'(y)(x - y)$. Somando, $0 \leq (f'(x) - f'(y))(y - x)$, e como $y - x > 0$, $f'(x) \geq f'(y)$.
+
+Para (c) $\Rightarrow$ (a), sejam $x < y$, $\lambda \in (0, 1)$ e $z \defeq \lambda x + (1 - \lambda) y \in (x, y)$, de modo que $z - x = (1 - \lambda)(y - x)$ e $y - z = \lambda (y - x)$. Pelo valor médio, existem $c_1 \in (x, z)$ e $c_2 \in (z, y)$ com
+$$
+\frac{f(z) - f(x)}{1 - \lambda} = f'(c_1)(y - x) \geq f'(c_2)(y - x) = \frac{f(y) - f(z)}{\lambda},
+$$
+usando $c_1 < c_2$ e (c). Multiplicando por $\lambda(1 - \lambda) > 0$: $\lambda f(z) - \lambda f(x) \geq (1 - \lambda) f(y) - (1-\lambda) f(z)$, isto é, $f(z) \geq \lambda f(x) + (1 - \lambda) f(y)$. Os casos $x = y$, $\lambda \in \{0, 1\}$ e $x > y$ são imediatos ou simétricos.
+
+Por fim, (d) $\Rightarrow$ (c) é o @cor-mat-g03-monotonia aplicado a $f'$; e, se $f'$ é não crescente, os quocientes $(f'(x + h) - f'(x))/h$ são $\leq 0$, e seu limite $f''(x)$ também.
+:::
+
+Trocando as desigualdades, obtêm-se as caracterizações de funções convexas; com desigualdades estritas, $f'$ estritamente decrescente (em particular, $f'' < 0$) implica concavidade estrita, pelo mesmo argumento.
+
+::: {#cor-mat-g03-maximo-global}
+## Condição suficiente para máximo global
+Seja $f$ côncava e diferenciável num intervalo aberto $I$. Se $f'(x^*) = 0$, então $x^*$ é ponto de máximo global de $f$ em $I$. Se $f$ é estritamente côncava, o máximo é único.
+:::
+
+::: {.proof}
+Por (b) do @thm-mat-g03-concavidade, $f(y) \leq f(x^*) + f'(x^*)(y - x^*) = f(x^*)$ para todo $y \in I$. Se $f$ é estritamente côncava e $x^{**} \neq x^*$ também fosse máximo, o ponto médio daria $f\big(\tfrac{x^* + x^{**}}{2}\big) > \tfrac12 f(x^*) + \tfrac12 f(x^{**}) = f(x^*)$ — contradição.
+:::
+
+Essa é a condição suficiente anunciada no @sec-mat-g01: sob concavidade, a condição de primeira ordem deixa de ser apenas necessária. A versão em várias variáveis está no @sec-mat-g07.
+
+::: {#exm-mat-g03-concavas}
+## Exemplos
+O logaritmo é estritamente côncavo em $(0, \infty)$: $\log''(x) = -1/x^2 < 0$. Daí, com $\lambda = 1/2$, $\log \frac{x + y}{2} \geq \frac{\log x + \log y}{2} = \log\sqrt{xy}$, que é a desigualdade entre as médias aritmética e geométrica, $\frac{x + y}{2} \geq \sqrt{xy}$. A utilidade **CRRA** $u(c) = c^{1 - \gamma}/(1 - \gamma)$, com $\gamma > 0$ e $\gamma \neq 1$, tem $u''(c) = -\gamma c^{-\gamma - 1} < 0$ e é estritamente côncava; o caso $\gamma = 1$ corresponde a $u = \log$. A exponencial é estritamente convexa, e (b) dá $e^x \geq 1 + x$ (@exr-mat-g03-exp).
+:::
+
+::: {#def-mat-g03-elasticidade}
+## Elasticidade
+Seja $f$ diferenciável e positiva num intervalo de números positivos. A **elasticidade** de $f$ em $x$ é
+$$
+\varepsilon_f(x) \defeq \frac{f'(x)\,x}{f(x)} = \frac{\dd \log f(x)}{\dd \log x},
+$$ {#eq-mat-g03-elasticidade}
+a variação percentual de $f$ por variação percentual de $x$, na margem.
+:::
+
+A segunda forma em @eq-mat-g03-elasticidade significa: se $g(u) \defeq \log f(e^u)$, então $g'(\log x) = \varepsilon_f(x)$. De fato, pela regra da cadeia, $g'(u) = \frac{f'(e^u)\,e^u}{f(e^u)}$. A elasticidade não depende das unidades de $x$ e de $f$ — por isso é a medida natural de sensibilidade em economia —, e é por esse motivo que, numa regressão de $\log y$ em $\log x$, o coeficiente é uma elasticidade (@sec-ecm-g01). Uma demanda $D(p) = A p^{-\eta}$ tem elasticidade constante, $\varepsilon_D = -\eta$.
+
+::: {#prp-mat-g03-receita}
+## Receita, elasticidade e a regra de Lerner
+(a) Se $D$ é uma função de demanda diferenciável e positiva e $R(p) \defeq p\,D(p)$ é a receita, então $R'(p) = D(p)\,\big(1 + \varepsilon_D(p)\big)$. Em particular, com $D' < 0$, um aumento de preço eleva a receita se, e somente se, a demanda é **inelástica** ($\abs{\varepsilon_D} < 1$).
+(b) Seja $D$ estritamente decrescente e diferenciável, com $D' \neq 0$, e $P = D^{-1}$ a demanda inversa. Um monopolista com custo $C$ diferenciável que escolhe uma quantidade $q^*$ interior maximizando $P(q)\,q - C(q)$ satisfaz, com $p^* = P(q^*)$,
+$$
+\frac{p^* - C'(q^*)}{p^*} = -\frac{1}{\varepsilon_D(p^*)} .
+$$ {#eq-mat-g03-lerner}
+:::
+
+::: {.proof}
+Para (a), pela regra do produto, $R'(p) = D(p) + p D'(p) = D(p)\big(1 + p D'(p)/D(p)\big)$. Como $D > 0$, o sinal de $R'$ é o de $1 + \varepsilon_D$, positivo se, e somente se, $\varepsilon_D > -1$.
+
+Para (b), pelo @thm-mat-g03-inversa, $P'(q) = 1/D'(P(q))$. A receita $P(q)\,q$ tem derivada (receita marginal)
+$$
+P(q) + q P'(q) = P(q)\Big(1 + \frac{q}{P(q)\,D'(P(q))}\Big) = P(q)\Big(1 + \frac{1}{\varepsilon_D(P(q))}\Big),
+$$
+usando $q = D(P(q))$. Pelo @thm-mat-g03-fermat, no ótimo interior a derivada do lucro se anula: $p^*(1 + 1/\varepsilon_D(p^*)) = C'(q^*)$. Rearranjando, $p^* - C'(q^*) = -p^*/\varepsilon_D(p^*)$, que é a @eq-mat-g03-lerner.
+:::
+
+O **índice de Lerner** à esquerda da @eq-mat-g03-lerner mede o poder de mercado; a equação diz que o monopolista nunca opera no trecho inelástico da demanda (pois $\abs{\varepsilon_D} \leq 1$ tornaria o índice $\geq 1$, ou seja, $C' \leq 0$) e que o markup é tanto maior quanto menos elástica for a demanda.
+
+## Pontes {#sec-mat-g03-pontes}
+
+- **Integração (@sec-mat-g04).** O teorema fundamental do cálculo liga derivada e integral; a exponencial e o logaritmo admitidos na @prp-mat-g03-exp são construídos ali.
+- **Várias variáveis e otimização (@sec-mat-g06, @sec-mat-g07).** Derivadas parciais, gradiente e hessiana generalizam $f'$ e $f''$; Fermat vira "gradiente nulo", a concavidade continua sendo a condição suficiente e, com restrições, surgem os multiplicadores de Lagrange.
+- **Microeconomia (@sec-mic-g01, @sec-mic-g02).** Utilidade marginal, produtividade marginal, custo marginal e elasticidades-preço e renda são derivadas; a regra de Lerner reaparece na teoria da firma.
+- **Existência de equilíbrio (@sec-mat-m01, @sec-mat-m05).** Weierstrass em conjuntos compactos e os teoremas de Brouwer e Kakutani estendem o @thm-mat-g03-weierstrass e o @cor-mat-g03-ponto-fixo a muitas dimensões.
+- **Métodos numéricos (@sec-cmp-m01).** Bisseção e Newton resolvem $f(x) = 0$; a fórmula de Taylor explica o erro da diferenciação numérica e a convergência quadrática de Newton.
+- **Probabilidade (@sec-est-g02).** A densidade de uma variável contínua é a derivada da sua função de distribuição.
+- **Renda fixa (@sec-fin-g02).** Duration e convexidade são a primeira e a segunda derivadas (normalizadas) do preço de um título em relação à taxa — uma expansão de Taylor de segunda ordem.
+- **Macroeconomia (@sec-mac-g01, @sec-mac-g04).** Taxas de crescimento e inflação calculadas por diferenças de logaritmos; a aplicação abaixo mostra quando a aproximação falha.
+
+## Interativo {#sec-mat-g03-interativo}
+
+::: {.content-visible when-format="html"}
+**Da secante à tangente.** Escolha uma função e um ponto $a$; reduza $h$ e veja a inclinação da secante (âmbar) aproximar-se da derivada, a inclinação da tangente (vinho).
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof funcEscolhida = seletor("função", funcoes.map(f => f.nome), {valor: funcoes[0].nome})
+viewof aTan = controle("ponto a", [0.5, 3], {valor: 1, passo: 0.05, casas: 2})
+viewof hTan = controle("incremento h", [-1, 1], {valor: 0.8, passo: 0.01, casas: 2})
+```
+
+```{ojs}
+//| echo: false
+md`${Math.abs(hTan) < 1e-9
+  ? "Com h = 0 a secante não está definida: a tangente é o seu limite."
+  : `Inclinação da secante: **${inclSec.toFixed(4).replace(".", ",")}**; derivada f'(a): **${func.df(aTan).toFixed(4).replace(".", ",")}**; diferença: ${(inclSec - func.df(aTan)).toFixed(4).replace(".", ",")}.`}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 340, grid: true,
+  x: {domain: [0.1, 4], label: "x"}, y: {label: "f(x)", domain: func.ydom},
+  marks: [
+    Plot.line(curvaTan, {x: "x", y: "y", stroke: "#2F5D8A", strokeWidth: 2, clip: true}),
+    Plot.line(retaTangente, {x: "x", y: "y", stroke: "#8C2F39", clip: true}),
+    Math.abs(hTan) > 1e-9 ? Plot.line(retaSecante, {x: "x", y: "y", stroke: "#B7791F", strokeDasharray: "5,3", clip: true}) : null,
+    Plot.dot([{x: aTan, y: func.f(aTan)}], {x: "x", y: "y", r: 4, fill: "#8C2F39"}),
+    Math.abs(hTan) > 1e-9 ? Plot.dot([{x: aTan + hTan, y: func.f(aTan + hTan)}], {x: "x", y: "y", r: 4, fill: "#B7791F"}) : null
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+funcoes = [
+  {nome: "f(x) = x²", f: x => x * x, df: x => 2 * x, ydom: [-2, 16]},
+  {nome: "f(x) = log x", f: x => Math.log(x), df: x => 1 / x, ydom: [-3, 2]},
+  {nome: "f(x) = √x", f: x => Math.sqrt(x), df: x => 0.5 / Math.sqrt(x), ydom: [-0.5, 2.5]},
+  {nome: "f(x) = x³ − 3x", f: x => x ** 3 - 3 * x, df: x => 3 * x * x - 3, ydom: [-5, 15]}
+]
+func = funcoes.find(f => f.nome === funcEscolhida)
+inclSec = (func.f(aTan + hTan) - func.f(aTan)) / hTan
+gradeTan = d3.range(0.1, 4.001, 0.02)
+curvaTan = gradeTan.filter(x => Number.isFinite(func.f(x))).map(x => ({x, y: func.f(x)}))
+retaTangente = gradeTan.map(x => ({x, y: func.f(aTan) + func.df(aTan) * (x - aTan)}))
+retaSecante = gradeTan.map(x => ({x, y: func.f(aTan) + inclSec * (x - aTan)}))
+```
+:::
+
+**Polinômios de Taylor.** Aumente a ordem $n$ e compare o polinômio (vinho) com a função (azul). Para a exponencial, a aproximação melhora em toda parte; para $\log(1 + x)$, ela melhora em $(-1, 1]$ mas **piora** para $x > 1$ — a série do @exm-mat-g03-series-taylor só converge até $x = 1$.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof taylorEscolhida = seletor("função", taylorFuncs.map(f => f.nome), {valor: taylorFuncs[0].nome})
+viewof ordemTaylor = controle("ordem n", [1, 12], {valor: 2, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 320, grid: true,
+  x: {label: "x", domain: tf.dom}, y: {label: "f(x) e Pₙ(x)", domain: tf.ydom},
+  marks: [
+    Plot.ruleX([0], {stroke: "#9AA5B1"}),
+    Plot.line(curvaTaylor, {x: "x", y: "f", stroke: "#2F5D8A", strokeWidth: 2, clip: true}),
+    Plot.line(curvaTaylor, {x: "x", y: "p", stroke: "#8C2F39", clip: true})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+md`Erro do polinômio de ordem ${ordemTaylor} em x = ${tf.xteste.toString().replace(".", ",")}: **${fmtErro(Math.abs(tf.f(tf.xteste) - tf.p(tf.xteste, ordemTaylor)))}**.`
+```
+
+```{ojs}
+//| echo: false
+fmtErro = e => (e >= 1e-3 ? e.toFixed(4) : e.toExponential(2)).replace(".", ",")
+fatorial = k => d3.range(1, k + 1).reduce((a, b) => a * b, 1)
+taylorFuncs = [
+  {nome: "exponencial em torno de 0", f: x => Math.exp(x), dom: [-3, 3], ydom: [-2, 20], xteste: 2,
+   p: (x, n) => d3.sum(d3.range(0, n + 1), k => x ** k / fatorial(k))},
+  {nome: "log(1 + x) em torno de 0", f: x => Math.log(1 + x), dom: [-0.95, 2], ydom: [-3, 2], xteste: 0.5,
+   p: (x, n) => d3.sum(d3.range(1, n + 1), k => (-1) ** (k + 1) * x ** k / k)}
+]
+tf = taylorFuncs.find(f => f.nome === taylorEscolhida)
+curvaTaylor = d3.range(tf.dom[0], tf.dom[1] + 1e-9, (tf.dom[1] - tf.dom[0]) / 300)
+  .map(x => ({x, f: tf.f(x), p: tf.p(x, ordemTaylor)}))
+```
+:::
+
+**Elasticidade e receita.** Com a demanda linear $D(p) = 10 - p$, a receita $R(p) = p(10 - p)$ cresce enquanto a demanda é inelástica e decresce quando é elástica; o máximo ocorre onde a elasticidade é $-1$ (@prp-mat-g03-receita).
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof precoEl = controle("preço p", [0.5, 9.5], {valor: 3, passo: 0.1, casas: 1})
+```
+
+```{ojs}
+//| echo: false
+md`Quantidade D(p) = ${(10 - precoEl).toFixed(1).replace(".", ",")}; elasticidade ε = −p/(10 − p) = **${(-precoEl / (10 - precoEl)).toFixed(2).replace(".", ",")}**; receita R = ${(precoEl * (10 - precoEl)).toFixed(2).replace(".", ",")}. ${precoEl < 5 - 1e-9 ? "Demanda inelástica: subir o preço aumenta a receita." : (precoEl > 5 + 1e-9 ? "Demanda elástica: subir o preço reduz a receita." : "Elasticidade unitária: a receita é máxima.")}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "preço p", domain: [0, 10]}, y: {label: "receita R(p)", domain: [0, 26]},
+  marks: [
+    Plot.line(d3.range(0, 10.001, 0.05).map(p => ({p, r: p * (10 - p)})), {x: "p", y: "r", stroke: "#2F5D8A", strokeWidth: 2}),
+    Plot.ruleX([5], {stroke: "#9AA5B1", strokeDasharray: "4,3"}),
+    Plot.line([0, 10].map(p => ({p, r: precoEl * (10 - precoEl) + (10 - 2 * precoEl) * (p - precoEl)})), {x: "p", y: "r", stroke: "#8C2F39", clip: true}),
+    Plot.dot([{p: precoEl, r: precoEl * (10 - precoEl)}], {x: "p", y: "r", r: 5, fill: "#8C2F39"})
+  ]
+})
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os três interativos desta seção — secantes e tangente, polinômios de Taylor e a relação entre elasticidade e receita — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-mat-g03-laboratorio}
+
+### Derivadas numéricas e o erro de Taylor
+
+A derivada é um limite; no computador, usamos um $h$ pequeno. Pela fórmula de Taylor, a **diferença progressiva** $(f(x+h) - f(x))/h$ erra por $\frac{h}{2} f''(c)$ — erro de ordem $h$ —, e a **diferença central** $(f(x+h) - f(x-h))/(2h)$, de ordem $h^2$ (os termos de ordem $h^2$ das duas expansões se cancelam). Mas $h$ pequeno demais amplifica o arredondamento da aritmética de ponto flutuante, de ordem $10^{-16}/h$.
+
+```{python}
+import math
+
+x0, exato = 1.0, math.exp(1.0)
+print(f"{'h':>8} {'erro progressiva':>17} {'erro central':>13}")
+for k in [1, 2, 4, 6, 8, 10, 12]:
+    h = 10.0 ** (-k)
+    prog = (math.exp(x0 + h) - math.exp(x0)) / h
+    cent = (math.exp(x0 + h) - math.exp(x0 - h)) / (2 * h)
+    print(f"{h:>8.0e} {abs(prog - exato):>17.2e} {abs(cent - exato):>13.2e}")
+```
+
+O erro da diferença progressiva cai como $h$ até $h \approx 10^{-8}$ e depois volta a crescer; o da central cai como $h^2$ até $h$ entre $10^{-6}$ e $10^{-5}$. O ponto ótimo equilibra o erro de truncamento (Taylor) e o de arredondamento — um tema do @sec-cmp-m01.
+
+### Bisseção: um preço de equilíbrio
+
+Com demanda $D(p) = 10\,p^{-0{,}5}$ e oferta $S(p) = 2\,p^{0{,}8}$, o excesso de demanda $z(p) = D(p) - S(p)$ é contínuo e estritamente decrescente, positivo em $p = 1$ e negativo em $p = 10$. A @prp-mat-g03-equilibrio garante um único equilíbrio, que a bisseção encontra sem fórmula; aqui, a fórmula existe para conferir: $p^* = 5^{1/1{,}3}$.
+
+```{python}
+def z(p):
+    return 10 * p ** -0.5 - 2 * p ** 0.8
+
+def bissecao(f, a, b, tol=1e-10):
+    """Supoe f contínua com f(a) > 0 > f(b)."""
+    passos = 0
+    while b - a > tol:
+        m = (a + b) / 2
+        if f(m) > 0:
+            a = m
+        else:
+            b = m
+        passos += 1
+    return (a + b) / 2, passos
+
+p_est, passos = bissecao(z, 1.0, 10.0)
+print(f"preco de equilibrio: {p_est:.10f}  ({passos} passos)")
+print(f"formula fechada:     {5 ** (1 / 1.3):.10f}")
+print(f"quantidade: D = {10 * p_est ** -0.5:.6f}, S = {2 * p_est ** 0.8:.6f}")
+```
+
+Cada passo divide o intervalo por 2: para reduzir uma incerteza inicial de 9 a $10^{-10}$, bastam $\lceil \log_2(9 \cdot 10^{10}) \rceil = 37$ passos.
+
+### Aproximações do logaritmo
+
+Comparamos $\log(1 + x)$ com as aproximações de primeira e segunda ordem e com a cota da @prp-mat-g03-log.
+
+```{python}
+print(f"{'x':>6} {'log(1+x)':>10} {'erro de x':>10} {'cota x^2/(1+x)':>15} {'erro de x - x^2/2':>18}")
+for x in [0.005, 0.01, 0.05, 0.10, 0.25, 0.50, 0.80]:
+    lx = math.log1p(x)
+    print(f"{x:>6.3f} {lx:>10.6f} {x - lx:>10.2e} {x**2 / (1 + x):>15.2e} {abs(x - x**2 / 2 - lx):>18.2e}")
+```
+
+Para taxas mensais típicas de hoje (menos de 1%), o erro de usar $x$ no lugar de $\log(1 + x)$ é da ordem de milésimos de ponto percentual. Para $x = 50\%$, o erro passa de 9 pontos percentuais.
+
+## Aplicação: inflação mensal e a aproximação logarítmica no Brasil {#sec-mat-g03-aplicacao}
+
+A série 433 do SGS traz a variação mensal do IPCA desde 1980. Comparamos, para cada ano, a inflação **acumulada exata** $\prod_t (1 + \pi_t) - 1 = \exp\big(\sum_t \log(1 + \pi_t)\big) - 1$ com a **soma simples** $\sum_t \pi_t$ das doze taxas mensais. Pela @prp-mat-g03-acumulada, a soma subestima a inflação do ano; pela @prp-mat-g03-log, o erro mês a mês é pequeno quando as taxas são pequenas — e enorme quando não são.
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import Markdown
+from formacao import dados, graficos
+
+graficos.estilo()
+try:
+    ipca = dados.sgs("ipca", inicio="1980-01-01")   # variação % mensal
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponíveis neste ambiente de renderização ({erro}).")
+    print("Renderize com acesso à internet para baixar a série e preencher a cache.")
+
+if disponivel:
+    pi = ipca / 100
+    por_ano = pi.groupby(pi.index.year)
+    anual = pd.DataFrame({
+        "meses": por_ano.size(),
+        "exata": 100 * por_ano.apply(lambda v: np.prod(1 + v) - 1),
+        "via_log": 100 * por_ano.apply(lambda v: np.expm1(np.log1p(v).sum())),
+        "soma": 100 * por_ano.sum(),
+    })
+    anual = anual[anual["meses"] == 12].drop(columns="meses")
+    print(anual.loc[[a for a in (1985, 1989, 1993, 1995, 2002, 2015, 2023) if a in anual.index]].round(1))
+```
+
+```{python}
+if disponivel:
+    br = lambda v, d: f"{v:,.{d}f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    pior = anual["exata"].idxmax()
+    recente = anual.loc[anual.index >= 2000]
+    gap_rec = (recente["exata"] - recente["soma"]).max()
+    mes_max = pi.idxmax()
+    resumo = (
+        f"A identidade exata e a conta via logaritmos coincidem em todos os anos (diferença máxima de "
+        f"{(anual['exata'] - anual['via_log']).abs().max():.0e} p.p., arredondamento). No pior ano da série, "
+        f"{pior}, a inflação acumulada foi de {br(anual.loc[pior, 'exata'], 0)}%, mas a soma das taxas "
+        f"mensais dá apenas {br(anual.loc[pior, 'soma'], 0)}%. A maior taxa mensal, "
+        f"{br(100 * pi.max(), 1)}% em {mes_max.month:02d}/{mes_max.year}, tem logaritmo "
+        f"{br(100 * np.log1p(pi.max()), 1)}%: um erro de "
+        f"{br(100 * (pi.max() - np.log1p(pi.max())), 1)} p.p. num único mês. "
+        f"Desde 2000, o maior erro anual da soma simples foi de {br(gap_rec, 2)} p.p."
+    )
+
+    fig, ax = plt.subplots()
+    ax.plot(anual.index, anual["exata"], color=graficos.PALETA["vinho"], lw=2,
+            label="acumulada exata")
+    ax.plot(anual.index, anual["soma"], color=graficos.PALETA["azul"], lw=1.5, ls="--",
+            label="soma das taxas mensais")
+    ax.set_yscale("log")
+    ax.set_xlabel("ano")
+    ax.set_ylabel("inflação no ano (%, escala log)")
+    ax.legend()
+    graficos.fonte(ax, "IBGE (IPCA), via SGS/BCB, série 433.")
+    plt.show()
+else:
+    resumo = "*(Os resultados aparecem quando o capítulo é renderizado com acesso aos dados.)*"
+Markdown(resumo)
+```
+
+**Como ler o resultado.** Depois do Plano Real, e sobretudo a partir dos anos 2000, as curvas praticamente se confundem: com inflação mensal abaixo de 1%, somar taxas é uma aproximação excelente, e a diferença de logaritmos é, para todos os fins práticos, a taxa de variação. Entre 1980 e 1994, com taxas mensais de vários pontos percentuais — e de dezenas, no fim da década de 1980 —, a curvatura do logaritmo deixa de ser desprezível e a soma subestima a inflação do ano por uma margem enorme. Duas lições gerais: (i) aproximações de primeira ordem são válidas **perto do ponto de expansão**, e o termo de segunda ordem diz quando se está longe dele; (ii) quando as variações são grandes, trabalhe com logaritmos — que somam exatamente o que as taxas compõem — e só converta para taxas no fim. A inflação brasileira e suas consequências são estudadas no @sec-mac-g04.
+
+## Exercícios resolvidos {#sec-mat-g03-exercicios}
+
+::: {#exr-mat-g03-epsilon-delta}
+Mostre, pela definição, que $\lim_{x \to 2} x^2 = 4$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\abs{x^2 - 4} = \abs{x - 2}\,\abs{x + 2}$. Se $\abs{x - 2} < 1$, então $1 < x < 3$ e $\abs{x + 2} < 5$. Dado $\varepsilon > 0$, tome $\delta \defeq \min\{1, \varepsilon/5\}$: se $0 < \abs{x - 2} < \delta$, então $\abs{x^2 - 4} < 5 \cdot \varepsilon/5 = \varepsilon$. O padrão é o mesmo do @exr-mat-g02-epsilon-n: limitar primeiro o fator "ruim" ($\abs{x+2}$) restringindo $x$ a uma vizinhança fixa, e depois escolher $\delta$.
+:::
+
+::: {#exr-mat-g03-racionais}
+Sejam $f, g: \R \to \R$ contínuas com $f(q) = g(q)$ para todo $q \in \Q$. Mostre que $f = g$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $a \in \R$. Pela densidade de $\Q$ (@thm-mat-g02-densidade), para cada $n$ existe $q_n \in \Q$ com $a < q_n < a + 1/n$; logo $q_n \to a$. Pela continuidade (@prp-mat-g03-continuidade-sequencial), $f(a) = \lim f(q_n) = \lim g(q_n) = g(a)$. Assim, uma função contínua fica determinada pelos seus valores nos racionais — o que é, por exemplo, a razão pela qual basta conhecer $a^q$ para $q$ racional para que exista no máximo uma extensão contínua de $q \mapsto a^q$ a todo $\R$.
+:::
+
+::: {#exr-mat-g03-grau-impar}
+Mostre que todo polinômio de grau ímpar tem pelo menos uma raiz real.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Dividindo pelo coeficiente líder, podemos supor $p(x) = x^n + a_{n-1}x^{n-1} + \dots + a_0$ com $n$ ímpar. Para $x \neq 0$, $p(x) = x^n\big(1 + r(x)\big)$ com $r(x) \defeq a_{n-1}/x + \dots + a_0/x^n$. Seja $M \defeq \max\{1, 2n\abs{a_{n-1}}, \dots, 2n\abs{a_0}\}$. Para $\abs{x} \geq M$, cada termo de $r(x)$ tem valor absoluto $\leq \abs{a_j}/\abs{x} \leq 1/(2n)$, logo $\abs{r(x)} \leq 1/2$ e $1 + r(x) \geq 1/2 > 0$. Como $n$ é ímpar, $p(M) > 0 > p(-M)$, e o @thm-mat-g03-tvi dá uma raiz em $(-M, M)$. Para grau par, o argumento falha — e $x^2 + 1$ não tem raiz real.
+:::
+
+::: {#exr-mat-g03-equilibrio}
+Com demanda $D(p) = A p^{-\varepsilon}$ e oferta $S(p) = B p^{\eta}$, $A, B, \varepsilon, \eta > 0$, mostre, sem resolver a equação, que existe um único preço de equilíbrio em $(0, \infty)$; depois, encontre-o.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+O excesso de demanda $z(p) = A p^{-\varepsilon} - B p^{\eta}$ é contínuo e estritamente decrescente em $(0, \infty)$, como diferença de uma função estritamente decrescente e de uma estritamente crescente (@exm-mat-g03-derivadas e @cor-mat-g03-monotonia: $z'(p) = -\varepsilon A p^{-\varepsilon - 1} - \eta B p^{\eta - 1} < 0$). Quando $p \to 0^+$, $A p^{-\varepsilon} \to +\infty$ e $B p^\eta \to 0$; quando $p \to +\infty$, o contrário. Logo existem $p_0 < p_1$ com $z(p_0) > 0 > z(p_1)$, e a @prp-mat-g03-equilibrio garante um único $p^*$. Resolvendo, $A p^{-\varepsilon} = B p^\eta \iff p^{\varepsilon + \eta} = A/B$, isto é, $p^* = (A/B)^{1/(\varepsilon + \eta)}$. O laboratório confirma o caso $A = 10$, $B = 2$, $\varepsilon = 0{,}5$, $\eta = 0{,}8$.
+:::
+
+::: {#exr-mat-g03-exp}
+Mostre que $e^x \geq 1 + x$ para todo $x \in \R$, com igualdade somente em $x = 0$. Conclua que $\log y \leq y - 1$ para todo $y > 0$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $h(x) \defeq e^x - 1 - x$, com $h'(x) = e^x - 1$. Como $\exp$ é estritamente crescente e $e^0 = 1$, $h' < 0$ em $(-\infty, 0)$ e $h' > 0$ em $(0, \infty)$; pelo @cor-mat-g03-monotonia, $h$ é estritamente decrescente em $(-\infty, 0]$ e estritamente crescente em $[0, \infty)$, logo $h(x) > h(0) = 0$ para $x \neq 0$. Com $x = \log y$, obtemos $y \geq 1 + \log y$. (Alternativamente: $\exp$ é convexa, e $1 + x$ é a sua tangente em $0$; veja o @thm-mat-g03-concavidade.)
+:::
+
+::: {#exr-mat-g03-newton}
+**Newton como contração.** Seja $g(x) = \frac12\big(x + 2/x\big)$, a iteração do @exr-mat-g02-babilonio. (a) Mostre que $g$ leva $[1, 2]$ em $[1, 2]$ e que $\abs{g(x) - g(y)} \leq \frac12\abs{x - y}$ nesse intervalo. (b) Use a fórmula de Taylor para mostrar que, a partir de $x_1 \in [1,2]$, $\abs{x_{n+1} - \sqrt 2} \leq \abs{x_n - \sqrt 2}^2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para (a), pelo @exr-mat-g02-babilonio, $g(x)^2 - 2 = \frac14(x - 2/x)^2 \geq 0$, logo $g(x) \geq \sqrt 2 > 1$. Além disso, $g(x) - \frac32 = \frac{x^2 - 3x + 2}{2x} = \frac{(x-1)(x-2)}{2x} \leq 0$ em $[1, 2]$. Assim $g([1,2]) \subseteq [\sqrt 2, 3/2] \subseteq [1, 2]$. Como $g'(x) = \frac12 - \frac{1}{x^2}$ e $\frac{1}{x^2} \in [\frac14, 1]$, temos $g'(x) \in [-\frac12, \frac14]$, e o @cor-mat-g03-monotonia (c) dá a cota com $K = 1/2$. A demonstração do @thm-mat-g02-ponto-fixo vale sem mudanças para $g: [1,2] \to [1,2]$ (as iteradas ficam em $[1,2]$, e o limite também, pela @prp-mat-g02-ordem); logo $x_n \to \sqrt 2$ com erro $\leq 2^{-n} \cdot$ constante.
+
+Para (b), a convergência é muito mais rápida do que $2^{-n}$, porque $g'(\sqrt 2) = \frac12 - \frac12 = 0$. Pelo @thm-mat-g03-taylor com $n = 1$ em torno de $\sqrt 2$, $g(x) = g(\sqrt 2) + g'(\sqrt 2)(x - \sqrt 2) + \frac{g''(c)}{2}(x - \sqrt 2)^2$, com $g''(c) = 2/c^3 \in (0, 2]$ para $c \in [1, 2]$. Como $g(\sqrt 2) = \sqrt 2$, obtemos $\abs{x_{n+1} - \sqrt 2} \leq \abs{x_n - \sqrt 2}^2$: o número de casas decimais corretas praticamente dobra a cada passo (**convergência quadrática** do método de Newton, @sec-cmp-m01).
+:::
+
+::: {#exr-mat-g03-raiz}
+Use o polinômio de Taylor de ordem 2 de $f(x) = \sqrt{1 + x}$ em torno de $0$ para aproximar $\sqrt{1{,}1}$, e dê uma cota para o erro.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$f'(x) = \frac12(1+x)^{-1/2}$, $f''(x) = -\frac14(1+x)^{-3/2}$, $f'''(x) = \frac38(1+x)^{-5/2}$. Logo $P_2(x) = 1 + \frac{x}{2} - \frac{x^2}{8}$ e $P_2(0{,}1) = 1 + 0{,}05 - 0{,}00125 = 1{,}04875$. Pelo @thm-mat-g03-taylor, o erro é $\frac{f'''(c)}{6}\,x^3$ com $c \in (0, 0{,}1)$; como $f'''(c) \leq \frac38$, o erro está entre $0$ e $\frac{3}{48}(0{,}1)^3 = 6{,}25 \times 10^{-5}$. De fato, $\sqrt{1{,}1} = 1{,}0488088\ldots$, e o erro é $5{,}9 \times 10^{-5}$.
+:::
+
+::: {#exr-mat-g03-receita-linear}
+Com demanda linear $D(p) = a - bp$, $a, b > 0$, $0 < p < a/b$: calcule a elasticidade, mostre que a receita é máxima em $p = a/(2b)$ e que nesse ponto $\varepsilon_D = -1$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\varepsilon_D(p) = \frac{-b\,p}{a - bp}$, que vai de $0$ (em $p \to 0$) a $-\infty$ (em $p \to a/b$): numa reta, a elasticidade **não** é constante. A receita $R(p) = ap - bp^2$ é estritamente côncava ($R'' = -2b < 0$), e $R'(p) = a - 2bp = 0$ em $p^* = a/(2b)$, que é o máximo global pelo @cor-mat-g03-maximo-global. Nesse ponto, $\varepsilon_D = -\frac{b \cdot a/(2b)}{a - a/2} = -1$, como prevê a @prp-mat-g03-receita: $R'(p) = D(p)(1 + \varepsilon_D(p))$ só se anula onde a elasticidade é unitária.
+:::
+
+::: {#exr-mat-g03-duration}
+**Duration.** Para um título de preço $P(i)$, define-se a *duration* $\mathcal D \defeq -P'(i)\,(1 + i)/P(i)$, de modo que $\Delta P/P \approx -\mathcal D\,\Delta i/(1+i)$. Calcule $\mathcal D$ para (a) um título que paga 1 em $T$ períodos, $P(i) = (1 + i)^{-T}$, e (b) uma perpetuidade, $P(i) = c/i$. (c) Com $i = 10\%$, estime pela duration a variação percentual do preço da perpetuidade se a taxa subir para $11\%$, e compare com o valor exato.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para (a), $P'(i) = -T(1+i)^{-T-1}$, logo $\mathcal D = T(1+i)^{-T-1}(1+i)/(1+i)^{-T} = T$: a duration de um título de cupom zero é o seu prazo. Para (b), $P'(i) = -c/i^2$, logo $\mathcal D = \frac{c}{i^2}\cdot\frac{1+i}{c/i} = \frac{1+i}{i}$; com $i = 10\%$, $\mathcal D = 11$. Para (c), a aproximação de primeira ordem dá $\Delta P/P \approx -11 \times 0{,}01/1{,}1 = -10\%$; o valor exato é $\frac{c/0{,}11}{c/0{,}10} - 1 = -9{,}09\%$. A diferença vem do termo de segunda ordem: $P$ é convexa em $i$, e a **convexidade** (@sec-fin-g02) corrige a aproximação.
+:::
+
+## Flashcards {#sec-mat-g03-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a definição ε–δ de $\lim_{x \to a} f(x) = L$?
+Para todo $\varepsilon > 0$ existe $\delta > 0$ tal que $0 < \abs{x - a} < \delta$ (com $x$ no domínio) implica $\abs{f(x) - L} < \varepsilon$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se caracteriza o limite de uma função por sequências?
+$\lim_{x\to a} f(x) = L$ se, e somente se, $f(x_n) \to L$ para toda sequência $x_n \to a$ com $x_n \neq a$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema do valor intermediário?
+Se $f$ é contínua em $[a, b]$ e $c$ está estritamente entre $f(a)$ e $f(b)$, existe $x \in (a, b)$ com $f(x) = c$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que uma função contínua de $[a, b]$ em $[a, b]$ tem ponto fixo?
+Porque $h(x) = g(x) - x$ é contínua com $h(a) \geq 0 \geq h(b)$; o valor intermediário dá um zero de $h$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que afirma o teorema de Weierstrass, e quais hipóteses são essenciais?
+Uma função contínua num intervalo fechado e limitado atinge máximo e mínimo. Domínio aberto, ilimitado ou função descontínua podem fazer o ótimo não ser atingido.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Diferenciável implica contínua? E a recíproca?
+Sim: diferenciável em $a$ implica contínua em $a$. A recíproca é falsa: $\abs{x}$ é contínua e não é diferenciável em $0$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a regra da cadeia, e qual a derivada da inversa?
+$(g \circ f)'(a) = g'(f(a))\,f'(a)$; se $f'(a) \neq 0$, $(f^{-1})'(f(a)) = 1/f'(a)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema de Fermat?
+Se $f$ é diferenciável num ponto interior $a$ de máximo ou mínimo local, então $f'(a) = 0$. A condição é necessária, não suficiente ($x^3$ em $0$).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema do valor médio?
+Se $f$ é contínua em $[a, b]$ e diferenciável em $(a, b)$, existe $c \in (a,b)$ com $f(b) - f(a) = f'(c)(b - a)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a fórmula de Taylor com resto de Lagrange?
+$f(x) = \sum_{k=0}^n \frac{f^{(k)}(a)}{k!}(x-a)^k + \frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}$, para algum $c$ entre $a$ e $x$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quão boa é a aproximação $\log(1 + x) \approx x$?
+Para $x > -1$, $\frac{x}{1+x} \leq \log(1+x) \leq x$; o erro está entre $0$ e $\frac{x^2}{1+x}$ — desprezível para taxas pequenas, grande para taxas altas.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se caracteriza uma função côncava diferenciável?
+Equivalentemente: o gráfico fica abaixo de cada tangente; $f'$ é não crescente; ou (se duas vezes diferenciável) $f'' \leq 0$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando $f'(x^*) = 0$ garante máximo global?
+Quando $f$ é côncava e diferenciável num intervalo aberto; se for estritamente côncava, o máximo é único.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a relação entre receita e elasticidade?
+$R'(p) = D(p)(1 + \varepsilon_D)$: subir o preço aumenta a receita se, e somente se, a demanda é inelástica; o monopolista satisfaz $(p - C')/p = -1/\varepsilon_D$.
+:::
+
+## Ficha-resumo {#sec-mat-g03-ficha}
+
+::: {.ficha-resumo}
+**Limites.** $\lim_{x\to a} f(x) = L \iff \forall\varepsilon\ \exists\delta: 0 < \abs{x-a} < \delta \Rightarrow \abs{f(x) - L} < \varepsilon \iff f(x_n) \to L$ para toda $x_n \to a$, $x_n \neq a$. Herdam as regras de sequências.
+
+**Continuidade.** $f$ contínua em $a \iff x_n \to a \Rightarrow f(x_n) \to f(a)$. Somas, produtos, quocientes e composições preservam continuidade.
+
+**Teoremas em $[a, b]$.** Valor intermediário (existência de zeros, de equilíbrio e, com $g(x) - x$, de ponto fixo); Weierstrass (máximo e mínimo atingidos). Contínua e estritamente monótona $\Rightarrow$ inversa contínua.
+
+**Derivada.** $f'(a) = \lim_{h\to 0} \frac{f(a+h) - f(a)}{h}$; $f(x) - f(a) = \varphi(x)(x - a)$ com $\varphi$ contínua em $a$. Diferenciável $\Rightarrow$ contínua. Produto, quociente, cadeia $(g\circ f)' = g'(f)\,f'$, inversa $(f^{-1})' = 1/f'(f^{-1})$. $(x^\alpha)' = \alpha x^{\alpha - 1}$, $\exp' = \exp$, $\log' = 1/x$; $(1 + x/n)^n \to e^x$.
+
+**Valor médio.** Fermat (extremo interior $\Rightarrow f' = 0$) $\Rightarrow$ Rolle $\Rightarrow f(b) - f(a) = f'(c)(b-a)$. Sinal de $f'$ dá monotonia; $\abs{f'} \leq K$ dá $\abs{f(x) - f(y)} \leq K\abs{x - y}$.
+
+**Taylor.** $f(x) = P_n(x) + \frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}$. $e^x = \sum x^k/k!$; $\log 2 = 1 - \frac12 + \frac13 - \cdots$. $f' = 0, f'' < 0 \Rightarrow$ máximo local estrito. $\frac{x}{1+x} \leq \log(1+x) \leq x$; com $x_t \geq 0$, $\prod(1+x_t) - 1 \geq \sum x_t$.
+
+**Concavidade.** Côncava $\iff f(y) \leq f(x) + f'(x)(y-x) \iff f'$ não crescente $\iff f'' \leq 0$. Côncava e $f'(x^*) = 0 \Rightarrow$ máximo global.
+
+**Elasticidade.** $\varepsilon_f = f'x/f = \dd\log f/\dd\log x$. $R' = D(1 + \varepsilon_D)$; Lerner: $(p - C')/p = -1/\varepsilon_D$.
+:::
+
+## Notas bibliográficas {#sec-mat-g03-notas}
+
+Os capítulos 6 a 9 de @lima1989 tratam limites, continuidade, derivadas e a fórmula de Taylor com o rigor deste capítulo, e são a leitura recomendada para aprofundar cada seção. A formulação da derivada pela função $\varphi$ do @lem-mat-g03-caratheodory, devida a Carathéodory, simplifica as regras do produto, da cadeia e da inversa; o capítulo 5 de @rudin1976 usa uma ideia semelhante na regra da cadeia. @simon1994 (capítulos 2 a 5) e @sydsaeter2016 (capítulos sobre derivação e suas aplicações) apresentam o mesmo conteúdo com foco econômico — elasticidades, receita marginal, concavidade, aproximações — e com muitos exercícios; são a leitura recomendada para treinar o cálculo. Para a construção da exponencial e do logaritmo, veja o @sec-mat-g04.

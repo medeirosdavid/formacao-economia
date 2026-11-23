@@ -2,7 +2,7 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAT-G02`
+[Graduação]{.nivel .nivel-G} · [rascunho]{.status} · `MAT-G02`
 
 **Pré-requisitos:** @sec-mat-g01 (*Lógica, conjuntos e métodos de demonstração*)
 
@@ -10,13 +10,885 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-mat-g02-motivacao}
 
-1. Axioma do supremo
-2. Sequências e limites
-3. Subsequências e Bolzano–Weierstrass
-4. Sequências de Cauchy
-5. Séries e critérios de convergência
-6. Séries geométricas e valor presente
+Boa parte da teoria econômica depende de objetos que só existem porque os números reais não têm "buracos". O **valor presente** de um fluxo infinito de pagamentos é a soma de uma série. O **estado estacionário** de uma economia dinâmica é o limite de uma sequência. A garantia de que a **iteração da função valor** converge — o algoritmo que resolve quase todo modelo macroeconômico quantitativo — é um teorema sobre sequências de Cauchy. E, quando um problema de otimização não tem solução, ainda faz sentido falar no **melhor valor que se pode aproximar**: o supremo.
+
+Os números racionais bastam para medir, mas não para tomar limites. O @thm-mat-g01-raiz2 mostrou que nenhum racional tem quadrado igual a 2; neste capítulo veremos que existe um número real com essa propriedade, e que isso é consequência de um único axioma — o **axioma do supremo** — que distingue $\R$ de $\Q$. A partir dele, desenvolvemos:
+
+1. as propriedades básicas de $\R$: supremo, propriedade arquimediana, densidade dos racionais;
+2. a teoria das **sequências**: limites, sequências monótonas, subsequências, Bolzano–Weierstrass e o critério de Cauchy, com o caso particular das **contrações**;
+3. a teoria das **séries**, com os critérios de convergência mais usados;
+4. as **expansões decimais**, que completam a demonstração do @thm-mat-g01-reais;
+5. a aplicação a **valores presentes** e somas descontadas.
+
+## Os números reais e o axioma do supremo {#sec-mat-g02-reais}
+
+Admitimos que $\R$ é um **corpo ordenado**: valem as regras usuais de soma e produto, e a ordem $\leq$ é total e compatível com as operações ($x \leq y \Rightarrow x + z \leq y + z$; $x \leq y$ e $z \geq 0 \Rightarrow xz \leq yz$). O valor absoluto e a desigualdade triangular foram tratados no @sec-mat-g01 (@prp-mat-g01-triangular). Os racionais também formam um corpo ordenado; o que distingue $\R$ é a propriedade a seguir.
+
+::: {#def-mat-g02-supremo}
+## Cotas, supremo e ínfimo
+Seja $A \subseteq \R$. Um número $b$ é **cota superior** de $A$ se $a \leq b$ para todo $a \in A$; se existe uma, $A$ é **limitado superiormente**. O **supremo** de $A$, $\sup A$, é a menor cota superior: uma cota superior $s$ tal que $s \leq b$ para toda cota superior $b$. Se $\sup A \in A$, ele é o **máximo** de $A$. Analogamente definem-se cota inferior, **ínfimo** ($\inf A$, a maior cota inferior) e mínimo. $A$ é **limitado** se é limitado superior e inferiormente.
 :::
+
+O supremo, quando existe, é único: se $s$ e $s'$ são ambos menores cotas superiores, então $s \leq s'$ e $s' \leq s$.
+
+::: {#def-mat-g02-completude}
+## Axioma do supremo (completude)
+Todo subconjunto não vazio de $\R$ limitado superiormente tem supremo em $\R$.
+:::
+
+Aplicando o axioma a $-A \defeq \{-a : a \in A\}$, todo conjunto não vazio limitado inferiormente tem ínfimo, e $\inf A = -\sup(-A)$.
+
+::: {#prp-mat-g02-caracterizacao-sup}
+## Caracterização do supremo
+Seja $A$ não vazio e $s$ uma cota superior de $A$. Então $s = \sup A$ se, e somente se, para todo $\varepsilon > 0$ existe $a \in A$ com $a > s - \varepsilon$.
+:::
+
+::: {.proof}
+Se $s = \sup A$ e, para algum $\varepsilon > 0$, nenhum $a \in A$ satisfizesse $a > s - \varepsilon$, então $s - \varepsilon$ seria uma cota superior menor que $s$ — contradição. Reciprocamente, suponha a condição e seja $b$ uma cota superior com $b < s$. Com $\varepsilon = s - b > 0$, existiria $a \in A$ com $a > s - \varepsilon = b$, contradizendo que $b$ é cota superior. Logo toda cota superior é $\geq s$, e $s = \sup A$.
+:::
+
+::: {#thm-mat-g02-arquimediana}
+## Propriedade arquimediana
+$\N$ não é limitado superiormente em $\R$. Equivalentemente, para todo $\varepsilon > 0$ existe $n \in \N$ com $1/n < \varepsilon$.
+:::
+
+::: {.proof}
+Se $\N$ fosse limitado superiormente, teria supremo $s$. Pela @prp-mat-g02-caracterizacao-sup com $\varepsilon = 1$, existiria $n \in \N$ com $n > s - 1$, isto é, $n + 1 > s$ — mas $n + 1 \in \N$, contradizendo que $s$ é cota superior. Para a segunda forma, dado $\varepsilon > 0$, o número $1/\varepsilon$ não é cota superior de $\N$; logo existe $n > 1/\varepsilon$, ou seja, $1/n < \varepsilon$.
+:::
+
+A propriedade arquimediana garante também a existência da **parte inteira**: para cada $y \in \R$ existe um único inteiro $\lfloor y \rfloor$ com $\lfloor y \rfloor \leq y < \lfloor y \rfloor + 1$. De fato, o conjunto dos inteiros maiores que $y$ é não vazio (há um natural maior que $y$) e limitado inferiormente por um inteiro (há um natural $N > -y$, e $-N < y$); pela boa ordenação (@def-mat-g01-boa-ordem), ele tem um menor elemento $m$, e $\lfloor y \rfloor \defeq m - 1$.
+
+::: {#thm-mat-g02-densidade}
+## Densidade dos racionais
+Entre dois números reais distintos há sempre um número racional: se $x < y$, existe $q \in \Q$ com $x < q < y$.
+:::
+
+::: {.proof}
+Pela propriedade arquimediana, existe $n \in \N$ com $1/n < y - x$, isto é, $nx + 1 < ny$. Seja $m \defeq \lfloor nx \rfloor + 1$. Então $m - 1 \leq nx < m$, de modo que $nx < m \leq nx + 1 < ny$. Dividindo por $n$, $x < m/n < y$.
+:::
+
+::: {#prp-mat-g02-raiz2}
+## Existência de $\sqrt 2$
+Existe um único $s > 0$ em $\R$ com $s^2 = 2$.
+:::
+
+::: {.proof}
+Seja $A \defeq \{x \geq 0 : x^2 < 2\}$. Temos $1 \in A$, e $A$ é limitado superiormente por 2 (se $x \geq 2$, então $x^2 \geq 4$). Seja $s \defeq \sup A \geq 1$. Mostramos que $s^2 < 2$ e $s^2 > 2$ são impossíveis.
+
+Se $s^2 < 2$, para $0 < h < 1$ vale $(s + h)^2 = s^2 + 2sh + h^2 < s^2 + h(2s + 1)$. Escolhendo $h < \min\{1, (2 - s^2)/(2s + 1)\}$, obtemos $(s+h)^2 < 2$, ou seja, $s + h \in A$ — impossível, pois $s$ é cota superior.
+
+Se $s^2 > 2$, tome $h \defeq (s^2 - 2)/(2s)$, que satisfaz $0 < h < s$. Então $(s - h)^2 = s^2 - 2sh + h^2 > s^2 - 2sh = 2$. Se algum $x \in A$ satisfizesse $x > s - h > 0$, teríamos $x^2 > (s-h)^2 > 2$, contradizendo $x \in A$. Logo $s - h$ é uma cota superior de $A$ menor que $s$ — impossível.
+
+Portanto $s^2 = 2$. Se também $t > 0$ e $t^2 = 2$, então $(s - t)(s + t) = 0$ com $s + t > 0$, e $s = t$.
+:::
+
+A mesma demonstração, feita dentro de $\Q$, mostra que $\{x \in \Q : x \geq 0,\ x^2 < 2\}$ não tem supremo **em $\Q$**: um supremo racional teria quadrado igual a 2, o que o @thm-mat-g01-raiz2 proíbe. O axioma do supremo é exatamente o que falta aos racionais.
+
+::: {#exm-mat-g02-sup-sem-max}
+## Supremo sem máximo
+Seja $A = \{1 - 1/n : n \in \N\}$. O número 1 é cota superior e, dado $\varepsilon > 0$, a propriedade arquimediana dá $n$ com $1/n < \varepsilon$, isto é, $1 - 1/n > 1 - \varepsilon$. Pela @prp-mat-g02-caracterizacao-sup, $\sup A = 1$, mas $1 \notin A$: o conjunto não tem máximo. Em otimização, essa é a situação de um problema cujo valor ótimo pode ser aproximado tanto quanto se queira, mas nunca atingido — o que ocorre, por exemplo, quando o conjunto de escolhas é aberto. O teorema de Weierstrass (@sec-mat-g03) dá condições para que isso não aconteça.
+:::
+
+## Sequências e limites {#sec-mat-g02-sequencias}
+
+Uma **sequência** de números reais é uma função $x: \N \to \R$; escrevemos $x_n$ para $x(n)$ e $(x_n)$ para a sequência.
+
+::: {#def-mat-g02-limite}
+## Limite de uma sequência
+A sequência $(x_n)$ **converge** para $L \in \R$, e escrevemos $x_n \to L$ ou $\lim_{n\to\infty} x_n = L$, se
+$$
+\forall \varepsilon > 0\ \ \exists N \in \N\ \ \forall n \geq N:\ \abs{x_n - L} < \varepsilon .
+$$
+Uma sequência que não converge para nenhum $L$ é **divergente**. Escrevemos $x_n \to +\infty$ se $\forall M \in \R\ \exists N\ \forall n \geq N:\ x_n > M$.
+:::
+
+A definição diz: qualquer que seja a tolerância $\varepsilon$, a partir de algum índice todos os termos ficam na faixa $(L - \varepsilon, L + \varepsilon)$. O índice $N$ pode depender de $\varepsilon$ — é a alternância $\forall\exists$ discutida no @exm-mat-g01-convergencia.
+
+::: {#prp-mat-g02-unicidade}
+## Unicidade e limitação
+(a) O limite de uma sequência, se existe, é único.
+(b) Toda sequência convergente é limitada.
+:::
+
+::: {.proof}
+Para (a), suponha $x_n \to L$ e $x_n \to L'$ com $L \neq L'$, e tome $\varepsilon = \abs{L - L'}/2$. Para $n$ grande, $\abs{x_n - L} < \varepsilon$ e $\abs{x_n - L'} < \varepsilon$, logo $\abs{L - L'} \leq \abs{L - x_n} + \abs{x_n - L'} < 2\varepsilon = \abs{L - L'}$ — contradição.
+
+Para (b), seja $x_n \to L$ e tome $\varepsilon = 1$: existe $N$ com $\abs{x_n} \leq \abs{L} + \abs{x_n - L} < \abs{L} + 1$ para $n \geq N$. Então $\abs{x_n} \leq \max\{\abs{x_1}, \dots, \abs{x_{N-1}}, \abs{L} + 1\}$ para todo $n$.
+:::
+
+::: {#thm-mat-g02-operacoes}
+## Operações com limites
+Se $x_n \to a$ e $y_n \to b$, então (i) $x_n + y_n \to a + b$; (ii) $x_n y_n \to ab$; (iii) se $b \neq 0$, então $y_n \neq 0$ para $n$ grande e $x_n / y_n \to a/b$.
+:::
+
+::: {.proof}
+Para (i), dado $\varepsilon > 0$, existe $N$ tal que $\abs{x_n - a} < \varepsilon/2$ e $\abs{y_n - b} < \varepsilon/2$ para $n \geq N$; então $\abs{x_n + y_n - (a + b)} < \varepsilon$.
+
+Para (ii), seja $M > 0$ com $\abs{x_n} \leq M$ para todo $n$ (@prp-mat-g02-unicidade). Então
+$$
+\abs{x_n y_n - ab} = \abs{x_n (y_n - b) + b(x_n - a)} \leq M \abs{y_n - b} + \abs{b}\, \abs{x_n - a}.
+$$
+Dado $\varepsilon > 0$, para $n$ grande $\abs{y_n - b} < \varepsilon/(2M)$ e $\abs{x_n - a} < \varepsilon/(2\abs{b} + 2)$, e a soma é menor que $\varepsilon$.
+
+Para (iii), basta, por (ii), mostrar que $1/y_n \to 1/b$. Existe $N_0$ com $\abs{y_n - b} < \abs{b}/2$ para $n \geq N_0$; daí $\abs{y_n} \geq \abs{b} - \abs{y_n - b} > \abs{b}/2 > 0$. Para esses $n$,
+$$
+\Big\lvert \frac{1}{y_n} - \frac{1}{b} \Big\rvert = \frac{\abs{b - y_n}}{\abs{y_n}\abs{b}} < \frac{2\abs{y_n - b}}{\abs{b}^2},
+$$
+que fica menor que $\varepsilon$ quando $\abs{y_n - b} < \varepsilon \abs{b}^2/2$.
+:::
+
+::: {#prp-mat-g02-ordem}
+## Limites e desigualdades
+(a) Se $x_n \to a$, $y_n \to b$ e $x_n \leq y_n$ para $n$ grande, então $a \leq b$.
+(b) **Sanduíche:** se $x_n \leq z_n \leq y_n$ para $n$ grande e $x_n \to L$, $y_n \to L$, então $z_n \to L$.
+:::
+
+::: {.proof}
+Para (a), se fosse $a > b$, com $\varepsilon = (a - b)/2$ teríamos, para $n$ grande, $x_n > a - \varepsilon = b + \varepsilon > y_n$ — contradição. Para (b), dado $\varepsilon > 0$, para $n$ grande $L - \varepsilon < x_n \leq z_n \leq y_n < L + \varepsilon$.
+:::
+
+Note que desigualdades estritas não passam ao limite: $1/n > 0$ para todo $n$, mas $\lim 1/n = 0$.
+
+::: {#prp-mat-g02-fundamentais}
+## Limites fundamentais
+(a) $1/n \to 0$.
+(b) Se $\abs{r} < 1$, então $r^n \to 0$.
+(c) Se $r > 1$, então $r^n \to +\infty$.
+:::
+
+::: {.proof}
+Para (a), dado $\varepsilon > 0$, a propriedade arquimediana dá $N$ com $1/N < \varepsilon$, e $1/n \leq 1/N$ para $n \geq N$. Para (b), o caso $r = 0$ é trivial; se $0 < \abs{r} < 1$, escreva $1/\abs{r} = 1 + h$ com $h > 0$. Pela desigualdade de Bernoulli (@prp-mat-g01-bernoulli), $(1 + h)^n \geq 1 + nh > nh$, logo $0 \leq \abs{r^n} < 1/(nh)$, que tende a zero por (a); o sanduíche dá $\abs{r^n} \to 0$, e portanto $r^n \to 0$. Para (c), com $r = 1 + h$, Bernoulli dá $r^n \geq 1 + nh$, e $1 + nh$ supera qualquer $M$ pela propriedade arquimediana.
+:::
+
+## Sequências monótonas {#sec-mat-g02-monotonas}
+
+Uma sequência é **não decrescente** se $x_n \leq x_{n+1}$ para todo $n$, **crescente** se $x_n < x_{n+1}$, e analogamente **não crescente** e **decrescente**; é **monótona** se é de um desses tipos.
+
+::: {#thm-mat-g02-monotona}
+## Convergência monótona
+Toda sequência não decrescente e limitada superiormente converge para $\sup_n x_n$. Toda sequência não crescente e limitada inferiormente converge para $\inf_n x_n$. Uma sequência não decrescente e ilimitada tende a $+\infty$.
+:::
+
+::: {.proof}
+Seja $(x_n)$ não decrescente e limitada superiormente, e $s \defeq \sup_n x_n$, que existe pelo axioma do supremo. Dado $\varepsilon > 0$, a @prp-mat-g02-caracterizacao-sup dá $N$ com $x_N > s - \varepsilon$. Para $n \geq N$, $s - \varepsilon < x_N \leq x_n \leq s$, logo $\abs{x_n - s} < \varepsilon$. O caso não crescente segue aplicando este a $(-x_n)$. Se $(x_n)$ é não decrescente e ilimitada, para todo $M$ existe $N$ com $x_N > M$, e então $x_n \geq x_N > M$ para $n \geq N$.
+:::
+
+Esse é o teorema que mais usa o axioma do supremo: ele produz um limite sem que precisemos adivinhá-lo.
+
+::: {#prp-mat-g02-e}
+## O número $e$
+A sequência $a_n \defeq (1 + 1/n)^n$ é crescente e limitada; seu limite é o número $e \approx 2{,}71828$. Além disso, $b_n \defeq (1 + 1/n)^{n+1}$ é decrescente e $a_n < e < b_n$ para todo $n$.
+:::
+
+::: {.proof}
+Para ver que $(a_n)$ é crescente, escrevemos
+$$
+\frac{a_{n+1}}{a_n} = \Big(\frac{n+2}{n+1}\Big)^{n+1} \Big(\frac{n}{n+1}\Big)^{n}
+= \Big(\frac{n(n+2)}{(n+1)^2}\Big)^{n+1} \frac{n+1}{n}
+= \Big(1 - \frac{1}{(n+1)^2}\Big)^{n+1} \frac{n+1}{n}.
+$$
+Pela desigualdade de Bernoulli com $x = -1/(n+1)^2 \geq -1$, o primeiro fator é pelo menos $1 - 1/(n+1)$, e o produto é pelo menos $\frac{n}{n+1} \cdot \frac{n+1}{n} = 1$; como $x \neq 0$ e $n + 1 \geq 2$, a desigualdade de Bernoulli é estrita aqui (o termo $nx^2$ desprezado na sua demonstração é positivo), e $a_{n+1} > a_n$.
+
+Para $(b_n)$, de modo análogo,
+$$
+\frac{b_n}{b_{n+1}} = \Big(\frac{(n+1)^2}{n(n+2)}\Big)^{n+1} \frac{n+1}{n+2} = \Big(1 + \frac{1}{n(n+2)}\Big)^{n+1} \frac{n+1}{n+2} \geq \Big(1 + \frac{n+1}{n(n+2)}\Big)\frac{n+1}{n+2}.
+$$
+O último produto é $\frac{(n^2 + 3n + 1)(n+1)}{n(n+2)^2} = \frac{n^3 + 4n^2 + 4n + 1}{n^3 + 4n^2 + 4n} > 1$; logo $(b_n)$ é decrescente.
+
+Como $a_n < b_n \leq b_1 = 4$, a sequência $(a_n)$ é crescente e limitada, e converge pelo @thm-mat-g02-monotona; seja $e$ o seu limite. Como $b_n = a_n (1 + 1/n)$, também $b_n \to e$ (@thm-mat-g02-operacoes). Por fim, uma sequência crescente fica estritamente abaixo do seu limite e uma decrescente, estritamente acima: $a_n < a_{n+1} \leq e$ e $e \leq b_{n+1} < b_n$.
+:::
+
+Em finanças, $(1 + i/n)^n$ é o fator de capitalização de uma taxa anual $i$ composta $n$ vezes por ano. A proposição trata do caso $i = 1$; o limite geral, $e^i$ — a **capitalização contínua** —, é obtido no @sec-mat-g03.
+
+::: {#exm-mat-g02-linear}
+## Estado estacionário de uma equação linear
+Considere a recursão $x_{t+1} = a x_t + b$, com $a \neq 1$. O **ponto fixo** $x^* \defeq b/(1-a)$ satisfaz $x^* = a x^* + b$. Subtraindo, $x_{t+1} - x^* = a(x_t - x^*)$ e, por indução,
+$$
+x_t - x^* = a^t (x_0 - x^*) .
+$$
+Pela @prp-mat-g02-fundamentais, se $\abs{a} < 1$, então $x_t \to x^*$ para qualquer condição inicial: a convergência é **monótona** se $0 < a < 1$ e **oscilante** se $-1 < a < 0$. Se $\abs{a} > 1$ e $x_0 \neq x^*$, então $\abs{x_t - x^*} \to +\infty$. Essa equação descreve a dinâmica do modelo de Solow linearizado (@sec-mac-g02), a média de um processo AR(1) (@sec-ecm-m09) e é estudada em geral no @sec-mat-g08.
+:::
+
+## Subsequências e o teorema de Bolzano–Weierstrass {#sec-mat-g02-subsequencias}
+
+::: {#def-mat-g02-subsequencia}
+## Subsequência
+Dada $(x_n)$ e uma sequência estritamente crescente de índices $n_1 < n_2 < n_3 < \cdots$, a sequência $(x_{n_k})_{k \in \N}$ é uma **subsequência** de $(x_n)$.
+:::
+
+Por indução, $n_k \geq k$ para todo $k$.
+
+::: {#prp-mat-g02-subsequencia}
+## Subsequências de sequências convergentes
+Se $x_n \to L$, toda subsequência de $(x_n)$ converge para $L$. Em particular, se duas subsequências convergem para limites diferentes, a sequência diverge.
+:::
+
+::: {.proof}
+Dado $\varepsilon > 0$, seja $N$ tal que $\abs{x_n - L} < \varepsilon$ para $n \geq N$. Para $k \geq N$, $n_k \geq k \geq N$, logo $\abs{x_{n_k} - L} < \varepsilon$. A segunda afirmação é a contrapositiva da primeira, combinada com a unicidade do limite.
+:::
+
+Assim, $x_n = (-1)^n$ diverge: a subsequência dos índices pares é constante igual a 1, e a dos ímpares, igual a $-1$.
+
+::: {#lem-mat-g02-monotona}
+## Subsequência monótona
+Toda sequência de números reais tem uma subsequência monótona.
+:::
+
+::: {.proof}
+Diga que $n$ é um **pico** se $x_n \geq x_m$ para todo $m > n$. Se há infinitos picos $n_1 < n_2 < \cdots$, então $x_{n_1} \geq x_{n_2} \geq \cdots$ é uma subsequência não crescente. Se há apenas finitos picos, seja $n_1$ maior que todos eles. Como $n_1$ não é pico, existe $n_2 > n_1$ com $x_{n_2} > x_{n_1}$; como $n_2$ também não é pico, existe $n_3 > n_2$ com $x_{n_3} > x_{n_2}$; prosseguindo recursivamente, obtemos uma subsequência crescente.
+:::
+
+::: {#thm-mat-g02-bolzano}
+## Bolzano–Weierstrass
+Toda sequência limitada de números reais tem uma subsequência convergente.
+:::
+
+::: {.proof}
+Pelo @lem-mat-g02-monotona, a sequência tem uma subsequência monótona, que é limitada e, pelo @thm-mat-g02-monotona, converge.
+:::
+
+::: {#def-mat-g02-limsup}
+## Limites superior e inferior
+Seja $(x_n)$ limitada. As sequências $s_n \defeq \sup_{k \geq n} x_k$ e $i_n \defeq \inf_{k \geq n} x_k$ são, respectivamente, não crescente e não decrescente, e limitadas. Os limites
+$$
+\limsup_{n\to\infty} x_n \defeq \lim_{n\to\infty} s_n, \qquad \liminf_{n\to\infty} x_n \defeq \lim_{n\to\infty} i_n
+$$
+existem pelo @thm-mat-g02-monotona e satisfazem $\liminf x_n \leq \limsup x_n$.
+:::
+
+::: {#prp-mat-g02-limsup}
+## Convergência e limites superior e inferior
+Uma sequência limitada $(x_n)$ converge se, e somente se, $\liminf x_n = \limsup x_n$; nesse caso, o limite é esse valor comum.
+:::
+
+::: {.proof}
+Por definição, $i_n \leq x_n \leq s_n$. Se $\lim i_n = \lim s_n = L$, o sanduíche dá $x_n \to L$. Reciprocamente, se $x_n \to L$, dado $\varepsilon > 0$ existe $N$ tal que $L - \varepsilon < x_k < L + \varepsilon$ para $k \geq N$; logo $L - \varepsilon \leq i_n \leq s_n \leq L + \varepsilon$ para $n \geq N$, e, passando ao limite (@prp-mat-g02-ordem), $L - \varepsilon \leq \liminf x_n \leq \limsup x_n \leq L + \varepsilon$. Como $\varepsilon$ é arbitrário, ambos valem $L$.
+:::
+
+## Sequências de Cauchy e contrações {#sec-mat-g02-cauchy}
+
+A definição de limite exige conhecer o candidato $L$. O critério de Cauchy decide a convergência olhando apenas para os termos da sequência.
+
+::: {#def-mat-g02-cauchy}
+## Sequência de Cauchy
+$(x_n)$ é **de Cauchy** se $\forall \varepsilon > 0\ \exists N\ \forall m, n \geq N:\ \abs{x_m - x_n} < \varepsilon$.
+:::
+
+::: {#prp-mat-g02-cauchy-basico}
+## Propriedades
+(a) Toda sequência convergente é de Cauchy.
+(b) Toda sequência de Cauchy é limitada.
+:::
+
+::: {.proof}
+Para (a), se $x_n \to L$, dado $\varepsilon > 0$ existe $N$ com $\abs{x_n - L} < \varepsilon/2$ para $n \geq N$; então $\abs{x_m - x_n} \leq \abs{x_m - L} + \abs{L - x_n} < \varepsilon$ para $m, n \geq N$. Para (b), com $\varepsilon = 1$, existe $N$ tal que $\abs{x_n} \leq \abs{x_N} + 1$ para $n \geq N$; os demais termos são finitos.
+:::
+
+::: {#thm-mat-g02-cauchy}
+## Critério de Cauchy
+Em $\R$, toda sequência de Cauchy converge. Portanto, uma sequência de números reais converge se, e somente se, é de Cauchy.
+:::
+
+::: {.proof}
+Seja $(x_n)$ de Cauchy. Ela é limitada (@prp-mat-g02-cauchy-basico) e, por Bolzano–Weierstrass, tem uma subsequência $x_{n_k} \to L$. Dado $\varepsilon > 0$, seja $N$ tal que $\abs{x_m - x_n} < \varepsilon/2$ para $m, n \geq N$, e escolha $k$ com $n_k \geq N$ e $\abs{x_{n_k} - L} < \varepsilon/2$. Para $n \geq N$, $\abs{x_n - L} \leq \abs{x_n - x_{n_k}} + \abs{x_{n_k} - L} < \varepsilon$.
+:::
+
+::: {.remark}
+Em $\Q$, o critério falha. A sequência das aproximações decimais de $\sqrt 2$ — $1$; $1{,}4$; $1{,}41$; $1{,}414$; … — é formada por racionais e é de Cauchy (dois termos a partir do $n$-ésimo diferem menos de $10^{-n+1}$), mas não tem limite racional. Um espaço em que toda sequência de Cauchy converge é dito **completo**; a completude é a propriedade que torna possíveis os teoremas de ponto fixo do @sec-mat-m05 e a programação dinâmica do @sec-mat-d02.
+:::
+
+::: {#prp-mat-g02-contrativa}
+## Sequências contrativas
+Suponha que exista $\beta \in [0, 1)$ com $\abs{x_{n+2} - x_{n+1}} \leq \beta\, \abs{x_{n+1} - x_n}$ para todo $n$. Então $(x_n)$ converge para algum $L$ e
+$$
+\abs{x_n - L} \leq \frac{\beta^{n-1}}{1 - \beta}\, \abs{x_2 - x_1} \qquad \text{para todo } n.
+$$ {#eq-mat-g02-cota-contracao}
+:::
+
+::: {.proof}
+Seja $d \defeq \abs{x_2 - x_1}$. Por indução, $\abs{x_{k+1} - x_k} \leq \beta^{k-1} d$. Para $m > n$, pela desigualdade triangular e pela soma geométrica (@prp-mat-g01-geometrica),
+$$
+\abs{x_m - x_n} \leq \sum_{k=n}^{m-1} \abs{x_{k+1} - x_k} \leq d \sum_{k=n}^{m-1} \beta^{k-1} = d\, \beta^{n-1} \frac{1 - \beta^{m-n}}{1 - \beta} < \frac{d\, \beta^{n-1}}{1 - \beta}.
+$$
+Como $\beta^{n-1} \to 0$, a sequência é de Cauchy e converge para algum $L$ (@thm-mat-g02-cauchy). Fixando $n$ e fazendo $m \to \infty$, $\abs{x_m - x_n} \to \abs{L - x_n}$ (porque $\big\lvert \abs{u} - \abs{v} \big\rvert \leq \abs{u - v}$), e a @prp-mat-g02-ordem dá @eq-mat-g02-cota-contracao.
+:::
+
+::: {#thm-mat-g02-ponto-fixo}
+## Ponto fixo de uma contração em $\R$
+Seja $g: \R \to \R$ uma **contração**: existe $\beta \in [0, 1)$ com $\abs{g(x) - g(y)} \leq \beta \abs{x - y}$ para todos $x, y$. Então $g$ tem um único ponto fixo $x^* = g(x^*)$, e, para qualquer $x_0$, a sequência $x_{n+1} = g(x_n)$ converge para $x^*$, com $\abs{x_n - x^*} \leq \beta^n \abs{x_0 - x^*}$.
+:::
+
+::: {.proof}
+Como $\abs{x_{n+2} - x_{n+1}} = \abs{g(x_{n+1}) - g(x_n)} \leq \beta \abs{x_{n+1} - x_n}$, a @prp-mat-g02-contrativa mostra que $x_n \to x^*$ para algum $x^*$. Como $\abs{g(x_n) - g(x^*)} \leq \beta \abs{x_n - x^*} \to 0$, temos $g(x_n) \to g(x^*)$; mas $g(x_n) = x_{n+1} \to x^*$, e a unicidade do limite dá $g(x^*) = x^*$. Se $y^*$ também é ponto fixo, $\abs{x^* - y^*} = \abs{g(x^*) - g(y^*)} \leq \beta \abs{x^* - y^*}$, o que, com $\beta < 1$, força $x^* = y^*$. Por fim, $\abs{x_n - x^*} = \abs{g(x_{n-1}) - g(x^*)} \leq \beta \abs{x_{n-1} - x^*}$, e a cota segue por indução.
+:::
+
+A função $g(x) = ax + b$ com $\abs{a} < 1$ é uma contração com $\beta = \abs{a}$, e o teorema reencontra o @exm-mat-g02-linear. A versão geral desse teorema — o teorema do ponto fixo de Banach, em espaços métricos completos — é o que garante que a equação de Bellman tem solução única e que a iteração da função valor converge para ela, à taxa $\beta^n$ (@sec-mat-d02, @sec-cmp-d01).
+
+## Séries {#sec-mat-g02-series}
+
+::: {#def-mat-g02-serie}
+## Série
+Dada uma sequência $(a_n)$, a **série** $\sum_{n=1}^\infty a_n$ é a sequência das **somas parciais** $s_n \defeq a_1 + \dots + a_n$. A série **converge** para $S$, e escrevemos $\sum_{n=1}^\infty a_n = S$, se $s_n \to S$; caso contrário, **diverge**.
+:::
+
+::: {#prp-mat-g02-termo}
+## Condição necessária
+Se $\sum a_n$ converge, então $a_n \to 0$.
+:::
+
+::: {.proof}
+$a_n = s_n - s_{n-1} \to S - S = 0$.
+:::
+
+A recíproca é falsa, como mostra a série harmônica abaixo.
+
+::: {#prp-mat-g02-geometrica}
+## Série geométrica
+$\sum_{t=0}^\infty r^t$ converge se, e somente se, $\abs{r} < 1$, e nesse caso vale $1/(1 - r)$.
+:::
+
+::: {.proof}
+Para $\abs{r} < 1$, as somas parciais são $(1 - r^{n+1})/(1 - r)$ (@prp-mat-g01-geometrica), que convergem para $1/(1-r)$ porque $r^{n+1} \to 0$. Para $\abs{r} \geq 1$, $\abs{r^t} \geq 1$ para todo $t$, e o termo geral não tende a zero.
+:::
+
+::: {#prp-mat-g02-harmonica}
+## A série harmônica diverge
+$\sum_{n=1}^\infty 1/n = +\infty$.
+:::
+
+::: {.proof}
+Para $j \geq 1$, o bloco de termos com $2^{j-1} < n \leq 2^j$ tem $2^{j-1}$ termos, cada um $\geq 1/2^j$; sua soma é, portanto, $\geq 1/2$. Logo $s_{2^k} \geq 1 + k/2$ para todo $k$. As somas parciais são crescentes e ilimitadas, e tendem a $+\infty$ (@thm-mat-g02-monotona).
+:::
+
+::: {#thm-mat-g02-criterios}
+## Critérios de convergência
+(a) **Cauchy:** $\sum a_n$ converge se, e somente se, $\forall \varepsilon > 0\ \exists N\ \forall m > n \geq N:\ \abs{a_{n+1} + \dots + a_m} < \varepsilon$.
+(b) **Comparação:** se $0 \leq a_n \leq b_n$ para todo $n$ e $\sum b_n$ converge, então $\sum a_n$ converge; se $\sum a_n$ diverge, $\sum b_n$ diverge.
+(c) **Convergência absoluta:** se $\sum \abs{a_n}$ converge, então $\sum a_n$ converge e $\abs{\sum a_n} \leq \sum \abs{a_n}$.
+(d) **Razão:** se $a_n \neq 0$ e $\abs{a_{n+1}/a_n} \to \rho$, a série converge absolutamente se $\rho < 1$ e diverge se $\rho > 1$.
+:::
+
+::: {.proof}
+Para (a), como $s_m - s_n = a_{n+1} + \dots + a_m$, é o critério de Cauchy (@thm-mat-g02-cauchy) aplicado a $(s_n)$.
+
+Para (b), as somas parciais de $\sum a_n$ são não decrescentes e limitadas por $\sum b_n$; convergem pelo @thm-mat-g02-monotona. A segunda afirmação é a contrapositiva da primeira.
+
+Para (c), $\abs{a_{n+1} + \dots + a_m} \leq \abs{a_{n+1}} + \dots + \abs{a_m}$, e o critério de Cauchy para $\sum \abs{a_n}$ implica o de $\sum a_n$. Além disso, $\abs{s_n} \leq \sum_{k \leq n} \abs{a_k} \leq \sum_{k} \abs{a_k}$, e a desigualdade passa ao limite.
+
+Para (d), se $\rho < 1$, escolha $r$ com $\rho < r < 1$. Existe $N$ com $\abs{a_{n+1}} \leq r \abs{a_n}$ para $n \geq N$, logo $\abs{a_{N+j}} \leq r^j \abs{a_N}$; por comparação com a série geométrica, $\sum \abs{a_n}$ converge (os finitos termos iniciais não afetam a convergência). Se $\rho > 1$, então $\abs{a_{n+1}} > \abs{a_n}$ para $n$ grande, e o termo geral não tende a zero.
+:::
+
+Com $\rho = 1$, o teste da razão nada diz: $\sum 1/n$ diverge e $\sum 1/n^2$ converge, e ambas têm $\rho = 1$.
+
+::: {#prp-mat-g02-p-serie}
+## A série $\sum 1/n^2$
+$\sum_{n=1}^\infty 1/n^2$ converge. Mais geralmente, $\sum 1/n^p$ converge se $p > 1$ e diverge se $p \leq 1$.
+:::
+
+::: {.proof}
+Para $n \geq 2$, $\frac{1}{n^2} \leq \frac{1}{n(n-1)} = \frac{1}{n-1} - \frac{1}{n}$. Somando de $2$ a $m$, os termos se cancelam em sequência e $s_m \leq 1 + (1 - 1/m) < 2$; as somas parciais são crescentes e limitadas, e a série converge. Se $p \leq 1$, então $1/n^p \geq 1/n$, e a série diverge por comparação com a harmônica. O caso $p > 1$ geral é o @exr-mat-g02-p-serie.
+:::
+
+::: {#thm-mat-g02-leibniz}
+## Séries alternadas (Leibniz)
+Se $(b_n)$ é não crescente e $b_n \to 0$, então $\sum_{n=1}^\infty (-1)^{n+1} b_n$ converge para algum $S$, e $\abs{S - s_n} \leq b_{n+1}$ para todo $n$.
+:::
+
+::: {.proof}
+As somas parciais pares crescem: $s_{2k+2} - s_{2k} = b_{2k+1} - b_{2k+2} \geq 0$; as ímpares decrescem: $s_{2k+1} - s_{2k-1} = -b_{2k} + b_{2k+1} \leq 0$. Além disso, $s_{2k} = s_{2k+1} - b_{2k+1} \leq s_{2k+1} \leq s_1$, de modo que as pares são limitadas superiormente e as ímpares, inferiormente por $s_2$. Ambas convergem (@thm-mat-g02-monotona), e para o mesmo limite $S$, pois $s_{2k+1} - s_{2k} = b_{2k+1} \to 0$. Como as pares crescem para $S$ e as ímpares decrescem para $S$, o número $S$ fica entre duas somas parciais consecutivas quaisquer; logo $\abs{S - s_n} \leq \abs{s_{n+1} - s_n} = b_{n+1}$. Por fim, a sequência $(s_n)$ converge para $S$ porque suas subsequências par e ímpar convergem para $S$ e, juntas, esgotam todos os índices.
+:::
+
+A série harmônica alternada $1 - \frac12 + \frac13 - \cdots$ converge (para $\log 2$, como veremos no @sec-mat-g03), mas não absolutamente. Séries assim são frágeis: um teorema de Riemann afirma que seus termos podem ser reordenados para produzir **qualquer** soma. Séries absolutamente convergentes, ao contrário, podem ser reordenadas livremente.
+
+## Expansões decimais {#sec-mat-g02-decimais}
+
+Esta seção demonstra o fato usado no @thm-mat-g01-reais.
+
+::: {#thm-mat-g02-decimais}
+## Expansão decimal
+(a) Toda sequência de dígitos $d_k \in \{0, \dots, 9\}$ define uma série $\sum_{k=1}^\infty d_k 10^{-k}$ convergente, com soma em $[0, 1]$; escrevemos $0{,}d_1 d_2 d_3 \dots$ para essa soma.
+(b) Todo $x \in [0, 1)$ admite uma expansão $x = 0{,}d_1 d_2 \dots$ que não termina em noves repetidos.
+(c) Duas sequências de dígitos diferentes representam o mesmo número se, e somente se, para algum $j$, elas coincidem antes de $j$, $e_j = d_j + 1$, e $d_k = 9$, $e_k = 0$ para todo $k > j$ (ou o mesmo com os papéis trocados).
+:::
+
+::: {.proof}
+Para (a), $0 \leq d_k 10^{-k} \leq 9 \cdot 10^{-k}$, e $\sum_{k \geq 1} 9 \cdot 10^{-k} = \frac{9/10}{1 - 1/10} = 1$ (@prp-mat-g02-geometrica); a comparação dá a convergência, e a soma está em $[0, 1]$.
+
+Para (b), seja $q_k \defeq \lfloor 10^k x \rfloor$, com $q_0 = 0$. Como $10 q_{k-1}$ é um inteiro $\leq 10^k x$, temos $10 q_{k-1} \leq q_k$; e $q_k \leq 10^k x < 10(q_{k-1} + 1)$, logo $q_k \leq 10 q_{k-1} + 9$. Assim $d_k \defeq q_k - 10 q_{k-1} \in \{0, \dots, 9\}$. A soma parcial é telescópica:
+$$
+\sum_{k=1}^n d_k 10^{-k} = \sum_{k=1}^n \Big(\frac{q_k}{10^k} - \frac{q_{k-1}}{10^{k-1}}\Big) = \frac{q_n}{10^n}, \qquad 0 \leq x - \frac{q_n}{10^n} < 10^{-n},
+$$
+e o sanduíche dá a convergência para $x$. Se fosse $d_k = 9$ para todo $k > m$, teríamos $x - q_m/10^m = \sum_{k > m} 9 \cdot 10^{-k} = 10^{-m}$, contradizendo a desigualdade estrita acima.
+
+Para (c), sejam $(d_k) \neq (e_k)$ com a mesma soma, $j$ o primeiro índice em que diferem e, sem perda de generalidade, $d_j < e_j$. Então
+$$
+0 = \sum_{k \geq 1} (e_k - d_k) 10^{-k} = (e_j - d_j) 10^{-j} - 10^{-j} + \sum_{k > j} (e_k - d_k + 9)\, 10^{-k},
+$$
+usando $\sum_{k > j} 9 \cdot 10^{-k} = 10^{-j}$. Os termos $e_j - d_j - 1 \geq 0$ e $(e_k - d_k + 9) 10^{-k} \geq 0$ são não negativos e somam zero; logo todos são nulos: $e_j = d_j + 1$ e $e_k - d_k = -9$, isto é, $e_k = 0$ e $d_k = 9$, para $k > j$. A recíproca é a mesma conta lida de trás para a frente.
+:::
+
+Por isso $0{,}4999\ldots = 0{,}5000\ldots$, e um número cuja expansão usa apenas os dígitos 4 e 5 — como o $y$ do argumento diagonal — tem uma única expansão.
+
+## Aplicação: valor presente e somas descontadas {#sec-mat-g02-valor-presente}
+
+Seja $(c_t)_{t \geq 1}$ um fluxo de pagamentos e $i > 0$ a taxa de juros por período, com fator de desconto $\beta \defeq 1/(1+i) \in (0, 1)$. O **valor presente** do fluxo é $\mathrm{VP} \defeq \sum_{t=1}^\infty \beta^t c_t$, quando a série converge.
+
+::: {#prp-mat-g02-perpetuidades}
+## Perpetuidades
+(a) **Perpetuidade constante:** se $c_t = c$, então $\mathrm{VP} = c/i$.
+(b) **Perpetuidade crescente (Gordon):** se $c_t = c(1+g)^{t-1}$ com $c > 0$ e $g > -1$, a série converge se, e somente se, $g < i$, e então $\mathrm{VP} = c/(i - g)$.
+(c) **Fluxos limitados:** se $\abs{c_t} \leq M$ para todo $t$, a série converge absolutamente e $\abs{\mathrm{VP}} \leq M/i$.
+:::
+
+::: {.proof}
+Para (a), $\sum_{t \geq 1} c\,\beta^t = c\beta/(1 - \beta)$, e $\beta/(1-\beta) = \frac{1/(1+i)}{i/(1+i)} = 1/i$. Para (b),
+$$
+\sum_{t=1}^\infty \frac{c(1+g)^{t-1}}{(1+i)^t} = \frac{c}{1+i} \sum_{s=0}^\infty \Big(\frac{1+g}{1+i}\Big)^s ,
+$$
+uma série geométrica de razão $r = (1+g)/(1+i) > 0$, que converge se, e somente se, $r < 1$, isto é, $g < i$; a soma é $\frac{c}{1+i} \cdot \frac{1+i}{i - g} = \frac{c}{i-g}$. Para (c), $\abs{\beta^t c_t} \leq M \beta^t$, e a comparação com (a) dá convergência absoluta e a cota.
+:::
+
+O item (b) é o **modelo de Gordon** de avaliação de ações (@sec-fin-g03): se os dividendos crescerem a uma taxa igual ou maior que a de desconto, o "valor" é infinito — o que, em equilíbrio, é excluído por condições de transversalidade (@sec-mac-m01). O item (c) garante que a **utilidade descontada** $\sum_t \beta^t u(c_t)$ está bem definida sempre que a utilidade é limitada, hipótese-padrão da programação dinâmica (@sec-mat-d02).
+
+## Pontes {#sec-mat-g02-pontes}
+
+- **Funções (@sec-mat-g03).** Limites de funções e continuidade são definidos e estudados por meio de sequências; o teorema de Weierstrass usa Bolzano–Weierstrass.
+- **Análise em $\R^n$ (@sec-mat-m01).** Completude, compacidade e Bolzano–Weierstrass generalizam-se a espaços métricos.
+- **Ponto fixo e programação dinâmica (@sec-mat-m05, @sec-mat-d02, @sec-cmp-d01).** O @thm-mat-g02-ponto-fixo é o caso unidimensional do teorema de Banach; a cota $\beta^n$ é a taxa de convergência da iteração da função valor.
+- **Dinâmica (@sec-mat-g08, @sec-ecm-m09).** A recursão linear do @exm-mat-g02-linear é a base das equações em diferenças e dos processos autorregressivos.
+- **Probabilidade (@sec-est-g04, @sec-est-m03).** A lei dos grandes números é uma afirmação sobre a convergência de uma sequência de médias; limites superiores e inferiores aparecem no lema de Borel–Cantelli.
+- **Finanças (@sec-fin-g01, @sec-fin-g03).** Anuidades, perpetuidades e o modelo de Gordon são séries geométricas.
+
+## Interativo {#sec-mat-g02-interativo}
+
+::: {.content-visible when-format="html"}
+**A definição de limite.** Escolha uma sequência e uma tolerância $\varepsilon$. A faixa sombreada é $(L - \varepsilon, L + \varepsilon)$; a linha vertical marca o menor $N$ a partir do qual **todos** os termos ficam dentro dela. Diminua $\varepsilon$ e veja $N$ crescer.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof seqEscolhida = seletor("sequência", sequencias.map(s => s.nome), {valor: sequencias[0].nome})
+viewof epsilon = controle("tolerância ε", [0.01, 0.5], {valor: 0.2, passo: 0.01, casas: 2})
+```
+
+```{ojs}
+//| echo: false
+md`${seq.diverge
+  ? "Nenhum N funciona: os termos ±1 nunca ficam todos a menos de ε de 0, e a sequência não converge (para nenhum L)."
+  : (Nmin === null ? "N maior que 2000 para esta tolerância."
+     : `Com ε = ${epsilon.toFixed(2).replace(".", ",")}, basta tomar **N = ${Nmin}**: todos os termos a partir daí ficam na faixa.`)}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 320, grid: true,
+  x: {domain: [0, 61], label: "n"}, y: {label: "x_n"},
+  marks: [
+    Plot.areaY([0.5, 60.5], {x: d => d, y1: () => seq.L - epsilon, y2: () => seq.L + epsilon,
+                             fill: "#2F5D8A", fillOpacity: 0.12}),
+    Plot.ruleY([seq.L], {stroke: "#2F5D8A", strokeDasharray: "4,3"}),
+    (Nmin !== null && Nmin <= 60) ? Plot.ruleX([Nmin], {stroke: "#8C2F39"}) : null,
+    Plot.dot(pontosSeq, {x: "n", y: "x", r: 3,
+                         fill: d => Math.abs(d.x - seq.L) < epsilon ? "#2F5D8A" : "#B7791F"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+sequencias = [
+  {nome: "x_n = 1/n", f: n => 1 / n, L: 0},
+  {nome: "x_n = (-1)^n / n", f: n => (-1) ** n / n, L: 0},
+  {nome: "x_n = n / (n + 1)", f: n => n / (n + 1), L: 1},
+  {nome: "x_n = (1 + 1/n)^n", f: n => (1 + 1 / n) ** n, L: Math.E},
+  {nome: "x_n = (-1)^n", f: n => (-1) ** n, L: 0, diverge: true}
+]
+seq = sequencias.find(s => s.nome === seqEscolhida)
+pontosSeq = d3.range(1, 61).map(n => ({n, x: seq.f(n)}))
+Nmin = {
+  if (seq.diverge) return null;
+  let ultimoFora = 0;
+  for (let n = 1; n <= 2000; n++) if (Math.abs(seq.f(n) - seq.L) >= epsilon) ultimoFora = n;
+  return ultimoFora >= 2000 ? null : ultimoFora + 1;
+}
+```
+:::
+
+**Iteração e ponto fixo.** A recursão $x_{t+1} = a x_t + 1$ do @exm-mat-g02-linear. Com $\abs{a} < 1$ a trajetória converge para o ponto fixo $1/(1-a)$ — monotonamente se $a > 0$, oscilando se $a < 0$; com $\abs{a} > 1$, ela se afasta.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof aLin = controle("coeficiente a", [-1.3, 1.3], {valor: 0.8, passo: 0.05, casas: 2})
+viewof x0Lin = controle("valor inicial x0", [-10, 10], {valor: -5, passo: 0.5, casas: 1})
+```
+
+```{ojs}
+//| echo: false
+md`${Math.abs(aLin) < 1
+  ? `Ponto fixo x\\* = ${(1 / (1 - aLin)).toFixed(2).replace(".", ",")}; |a| < 1: a trajetória converge ${aLin > 0 ? "monotonamente" : (aLin < 0 ? "oscilando" : "em um passo")}.`
+  : (Math.abs(aLin - 1) < 1e-9 ? "Com a = 1 não há ponto fixo: x cresce 1 por período."
+     : `Ponto fixo x\\* = ${(1 / (1 - aLin)).toFixed(2).replace(".", ",")}; |a| ≥ 1: a trajetória não converge (a menos que x0 = x\\*).`)}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "t"}, y: {label: "x_t", domain: [-20, 20]},
+  marks: [
+    Math.abs(1 - aLin) > 1e-9 ? Plot.ruleY([1 / (1 - aLin)], {stroke: "#8C2F39", strokeDasharray: "4,3"}) : null,
+    Plot.line(caminhoLin, {x: "t", y: "x", stroke: "#2F5D8A", clip: true}),
+    Plot.dot(caminhoLin, {x: "t", y: "x", r: 2.5, fill: "#2F5D8A", clip: true})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+caminhoLin = {
+  const xs = [{t: 0, x: x0Lin}];
+  for (let t = 1; t <= 30; t++) xs.push({t, x: aLin * xs[t - 1].x + 1});
+  return xs;
+}
+```
+:::
+
+**Somas parciais.** Compare o comportamento das somas parciais de algumas séries do capítulo. A linha tracejada marca a soma, quando ela existe.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof serieEscolhida = seletor("série", seriesLista.map(s => s.nome), {valor: seriesLista[0].nome})
+```
+
+```{ojs}
+//| echo: false
+md`${serie.soma === null
+  ? `Diverge: depois de 200 termos a soma parcial é ${somasParciais[199].s.toFixed(3).replace(".", ",")} e continua crescendo, como log n.`
+  : `Soma: ${serie.soma.toFixed(6).replace(".", ",")}. Soma parcial com 200 termos: ${somasParciais[199].s.toFixed(6).replace(".", ",")}.`}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "número de termos n"}, y: {label: "soma parcial"},
+  marks: [
+    serie.soma !== null ? Plot.ruleY([serie.soma], {stroke: "#8C2F39", strokeDasharray: "4,3"}) : null,
+    Plot.line(somasParciais, {x: "n", y: "s", stroke: "#2F5D8A"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+seriesLista = [
+  {nome: "geométrica, r = 0,9", termo: n => 0.9 ** (n - 1), soma: 10},
+  {nome: "geométrica, r = -0,9", termo: n => (-0.9) ** (n - 1), soma: 1 / 1.9},
+  {nome: "harmônica: soma de 1/n", termo: n => 1 / n, soma: null},
+  {nome: "soma de 1/n²", termo: n => 1 / (n * n), soma: Math.PI ** 2 / 6},
+  {nome: "harmônica alternada", termo: n => (-1) ** (n + 1) / n, soma: Math.log(2)}
+]
+serie = seriesLista.find(s => s.nome === serieEscolhida)
+somasParciais = {
+  let s = 0;
+  return d3.range(1, 201).map(n => { s += serie.termo(n); return {n, s}; });
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os três interativos desta seção — a definição de limite, a iteração de uma recursão linear e as somas parciais de séries — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-mat-g02-laboratorio}
+
+### O supremo por bisseção
+
+A demonstração da @prp-mat-g02-raiz2 é construtiva em espírito: $\sqrt 2$ é o supremo de $\{x \geq 0 : x^2 < 2\}$. A **bisseção** aproxima esse supremo mantendo um intervalo $[a, b]$ com $a$ no conjunto e $b$ cota superior; a cada passo o comprimento cai pela metade.
+
+```{python}
+import math
+
+def supremo_bissecao(pertence, a, b, passos):
+    """a pertence ao conjunto, b e cota superior; devolve a sequencia de intervalos."""
+    historico = []
+    for _ in range(passos):
+        m = (a + b) / 2
+        if pertence(m):
+            a = m
+        else:
+            b = m
+        historico.append((a, b))
+    return historico
+
+hist = supremo_bissecao(lambda x: x * x < 2, 1.0, 2.0, 40)
+for k in [1, 5, 10, 20, 40]:
+    a, b = hist[k - 1]
+    print(f"passo {k:>2}: [{a:.12f}, {b:.12f}]  largura = {b - a:.1e}")
+print(f"math.sqrt(2) = {math.sqrt(2):.12f}")
+```
+
+### Duas sequências para o número $e$
+
+A sequência $(1 + 1/n)^n$ converge devagar: o erro é aproximadamente $e/(2n)$. A série $\sum_{k \geq 0} 1/k!$, que também converge para $e$ (como veremos no @sec-mat-g03), é muito mais rápida — e o teste da razão explica por quê: a razão entre termos consecutivos, $1/(k+1)$, tende a zero.
+
+```{python}
+print(f"{'n':>9} {'(1+1/n)^n':>14} {'erro':>10}")
+for n in [1, 10, 100, 1_000, 10_000, 1_000_000]:
+    a_n = (1 + 1 / n) ** n
+    print(f"{n:>9} {a_n:>14.10f} {math.e - a_n:>10.2e}")
+
+print(f"\n{'k':>3} {'soma 1/j!, j<=k':>18} {'erro':>10}")
+soma, termo = 0.0, 1.0
+for k in range(0, 16):
+    if k > 0:
+        termo /= k
+    soma += termo
+    if k in (2, 5, 10, 15):
+        print(f"{k:>3} {soma:>18.15f} {math.e - soma:>10.2e}")
+```
+
+### Contrações e a cota de erro
+
+Para $g(x) = 0{,}8\,x + 1$, o ponto fixo é $x^* = 5$ e $\beta = 0{,}8$. Verificamos o @thm-mat-g02-ponto-fixo: o erro cai geometricamente e respeita a cota $\beta^n \abs{x_0 - x^*}$.
+
+```{python}
+beta, x_estrela, x = 0.8, 5.0, 0.0
+print(f"{'n':>3} {'x_n':>10} {'erro':>10} {'cota':>10}")
+for n in range(0, 31):
+    if n % 5 == 0:
+        print(f"{n:>3} {x:>10.6f} {abs(x - x_estrela):>10.2e} {beta**n * 5:>10.2e}")
+    x = beta * x + 1
+```
+
+### Séries: harmônica, $\sum 1/n^2$ e a harmônica alternada
+
+```{python}
+import numpy as np
+
+n = np.arange(1, 10**6 + 1)
+H = np.cumsum(1 / n)
+for m in [10, 1_000, 10**6]:
+    print(f"H_{m} = {H[m-1]:.6f}   log({m}) = {math.log(m):.6f}   diferenca = {H[m-1] - math.log(m):.6f}")
+print("(a diferenca converge para a constante de Euler-Mascheroni, 0.5772...)")
+
+S2 = np.cumsum(1 / n**2)
+alt = np.cumsum((-1.0) ** (n + 1) / n)
+print(f"\n{'m':>6} {'soma 1/n^2':>12} {'erro':>9} {'alternada':>11} {'erro':>9} {'1/(m+1)':>9}")
+for m in [10, 100, 10_000]:
+    print(f"{m:>6} {S2[m-1]:>12.8f} {math.pi**2/6 - S2[m-1]:>9.1e}"
+          f" {alt[m-1]:>11.8f} {abs(math.log(2) - alt[m-1]):>9.1e} {1/(m+1):>9.1e}")
+print("(somas: pi^2/6 = 1.64493407 e log 2 = 0.69314718; o erro da alternada respeita a cota de Leibniz)")
+```
+
+### Expansões decimais exatas
+
+Com frações exatas, o algoritmo da demonstração do @thm-mat-g02-decimais calcula os dígitos sem erro de arredondamento.
+
+```{python}
+from fractions import Fraction
+
+def digitos(x, k):
+    """Primeiros k digitos de x em [0, 1), pelo algoritmo d_j = q_j - 10 q_{j-1}."""
+    q_ant, ds = 0, []
+    for j in range(1, k + 1):
+        q = math.floor(x * 10**j)
+        ds.append(q - 10 * q_ant)
+        q_ant = q
+    return "0," + "".join(map(str, ds))
+
+for x in [Fraction(1, 7), Fraction(1, 4), Fraction(1, 3), Fraction(5, 11)]:
+    print(f"{str(x):>5} = {digitos(x, 18)}...")
+
+# 0,4999... e 0,5 sao o mesmo numero: as somas parciais de 0,4999... tendem a 1/2
+parcial = Fraction(4, 10) + sum(Fraction(9, 10**k) for k in range(2, 30))
+print("1/2 - (0,4 seguido de 28 noves) =", Fraction(1, 2) - parcial)
+```
+
+### Valor presente: Gordon e somas truncadas
+
+```{python}
+def vp_truncado(c, g, i, T):
+    return sum(c * (1 + g) ** (t - 1) / (1 + i) ** t for t in range(1, T + 1))
+
+c, i = 1.0, 0.10
+for g in [0.0, 0.03, 0.08]:
+    print(f"g = {g:.2f}: Gordon c/(i-g) = {c / (i - g):8.3f}  |  "
+          + "  ".join(f"T={T}: {vp_truncado(c, g, i, T):8.3f}" for T in (10, 50, 200)))
+print("g = 0.12 (g > i):  " + "  ".join(f"T={T}: {vp_truncado(c, 0.12, i, T):10.2f}" for T in (10, 50, 200)))
+```
+
+## Exercícios resolvidos {#sec-mat-g02-exercicios}
+
+::: {#exr-mat-g02-sup-inf}
+Seja $A = \{1 - 1/n : n \in \N\}$. Mostre que $\inf A = \min A = 0$ e que $A$ não tem máximo. Encontre também $\sup B$ e $\inf B$ para $B = \{(-1)^n + 1/n : n \in \N\}$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para todo $n$, $1 - 1/n \geq 0$, com igualdade em $n = 1$; logo $0$ é cota inferior e pertence a $A$: $\inf A = \min A = 0$. O @exm-mat-g02-sup-sem-max mostrou que $\sup A = 1 \notin A$; portanto $A$ não tem máximo.
+
+Para $B$: os termos com $n$ par são $1 + 1/n \in (1, 3/2]$, máximos em $n = 2$, com valor $3/2$; os com $n$ ímpar são $-1 + 1/n \in (-1, 0]$. Logo $\sup B = \max B = 3/2$. Para o ínfimo, $-1$ é cota inferior e, dado $\varepsilon > 0$, há $n$ ímpar com $1/n < \varepsilon$, isto é, $-1 + 1/n < -1 + \varepsilon$; pela versão para ínfimos da @prp-mat-g02-caracterizacao-sup, $\inf B = -1$, que não é atingido.
+:::
+
+::: {#exr-mat-g02-epsilon-n}
+Mostre, pela definição, que $\dfrac{2n + 1}{n + 3} \to 2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\Big\lvert \dfrac{2n+1}{n+3} - 2 \Big\rvert = \dfrac{\abs{2n + 1 - 2n - 6}}{n + 3} = \dfrac{5}{n+3} < \dfrac{5}{n}$. Dado $\varepsilon > 0$, a propriedade arquimediana dá $N > 5/\varepsilon$; para $n \geq N$, $5/n \leq 5/N < \varepsilon$. A demonstração segue o padrão usual: majorar o erro por uma expressão simples que tende a zero e escolher $N$ a partir dela.
+:::
+
+::: {#exr-mat-g02-permanencia}
+**Permanência do sinal.** Se $x_n \to L > 0$, mostre que existe $N$ com $x_n > L/2$ para todo $n \geq N$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Tome $\varepsilon = L/2 > 0$ na definição: existe $N$ tal que $\abs{x_n - L} < L/2$ para $n \geq N$, e então $x_n > L - L/2 = L/2$. Esse fato foi usado, com $L$ trocado por $\abs{b}$, na demonstração do @thm-mat-g02-operacoes (iii).
+:::
+
+::: {#exr-mat-g02-babilonio}
+**Método babilônico.** Seja $x_1 = 2$ e $x_{n+1} = \frac12\big(x_n + 2/x_n\big)$. Mostre que $x_n \to \sqrt 2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Por indução, $x_n > 0$. Para $n \geq 1$,
+$$
+x_{n+1}^2 - 2 = \frac14\Big(x_n + \frac{2}{x_n}\Big)^2 - 2 = \frac14\Big(x_n - \frac{2}{x_n}\Big)^2 \geq 0,
+$$
+logo $x_n \geq \sqrt 2$ para todo $n$ (para $n = 1$, $x_1 = 2 > \sqrt 2$). Além disso, $x_{n+1} - x_n = \frac{2 - x_n^2}{2 x_n} \leq 0$, de modo que $(x_n)$ é não crescente e limitada inferiormente por $\sqrt 2$. Pelo @thm-mat-g02-monotona, $x_n \to L \geq \sqrt 2 > 0$. Passando ao limite na recursão (@thm-mat-g02-operacoes), $L = \frac12(L + 2/L)$, ou seja, $L^2 = 2$, e $L = \sqrt 2$. Esse é o método de Newton aplicado a $x^2 - 2$ (@sec-cmp-m01), e converge muito rapidamente: o número de dígitos corretos praticamente dobra a cada passo.
+:::
+
+::: {#exr-mat-g02-telescopica}
+Mostre que $\sum_{n=1}^\infty \frac{1}{n(n+1)} = 1$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Como $\frac{1}{n(n+1)} = \frac1n - \frac{1}{n+1}$, a soma parcial é telescópica: $s_m = \big(1 - \tfrac12\big) + \big(\tfrac12 - \tfrac13\big) + \dots + \big(\tfrac1m - \tfrac{1}{m+1}\big) = 1 - \frac{1}{m+1} \to 1$.
+:::
+
+::: {#exr-mat-g02-p-serie}
+Mostre que $\sum 1/n^p$ converge para todo $p > 1$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Agrupe os termos em blocos $2^j \leq n < 2^{j+1}$, $j = 0, 1, 2, \dots$ Cada bloco tem $2^j$ termos, todos $\leq 1/2^{jp}$; a soma do bloco é, portanto, $\leq 2^j / 2^{jp} = (2^{1-p})^j$. Como $p > 1$, a razão $r = 2^{1-p}$ está em $(0, 1)$, e as somas parciais $s_m$ com $m < 2^{k+1}$ satisfazem $s_m \leq \sum_{j=0}^{k} r^j < 1/(1 - r)$. Sendo crescentes e limitadas, convergem. É o mesmo agrupamento que mostrou a divergência da série harmônica (@prp-mat-g02-harmonica), agora usado para cima.
+:::
+
+::: {#exr-mat-g02-noves}
+Mostre, usando a série geométrica, que $0{,}999\ldots = 1$ e $0{,}1999\ldots = 0{,}2$, e explique a relação com o @thm-mat-g02-decimais (c).
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$0{,}999\ldots = \sum_{k \geq 1} 9 \cdot 10^{-k} = \frac{9/10}{1 - 1/10} = 1$. E $0{,}1999\ldots = \frac{1}{10} + \sum_{k \geq 2} 9 \cdot 10^{-k} = \frac{1}{10} + \frac{9/100}{9/10} = \frac{1}{10} + \frac{1}{10} = 0{,}2$. O segundo par é exatamente a situação do teorema com $j = 1$: as expansões coincidem antes de $j$ (não há dígitos antes), diferem por uma unidade em $j$ ($1$ e $2$) e, depois, uma tem só noves e a outra só zeros. O primeiro caso é o mesmo fenômeno para o número 1, que está fora de $[0, 1)$: $1{,}000\ldots$ e $0{,}999\ldots$.
+:::
+
+::: {#exr-mat-g02-meia-vida}
+**Velocidade de convergência.** Na recursão $x_{t+1} = 0{,}8\, x_t + 1$, com $x_0 = 0$: (a) quantos períodos são necessários para que $\abs{x_t - x^*} < 0{,}01$? (b) Qual é a **meia-vida** de um desvio em relação ao estado estacionário?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+O ponto fixo é $x^* = 1/(1 - 0{,}8) = 5$, e $\abs{x_t - 5} = 0{,}8^t \cdot 5$ (@exm-mat-g02-linear). (a) Queremos $5 \cdot 0{,}8^t < 0{,}01$, isto é, $0{,}8^t < 0{,}002$. Tomando logaritmos (que são crescentes; @sec-mat-g03), $t > \log 0{,}002 / \log 0{,}8 \approx 27{,}85$; logo $t = 28$ períodos. (b) A meia-vida $h$ resolve $0{,}8^h = 1/2$: $h = \log(1/2)/\log 0{,}8 \approx 3{,}1$ períodos. Em geral, com coeficiente $a \in (0,1)$, a meia-vida é $\log 2 / \abs{\log a}$ — a medida usual de persistência de choques em macroeconomia e em séries temporais.
+:::
+
+## Flashcards {#sec-mat-g02-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o axioma do supremo?
+Todo subconjunto não vazio de $\R$ limitado superiormente tem supremo (menor cota superior) em $\R$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se caracteriza o supremo com $\varepsilon$?
+Uma cota superior $s$ de $A$ é o supremo se, e somente se, para todo $\varepsilon > 0$ existe $a \in A$ com $a > s - \varepsilon$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é a propriedade arquimediana?
+$\N$ não é limitado em $\R$; equivalentemente, para todo $\varepsilon > 0$ existe $n$ com $1/n < \varepsilon$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que $\Q$ não satisfaz o axioma do supremo?
+O conjunto dos racionais não negativos com quadrado menor que 2 é limitado, mas seu supremo teria quadrado 2, e nenhum racional tem essa propriedade.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que garante o teorema da convergência monótona?
+Toda sequência monótona e limitada converge — para o supremo (se não decrescente) ou o ínfimo (se não crescente) de seus termos.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que afirma o teorema de Bolzano–Weierstrass?
+Toda sequência limitada de números reais tem uma subsequência convergente.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é uma sequência de Cauchy, e por que ela importa?
+Uma sequência cujos termos ficam arbitrariamente próximos entre si a partir de algum índice. Em $\R$ (espaço completo), toda sequência de Cauchy converge, o que permite provar convergência sem conhecer o limite.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que garante o teorema do ponto fixo de uma contração?
+Se $\abs{g(x) - g(y)} \leq \beta \abs{x - y}$ com $\beta < 1$, então $g$ tem um único ponto fixo e a iteração $x_{n+1} = g(x_n)$ converge para ele, com erro $\leq \beta^n \abs{x_0 - x^*}$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando a recursão $x_{t+1} = a x_t + b$ converge?
+Se $\abs{a} < 1$, para $x^* = b/(1-a)$ a partir de qualquer $x_0$: monotonamente se $a > 0$, oscilando se $a < 0$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando a série geométrica $\sum r^t$ converge, e qual é a soma?
+Se, e somente se, $\abs{r} < 1$; a soma (a partir de $t = 0$) é $1/(1 - r)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## $a_n \to 0$ garante que $\sum a_n$ converge?
+Não: é condição necessária, não suficiente. A série harmônica $\sum 1/n$ diverge.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teste da razão?
+Se $\abs{a_{n+1}/a_n} \to \rho$: converge absolutamente se $\rho < 1$, diverge se $\rho > 1$, e é inconclusivo se $\rho = 1$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o valor presente de uma perpetuidade crescente?
+$c/(i - g)$, se $g < i$ (modelo de Gordon); se $g \geq i$, a série diverge.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando duas expansões decimais representam o mesmo número?
+Só quando uma termina em noves repetidos e a outra em zeros, como $0{,}4999\ldots = 0{,}5$.
+:::
+
+## Ficha-resumo {#sec-mat-g02-ficha}
+
+::: {.ficha-resumo}
+**Reais.** $\R$ é um corpo ordenado completo: todo conjunto não vazio limitado superiormente tem supremo. $s = \sup A \iff s$ é cota superior e $\forall \varepsilon\ \exists a > s - \varepsilon$. Consequências: propriedade arquimediana, parte inteira, densidade de $\Q$, existência de $\sqrt 2$.
+
+**Sequências.** $x_n \to L \iff \forall \varepsilon\ \exists N\ \forall n \geq N: \abs{x_n - L} < \varepsilon$. Limite único; convergente $\Rightarrow$ limitada; limites preservam somas, produtos, quocientes e $\leq$ (não $<$); sanduíche. $1/n \to 0$; $r^n \to 0$ se $\abs{r} < 1$.
+
+**Monótonas.** Monótona e limitada $\Rightarrow$ converge (para sup/inf). $(1 + 1/n)^n \uparrow e$. Recursão $x_{t+1} = a x_t + b$: $x_t - x^* = a^t (x_0 - x^*)$.
+
+**Subsequências.** Herdam o limite. Toda sequência tem subsequência monótona; **Bolzano–Weierstrass**: limitada $\Rightarrow$ subsequência convergente. Converge $\iff \liminf = \limsup$.
+
+**Cauchy.** Em $\R$, converge $\iff$ é de Cauchy. Contração ($\beta < 1$): ponto fixo único, $\abs{x_n - x^*} \leq \beta^n \abs{x_0 - x^*}$.
+
+**Séries.** Converge $\Rightarrow a_n \to 0$. Geométrica: $1/(1-r)$ se $\abs{r} < 1$. Harmônica diverge; $\sum 1/n^p$ converge $\iff p > 1$. Critérios: Cauchy, comparação, absoluta $\Rightarrow$ simples, razão ($\rho < 1$), Leibniz (erro $\leq b_{n+1}$).
+
+**Decimais.** Toda $x \in [0,1)$ tem expansão; duas expansões só coincidem no caso $\ldots d\,999\ldots = \ldots (d+1)\,000\ldots$
+
+**Valor presente.** Perpetuidade $c/i$; Gordon $c/(i - g)$ se $g < i$; fluxo limitado por $M$ $\Rightarrow \abs{\mathrm{VP}} \leq M/i$.
+:::
+
+## Notas bibliográficas {#sec-mat-g02-notas}
+
+Os capítulos 2 a 4 de @lima1989 cobrem números reais, sequências e séries com o mesmo nível de rigor deste capítulo, e com muitos exercícios; é a leitura recomendada para aprofundar cada seção. @rudin1976 (capítulos 1 e 3) apresenta o mesmo material de forma mais concisa e já no contexto de espaços métricos, o que prepara o @sec-mat-m01. A construção de $\R$ a partir de $\Q$ — por cortes de Dedekind ou por classes de sequências de Cauchy —, que aqui tomamos como dada, está no apêndice do capítulo 1 de @rudin1976. Para as aplicações a valor presente, veja o @sec-fin-g01; para contrações e programação dinâmica, @stokey1989.

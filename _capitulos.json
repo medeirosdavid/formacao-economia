@@ -8,14 +8,14 @@
  "MAT-G02": {
   "titulo": "Números reais, sequências e séries",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "MAT-G03": {
   "titulo": "Funções de uma variável: limites, continuidade e derivadas",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "MAT-G04": {
   "titulo": "Integração e aplicações",

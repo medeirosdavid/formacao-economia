@@ -71,19 +71,21 @@ partes:
         nivel: G
         prereq: [MAT-G01]
         leituras: [lima1989, rudin1976]
-        topicos: ["Axioma do supremo", "Sequências e limites", "Subsequências e Bolzano–Weierstrass", "Sequências de Cauchy", "Séries e critérios de convergência", "Séries geométricas e valor presente"]
+        status: rascunho
+        topicos: ["Axioma do supremo, propriedade arquimediana e densidade", "Sequências e limites", "Sequências monótonas", "Subsequências, Bolzano–Weierstrass, limite superior e inferior", "Sequências de Cauchy e contrações", "Séries e critérios de convergência", "Expansões decimais", "Valor presente e somas descontadas"]
       - id: MAT-G03
         titulo: "Funções de uma variável: limites, continuidade e derivadas"
         nivel: G
         prereq: [MAT-G02]
-        leituras: [simon1994, sydsaeter2016]
-        topicos: ["Limites e continuidade", "Valor intermediário e Weierstrass", "Derivada e regras de derivação", "Teorema do valor médio", "Fórmula de Taylor", "Concavidade, elasticidade e aplicações"]
+        leituras: [lima1989, simon1994, sydsaeter2016]
+        status: rascunho
+        topicos: ["Limites de funções", "Continuidade", "Valor intermediário, ponto fixo e existência de equilíbrio", "Teorema de Weierstrass", "Derivada e regras de derivação", "Fermat, Rolle e valor médio", "Fórmula de Taylor e aproximações logarítmicas", "Concavidade e elasticidade"]
       - id: MAT-G04
         titulo: "Integração e aplicações"
         nivel: G
         prereq: [MAT-G03]
         leituras: [simon1994, sydsaeter2016]
-        topicos: ["Integral de Riemann", "Teorema fundamental do cálculo", "Técnicas de integração", "Integrais impróprias", "Regra de Leibniz", "Aplicações: excedentes, valor presente contínuo"]
+        topicos: ["Integral de Riemann", "Teorema fundamental do cálculo", "Logaritmo e exponencial", "Técnicas de integração", "Integrais impróprias", "Regra de Leibniz", "Aplicações: excedentes, valor presente contínuo"]
       - id: MAT-G05
         titulo: "Álgebra linear I: vetores, matrizes e sistemas lineares"
         nivel: G

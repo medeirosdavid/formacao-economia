@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Funções de uma variável: limites, continuidade e derivadas* (MAT-G03); *Álgebra linear I: vetores, matrizes e sistemas lineares* (MAT-G05)
+**Pré-requisitos:** @sec-mat-g03 (*Funções de uma variável: limites, continuidade e derivadas*); *Álgebra linear I: vetores, matrizes e sistemas lineares* (MAT-G05)
 :::
 
 **Leituras principais:** @simon1994, @sydsaeter2016

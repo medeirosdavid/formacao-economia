@@ -2,6 +2,34 @@
 
 Registro curto de cada sessão: o que foi feito, decisões e pendências. Entradas mais recentes no topo.
 
+## 22/11/2026 — MAT-G02 e MAT-G03
+
+**Feito**
+
+- Capítulo **MAT-G02** *Números reais, sequências e séries* (status: rascunho), seguindo Lima (*Análise Real*, caps. 2–4) e Rudin (caps. 1 e 3):
+  - axioma do supremo, propriedade arquimediana, parte inteira, densidade de $\Q$, existência de $\sqrt 2$;
+  - limites de sequências, sequências monótonas (número $e$ com as sequências $(1+1/n)^n$ e $(1+1/n)^{n+1}$), recursão linear e estado estacionário;
+  - subsequências, Bolzano–Weierstrass, limites superior e inferior, critério de Cauchy, sequências contrativas e ponto fixo de contrações em $\R$ (ponte para Banach/Bellman);
+  - séries (geométrica, harmônica, $\sum 1/n^p$, comparação, absoluta, razão, Leibniz);
+  - expansões decimais, cumprindo a promessa do MAT-G01 (unicidade exceto $\ldots 999 = \ldots 000$);
+  - valor presente: perpetuidade, Gordon e fluxos limitados;
+  - 3 interativos (definição ε–N, iteração linear, somas parciais), laboratório, 9 exercícios, 14 flashcards.
+- Capítulo **MAT-G03** *Funções de uma variável: limites, continuidade e derivadas* (status: rascunho), seguindo Lima (caps. 6–9), Simon & Blume e Sydsæter:
+  - limites ε–δ e caracterização por sequências; continuidade; exponencial e logaritmo admitidos (construção prometida para o MAT-G04, onde o tópico foi acrescentado);
+  - valor intermediário, ponto fixo em dimensão 1, existência de preço de equilíbrio, continuidade da inversa, Weierstrass;
+  - derivada pela formulação de Carathéodory (regras do produto, quociente, cadeia e inversa), capitalização contínua;
+  - Fermat (promessa do MAT-G01), Rolle, valor médio, cotas para $\log(1+x)$;
+  - Taylor com resto de Lagrange, $e^x$ e $\log 2$ como séries (promessas do MAT-G02), condição de segunda ordem;
+  - concavidade (quatro caracterizações), máximo global, elasticidade, receita e regra de Lerner;
+  - aplicação: IPCA mensal desde 1980 (SGS 433), soma das taxas × inflação acumulada exata;
+  - 3 interativos (secante → tangente, polinômios de Taylor, elasticidade e receita), laboratório, 9 exercícios, 14 flashcards.
+
+**Pendências**
+
+- [ ] David conferir, no site, os números da aplicação do IPCA (a sandbox não acessa o BCB; o código foi testado com dados simulados).
+- [ ] David revisar MAT-G01, MAT-G02 e MAT-G03.
+- [ ] Próximo capítulo da trilha: MAT-G04 *Integração e aplicações* (inclui a construção do logaritmo e da exponencial) ou MAT-G05 *Álgebra linear I*.
+
 ## 22/11/2026 — MAT-G01 Lógica, conjuntos e métodos de demonstração
 
 **Feito**

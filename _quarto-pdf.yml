@@ -6,6 +6,8 @@ book:
   - part: partes/01-matematica/index.qmd
     chapters:
     - partes/01-matematica/mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd
+    - partes/01-matematica/mat-g02-numeros-reais-sequencias-e-series.qmd
+    - partes/01-matematica/mat-g03-funcoes-de-uma-variavel-limites-continuidade-e-derivadas.qmd
   - part: partes/05-econometria/index.qmd
     chapters:
     - partes/05-econometria/ecm-g01-regressao-linear-simples.qmd

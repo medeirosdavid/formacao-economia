@@ -8,8 +8,8 @@ Ferramentas de análise, álgebra linear, otimização e dinâmica usadas no res
 | Código | Nível | Capítulo | Status |
 |:--|:--|:--|:--|
 | MAT-G01 | G | [Lógica, conjuntos e métodos de demonstração](mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd) | ◔ rascunho |
-| MAT-G02 | G | [Números reais, sequências e séries](mat-g02-numeros-reais-sequencias-e-series.qmd) | ○ planejado |
-| MAT-G03 | G | [Funções de uma variável: limites, continuidade e derivadas](mat-g03-funcoes-de-uma-variavel-limites-continuidade-e-derivadas.qmd) | ○ planejado |
+| MAT-G02 | G | [Números reais, sequências e séries](mat-g02-numeros-reais-sequencias-e-series.qmd) | ◔ rascunho |
+| MAT-G03 | G | [Funções de uma variável: limites, continuidade e derivadas](mat-g03-funcoes-de-uma-variavel-limites-continuidade-e-derivadas.qmd) | ◔ rascunho |
 | MAT-G04 | G | [Integração e aplicações](mat-g04-integracao-e-aplicacoes.qmd) | ○ planejado |
 | MAT-G05 | G | [Álgebra linear I: vetores, matrizes e sistemas lineares](mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd) | ○ planejado |
 | MAT-G06 | G | [Cálculo em várias variáveis](mat-g06-calculo-em-varias-variaveis.qmd) | ○ planejado |
