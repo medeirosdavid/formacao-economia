@@ -2,26 +2,979 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M01`
+[Mestrado]{.nivel .nivel-M} · [rascunho]{.status} · `MAT-M01`
 
 **Pré-requisitos:** @sec-mat-g02 (*Números reais, sequências e séries*); @sec-mat-g06 (*Cálculo em várias variáveis*)
 
-**Leituras principais:** @ok2007, @rudin1976, @delafuente2000
+**Leituras principais:** @ok2007, @rudin1976, @lima1977, @delafuente2000
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-mat-m01-motivacao}
 
-1. Métricas e exemplos
-2. Bolas, abertos, fechados, interior, fecho e fronteira
-3. Subespaços, topologia relativa, métricas equivalentes e produtos
-4. Convergência e caracterização sequencial de fechados
-5. Completude, teorema de Cantor e completamento
-6. Continuidade, continuidade uniforme, funções Lipschitz e homeomorfismos
-7. Extensão de funções uniformemente contínuas
-8. Compacidade: coberturas, caracterizações métricas e Heine–Borel
-9. Celas encaixadas e Bolzano–Weierstrass em $\mathbb{R}^n$
-10. Teorema de Weierstrass em espaços métricos
-11. Conexidade e valor intermediário
+Os objetos que um economista manipula raramente são números isolados. São cestas de bens em $\R^n$, fluxos de consumo $(c_0, c_1, c_2, \dots)$ que se estendem indefinidamente, funções valor, estratégias, distribuições de probabilidade. As perguntas que fazemos sobre eles, porém, são as mesmas da análise de uma variável:
+
+- **existe** uma escolha ótima? um equilíbrio?
+- um procedimento iterativo — iteração da função valor, tâtonnement, algoritmo numérico — **converge**? e converge para algo que pertence ao espaço em que estamos trabalhando?
+- uma pequena mudança nos parâmetros produz uma pequena mudança na solução?
+
+Todas dependem apenas de uma noção de **distância**. Um **espaço métrico** é um conjunto munido de uma distância, e a teoria deste capítulo mostra que boa parte do que se fez em $\R$ (@sec-mat-g02, @sec-mat-g03) vale nessa generalidade. Três propriedades organizam o capítulo:
+
+- **completude**: toda sequência de Cauchy converge. É o que garante que procedimentos iterativos têm limite *dentro* do espaço; é a hipótese do teorema do ponto fixo de Banach e, por meio dele, da programação dinâmica (@sec-mat-m05, @sec-mat-d02);
+- **compacidade**: toda cobertura por abertos tem subcobertura finita, ou, em espaços métricos, toda sequência tem subsequência convergente. É a hipótese do teorema de Weierstrass, o principal teorema de existência da teoria econômica;
+- **conexidade**: o espaço não se parte em dois abertos disjuntos. É o que está por trás do teorema do valor intermediário.
+
+O capítulo desenvolve:
+
+1. métricas, bolas, abertos, fechados, interior, fecho e fronteira;
+2. subespaços, métricas equivalentes e produtos;
+3. convergência e a caracterização de fechados por sequências;
+4. completude, o espaço das funções limitadas, o teorema da interseção de Cantor e o completamento;
+5. continuidade, continuidade uniforme, funções Lipschitz, homeomorfismos e a extensão de funções uniformemente contínuas;
+6. compacidade, suas três caracterizações em espaços métricos, celas encaixadas, Bolzano–Weierstrass e Heine–Borel em $\R^n$;
+7. o teorema de Weierstrass e a existência de ótimos;
+8. conexidade e o valor intermediário.
+
+## Espaços métricos {#sec-mat-m01-metricas}
+
+::: {#def-mat-m01-metrica}
+## Métrica
+Uma **métrica** num conjunto não vazio $X$ é uma função $d: X \times X \to \R$ tal que, para todos $x, y, z \in X$:
+
+- (M1) $d(x, y) \geq 0$, com $d(x, y) = 0$ se, e somente se, $x = y$;
+- (M2) $d(x, y) = d(y, x)$;
+- (M3) $d(x, z) \leq d(x, y) + d(y, z)$ (desigualdade triangular).
+
+O par $(X, d)$ é um **espaço métrico**. Quando a métrica estiver clara, escrevemos só $X$.
 :::
+
+::: {#exm-mat-m01-metricas}
+## Espaços métricos
+(a) $\R$ com $d(x, y) = \abs{x - y}$.
+(b) $\R^n$ com qualquer uma das métricas
+$$
+d_2(\vb x, \vb y) = \Big(\sum_{i=1}^n (x_i - y_i)^2\Big)^{1/2}, \qquad d_1(\vb x, \vb y) = \sum_{i=1}^n \abs{x_i - y_i}, \qquad d_\infty(\vb x, \vb y) = \max_{i} \abs{x_i - y_i} .
+$$
+Para $d_2 = \norm{\vb x - \vb y}$, a desigualdade triangular é o @cor-mat-g05-triangular; para $d_1$ e $d_\infty$, ela decorre de $\abs{x_i - z_i} \leq \abs{x_i - y_i} + \abs{y_i - z_i}$, somando ou tomando o máximo em $i$. Salvo menção em contrário, $\R^n$ tem a métrica euclidiana $d_2$.
+(c) A **métrica discreta** em qualquer conjunto: $d(x, y) = 1$ se $x \neq y$ e $d(x, x) = 0$.
+(d) Seja $S$ um conjunto qualquer e $B(S)$ o conjunto das funções **limitadas** $f: S \to \R$, com a **métrica do supremo**
+$$
+d_\infty(f, g) \defeq \sup_{s \in S} \abs{f(s) - g(s)} .
+$$
+O supremo é finito porque $\abs{f - g} \leq \abs f + \abs g$ é limitada. Para a desigualdade triangular, para cada $s$, $\abs{f(s) - h(s)} \leq \abs{f(s) - g(s)} + \abs{g(s) - h(s)} \leq d_\infty(f, g) + d_\infty(g, h)$; basta tomar o supremo em $s$. Com $S = \N$, $B(\N)$ é o espaço das sequências limitadas — por exemplo, fluxos de consumo limitados —, também denotado $\ell^\infty$. Com $S = [a, b]$, as funções contínuas formam um subconjunto $C[a, b] \subseteq B([a, b])$ (@thm-mat-g03-weierstrass).
+(e) Em $C[a, b]$, também $d_1(f, g) \defeq \int_a^b \abs{f(t) - g(t)}\,\dd t$ é uma métrica. A única propriedade não imediata é (M1): se $f \neq g$, então $\abs{f - g}$ é contínua e positiva em algum ponto, logo maior que uma constante $c > 0$ num intervalo de comprimento $\ell > 0$, e $d_1(f, g) \geq c\,\ell > 0$.
+(f) Qualquer subconjunto $Y \subseteq X$, com a restrição de $d$ a $Y \times Y$, é um espaço métrico: um **subespaço** de $X$.
+:::
+
+As três métricas de $\R^n$ estão relacionadas por
+$$
+d_\infty(\vb x, \vb y) \leq d_2(\vb x, \vb y) \leq d_1(\vb x, \vb y) \leq \sqrt n\, d_2(\vb x, \vb y) \leq n\, d_\infty(\vb x, \vb y) .
+$$ {#eq-mat-m01-metricas-rn}
+De fato, com $a_i = \abs{x_i - y_i}$: $\max_i a_i^2 \leq \sum_i a_i^2 \leq \big(\sum_i a_i\big)^2$; pela desigualdade de Cauchy–Schwarz aplicada a $(a_i)$ e $(1, \dots, 1)$, $\sum_i a_i \leq \sqrt n\,\big(\sum_i a_i^2\big)^{1/2}$; e $\sum_i a_i^2 \leq n \max_i a_i^2$. O laboratório mostra que as constantes não podem ser melhoradas.
+
+::: {#prp-mat-m01-triangular-inversa}
+## Consequências da desigualdade triangular
+Para todos $x, y, z, x', y' \in X$:
+
+(a) $\abs{d(x, z) - d(y, z)} \leq d(x, y)$;
+(b) $\abs{d(x, y) - d(x', y')} \leq d(x, x') + d(y, y')$.
+:::
+
+::: {.proof}
+Para (a), $d(x, z) \leq d(x, y) + d(y, z)$ dá $d(x, z) - d(y, z) \leq d(x, y)$, e, trocando os papéis de $x$ e $y$, $d(y, z) - d(x, z) \leq d(x, y)$. Para (b), $d(x, y) \leq d(x, x') + d(x', y') + d(y', y)$, e, simetricamente, $d(x', y') \leq d(x', x) + d(x, y) + d(y, y')$.
+:::
+
+O **diâmetro** de $A \subseteq X$ é $\diam A \defeq \sup\{d(x, y) : x, y \in A\}$, e $A$ é **limitado** se $\diam A < \infty$ — equivalentemente, se $A$ está contido em alguma bola. A **distância** de um ponto a um conjunto não vazio é $d(x, A) \defeq \inf_{a \in A} d(x, a)$.
+
+## Abertos, fechados, interior, fecho e fronteira {#sec-mat-m01-topologia}
+
+::: {#def-mat-m01-abertos}
+## Bolas, abertos e fechados
+A **bola aberta** de centro $x$ e raio $r > 0$ é $B(x, r) \defeq \{y \in X : d(x, y) < r\}$, e a **bola fechada** é $B[x, r] \defeq \{y \in X : d(x, y) \leq r\}$. Um conjunto $U \subseteq X$ é **aberto** se para cada $x \in U$ existe $r > 0$ com $B(x, r) \subseteq U$; um conjunto $F \subseteq X$ é **fechado** se $X \setminus F$ é aberto.
+:::
+
+Em $\R^2$, as bolas de $d_2$ são discos, as de $d_1$ são losangos e as de $d_\infty$ são quadrados; o interativo (@sec-mat-m01-interativo) mostra as três e uma métrica menos comportada.
+
+::: {#prp-mat-m01-bolas}
+## Bolas abertas são abertas
+Bolas abertas são abertas, bolas fechadas são fechadas, e todo conjunto unitário $\{x\}$ é fechado.
+:::
+
+::: {.proof}
+Seja $y \in B(x, r)$ e $s \defeq r - d(x, y) > 0$. Se $z \in B(y, s)$, então $d(x, z) \leq d(x, y) + d(y, z) < d(x, y) + s = r$; logo $B(y, s) \subseteq B(x, r)$. Se $y \notin B[x, r]$, então $s \defeq d(x, y) - r > 0$ e, para $z \in B(y, s)$, $d(x, z) \geq d(x, y) - d(y, z) > d(x, y) - s = r$; logo $B(y, s)$ não encontra $B[x, r]$, e o complementar de $B[x, r]$ é aberto. Por fim, cada $y \neq x$ tem a bola $B(y, d(x, y))$, que não contém $x$: o complementar de $\{x\}$ é aberto.
+:::
+
+::: {#thm-mat-m01-abertos}
+## Propriedades dos abertos
+Num espaço métrico $X$:
+
+(a) $\emptyset$ e $X$ são abertos;
+(b) toda união (de uma família qualquer) de abertos é aberta;
+(c) toda interseção **finita** de abertos é aberta.
+
+Dualmente, $\emptyset$ e $X$ são fechados, toda interseção de fechados é fechada e toda união finita de fechados é fechada.
+:::
+
+::: {.proof}
+Para (a), não há o que verificar em $\emptyset$, e $X$ contém todas as bolas. Para (b), se $x \in \bigcup_i U_i$, então $x \in U_j$ para algum $j$, e uma bola em torno de $x$ contida em $U_j$ está contida na união. Para (c), se $x \in U_1 \cap \dots \cap U_k$ e $B(x, r_i) \subseteq U_i$, então $r \defeq \min_i r_i > 0$ e $B(x, r) \subseteq U_1 \cap \dots \cap U_k$. As afirmações sobre fechados seguem pelas leis de De Morgan (@prp-mat-g01-de-morgan).
+:::
+
+A finitude em (c) é essencial: em $\R$, $\bigcap_{n} (-1/n, 1/n) = \{0\}$ não é aberto e, dualmente, $\bigcup_n [1/n, 1] = (0, 1]$ não é fechado. A família dos abertos é a **topologia** de $(X, d)$. Propriedades definidas apenas em termos de abertos — fecho, convergência, continuidade, compacidade, conexidade — são **topológicas**; veremos que completude e limitação não são.
+
+::: {#def-mat-m01-interior-fecho}
+## Interior, fecho e fronteira
+Seja $A \subseteq X$. Um ponto $x$ é **interior** a $A$ se alguma bola $B(x, r)$ está contida em $A$; é **aderente** a $A$ se toda bola $B(x, r)$ encontra $A$; é **ponto de acumulação** de $A$ se toda bola $B(x, r)$ contém um ponto de $A$ diferente de $x$. O **interior** $\interior A$ é o conjunto dos pontos interiores, o **fecho** $\overline A$ é o conjunto dos pontos aderentes e a **fronteira** é $\partial A \defeq \overline A \setminus \interior A$ — os pontos cujas bolas encontram tanto $A$ quanto $X \setminus A$. $A$ é **denso** em $X$ se $\overline A = X$.
+:::
+
+::: {#prp-mat-m01-interior-fecho}
+## Interior e fecho
+Seja $A \subseteq X$.
+
+(a) $X \setminus \overline A = \interior(X \setminus A)$.
+(b) $\interior A$ é aberto e é o maior aberto contido em $A$; $A$ é aberto se, e somente se, $A = \interior A$.
+(c) $\overline A$ é fechado e é o menor fechado que contém $A$; $A$ é fechado se, e somente se, $A = \overline A$.
+:::
+
+::: {.proof}
+Para (a), $x \notin \overline A$ se, e somente se, alguma bola $B(x, r)$ não encontra $A$, isto é, $B(x, r) \subseteq X \setminus A$, o que significa $x \in \interior(X \setminus A)$.
+
+Para (b), se $x \in \interior A$ e $B(x, r) \subseteq A$, cada $y \in B(x, r)$ tem uma bola contida em $B(x, r)$ (@prp-mat-m01-bolas), logo em $A$; assim $B(x, r) \subseteq \interior A$, e $\interior A$ é aberto. Se $U \subseteq A$ é aberto, todo ponto de $U$ é interior a $A$, e $U \subseteq \interior A$. Em particular, $A = \interior A$ se $A$ é aberto, e a recíproca é imediata.
+
+Para (c), por (a), $X \setminus \overline A$ é um interior, portanto aberto, e $\overline A$ é fechado. Se $F \supseteq A$ é fechado, $X \setminus F$ é um aberto contido em $X \setminus A$, logo, por (b), contido em $\interior(X \setminus A) = X \setminus \overline A$; isto é, $\overline A \subseteq F$. Com $F = A$, obtemos $A = \overline A$ quando $A$ é fechado; a recíproca segue de $\overline A$ ser fechado.
+:::
+
+::: {#exm-mat-m01-interior}
+## Interior, fecho e fronteira
+(a) Em $\R$, $A = [0, 1)$ tem $\interior A = (0, 1)$, $\overline A = [0, 1]$ e $\partial A = \{0, 1\}$. Entre dois reais há racionais (@thm-mat-g02-densidade) e irracionais (se $q \in \Q$ está entre $x - \sqrt 2$ e $y - \sqrt 2$, então $q + \sqrt 2$ é irracional e está entre $x$ e $y$); logo $\interior \Q = \emptyset$, $\overline \Q = \R$ e $\partial \Q = \R$.
+(b) Em $\R^2$, $A = \{\vb x : 0 < \norm{\vb x} \leq 1\}$ tem interior $\{\vb x : 0 < \norm{\vb x} < 1\}$, fecho $B[\vb 0, 1]$ e fronteira $\{\vb x : \norm{\vb x} = 1\} \cup \{\vb 0\}$.
+(c) Com a métrica discreta, $B(x, 1/2) = \{x\}$: todo conjunto é aberto e, portanto, também fechado. Em particular, $B(x, 1) = \{x\}$ é fechado, mas $B[x, 1] = X$: **o fecho de uma bola aberta pode ser menor que a bola fechada de mesmo raio**. (Em espaços normados isso não acontece; veja o @sec-mat-m10.)
+:::
+
+## Subespaços, métricas equivalentes e produtos {#sec-mat-m01-subespacos}
+
+Se $Y \subseteq X$ tem a métrica induzida, as bolas de $Y$ são $B_Y(y, r) = B(y, r) \cap Y$, e "aberto" passa a depender do espaço de referência: $[0, 1/2)$ é aberto em $Y = [0, 1]$, porque $[0, 1/2) = (-1, 1/2) \cap [0, 1]$, mas não é aberto em $\R$.
+
+::: {#prp-mat-m01-relativa}
+## Topologia relativa
+Seja $Y \subseteq X$ com a métrica induzida. Um conjunto $U \subseteq Y$ é aberto em $Y$ se, e somente se, $U = V \cap Y$ para algum $V$ aberto em $X$; e $F \subseteq Y$ é fechado em $Y$ se, e somente se, $F = G \cap Y$ para algum $G$ fechado em $X$.
+:::
+
+::: {.proof}
+Se $U$ é aberto em $Y$, escolha, para cada $y \in U$, $r_y > 0$ com $B_Y(y, r_y) \subseteq U$, e seja $V \defeq \bigcup_{y \in U} B(y, r_y)$, aberto em $X$ pelo @thm-mat-m01-abertos. Então $V \cap Y = \bigcup_{y \in U} B_Y(y, r_y)$ contém cada $y \in U$ e está contido em $U$. Reciprocamente, se $U = V \cap Y$ e $y \in U$, existe $B(y, r) \subseteq V$, e $B_Y(y, r) = B(y, r) \cap Y \subseteq U$. A afirmação sobre fechados segue tomando complementares em $Y$: $Y \setminus (G \cap Y) = (X \setminus G) \cap Y$.
+:::
+
+Em economia, os domínios naturais são subespaços: o ortante $\R^n_+$ das cestas de consumo, o simplexo das distribuições de probabilidade. Dizer que uma utilidade é contínua em $\R^n_+$, ou que um conjunto é aberto em $\R^n_+$, refere-se à topologia relativa.
+
+::: {#def-mat-m01-equivalentes}
+## Métricas equivalentes
+Duas métricas $d$ e $d'$ em $X$ são **equivalentes** se definem os mesmos abertos, e **uniformemente equivalentes** se existem $\alpha, \beta > 0$ com $\alpha\, d(x, y) \leq d'(x, y) \leq \beta\, d(x, y)$ para todos $x, y$.
+:::
+
+::: {#prp-mat-m01-equivalentes}
+## O que métricas uniformemente equivalentes preservam
+Se $d$ e $d'$ são uniformemente equivalentes, então elas definem os mesmos abertos, os mesmos fechados, as mesmas sequências convergentes (com os mesmos limites), as mesmas sequências de Cauchy e os mesmos conjuntos limitados.
+:::
+
+::: {.proof}
+De $d' \leq \beta d$ vem $B_d(x, r/\beta) \subseteq B_{d'}(x, r)$, e de $\alpha d \leq d'$ vem $B_{d'}(x, \alpha r) \subseteq B_d(x, r)$. Assim, toda bola de uma métrica contém uma bola da outra com o mesmo centro, e os abertos coincidem; os fechados também, por complementação. As outras afirmações seguem diretamente das desigualdades: por exemplo, $d'(x_n, x) \leq \beta d(x_n, x)$ e $d(x_n, x) \leq d'(x_n, x)/\alpha$.
+:::
+
+Pela @eq-mat-m01-metricas-rn, $d_1$, $d_2$ e $d_\infty$ são uniformemente equivalentes em $\R^n$: "aberto", "convergente", "de Cauchy" e "limitado" em $\R^n$ não dependem da escolha entre elas. O @sec-mat-m10 mostra que isso vale para quaisquer duas normas em dimensão finita. Já $\tilde d \defeq \min\{d, 1\}$ é equivalente a $d$ — as bolas de raio menor que 1 das duas métricas coincidem — mas, com $\tilde d$, todo conjunto é limitado: **limitação não é uma propriedade topológica**.
+
+**Produtos.** Se $(X, d_X)$ e $(Y, d_Y)$ são espaços métricos, o produto $X \times Y$ recebe a métrica $d\big((x, y), (x', y')\big) \defeq \max\{d_X(x, x'), d_Y(y, y')\}$ (a soma ou a raiz da soma dos quadrados dariam métricas uniformemente equivalentes). Uma sequência $(x_n, y_n)$ converge para $(x, y)$ se, e somente se, $x_n \to x$ e $y_n \to y$, e produtos $U \times V$ de abertos são abertos. Com essa construção, $\R^n = \R \times \dots \times \R$ com $d_\infty$.
+
+## Convergência {#sec-mat-m01-convergencia}
+
+Uma sequência $(x_n)$ em $X$ **converge** para $x$, e escrevemos $x_n \to x$, se $d(x_n, x) \to 0$: para todo $\varepsilon > 0$ existe $N$ com $d(x_n, x) < \varepsilon$ para $n \geq N$. As demonstrações de $\R$ (@prp-mat-g02-unicidade, @prp-mat-g02-subsequencia) valem palavra por palavra com $d$ no lugar de $\abs{\,\cdot\,}$: o limite, quando existe, é único; sequências convergentes são limitadas; e toda subsequência de uma sequência convergente converge para o mesmo limite.
+
+::: {#thm-mat-m01-fecho-sequencial}
+## Fecho e sequências
+Seja $A \subseteq X$.
+
+(a) $x \in \overline A$ se, e somente se, existe uma sequência $(a_n)$ em $A$ com $a_n \to x$.
+(b) $A$ é fechado se, e somente se, o limite de toda sequência convergente de pontos de $A$ pertence a $A$.
+(c) $x$ é ponto de acumulação de $A$ se, e somente se, existe uma sequência em $A \setminus \{x\}$ que converge para $x$.
+:::
+
+::: {.proof}
+Para (a), se $x \in \overline A$, escolha $a_n \in B(x, 1/n) \cap A$; então $d(a_n, x) < 1/n \to 0$. Reciprocamente, se $a_n \to x$ com $a_n \in A$, cada bola $B(x, r)$ contém $a_n$ para $n$ grande, logo encontra $A$. Para (b), pela @prp-mat-m01-interior-fecho, $A$ é fechado se, e somente se, $\overline A \subseteq A$, o que, por (a), é exatamente a condição do enunciado. Para (c), repita (a) com $a_n \in B(x, 1/n) \cap (A \setminus \{x\})$.
+:::
+
+A parte (b) é a forma operacional de "fechado": um conjunto é fechado quando não se pode sair dele passando ao limite. Em $\R^n$, como $d_\infty$ é uniformemente equivalente a $d_2$, $\vb x_k \to \vb x$ se, e somente se, cada coordenada converge. Em $B(S)$, $f_n \to f$ significa $\sup_s \abs{f_n(s) - f(s)} \to 0$: é a **convergência uniforme**, mais forte que a convergência ponto a ponto. Por exemplo, $f_n(s) = s^n$ converge para $0$ em cada $s \in [0, 1)$, mas $d_\infty(f_n, 0) = \sup_{s \in [0,1)} s^n = 1$ para todo $n$; o @sec-mat-m07 estuda a diferença em detalhe.
+
+## Completude {#sec-mat-m01-completude}
+
+::: {#def-mat-m01-completo}
+## Sequência de Cauchy e espaço completo
+$(x_n)$ é **de Cauchy** se para todo $\varepsilon > 0$ existe $N$ com $d(x_m, x_n) < \varepsilon$ para todos $m, n \geq N$. O espaço $X$ é **completo** se toda sequência de Cauchy em $X$ converge para um ponto de $X$.
+:::
+
+::: {#prp-mat-m01-cauchy}
+## Propriedades das sequências de Cauchy
+(a) Toda sequência convergente é de Cauchy.
+(b) Toda sequência de Cauchy é limitada.
+(c) Se uma sequência de Cauchy tem uma subsequência que converge para $x$, então a sequência inteira converge para $x$.
+:::
+
+::: {.proof}
+Para (a), se $x_n \to x$, então $d(x_m, x_n) \leq d(x_m, x) + d(x, x_n) < \varepsilon$ para $m, n$ grandes. Para (b), com $\varepsilon = 1$, todos os termos a partir de $N$ estão em $B(x_N, 1)$, e os anteriores são finitos. Para (c), dado $\varepsilon > 0$, tome $N$ com $d(x_m, x_n) < \varepsilon/2$ para $m, n \geq N$ e $k$ com $n_k \geq N$ e $d(x_{n_k}, x) < \varepsilon/2$; então $d(x_n, x) \leq d(x_n, x_{n_k}) + d(x_{n_k}, x) < \varepsilon$ para $n \geq N$.
+:::
+
+::: {#thm-mat-m01-completos}
+## Espaços completos
+(a) $\R^n$ é completo (com $d_1$, $d_2$ ou $d_\infty$).
+(b) Para qualquer conjunto $S$, $B(S)$ com a métrica do supremo é completo.
+(c) Se $X$ é completo, um subconjunto $Y \subseteq X$ é completo (com a métrica induzida) se, e somente se, $Y$ é fechado em $X$.
+:::
+
+::: {.proof}
+Para (a), se $(\vb x_k)$ é de Cauchy em $d_\infty$, cada coordenada $(x_{k,i})_k$ é de Cauchy em $\R$, pois $\abs{x_{k,i} - x_{l,i}} \leq d_\infty(\vb x_k, \vb x_l)$; pelo critério de Cauchy (@thm-mat-g02-cauchy), converge para algum $x_i$, e então $\vb x_k \to \vb x$ coordenada a coordenada, isto é, em $d_\infty$. Pela @prp-mat-m01-equivalentes, o mesmo vale para $d_1$ e $d_2$.
+
+Para (b), seja $(f_n)$ de Cauchy em $B(S)$. Para cada $s$, $\abs{f_n(s) - f_m(s)} \leq d_\infty(f_n, f_m)$, de modo que $(f_n(s))$ é de Cauchy em $\R$ e converge para um número que chamamos $f(s)$. Dado $\varepsilon > 0$, tome $N$ com $d_\infty(f_n, f_m) < \varepsilon$ para $m, n \geq N$. Para cada $s$ e cada $n \geq N$, fazendo $m \to \infty$ em $\abs{f_n(s) - f_m(s)} < \varepsilon$, obtemos $\abs{f_n(s) - f(s)} \leq \varepsilon$. Daí, primeiro, $\abs{f(s)} \leq \sup_t \abs{f_N(t)} + \varepsilon$ para todo $s$, e $f \in B(S)$; segundo, $d_\infty(f_n, f) \leq \varepsilon$ para $n \geq N$, isto é, $f_n \to f$ em $B(S)$.
+
+Para (c), suponha $Y$ fechado e $(y_n)$ de Cauchy em $Y$. Ela é de Cauchy em $X$, converge para algum $x \in X$ e, pelo @thm-mat-m01-fecho-sequencial, $x \in Y$. Reciprocamente, suponha $Y$ completo e $y_n \to x \in X$ com $y_n \in Y$. A sequência é de Cauchy, logo converge para algum $y \in Y$; pela unicidade do limite em $X$, $x = y \in Y$, e $Y$ é fechado. (Esta direção não usa a completude de $X$: **um subespaço completo de qualquer espaço métrico é fechado nele.**)
+:::
+
+O item (b) é um dos resultados mais usados deste capítulo: em programação dinâmica, a função valor é procurada em $B(S)$, e é a completude desse espaço que garante que a iteração da função valor converge para uma função limitada (@sec-mat-m07, @sec-mat-d02). Exemplos de espaços **não** completos: $\Q$ (as aproximações de $\sqrt 2$ do laboratório), $(0, 1]$ (a sequência $1/n$) e $C[a, b]$ com a métrica $d_1$ (@sec-mat-m10).
+
+::: {#thm-mat-m01-cantor}
+## Teorema da interseção de Cantor
+Um espaço métrico $X$ é completo se, e somente se, para toda sequência decrescente $F_1 \supseteq F_2 \supseteq \cdots$ de fechados não vazios com $\diam F_n \to 0$, a interseção $\bigcap_n F_n$ é não vazia. Nesse caso, a interseção tem exatamente um ponto.
+:::
+
+::: {.proof}
+Suponha $X$ completo e escolha $x_n \in F_n$. Para $m \geq n$, $x_m \in F_m \subseteq F_n$, de modo que $d(x_m, x_n) \leq \diam F_n \to 0$: a sequência é de Cauchy e converge para algum $x$. Para cada $n$ fixo, a cauda $(x_m)_{m \geq n}$ está no fechado $F_n$, logo $x \in F_n$ (@thm-mat-m01-fecho-sequencial). Se $x, y \in \bigcap_n F_n$, então $d(x, y) \leq \diam F_n$ para todo $n$, e $x = y$.
+
+Reciprocamente, seja $(x_n)$ de Cauchy e $F_n \defeq \overline{\{x_m : m \geq n\}}$, fechados, não vazios e decrescentes. O fecho não aumenta o diâmetro: se $x, y \in \overline A$ e $a, b \in A$ estão a menos de $\varepsilon$ de $x$ e $y$, então $d(x, y) < d(a, b) + 2\varepsilon \leq \diam A + 2\varepsilon$. Assim, $\diam F_n = \diam\{x_m : m \geq n\} \to 0$, pois a sequência é de Cauchy. Por hipótese, existe $x \in \bigcap_n F_n$, e como $x_n$ e $x$ estão ambos em $F_n$, $d(x_n, x) \leq \diam F_n \to 0$.
+:::
+
+O teorema generaliza os intervalos encaixados (@thm-mat-g02-encaixados) e não deve ser confundido com o teorema de Cantor sobre cardinalidade (@thm-mat-g01-cantor). As hipóteses são necessárias: os intervalos $(0, 1/n]$ não são fechados; em $\N$ com a métrica discreta — que é completo, pois toda sequência de Cauchy é constante a partir de certo termo —, os fechados $\{n, n+1, \dots\}$ são encaixados, mas têm diâmetro $1$ e interseção vazia.
+
+**Completamento.** Uma aplicação $i: X \to Y$ é uma **isometria** se $d_Y(i(x), i(x')) = d_X(x, x')$ para todos $x, x'$. Um **completamento** de $X$ é um espaço completo $\hat X$ com uma isometria $i: X \to \hat X$ cuja imagem é densa.
+
+::: {#thm-mat-m01-completamento}
+## Existência do completamento
+Todo espaço métrico tem um completamento.
+:::
+
+::: {.proof}
+Fixe $a \in X$ e associe a cada $x \in X$ a função $f_x(z) \defeq d(z, x) - d(z, a)$, $z \in X$. Pela @prp-mat-m01-triangular-inversa, $\abs{f_x(z)} \leq d(x, a)$, de modo que $f_x \in B(X)$, e $\abs{f_x(z) - f_y(z)} = \abs{d(z, x) - d(z, y)} \leq d(x, y)$, com igualdade em $z = y$. Logo $d_\infty(f_x, f_y) = d(x, y)$, e $i(x) \defeq f_x$ é uma isometria de $X$ em $B(X)$. Seja $\hat X$ o fecho de $i(X)$ em $B(X)$: é fechado no espaço completo $B(X)$ (@thm-mat-m01-completos), logo completo, e $i(X)$ é denso em $\hat X$ por construção.
+:::
+
+A isometria da demonstração é o **mergulho de Kuratowski**; o laboratório a confere numericamente. A demonstração usa funções com valores reais e, portanto, não serve para *construir* $\R$ a partir de $\Q$; essa construção segue a mesma ideia — acrescentar a cada sequência de Cauchy um limite —, mas parte das classes de sequências de Cauchy de racionais (@sec-mat-g02-notas). O completamento é único a menos de isometria (@cor-mat-m01-completamento-unico). Um exemplo importante: o completamento de $C[a, b]$ com a métrica $d_1$ é o espaço $L^1$ da teoria da medida (@sec-est-m01, @sec-mat-d04).
+
+## Continuidade {#sec-mat-m01-continuidade}
+
+::: {#def-mat-m01-continuidade}
+## Continuidade
+Uma função $f: X \to Y$ entre espaços métricos é **contínua** em $x \in X$ se para todo $\varepsilon > 0$ existe $\delta > 0$ tal que $d_Y(f(x), f(x')) < \varepsilon$ sempre que $d_X(x, x') < \delta$; é contínua se é contínua em todos os pontos.
+:::
+
+::: {#thm-mat-m01-continuidade}
+## Caracterizações da continuidade
+Para $f: X \to Y$, são equivalentes:
+
+(a) $f$ é contínua;
+(b) para toda sequência $x_n \to x$ em $X$, vale $f(x_n) \to f(x)$;
+(c) $f^{-1}(V)$ é aberto em $X$ para todo aberto $V$ de $Y$;
+(d) $f^{-1}(G)$ é fechado em $X$ para todo fechado $G$ de $Y$.
+:::
+
+::: {.proof}
+De (a) para (b): dado $\varepsilon$, tome o $\delta$ da continuidade em $x$ e $N$ com $d(x_n, x) < \delta$ para $n \geq N$; então $d(f(x_n), f(x)) < \varepsilon$ para $n \geq N$. De (b) para (a), por contraposição: se $f$ não é contínua em $x$, existe $\varepsilon > 0$ tal que, para cada $n$, algum $x_n$ satisfaz $d(x_n, x) < 1/n$ e $d(f(x_n), f(x)) \geq \varepsilon$; então $x_n \to x$, mas $f(x_n) \not\to f(x)$.
+
+De (a) para (c): se $x \in f^{-1}(V)$, existe $\varepsilon$ com $B(f(x), \varepsilon) \subseteq V$, e o $\delta$ correspondente satisfaz $f(B(x, \delta)) \subseteq B(f(x), \varepsilon) \subseteq V$, isto é, $B(x, \delta) \subseteq f^{-1}(V)$. De (c) para (a): $f^{-1}(B(f(x), \varepsilon))$ é aberto e contém $x$, logo contém uma bola $B(x, \delta)$, que é o que a continuidade exige. Por fim, (c) e (d) são equivalentes porque $f^{-1}(Y \setminus G) = X \setminus f^{-1}(G)$ (@prp-mat-g01-imagens).
+:::
+
+A forma (c) é a anunciada no @sec-mat-g01: continuidade só depende dos abertos. Com (b) ou (c), vê-se imediatamente que **composições de funções contínuas são contínuas**; com (b) e as regras de limites de $\R$, somas, produtos e quocientes (com denominador não nulo) de funções contínuas com valores reais são contínuos.
+
+::: {#exm-mat-m01-continuas}
+## Funções contínuas
+(a) A distância a um conjunto: $\abs{d(x, A) - d(y, A)} \leq d(x, y)$. De fato, para $a \in A$, $d(x, A) \leq d(x, a) \leq d(x, y) + d(y, a)$; tomando o ínfimo em $a$, $d(x, A) \leq d(x, y) + d(y, A)$, e o mesmo com $x$ e $y$ trocados. Além disso, $d(x, A) = 0$ se, e somente se, $x \in \overline A$.
+(b) Em $B(S)$, a avaliação $f \mapsto f(s)$ e o supremo $f \mapsto \sup_S f$ satisfazem $\abs{f(s) - g(s)} \leq d_\infty(f, g)$ e $\abs{\sup f - \sup g} \leq d_\infty(f, g)$.
+(c) Transformações lineares $\R^n \to \R^m$ satisfazem $\norm{\vb A\vb x - \vb A\vb y} \leq \norm{\vb A}_F\,\norm{\vb x - \vb y}$ (@lem-mat-g06-norma-matriz).
+:::
+
+::: {#exm-mat-m01-preferencias}
+## Conjuntos de contorno e conjunto orçamentário
+Se $u: \R^n_+ \to \R$ é contínua, o conjunto de contorno superior $\{\vb x \in \R^n_+ : u(\vb x) \geq u(\vb x^0)\} = u^{-1}([u(\vb x^0), \infty))$ é fechado em $\R^n_+$ — e, como $\R^n_+$ é fechado em $\R^n$, também em $\R^n$ —, e o contorno estrito $\{u > u(\vb x^0)\}$ é aberto em $\R^n_+$. Por isso uma relação de preferência representada por uma utilidade contínua tem conjuntos de contorno fechados; o @exr-mat-m01-lexicografica usa isso para mostrar que a ordem lexicográfica não tem representação contínua. O conjunto orçamentário $\{\vb x \in \R^n : x_i \geq 0 \text{ para todo } i,\ \vb p\T\vb x \leq w\}$ é fechado, por ser a interseção das pré-imagens de fechados por funções contínuas $\vb x \mapsto x_i$ e $\vb x \mapsto \vb p\T\vb x$.
+:::
+
+::: {#def-mat-m01-uniforme}
+## Continuidade uniforme e funções Lipschitz
+$f: X \to Y$ é **uniformemente contínua** se para todo $\varepsilon > 0$ existe $\delta > 0$ — o mesmo para todos os pontos — tal que $d_Y(f(x), f(x')) < \varepsilon$ sempre que $d_X(x, x') < \delta$. É **Lipschitz**, com constante $L$, se $d_Y(f(x), f(x')) \leq L\, d_X(x, x')$ para todos $x, x'$; uma **contração** é uma função Lipschitz com $L < 1$.
+:::
+
+Lipschitz implica uniformemente contínua (com $\delta = \varepsilon/L$), que implica contínua. Nenhuma recíproca vale: $x \mapsto x^2$ é contínua em $\R$, mas não uniformemente, pois $(n + 1/n)^2 - n^2 = 2 + 1/n^2 \geq 2$ enquanto os pontos se aproximam; $\sqrt x$ é uniformemente contínua em $[0, \infty)$, mas não é Lipschitz (@exr-mat-m01-uniforme). As funções do @exm-mat-m01-continuas são todas Lipschitz.
+
+::: {#prp-mat-m01-cauchy-uniforme}
+## Funções uniformemente contínuas preservam sequências de Cauchy
+Se $f: X \to Y$ é uniformemente contínua e $(x_n)$ é de Cauchy em $X$, então $(f(x_n))$ é de Cauchy em $Y$.
+:::
+
+::: {.proof}
+Dado $\varepsilon$, tome o $\delta$ da continuidade uniforme e $N$ com $d(x_m, x_n) < \delta$ para $m, n \geq N$; então $d(f(x_m), f(x_n)) < \varepsilon$.
+:::
+
+Continuidade simples não basta: $f(x) = 1/x$ é contínua em $(0, 1]$ e leva a sequência de Cauchy $1/n$ em $n$.
+
+**Homeomorfismos.** Um **homeomorfismo** é uma bijeção contínua com inversa contínua. Pela caracterização (c), homeomorfismos levam abertos em abertos e preservam todas as propriedades topológicas. Um exemplo instrutivo é
+$$
+\varphi: \R \to (-1, 1), \qquad \varphi(x) = \frac{x}{1 + \abs x}, \qquad \text{com inversa } \varphi^{-1}(u) = \frac{u}{1 - \abs u} ,
+$$
+ambas contínuas (quocientes de funções contínuas com denominador positivo). Assim, $\R$, que é completo e ilimitado, é homeomorfo a $(-1, 1)$, que não é completo e é limitado: **completude não é uma propriedade topológica**. Dito de outro modo, $d_\varphi(x, y) \defeq \abs{\varphi(x) - \varphi(y)}$ é uma métrica em $\R$ equivalente à usual — define os mesmos abertos —, mas $x_n = n$ é de Cauchy em $d_\varphi$ e não converge. Por outro lado, a @prp-mat-m01-equivalentes mostra que métricas *uniformemente* equivalentes preservam a completude. Por fim, uma bijeção contínua pode ter inversa descontínua: $f: [0, 1) \cup [2, 3] \to [0, 2]$, com $f(x) = x$ em $[0, 1)$ e $f(x) = x - 1$ em $[2, 3]$, é contínua e bijetiva, mas $f^{-1}(1 - 1/n) = 1 - 1/n \to 1 \neq 2 = f^{-1}(1)$. O @cor-mat-m01-compactos mostra que isso não acontece quando o domínio é compacto.
+
+## Extensão de funções uniformemente contínuas {#sec-mat-m01-extensao}
+
+::: {#thm-mat-m01-extensao}
+## Extensão por continuidade
+Sejam $A$ denso em $X$, $Y$ completo e $f: A \to Y$ uniformemente contínua. Então existe uma única função contínua $F: X \to Y$ com $F = f$ em $A$. Além disso, $F$ é uniformemente contínua; se $f$ é Lipschitz com constante $L$, $F$ também é; e se $f$ é uma isometria, $F$ também é.
+:::
+
+::: {.proof}
+**Unicidade.** Se $F$ e $G$ são contínuas e coincidem em $A$, dado $x \in X$ tome $a_n \to x$ em $A$ (@thm-mat-m01-fecho-sequencial); então $F(x) = \lim F(a_n) = \lim G(a_n) = G(x)$.
+
+**Existência.** Dado $x \in X$, tome $a_n \to x$ em $A$. A sequência $(a_n)$ é de Cauchy, logo $(f(a_n))$ também é (@prp-mat-m01-cauchy-uniforme), e converge em $Y$, que é completo; defina $F(x) \defeq \lim f(a_n)$. O limite não depende da sequência: se também $a_n' \to x$, a sequência intercalada $a_1, a_1', a_2, a_2', \dots$ converge para $x$, e as imagens dela convergem; as duas subsequências $f(a_n)$ e $f(a_n')$ têm, então, o mesmo limite. Para $x \in A$, a sequência constante mostra que $F(x) = f(x)$.
+
+**Continuidade uniforme.** Dado $\varepsilon > 0$, seja $\delta$ o da continuidade uniforme de $f$. Se $d(x, x') < \delta$, tome $a_n \to x$ e $a_n' \to x'$ em $A$. Pela @prp-mat-m01-triangular-inversa, $d(a_n, a_n') \to d(x, x') < \delta$, de modo que $d(f(a_n), f(a_n')) < \varepsilon$ para $n$ grande; passando ao limite, de novo pela @prp-mat-m01-triangular-inversa, $d(F(x), F(x')) \leq \varepsilon$. Do mesmo modo, $d(f(a_n), f(a_n')) \leq L\, d(a_n, a_n')$ dá $d(F(x), F(x')) \leq L\, d(x, x')$ no limite, e igualdades se preservam.
+:::
+
+A continuidade uniforme não pode ser enfraquecida: a função que vale $0$ nos racionais menores que $\sqrt 2$ e $1$ nos maiores é contínua em $\Q$ (cada racional tem uma vizinhança em que ela é constante), mas não tem extensão contínua a $\R$.
+
+::: {#cor-mat-m01-completamento-unico}
+## Unicidade do completamento
+Se $(\hat X, i)$ e $(\tilde X, j)$ são completamentos de $X$, existe uma isometria bijetiva $\Phi: \hat X \to \tilde X$ com $\Phi \circ i = j$.
+:::
+
+::: {.proof}
+A função $j \circ i^{-1}$, definida no subconjunto denso $i(X)$ de $\hat X$, é uma isometria com valores no espaço completo $\tilde X$; pelo @thm-mat-m01-extensao, estende-se a uma isometria $\Phi: \hat X \to \tilde X$. Do mesmo modo, $i \circ j^{-1}$ estende-se a $\Psi: \tilde X \to \hat X$. A composição $\Psi \circ \Phi$ é contínua e igual à identidade no denso $i(X)$; pela unicidade no teorema, é a identidade de $\hat X$. Analogamente, $\Phi \circ \Psi$ é a identidade de $\tilde X$, e $\Phi$ é bijetiva.
+:::
+
+## Compacidade {#sec-mat-m01-compacidade}
+
+::: {#def-mat-m01-compacto}
+## Compacidade
+Seja $K \subseteq X$. Uma **cobertura aberta** de $K$ é uma família de abertos $\{U_i\}_{i \in I}$ com $K \subseteq \bigcup_i U_i$; uma **subcobertura** é uma subfamília que ainda cobre $K$. O conjunto $K$ é:
+
+(a) **compacto** se toda cobertura aberta de $K$ tem uma subcobertura finita;
+(b) **sequencialmente compacto** se toda sequência em $K$ tem uma subsequência que converge para um ponto de $K$;
+(c) **totalmente limitado** se, para todo $\varepsilon > 0$, $K$ está contido numa união finita de bolas de raio $\varepsilon$ com centros em $K$.
+:::
+
+Conjuntos finitos são compactos. $(0, 1]$ não é: os abertos $U_n = (1/n, 2)$ cobrem $(0, 1]$, e qualquer subfamília finita deixa de fora os pontos próximos de zero. $\R$ também não: os abertos $(-n, n)$ cobrem $\R$ sem subcobertura finita.
+
+::: {#prp-mat-m01-compacto-fechado}
+## Compactos são fechados e limitados
+(a) Todo compacto é fechado e limitado.
+(b) Todo subconjunto fechado de um compacto é compacto.
+(c) Todo conjunto totalmente limitado é limitado.
+:::
+
+::: {.proof}
+Para (a), seja $K$ compacto. As bolas $B(x_0, n)$, $n \in \N$, cobrem $K$; uma subcobertura finita põe $K$ dentro de uma delas, e $K$ é limitado. Seja $x \notin K$. Os abertos $U_n \defeq X \setminus B[x, 1/n]$ (@prp-mat-m01-bolas) crescem com $n$ e cobrem $K$, porque $d(y, x) > 0$ para $y \in K$; uma subcobertura finita dá $K \subseteq U_N$, isto é, $B(x, 1/N)$ não encontra $K$. Logo $X \setminus K$ é aberto.
+
+Para (b), sejam $F \subseteq K$ fechado (em $X$) e $\{U_i\}$ uma cobertura aberta de $F$. Acrescentando o aberto $X \setminus F$, obtemos uma cobertura de $K$, que tem subcobertura finita; retirando $X \setminus F$ dela, sobra uma subfamília finita que cobre $F$. Para (c), basta a cobertura por finitas bolas de raio $1$.
+:::
+
+A recíproca de (a) é falsa em geral. Um conjunto infinito com a métrica discreta é fechado e limitado, mas a cobertura pelas bolas $B(x, 1/2) = \{x\}$ não tem subcobertura finita. Em $B(\N)$, a bola fechada $B[0, 1]$ contém as sequências $\vb e_n = (0, \dots, 0, 1, 0, \dots)$, com $d_\infty(\vb e_n, \vb e_m) = 1$ para $n \neq m$: nenhuma subsequência é de Cauchy, e a bola não é compacta, embora seja fechada e limitada. O teorema a seguir explica o que falta: limitação total.
+
+::: {#thm-mat-m01-compacidade}
+## Caracterizações métricas da compacidade
+Para $K \subseteq X$, são equivalentes:
+
+(a) $K$ é compacto;
+(b) $K$ é sequencialmente compacto;
+(c) $K$, com a métrica induzida, é completo e totalmente limitado.
+:::
+
+::: {.proof}
+**De (a) para (b).** Seja $(x_n)$ uma sequência em $K$ e suponha que nenhuma subsequência converge para um ponto de $K$. Então cada $y \in K$ tem uma bola $B(y, r_y)$ que contém $x_n$ para apenas finitos índices $n$: do contrário, toda bola $B(y, 1/k)$ conteria $x_n$ para infinitos $n$, e poderíamos escolher $n_1 < n_2 < \cdots$ com $x_{n_k} \in B(y, 1/k)$, uma subsequência convergente para $y$. As bolas $B(y, r_y)$, $y \in K$, cobrem $K$; uma subcobertura finita conteria $x_n$ para apenas finitos índices, mas contém todos os termos da sequência — contradição.
+
+**De (b) para (c).** Uma sequência de Cauchy em $K$ tem uma subsequência que converge em $K$ e, pela @prp-mat-m01-cauchy, converge em $K$: $K$ é completo. Se $K$ não fosse totalmente limitado, haveria $\varepsilon > 0$ tal que nenhuma união finita de bolas de raio $\varepsilon$ com centros em $K$ cobre $K$. Escolha $x_1 \in K$ e, indutivamente, $x_{n+1} \in K \setminus \big(B(x_1, \varepsilon) \cup \dots \cup B(x_n, \varepsilon)\big)$. Então $d(x_n, x_m) \geq \varepsilon$ para $n \neq m$, nenhuma subsequência é de Cauchy, e nenhuma converge — contradição.
+
+**De (c) para (b).** Seja $(x_n)$ em $K$. Vamos construir conjuntos infinitos de índices $\N \supseteq N_1 \supseteq N_2 \supseteq \cdots$ tais que todos os $x_n$ com $n \in N_k$ estão numa mesma bola de raio $1/k$. Dado $N_{k-1}$ infinito (com $N_0 = \N$), cubra $K$ por finitas bolas de raio $1/k$; alguma delas contém $x_n$ para infinitos $n \in N_{k-1}$, e $N_k$ é o conjunto desses índices. Escolha $n_1 < n_2 < \cdots$ com $n_k \in N_k$, o que é possível porque cada $N_k$ é infinito. Para $j, l \geq k$, $n_j$ e $n_l$ estão em $N_k$, logo $d(x_{n_j}, x_{n_l}) < 2/k$: a subsequência é de Cauchy e, como $K$ é completo, converge para um ponto de $K$.
+
+**De (b) para (a).** Seja $\{U_i\}$ uma cobertura aberta de $K$. Primeiro mostramos que existe $\delta > 0$ (um **número de Lebesgue** da cobertura) tal que, para todo $x \in K$, a bola $B(x, \delta)$ está contida em algum $U_i$. Se não existisse, para cada $n$ haveria $x_n \in K$ tal que $B(x_n, 1/n)$ não está contida em nenhum $U_i$. Por (b), uma subsequência $x_{n_k}$ converge para algum $x \in K$; $x \in U_i$ para algum $i$, e $B(x, \varepsilon) \subseteq U_i$ para algum $\varepsilon > 0$. Para $k$ grande, $d(x_{n_k}, x) < \varepsilon/2$ e $1/n_k < \varepsilon/2$, de modo que $B(x_{n_k}, 1/n_k) \subseteq B(x, \varepsilon) \subseteq U_i$ — contradição. Agora, como (b) implica (c), $K$ é totalmente limitado: $K \subseteq B(y_1, \delta) \cup \dots \cup B(y_m, \delta)$ com $y_j \in K$. Cada $B(y_j, \delta)$ está contida em algum $U_{i_j}$, e $U_{i_1}, \dots, U_{i_m}$ cobrem $K$.
+:::
+
+Uma consequência da forma (b): a compacidade de $K$ só depende da métrica restrita a $K$ — ao contrário de "aberto" ou "fechado", ela não depende do espaço em que $K$ está mergulhado.
+
+::: {#cor-mat-m01-compactos}
+## Funções contínuas em compactos
+Seja $K \subseteq X$ compacto e $f: K \to Y$ contínua.
+
+(a) $f(K)$ é compacto.
+(b) $f$ é uniformemente contínua (teorema de Heine–Cantor).
+(c) Se $f$ é injetiva, então $f^{-1}: f(K) \to K$ é contínua, e $f$ é um homeomorfismo de $K$ sobre $f(K)$.
+
+Além disso, se $K$ e $L$ são compactos, $K \times L$ é compacto.
+:::
+
+::: {.proof}
+Para (a), seja $y_n = f(x_n)$ uma sequência em $f(K)$. Uma subsequência $x_{n_k}$ converge para algum $x \in K$, e $f(x_{n_k}) \to f(x) \in f(K)$. Para (b), se $f$ não fosse uniformemente contínua, haveria $\varepsilon > 0$ e pontos com $d(x_n, x_n') < 1/n$ e $d(f(x_n), f(x_n')) \geq \varepsilon$. Uma subsequência $x_{n_k}$ converge para algum $x \in K$; então também $x_{n_k}' \to x$, e, pela continuidade, $f(x_{n_k})$ e $f(x_{n_k}')$ tendem a $f(x)$, de modo que a distância entre eles tende a zero — contradição. Para (c), se $F$ é fechado em $K$, ele é compacto (@prp-mat-m01-compacto-fechado), $f(F)$ é compacto por (a), logo fechado; assim, a pré-imagem de cada fechado por $f^{-1}$, que é $f(F)$, é fechada, e $f^{-1}$ é contínua (@thm-mat-m01-continuidade). Para o produto, dada $(x_n, y_n)$, extraia uma subsequência em que $x_n$ converge e, dela, outra em que $y_n$ converge.
+:::
+
+O item (b) generaliza o @lem-mat-g04-uniforme e o @lem-mat-g04-uniforme-2d, usados na integração.
+
+### Compactos de $\R^n$: celas encaixadas, Bolzano–Weierstrass e Heine–Borel {#sec-mat-m01-heine-borel}
+
+Uma **cela** em $\R^n$ é um produto de intervalos fechados e limitados, $I = [a_1, b_1] \times \dots \times [a_n, b_n]$; seu diâmetro é $\big(\sum_i (b_i - a_i)^2\big)^{1/2}$.
+
+::: {#thm-mat-m01-celas}
+## Celas encaixadas
+Se $I_1 \supseteq I_2 \supseteq \cdots$ são celas em $\R^n$, então $\bigcap_k I_k \neq \emptyset$. Se, além disso, $\diam I_k \to 0$, a interseção tem um único ponto.
+:::
+
+::: {.proof}
+Escreva $I_k = \prod_i [a_{k,i}, b_{k,i}]$. A inclusão $I_k \supseteq I_{k+1}$ significa que, em cada coordenada $i$, os intervalos $[a_{k,i}, b_{k,i}]$ são encaixados. Pelo @thm-mat-g02-encaixados, existe $c_i$ em todos eles, e $\vb c = (c_1, \dots, c_n)$ está em todas as celas. Se $\vb c$ e $\vb c'$ estão em todas, $\norm{\vb c - \vb c'} \leq \diam I_k \to 0$.
+:::
+
+::: {#thm-mat-m01-cela-compacta}
+## Celas são compactas
+Toda cela de $\R^n$ é compacta.
+:::
+
+::: {.proof}
+Suponha que a cela $I_0$ tenha uma cobertura aberta $\{U_i\}$ sem subcobertura finita. Dividindo cada lado ao meio, $I_0$ é a união de $2^n$ celas; se cada uma delas fosse coberta por finitos $U_i$, $I_0$ também seria. Logo alguma delas, $I_1$, não admite subcobertura finita. Repetindo o argumento, obtemos celas encaixadas $I_0 \supseteq I_1 \supseteq \cdots$, nenhuma coberta por finitos $U_i$, com $\diam I_k = 2^{-k} \diam I_0$. Pelo @thm-mat-m01-celas, existe $\vb c$ em todas elas. Como $\vb c \in I_0$, $\vb c \in U_i$ para algum $i$, e $B(\vb c, \varepsilon) \subseteq U_i$ para algum $\varepsilon > 0$. Para $k$ com $\diam I_k < \varepsilon$, todo $\vb y \in I_k$ satisfaz $\norm{\vb y - \vb c} \leq \diam I_k < \varepsilon$, e $I_k \subseteq U_i$ — coberta por um único aberto, contradição.
+:::
+
+::: {#thm-mat-m01-heine-borel}
+## Heine–Borel
+Um subconjunto de $\R^n$ é compacto se, e somente se, é fechado e limitado.
+:::
+
+::: {.proof}
+Compactos são fechados e limitados em qualquer espaço métrico (@prp-mat-m01-compacto-fechado). Se $K \subseteq \R^n$ é limitado, $\norm{\vb x} \leq M$ em $K$, e então $\abs{x_i} \leq M$: $K$ está contido na cela $[-M, M]^n$, compacta pelo @thm-mat-m01-cela-compacta. Se $K$ também é fechado, é um subconjunto fechado de um compacto, logo compacto.
+:::
+
+::: {#cor-mat-m01-bolzano}
+## Bolzano–Weierstrass em $\R^n$
+Toda sequência limitada em $\R^n$ tem uma subsequência convergente.
+:::
+
+::: {.proof}
+Uma sequência limitada está numa cela, que é compacta, logo sequencialmente compacta (@thm-mat-m01-compacidade).
+:::
+
+O interativo (@sec-mat-m01-interativo) mostra a construção da demonstração em ação: a bisseção repetida escolhe celas cada vez menores que contêm infinitos termos da sequência. Pela @prp-mat-m01-equivalentes, os três resultados valem com $d_1$ ou $d_\infty$; o @sec-mat-m10 os estende a qualquer norma em dimensão finita e mostra que, em dimensão infinita, a bola fechada **nunca** é compacta — como já vimos em $B(\N)$.
+
+## O teorema de Weierstrass {#sec-mat-m01-weierstrass}
+
+::: {#thm-mat-m01-weierstrass}
+## Weierstrass em espaços métricos
+Seja $K$ um espaço métrico compacto e não vazio e $f: K \to \R$ contínua. Então $f$ é limitada e atinge máximo e mínimo: existem $x_*, x^* \in K$ com $f(x_*) \leq f(x) \leq f(x^*)$ para todo $x \in K$.
+:::
+
+::: {.proof}
+Pelo @cor-mat-m01-compactos, $f(K)$ é um compacto de $\R$, logo fechado e limitado. Seja $s = \sup f(K)$, finito. Pela @prp-mat-g02-caracterizacao-sup, há pontos de $f(K)$ a menos de $1/n$ de $s$, de modo que $s \in \overline{f(K)} = f(K)$: $s = f(x^*)$ para algum $x^*$. O mínimo segue aplicando o argumento a $-f$.
+:::
+
+Pelo teorema de Heine–Borel, toda função contínua num subconjunto fechado, limitado e não vazio de $\R^n$ atinge máximo e mínimo. A @exr-mat-m01-reciproca mostra que a compacidade é exatamente o que se precisa: num subconjunto não compacto de $\R^n$ há sempre uma função contínua sem máximo.
+
+::: {#exm-mat-m01-orcamento}
+## Existência da demanda
+Sejam $\vb p \in \R^n$ com $p_i > 0$ para todo $i$, $w \geq 0$ e $B(\vb p, w) = \{\vb x \in \R^n_+ : \vb p\T\vb x \leq w\}$. O conjunto é não vazio ($\vb 0 \in B$), fechado (@exm-mat-m01-preferencias) e limitado, pois $0 \leq x_i \leq w/p_i$. Pelo teorema de Weierstrass, toda utilidade contínua tem um máximo em $B(\vb p, w)$: a demanda é não vazia. As hipóteses importam. Se $p_1 = 0$, os vetores $t\vb e_1$, $t \geq 0$, estão todos no conjunto orçamentário, que é ilimitado, e uma utilidade estritamente crescente em $x_1$ não tem máximo. Se a restrição fosse $\vb p\T\vb x < w$, o conjunto não seria fechado, e uma utilidade crescente não atingiria o supremo. O teorema garante só a existência; a unicidade vem da quase-concavidade estrita (@sec-mic-g01).
+:::
+
+::: {#cor-mat-m01-coerciva}
+## Funções coercivas
+Seja $f: \R^n \to \R$ contínua e **coerciva**: para todo $M$ existe $R$ tal que $f(\vb x) > M$ sempre que $\norm{\vb x} > R$. Então $f$ atinge um mínimo global.
+:::
+
+::: {.proof}
+Fixe $\vb x^0$ e seja $S \defeq \{\vb x : f(\vb x) \leq f(\vb x^0)\}$, não vazio e fechado (pré-imagem de um fechado). Pela coercividade com $M = f(\vb x^0)$, $S \subseteq B[\vb 0, R]$, e $S$ é limitado. Pelo teorema de Weierstrass, $f$ atinge em $S$ um mínimo $f(\vb x_*) \leq f(\vb x^0)$; fora de $S$, $f > f(\vb x^0) \geq f(\vb x_*)$. Logo $\vb x_*$ é mínimo global.
+:::
+
+A coercividade é a forma usual de obter existência em problemas sem restrições — mínimos quadrados (@exr-mat-m01-mqo), máxima verossimilhança, problemas de mínima distância.
+
+## Conexidade {#sec-mat-m01-conexidade}
+
+::: {#def-mat-m01-conexo}
+## Conexidade
+Um espaço métrico $X$ é **conexo** se não pode ser escrito como $X = U \cup V$ com $U$ e $V$ abertos, disjuntos e não vazios — equivalentemente, se os únicos subconjuntos de $X$ simultaneamente abertos e fechados são $\emptyset$ e $X$. Um subconjunto é conexo se o é com a métrica induzida.
+:::
+
+::: {#thm-mat-m01-intervalos}
+## Os conexos da reta
+Um subconjunto $A \subseteq \R$ é conexo se, e somente se, é um intervalo: sempre que $x < z < y$ com $x, y \in A$, também $z \in A$.
+:::
+
+::: {.proof}
+Se $A$ não é um intervalo, existem $x < z < y$ com $x, y \in A$ e $z \notin A$. Então $A = \big(A \cap (-\infty, z)\big) \cup \big(A \cap (z, \infty)\big)$ é uma decomposição em dois abertos de $A$ (@prp-mat-m01-relativa), disjuntos e não vazios.
+
+Reciprocamente, seja $I$ um intervalo e suponha $I = U \cup V$ com $U$, $V$ abertos em $I$, disjuntos e não vazios. Tome $a \in U$ e $b \in V$, digamos com $a < b$, de modo que $[a, b] \subseteq I$. O conjunto $C \defeq U \cap [a, b] = [a, b] \setminus V$ é fechado em $\R$: como $V = V' \cap I$ com $V'$ aberto em $\R$, temos $C = [a, b] \cap (\R \setminus V')$. Seja $s \defeq \sup C$. Como $C$ é fechado e não vazio, $s \in C \subseteq U$, e $s < b$ porque $b \in V$. Como $U$ é aberto em $I$, existe $\varepsilon > 0$ com $(s - \varepsilon, s + \varepsilon) \cap I \subseteq U$; os pontos de $(s, \min\{s + \varepsilon, b\})$ estão em $[a, b] \subseteq I$, logo em $C$, contradizendo $s = \sup C$.
+:::
+
+::: {#thm-mat-m01-imagem-conexa}
+## Imagem de conexo é conexa
+Se $X$ é conexo e $f: X \to Y$ é contínua, então $f(X)$ é conexo.
+:::
+
+::: {.proof}
+Se $f(X) = U \cup V$, com $U$ e $V$ abertos em $f(X)$, disjuntos e não vazios, escreva $U = U' \cap f(X)$ e $V = V' \cap f(X)$ com $U'$, $V'$ abertos em $Y$. Então $f^{-1}(U) = f^{-1}(U')$ e $f^{-1}(V) = f^{-1}(V')$ são abertos em $X$, disjuntos, não vazios e cobrem $X$ — contradição.
+:::
+
+::: {#cor-mat-m01-tvi}
+## Valor intermediário em espaços conexos
+Se $X$ é conexo, $f: X \to \R$ é contínua, $a, b \in X$ e $c$ está entre $f(a)$ e $f(b)$, então existe $x \in X$ com $f(x) = c$.
+:::
+
+::: {.proof}
+$f(X)$ é um conexo de $\R$, isto é, um intervalo; como contém $f(a)$ e $f(b)$, contém $c$.
+:::
+
+Com $X = [a, b]$, recupera-se o @thm-mat-g03-tvi. Para reconhecer conjuntos conexos, a ferramenta mais prática são os caminhos. $X$ é **conexo por caminhos** se, para quaisquer $x, y \in X$, existe uma função contínua $\gamma: [0, 1] \to X$ com $\gamma(0) = x$ e $\gamma(1) = y$.
+
+::: {#prp-mat-m01-caminhos}
+## Conexo por caminhos implica conexo
+Todo espaço conexo por caminhos é conexo. Em particular, todo subconjunto **convexo** de $\R^n$ — que contém o segmento entre dois quaisquer de seus pontos — é conexo.
+:::
+
+::: {.proof}
+Se $X = U \cup V$ fosse uma decomposição em abertos disjuntos e não vazios, com $x \in U$ e $y \in V$, e $\gamma$ um caminho de $x$ a $y$, então $\gamma^{-1}(U)$ e $\gamma^{-1}(V)$ seriam abertos em $[0, 1]$, disjuntos, não vazios (contêm $0$ e $1$) e cobririam $[0, 1]$, contradizendo o @thm-mat-m01-intervalos. Num convexo, $\gamma(t) = (1 - t)\vb x + t\vb y$ é um caminho.
+:::
+
+São conexos, portanto, $\R^n$, as bolas, o ortante $\R^n_+$, os conjuntos orçamentários e o simplexo das distribuições de probabilidade. O @cor-mat-m01-tvi tem uma leitura econômica direta: se $u$ é contínua num domínio conexo e $u(\vb x) < c < u(\vb y)$, alguma cesta — no segmento entre $\vb x$ e $\vb y$, se o domínio é convexo — dá exatamente a utilidade $c$. É isso que garante a existência de equivalentes certos e de variações compensatórias.
+
+## Pontes {#sec-mat-m01-pontes}
+
+- **Espaços normados (@sec-mat-m10).** Quando o espaço também é vetorial, a métrica vem de uma norma; em dimensão finita todas as normas são equivalentes e Heine–Borel continua valendo, mas em dimensão infinita a bola fechada não é compacta.
+- **Sequências de funções (@sec-mat-m07).** A convergência em $B(S)$ é a convergência uniforme; o limite uniforme de funções contínuas é contínuo, de modo que $C[a, b]$ é fechado — e completo — em $B([a, b])$; o teorema de Arzelà–Ascoli descreve os compactos de $C[a, b]$.
+- **Pontos fixos (@sec-mat-m05).** O teorema de Banach — toda contração num espaço completo tem um único ponto fixo — usa a completude; os de Brouwer e Kakutani usam compacidade e convexidade.
+- **Convexidade e separação (@sec-mat-m08).** Projeção sobre convexos fechados e separação de um convexo fechado e um compacto disjuntos (@exr-mat-m01-distancia).
+- **Teorema do máximo (@sec-mat-m04).** A continuidade de correspondências com valores compactos generaliza a continuidade deste capítulo e dá a continuidade das demandas e das funções valor.
+- **Programação dinâmica (@sec-mat-d02).** A função valor é o ponto fixo do operador de Bellman em $B(S)$, cuja completude foi provada aqui.
+- **Microeconomia (@sec-mic-g01, @sec-mic-m01).** Existência da demanda (Weierstrass), continuidade de preferências como fecho dos conjuntos de contorno, a ordem lexicográfica.
+- **Probabilidade (@sec-est-m01).** O completamento de $C[a, b]$ com a métrica $d_1$ é o espaço $L^1$; abertos e fechados geram os conjuntos mensuráveis (borelianos).
+
+## Interativo {#sec-mat-m01-interativo}
+
+::: {.content-visible when-format="html"}
+**Bolas em quatro métricas do plano.** Escolha a métrica, o centro $\vb a$ e o raio $r$. Nas métricas usuais, a bola é um disco, um losango ou um quadrado, e cada uma contém uma bola das outras com o mesmo centro — as métricas são uniformemente equivalentes (@eq-mat-m01-metricas-rn). Na **métrica ferroviária**, todo trajeto passa pela capital (a origem), salvo se os dois pontos estão na mesma linha que sai dela: $d(\vb x, \vb y) = \norm{\vb x - \vb y}$ se $\vb x$ e $\vb y$ estão numa mesma reta pela origem, e $d(\vb x, \vb y) = \norm{\vb x} + \norm{\vb y}$ caso contrário. Uma bola pequena em torno de $\vb a \neq \vb 0$ é, então, um segmento: um conjunto aberto nessa métrica que não é aberto na métrica euclidiana.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof metricaB = seletor("métrica", ["euclidiana d₂", "da soma d₁", "do máximo d∞", "ferroviária"], {valor: "euclidiana d₂"})
+viewof a1B = controle("a₁", [-3, 3], {valor: 1.5, passo: 0.1, casas: 1})
+viewof a2B = controle("a₂", [-3, 3], {valor: 1, passo: 0.1, casas: 1})
+viewof rB = controle("raio r", [0.1, 4], {valor: 1, passo: 0.1, casas: 1})
+viewof compararB = alternador("mostrar os contornos das bolas usuais", {valor: false})
+```
+
+```{ojs}
+//| echo: false
+md`Distância de a à origem nesta métrica: **${distB(aB, [0, 0]).toFixed(3).replace(".", ",")}**. ${notaB}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 520, aspectRatio: 1, grid: true,
+  x: {domain: [-5, 5], label: "x₁"}, y: {domain: [-5, 5], label: "x₂"},
+  marks: [
+    Plot.ruleX([0], {stroke: "#9AA5B1"}), Plot.ruleY([0], {stroke: "#9AA5B1"}),
+    ...(compararB ? [
+      Plot.line(circuloB(aB, rB), {x: "x", y: "y", stroke: "#9AA5B1", strokeDasharray: "4,3", clip: true}),
+      Plot.line(losangoB(aB, rB), {x: "x", y: "y", stroke: "#9AA5B1", strokeDasharray: "4,3", clip: true}),
+      Plot.line(quadradoB(aB, rB), {x: "x", y: "y", stroke: "#9AA5B1", strokeDasharray: "4,3", clip: true})
+    ] : []),
+    ...formasB.map(f => f.tipo === "regiao"
+      ? Plot.line(f.pontos, {x: "x", y: "y", fill: "#2F5D8A", fillOpacity: 0.25, stroke: "#2F5D8A", strokeDasharray: "5,3", clip: true})
+      : Plot.line(f.pontos, {x: "x", y: "y", stroke: "#2F5D8A", strokeWidth: 4, clip: true})),
+    Plot.dot([{x: aB[0], y: aB[1]}], {x: "x", y: "y", r: 5, fill: "#8C2F39"}),
+    Plot.dot([{x: 0, y: 0}], {x: "x", y: "y", r: 4, fill: "#B7791F"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+aB = [a1B, a2B]
+normaB = v => Math.hypot(v[0], v[1])
+colinearesB = (x, y) => Math.abs(x[0] * y[1] - x[1] * y[0]) < 1e-9
+distB = (x, y) => {
+  const dx = x[0] - y[0], dy = x[1] - y[1]
+  if (metricaB === "da soma d₁") return Math.abs(dx) + Math.abs(dy)
+  if (metricaB === "do máximo d∞") return Math.max(Math.abs(dx), Math.abs(dy))
+  if (metricaB === "ferroviária" && !colinearesB(x, y)) return normaB(x) + normaB(y)
+  return Math.hypot(dx, dy)
+}
+circuloB = (c, r) => d3.range(0, 2 * Math.PI + 0.01, Math.PI / 90).map(t => ({x: c[0] + r * Math.cos(t), y: c[1] + r * Math.sin(t)}))
+losangoB = (c, r) => [[r, 0], [0, r], [-r, 0], [0, -r], [r, 0]].map(([u, v]) => ({x: c[0] + u, y: c[1] + v}))
+quadradoB = (c, r) => [[r, r], [-r, r], [-r, -r], [r, -r], [r, r]].map(([u, v]) => ({x: c[0] + u, y: c[1] + v}))
+formasB = {
+  if (metricaB === "da soma d₁") return [{tipo: "regiao", pontos: losangoB(aB, rB)}]
+  if (metricaB === "do máximo d∞") return [{tipo: "regiao", pontos: quadradoB(aB, rB)}]
+  if (metricaB === "euclidiana d₂") return [{tipo: "regiao", pontos: circuloB(aB, rB)}]
+  const na = normaB(aB)
+  if (na < 1e-9) return [{tipo: "regiao", pontos: circuloB([0, 0], rB)}]
+  const u = [aB[0] / na, aB[1] / na]
+  const formas = [{tipo: "segmento", pontos: [-1, 1].map(s => ({x: aB[0] + s * rB * u[0], y: aB[1] + s * rB * u[1]}))}]
+  if (rB > na) formas.push({tipo: "regiao", pontos: circuloB([0, 0], rB - na)})
+  return formas
+}
+notaB = metricaB !== "ferroviária" ? "" :
+  (normaB(aB) < 1e-9 ? "Com centro na origem, a bola ferroviária é o disco usual."
+   : (rB > normaB(aB)
+      ? "Como r > ‖a‖, a bola contém, além do segmento sobre a linha de a, o disco de raio r − ‖a‖ em torno da origem."
+      : "Como r ≤ ‖a‖, a bola é só um segmento sobre a linha que liga a à origem."))
+```
+:::
+
+**Bolzano–Weierstrass por bisseção.** A demonstração do @thm-mat-m01-cela-compacta, aplicada a uma sequência, divide a cela em quatro a cada passo e fica com uma parte que contém infinitos termos; escolhendo um termo de índice crescente em cada cela, obtém-se uma subsequência convergente. O computador só vê os $N$ primeiros termos, e por isso usamos "a parte com mais termos" como substituto de "a parte com infinitos termos". Os pontos vinho são os termos escolhidos $x_{n_1}, x_{n_2}, \dots$, que se acumulam no ponto comum das celas.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof seqBW = seletor("sequência", ["(frac(n√2), frac(n√3))", "(cos n, sen 2n)"], {valor: "(frac(n√2), frac(n√3))"})
+viewof passosBW = controle("passos de bisseção k", [0, 9], {valor: 3, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Cela após ${passosBW} passos: lado ${(ladoBW * Math.pow(2, -passosBW)).toFixed(4).replace(".", ",")}, com ${bissecaoBW.indices.length} dos ${NBW} primeiros termos. Índices escolhidos: ${bissecaoBW.escolhidos.length ? bissecaoBW.escolhidos.join(", ") : "nenhum ainda"}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 520, aspectRatio: 1,
+  x: {domain: [celaBW0[0], celaBW0[1]], label: "x₁"}, y: {domain: [celaBW0[2], celaBW0[3]], label: "x₂"},
+  marks: [
+    Plot.dot(pontosBW, {x: "x", y: "y", r: 1, fill: "#9AA5B1"}),
+    Plot.dot(bissecaoBW.indices.map(i => pontosBW[i - 1]), {x: "x", y: "y", r: 1.6, fill: "#2F5D8A"}),
+    Plot.rect([bissecaoBW.cela], {x1: d => d[0], x2: d => d[1], y1: d => d[2], y2: d => d[3], stroke: "#B7791F", strokeWidth: 2, fill: "none"}),
+    Plot.line(bissecaoBW.escolhidos.map(i => pontosBW[i - 1]), {x: "x", y: "y", stroke: "#8C2F39", strokeOpacity: 0.5}),
+    Plot.dot(bissecaoBW.escolhidos.map(i => pontosBW[i - 1]), {x: "x", y: "y", r: 4, fill: "#8C2F39"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+NBW = 4000
+fracBW = t => t - Math.floor(t)
+pontosBW = d3.range(1, NBW + 1).map(n => seqBW === "(cos n, sen 2n)"
+  ? {n, x: Math.cos(n), y: Math.sin(2 * n)}
+  : {n, x: fracBW(n * Math.SQRT2), y: fracBW(n * Math.sqrt(3))})
+celaBW0 = seqBW === "(cos n, sen 2n)" ? [-1, 1, -1, 1] : [0, 1, 0, 1]
+ladoBW = celaBW0[1] - celaBW0[0]
+bissecaoBW = {
+  let cela = celaBW0.slice()
+  let indices = d3.range(1, NBW + 1)
+  const escolhidos = []
+  for (let k = 0; k < passosBW; k++) {
+    const mx = (cela[0] + cela[1]) / 2, my = (cela[2] + cela[3]) / 2
+    const partes = [[cela[0], mx, cela[2], my], [mx, cela[1], cela[2], my],
+                    [cela[0], mx, my, cela[3]], [mx, cela[1], my, cela[3]]]
+    const dentro = (c, p) => p.x >= c[0] && (p.x < c[1] || c[1] === cela[1]) && p.y >= c[2] && (p.y < c[3] || c[3] === cela[3])
+    const contagens = partes.map(c => indices.filter(i => dentro(c, pontosBW[i - 1])))
+    const melhor = d3.maxIndex(contagens, l => l.length)
+    cela = partes[melhor]
+    indices = contagens[melhor]
+    const anterior = escolhidos.length ? escolhidos[escolhidos.length - 1] : 0
+    const proximo = indices.find(i => i > anterior)
+    if (proximo !== undefined) escolhidos.push(proximo)
+  }
+  return {cela, indices, escolhidos}
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — bolas em quatro métricas do plano e a bisseção de Bolzano–Weierstrass — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-mat-m01-laboratorio}
+
+### As constantes entre $d_1$, $d_2$ e $d_\infty$
+
+Conferimos a @eq-mat-m01-metricas-rn em pares aleatórios de pontos de $\R^5$ e mostramos que as constantes são atingidas: a razão $d_1/d_\infty$ vale $n$ no vetor $(1, \dots, 1)$ e $1$ nos vetores da base canônica.
+
+```{python}
+import numpy as np
+
+rng = np.random.default_rng(1)
+n = 5
+x = rng.normal(size=(100_000, n))
+y = rng.normal(size=(100_000, n))
+D = x - y
+d1 = np.abs(D).sum(axis=1)
+d2 = np.sqrt((D ** 2).sum(axis=1))
+dinf = np.abs(D).max(axis=1)
+ok = (np.all(dinf <= d2) and np.all(d2 <= d1)
+      and np.all(d1 <= np.sqrt(n) * d2 + 1e-12)
+      and np.all(d2 <= np.sqrt(n) * dinf + 1e-12))
+print("d_inf <= d_2 <= d_1 <= sqrt(n) d_2 <= n d_inf:", bool(ok))
+print(f"maior d_1/d_inf nos pares: {(d1 / dinf).max():.3f} (cota: {n})")
+for nome, v in [("(1,...,1)", np.ones(n)), ("e_1", np.eye(n)[0])]:
+    r1 = np.abs(v).sum() / np.abs(v).max()
+    r2 = np.abs(v).sum() / np.linalg.norm(v)
+    print(f"{nome:>10}: d_1/d_inf = {r1:.1f}, d_1/d_2 = {r2:.3f}")
+```
+
+### Uma sequência de Cauchy sem limite em $\mathbb{Q}$
+
+O método babilônico $x_{k+1} = (x_k + 2/x_k)/2$, a partir de $x_0 = 1$, produz racionais — calculados aqui **exatamente**, com frações. A sequência é de Cauchy (as diferenças sucessivas despencam), mas $x_k^2 - 2$ nunca é zero, porque $\sqrt 2$ é irracional (@thm-mat-g01-raiz2): em $\Q$, a sequência não tem limite. A última coluna é o número de dígitos do denominador, que dobra a cada passo.
+
+```{python}
+from fractions import Fraction
+
+x = Fraction(1)
+for k in range(1, 7):
+    novo = (x + 2 / x) / 2
+    dif = float(abs(novo - x))
+    resto = float(novo ** 2 - 2)
+    dig = len(str(novo.denominator))
+    print(f"k = {k}: dif. = {dif:.2e}  x_k^2 - 2 = {resto:.2e}"
+          f"  digitos: {dig}")
+    x = novo
+```
+
+### O mergulho de Kuratowski
+
+Num conjunto finito $X$, as funções em $B(X)$ são vetores indexados pelos pontos de $X$. Conferimos que $x \mapsto f_x = d(\cdot, x) - d(\cdot, a)$ preserva distâncias, aqui com a métrica $d_1$ do plano.
+
+```{python}
+P = rng.random((8, 2))                  # oito pontos do plano
+d = lambda x, y: np.abs(x - y).sum()    # metrica d_1
+a = P[0]
+f = lambda x: np.array([d(z, x) - d(z, a) for z in P])
+erro = max(abs(np.abs(f(x) - f(y)).max() - d(x, y))
+           for x in P for y in P)
+print(f"maior discrepancia entre sup|f_x - f_y| e d(x, y): {erro:.1e}")
+```
+
+### Números de cobertura e dimensão
+
+Uma rede gulosa escolhe centros até que todo ponto de uma amostra esteja a menos de $\varepsilon$ (na métrica $d_\infty$) de algum deles. Para evitar o efeito das bordas, medimos as distâncias "dando a volta" no cubo, como se as faces opostas estivessem coladas. Em $[0, 1]^m$, o número de bolas necessário cresce como $\varepsilon^{-m}$: a inclinação de $\log N(\varepsilon)$ contra $\log(1/\varepsilon)$ estima a dimensão. É a limitação total em ação: finitas bolas bastam para cada $\varepsilon$, mas cada vez mais delas. Na bola de $B(\N)$, ao contrário, os $\vb e_n$ estão a distância $1$ uns dos outros, e cada bola de raio $1/2$ contém no máximo um deles — nenhum número finito de bolas basta.
+
+```{python}
+def rede_gulosa(P, eps):
+    restantes = np.ones(len(P), dtype=bool)
+    centros = 0
+    while restantes.any():
+        i = np.flatnonzero(restantes)[0]
+        D = np.abs(P - P[i])
+        D = np.minimum(D, 1 - D)        # "dando a volta" no cubo
+        restantes &= D.max(axis=1) >= eps
+        centros += 1
+    return centros
+
+casos = [(2, [0.2, 0.1, 0.05, 0.025]), (3, [0.4, 0.2, 0.1])]
+for m, epsilons in casos:
+    P = rng.random((40_000, m))
+    N = [rede_gulosa(P, e) for e in epsilons]
+    x = np.log(1 / np.array(epsilons))
+    inclinacao = np.polyfit(x, np.log(N), 1)[0]
+    print(f"m = {m}: N(eps) = {N}, inclinacao = {inclinacao:.2f}")
+```
+
+### Coercividade e mínimos quadrados
+
+Com $\vb X$ de posto coluna completo, $S(\vb\beta) = \norm{\vb y - \vb X\vb\beta}^2$ é coerciva (@exr-mat-m01-mqo): a constante $c = \min_{\norm{\vb\beta} = 1} \norm{\vb X\vb\beta}$ é positiva — numericamente, é o menor valor singular de $\vb X$ (@sec-mat-m02). Partindo de pontos diferentes, o otimizador chega ao mesmo mínimo. Com uma coluna colinear, $c = 0$ — a amostragem aleatória na esfera só encontra valores pequenos, porque acertar exatamente a direção do núcleo tem probabilidade zero —, $S$ é constante ao longo do núcleo de $\vb X$ e os mínimos formam uma reta: o otimizador para em pontos diferentes, todos com o mesmo valor de $S$.
+
+```{python}
+from scipy.optimize import minimize
+
+X = rng.normal(size=(50, 3))
+y = X @ np.array([1.0, -2.0, 0.5]) + rng.normal(size=50)
+Xr = X.copy()
+Xr[:, 2] = X[:, 0] + X[:, 1]            # terceira coluna colinear
+inicios = [np.zeros(3), 10 * np.ones(3), np.array([-5.0, 7.0, 3.0])]
+
+for nome, M in [("posto completo", X), ("posto 2", Xr)]:
+    c = np.linalg.svd(M, compute_uv=False).min()
+    esfera = rng.normal(size=(20_000, 3))
+    esfera /= np.linalg.norm(esfera, axis=1, keepdims=True)
+    c_amostra = np.linalg.norm(esfera @ M.T, axis=1).min()
+    print(f"{nome}: c = {c:.4f} (amostragem: {c_amostra:.4f})")
+    for b0 in inicios:
+        S = lambda b: np.sum((y - M @ b) ** 2)
+        r = minimize(S, b0, method="BFGS")
+        b = np.round(r.x, 3)
+        print(f"   minimizador: {b}   S = {r.fun:.4f}")
+```
+
+## Exercícios resolvidos {#sec-mat-m01-exercicios}
+
+::: {#exr-mat-m01-limitada}
+Seja $d$ uma métrica em $X$ e $d'(x, y) \defeq \dfrac{d(x, y)}{1 + d(x, y)}$. Mostre que $d'$ é uma métrica limitada, equivalente a $d$, e que, se $d$ é ilimitada, $d'$ não é uniformemente equivalente a $d$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A função $\phi(t) = t/(1 + t)$ é crescente em $[0, \infty)$, com $\phi(t) = 0$ só em $t = 0$, e é subaditiva: $\phi(s + t) = \frac{s}{1 + s + t} + \frac{t}{1 + s + t} \leq \frac{s}{1 + s} + \frac{t}{1 + t}$. (M1) e (M2) são imediatas; para (M3), $d'(x, z) = \phi(d(x, z)) \leq \phi(d(x, y) + d(y, z)) \leq \phi(d(x, y)) + \phi(d(y, z))$. Como $\phi < 1$, $d'$ é limitada. Para $0 < r < 1$, $d'(x, y) < r$ equivale a $d(x, y) < r/(1 - r)$, de modo que $B_{d'}(x, r) = B_d(x, r/(1 - r))$, e $B_d(x, s) = B_{d'}(x, s/(1 + s))$ para todo $s > 0$: cada bola de uma métrica é uma bola da outra com o mesmo centro, e os abertos coincidem. Se houvesse $\alpha > 0$ com $\alpha\, d \leq d' \leq 1$, $d$ seria limitada por $1/\alpha$.
+:::
+
+::: {#exr-mat-m01-fronteira}
+Mostre que $\partial A = \overline A \cap \overline{X \setminus A}$, que $\partial A$ é fechado, que $A$ é fechado se, e somente se, $\partial A \subseteq A$, e que $A$ é aberto se, e somente se, $A \cap \partial A = \emptyset$. Calcule a fronteira de $\Q \times \Q$ em $\R^2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela @prp-mat-m01-interior-fecho (a), aplicada a $X \setminus A$, temos $X \setminus \overline{X \setminus A} = \interior A$, isto é, $x \notin \interior A$ se, e somente se, $x \in \overline{X \setminus A}$. Logo $\partial A = \overline A \setminus \interior A = \overline A \cap \overline{X \setminus A}$, interseção de fechados, portanto fechado. Como $\overline A = \interior A \cup \partial A$ e $\interior A \subseteq A$: $A$ é fechado $\iff \overline A \subseteq A \iff \partial A \subseteq A$. E $A$ é aberto $\iff A = \interior A \iff$ nenhum ponto de $A$ está fora de $\interior A$ $\iff A \cap \partial A = \emptyset$ (pois $A \subseteq \overline A$). Para $\Q \times \Q$: toda bola de $\R^2$ contém um quadrado aberto $(a, b) \times (c, d)$, que contém pontos com as duas coordenadas racionais e pontos com a primeira irracional (@exm-mat-m01-interior). Assim, toda bola encontra o conjunto e o seu complementar, e $\partial(\Q \times \Q) = \R^2$.
+:::
+
+::: {#exr-mat-m01-lexicografica}
+Em $\R^2_+$, a **ordem lexicográfica** é $\vb x \succsim \vb y$ se $x_1 > y_1$, ou se $x_1 = y_1$ e $x_2 \geq y_2$. Mostre que o conjunto $\{\vb x : \vb x \succsim (1, 1)\}$ não é fechado e conclua que nenhuma utilidade contínua representa essa preferência.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Os pontos $\vb x^k = (1 + 1/k, 0)$ satisfazem $\vb x^k \succsim (1, 1)$, porque $1 + 1/k > 1$, e convergem para $(1, 0)$, que **não** está no conjunto: a primeira coordenada empata e $0 < 1$. Pelo @thm-mat-m01-fecho-sequencial, o conjunto não é fechado. Se $u$ fosse contínua e representasse $\succsim$, o conjunto seria $\{\vb x \in \R^2_+ : u(\vb x) \geq u(1, 1)\}$, fechado pelo @exm-mat-m01-preferencias — contradição. (Na verdade, a ordem lexicográfica não tem representação por utilidade nenhuma, contínua ou não, por um argumento de cardinalidade; veja o @sec-mic-m01.)
+:::
+
+::: {#exr-mat-m01-uniforme}
+Mostre que (a) $f(x) = 1/x$ não é uniformemente contínua em $(0, 1]$ e (b) $g(x) = \sqrt x$ é uniformemente contínua em $[0, \infty)$, mas não é Lipschitz.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para (a), $1/n$ é de Cauchy e $f(1/n) = n$ não é; pela @prp-mat-m01-cauchy-uniforme, $f$ não é uniformemente contínua. Para (b), se $x \geq y \geq 0$, então $(\sqrt x - \sqrt y)^2 = x + y - 2\sqrt{xy} \leq x + y - 2y = x - y$, pois $\sqrt{xy} \geq y$. Logo $\abs{\sqrt x - \sqrt y} \leq \sqrt{\abs{x - y}}$, e $\delta = \varepsilon^2$ serve para todos os pontos. Mas $\abs{\sqrt x - \sqrt 0}/\abs{x - 0} = 1/\sqrt x$ é ilimitado perto de zero, e nenhuma constante de Lipschitz serve.
+:::
+
+::: {#exr-mat-m01-semicontinua}
+Uma função $f: X \to \R$ é **semicontínua superiormente** se $\limsup_n f(x_n) \leq f(x)$ sempre que $x_n \to x$. Mostre que, em $K$ compacto e não vazio, toda $f$ semicontínua superiormente atinge o máximo. Dê um exemplo de função em $[0, 1]$ que não é semicontínua superiormente e não atinge o supremo, e interprete-o no modelo de Bertrand.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $s = \sup_K f \in (-\infty, +\infty]$ (reta estendida, @sec-mat-g02-reta-estendida) e $x_n \in K$ com $f(x_n) \to s$. Uma subsequência $x_{n_k}$ converge para algum $x \in K$, e $f(x) \geq \limsup_k f(x_{n_k}) = s$. Logo $s \leq f(x) < \infty$ e $s = f(x)$. Exemplo: $f(x) = x$ para $x < 1$ e $f(1) = 0$; ao longo de $x_n = 1 - 1/n$, $\limsup f(x_n) = 1 > f(1)$, e o supremo $1$ não é atingido. No duopólio de Bertrand com custo marginal $c$ e rival cobrando $p_2$ entre $c$ e o preço de monopólio, o lucro da firma 1 tem exatamente esse formato em $p_1 = p_2$: cobrando um pouco menos, ela leva todo o mercado; empatando, divide-o. O lucro não é semicontínuo superiormente, e a firma 1 não tem melhor resposta — sempre compensa cobrar um pouco mais perto de $p_2$.
+:::
+
+::: {#exr-mat-m01-mqo}
+Seja $\vb X$ uma matriz $n \times k$ de posto coluna completo. Mostre que existe $c > 0$ com $\norm{\vb X\vb\beta} \geq c\,\norm{\vb\beta}$ para todo $\vb\beta \in \R^k$ e conclua que $S(\vb\beta) = \norm{\vb y - \vb X\vb\beta}^2$ atinge um mínimo.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A esfera $\{\vb\beta : \norm{\vb\beta} = 1\}$ é fechada (pré-imagem de $\{1\}$ pela norma, contínua) e limitada, logo compacta (@thm-mat-m01-heine-borel). A função $\vb\beta \mapsto \norm{\vb X\vb\beta}$ é contínua e positiva na esfera, porque, com posto coluna completo, $\vb X\vb\beta = \vb 0$ só para $\vb\beta = \vb 0$ (@cor-mat-g05-nucleo). Pelo teorema de Weierstrass, atinge um mínimo $c > 0$. Para $\vb\beta \neq \vb 0$, $\norm{\vb X\vb\beta} = \norm{\vb\beta}\,\norm{\vb X(\vb\beta/\norm{\vb\beta})} \geq c\,\norm{\vb\beta}$. Então $\norm{\vb y - \vb X\vb\beta} \geq \norm{\vb X\vb\beta} - \norm{\vb y} \geq c\,\norm{\vb\beta} - \norm{\vb y}$, e $S$ é coerciva; pelo @cor-mat-m01-coerciva, tem mínimo. A unicidade vem da convexidade estrita (@exm-mat-g07-mqo). Sem posto completo, $S$ não é coerciva — é constante ao longo do núcleo de $\vb X$ —, mas o mínimo ainda existe: é a projeção ortogonal de $\vb y$ sobre o espaço coluna (@sec-mat-m10).
+:::
+
+::: {#exr-mat-m01-distancia}
+Sejam $K$ compacto e $F$ fechado, disjuntos e não vazios. Mostre que $d(K, F) \defeq \inf\{d(x, y) : x \in K,\ y \in F\} > 0$. Mostre, com um exemplo em $\R^2$, que a conclusão falha para dois fechados disjuntos.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A função $g(x) = d(x, F)$ é contínua (@exm-mat-m01-continuas) e positiva em $K$: se $d(x, F) = 0$, então $x \in \overline F = F$, impossível para $x \in K$. Pelo teorema de Weierstrass, $g$ atinge em $K$ um mínimo $m > 0$, e $d(x, y) \geq d(x, F) \geq m$ para $x \in K$, $y \in F$. Contraexemplo: o eixo $F_1 = \{(t, 0) : t \in \R\}$ e a hipérbole $F_2 = \{(t, 1/t) : t > 0\} = \{\vb x : x_1 x_2 = 1,\ x_1 \geq 0\}$ são fechados (pré-imagens de fechados por funções contínuas) e disjuntos, mas $d\big((n, 0), (n, 1/n)\big) = 1/n \to 0$. A distância positiva entre um compacto e um fechado é o que permite separá-los por um hiperplano quando ambos são convexos (@sec-mat-m08).
+:::
+
+::: {#exr-mat-m01-conexo}
+Mostre que $\R^n \setminus \{\vb 0\}$ é conexo por caminhos para $n \geq 2$, que $\R \setminus \{0\}$ não é conexo, e conclua que $\R$ e $\R^2$ não são homeomorfos.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Sejam $\vb x, \vb y \neq \vb 0$. Se o segmento entre eles não passa pela origem, ele é um caminho. Se passa, $\vb y = -t\vb x$ com $t > 0$; como $n \geq 2$, existe $\vb z$ fora da reta gerada por $\vb x$, e os segmentos de $\vb x$ a $\vb z$ e de $\vb z$ a $\vb y$ não passam pela origem. Percorrendo o primeiro em $[0, 1/2]$ e o segundo em $[1/2, 1]$, obtemos um caminho contínuo (as duas partes são contínuas e coincidem em $t = 1/2$). Já $\R \setminus \{0\} = (-\infty, 0) \cup (0, \infty)$ é uma decomposição em abertos disjuntos e não vazios. Se $h: \R \to \R^2$ fosse um homeomorfismo, a restrição de $h^{-1}$ a $\R^2 \setminus \{h(0)\}$ — que é conexo, por ser uma translação de $\R^2 \setminus \{\vb 0\}$ — seria contínua com imagem $\R \setminus \{0\}$, que não é conexo, contrariando o @thm-mat-m01-imagem-conexa.
+:::
+
+::: {#exr-mat-m01-reciproca}
+Mostre que, se $A \subseteq \R^n$ é não vazio e **não** é compacto, existe $f: A \to \R$ contínua que não atinge o máximo.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pelo teorema de Heine–Borel, $A$ é ilimitado ou não é fechado. Se é ilimitado, $f(\vb x) = \norm{\vb x}$ é contínua e ilimitada superiormente em $A$. Se não é fechado, existe $\vb a \in \overline A \setminus A$, e $f(\vb x) = -\norm{\vb x - \vb a}$ é contínua, negativa em $A$ e tem supremo $0$, pois há pontos de $A$ arbitrariamente próximos de $\vb a$ (@thm-mat-m01-fecho-sequencial); esse supremo não é atingido, porque $\vb a \notin A$. Assim, em $\R^n$, "toda função contínua em $A$ tem máximo" **caracteriza** os compactos.
+:::
+
+## Flashcards {#sec-mat-m01-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são os três axiomas de uma métrica?
+$d(x, y) \geq 0$ com igualdade só se $x = y$; simetria; desigualdade triangular $d(x, z) \leq d(x, y) + d(y, z)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se comparam $d_1$, $d_2$ e $d_\infty$ em $\R^n$?
+$d_\infty \leq d_2 \leq d_1 \leq \sqrt n\, d_2 \leq n\, d_\infty$. São uniformemente equivalentes: mesmos abertos, convergentes, sequências de Cauchy e limitados.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Uniões e interseções de abertos são abertas?
+Uniões quaisquer, sim; interseções, só finitas: $\bigcap_n (-1/n, 1/n) = \{0\}$. Para fechados, o contrário: interseções quaisquer e uniões finitas.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como caracterizar fecho e conjuntos fechados por sequências?
+$x \in \overline A$ se, e somente se, é limite de uma sequência em $A$; $A$ é fechado se, e somente se, contém os limites de suas sequências convergentes.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando $U \subseteq Y \subseteq X$ é aberto em $Y$?
+Quando $U = V \cap Y$ para algum $V$ aberto em $X$. Ex.: $[0, 1/2)$ é aberto em $[0, 1]$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais espaços são completos, e quais subconjuntos de um espaço completo são completos?
+$\R^n$ e $B(S)$ com a métrica do supremo são completos; $\Q$ e $(0, 1]$ não. Num espaço completo, um subconjunto é completo se, e somente se, é fechado.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema da interseção de Cantor?
+$X$ é completo se, e somente se, toda sequência decrescente de fechados não vazios com diâmetro tendendo a zero tem interseção não vazia (e então unitária).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se constrói o completamento de um espaço métrico?
+Pelo mergulho de Kuratowski $x \mapsto d(\cdot, x) - d(\cdot, a)$, uma isometria em $B(X)$; o completamento é o fecho da imagem. É único a menos de isometria.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quatro formas equivalentes de continuidade entre espaços métricos?
+$\varepsilon$–$\delta$; $x_n \to x \Rightarrow f(x_n) \to f(x)$; pré-imagem de aberto é aberta; pré-imagem de fechado é fechada.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Lipschitz, uniformemente contínua, contínua: exemplos que separam as três?
+Lipschitz $\Rightarrow$ uniforme $\Rightarrow$ contínua. $\sqrt x$ em $[0, \infty)$ é uniforme, não Lipschitz; $x^2$ em $\R$ e $1/x$ em $(0, 1]$ são contínuas, não uniformes.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando uma função definida num denso se estende continuamente?
+Se é uniformemente contínua e o contradomínio é completo: a extensão é única e herda a continuidade uniforme (e a constante de Lipschitz).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais as três caracterizações de compacidade em espaços métricos?
+Toda cobertura aberta tem subcobertura finita $\iff$ toda sequência tem subsequência convergente no conjunto $\iff$ completo e totalmente limitado.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Fechado e limitado implica compacto?
+Em $\R^n$, sim (Heine–Borel). Em geral, não: a bola fechada de $B(\N)$ contém os $\vb e_n$, a distância $1$ uns dos outros; falta a limitação total.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que garante a existência da demanda do consumidor?
+Weierstrass: utilidade contínua num conjunto orçamentário compacto, o que exige preços estritamente positivos e a desigualdade fraca $\vb p\T\vb x \leq w$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que preserva uma função contínua num compacto?
+A compacidade da imagem; é uniformemente contínua (Heine–Cantor); se injetiva, é homeomorfismo sobre a imagem.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são os conexos de $\R$, e qual é o valor intermediário geral?
+Os intervalos. Imagem contínua de conexo é conexa; logo $f: X \to \R$ contínua em $X$ conexo assume todos os valores entre $f(a)$ e $f(b)$.
+:::
+
+## Ficha-resumo {#sec-mat-m01-ficha}
+
+::: {.ficha-resumo}
+**Métrica.** $d \geq 0$ ($=0$ só em $x = y$), simétrica, triangular. Exemplos: $d_1, d_2, d_\infty$ em $\R^n$ ($d_\infty \leq d_2 \leq d_1 \leq \sqrt n d_2 \leq n d_\infty$), discreta, supremo em $B(S)$, $d_1 = \int\abs{f - g}$ em $C[a, b]$.
+
+**Topologia.** Bolas abertas são abertas. Abertos: uniões quaisquer, interseções finitas. $\overline A$ = aderentes = menor fechado $\supseteq A$; $\interior A$ = maior aberto $\subseteq A$; $\partial A = \overline A \setminus \interior A$. Relativa: abertos de $Y$ são $V \cap Y$. Uniformemente equivalentes preservam tudo; equivalentes, só a topologia ($\min\{d, 1\}$; $x/(1 + \abs x)$).
+
+**Sequências.** $x \in \overline A \iff$ limite de sequência em $A$; fechado $\iff$ contém os limites.
+
+**Completude.** Cauchy converge. $\R^n$, $B(S)$ completos; fechado em completo $\iff$ completo. Cantor: fechados encaixados, $\diam \to 0$, interseção unitária. Completamento por Kuratowski, único.
+
+**Continuidade.** $\varepsilon$–$\delta$ $\iff$ sequências $\iff$ pré-imagens de abertos. Lipschitz $\Rightarrow$ uniforme $\Rightarrow$ contínua; uniforme preserva Cauchy. Homeomorfismo: bijeção bicontínua; completude não é topológica. Extensão: uniforme no denso, contradomínio completo $\Rightarrow$ extensão única.
+
+**Compacidade.** Cobertura finita $\iff$ sequencial $\iff$ completo e totalmente limitado. Compacto $\Rightarrow$ fechado e limitado; fechado em compacto é compacto. $\R^n$: celas encaixadas, celas compactas, Heine–Borel, Bolzano–Weierstrass. Contínua em compacto: imagem compacta, uniforme, inversa contínua.
+
+**Weierstrass.** Contínua em compacto atinge máximo e mínimo. Demanda existe se $p_i > 0$. Coerciva em $\R^n$ tem mínimo global.
+
+**Conexidade.** Conexos de $\R$ = intervalos; imagem contínua de conexo é conexa; valor intermediário; caminhos $\Rightarrow$ conexo; convexos são conexos.
+:::
+
+## Notas bibliográficas {#sec-mat-m01-notas}
+
+@lima1977 é a referência em português para este capítulo: trata espaços métricos com cuidado e muitos exemplos, incluindo completamento, extensão de funções uniformemente contínuas, compacidade e conexidade. O capítulo 2 de @rudin1976 apresenta a topologia de espaços métricos — abertos, fechados, compactos, conexos — de forma concisa, e os capítulos 3 e 4 tratam sequências de Cauchy e continuidade no mesmo contexto. @ok2007 desenvolve espaços métricos e continuidade com aplicações econômicas sistemáticas — preferências contínuas, existência de ótimos, pontos fixos — e é a melhor ponte entre este capítulo e a teoria econômica; @delafuente2000 cobre o mesmo material de forma mais compacta, já com o vocabulário de espaços normados do @sec-mat-m10. O mergulho usado na demonstração do completamento é devido a Kuratowski.
