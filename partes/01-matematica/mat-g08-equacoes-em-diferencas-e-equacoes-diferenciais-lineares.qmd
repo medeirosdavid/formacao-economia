@@ -10,13 +10,629 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-mat-g08-motivacao}
 
-1. Equações em diferenças de 1ª e 2ª ordem
-2. Números complexos e raízes características
-3. Equações diferenciais de 1ª e 2ª ordem
-4. Estado estacionário e estabilidade
-5. Sistemas lineares e linearização
-6. Aplicações: teia de aranha, Solow, persistência da inflação
+A macroeconomia e as finanças são dinâmicas: o capital de amanhã depende do de hoje, a inflação deste mês carrega parte da do mês passado, o preço de uma ação hoje depende do que se espera para ele amanhã. Os modelos mais simples — e as aproximações de todos os outros perto de um estado estacionário — são **lineares**:
+
+- em **tempo discreto**, **equações em diferenças** como $x_{t+1} = a x_t + b$ ou $x_{t+2} = \phi_1 x_{t+1} + \phi_2 x_t$, a base dos processos autorregressivos e de modelos como o multiplicador–acelerador;
+- em **tempo contínuo**, **equações diferenciais** como $\dot x = a x + b$, que descrevem, por exemplo, a convergência do modelo de Solow perto do estado estacionário.
+
+As perguntas são sempre as mesmas: qual é a solução, existe um **estado estacionário**, as trajetórias convergem para ele (**estabilidade**), de forma monótona ou **oscilando**, e com que **velocidade**? A resposta está nas raízes de um polinômio — as **raízes características** —, que podem ser complexas. Este capítulo desenvolve:
+
+1. equações em diferenças de primeira ordem, incluindo a solução "para frente" usada no apreçamento de ativos;
+2. os números complexos necessários para lidar com raízes complexas;
+3. equações em diferenças de segunda ordem e o **triângulo de estabilidade**;
+4. equações diferenciais lineares de primeira e segunda ordem;
+5. sistemas lineares $2 \times 2$, autovalores e linearização em torno de estados estacionários;
+6. aplicações: teia de aranha, multiplicador–acelerador, Solow e a persistência da inflação brasileira.
+
+## Equações em diferenças de primeira ordem {#sec-mat-g08-diferencas-1}
+
+Uma sequência $(x_t)_{t \geq 0}$ satisfaz uma **equação em diferenças linear de primeira ordem** se
+$$
+x_{t+1} = a\,x_t + b_t \qquad (t = 0, 1, 2, \dots),
+$$ {#eq-mat-g08-primeira}
+com $a \in \R$ e uma sequência de **choques** ou termos forçantes $(b_t)$. Dado $x_0$, a equação determina toda a sequência.
+
+::: {#prp-mat-g08-solucao-primeira}
+## Solução da equação de primeira ordem
+A solução da @eq-mat-g08-primeira com condição inicial $x_0$ é
+$$
+x_t = a^t x_0 + \sum_{s=0}^{t-1} a^{t-1-s}\, b_s .
+$$
+Se $b_t = b$ é constante e $a \neq 1$, então $x_t = x^* + a^t(x_0 - x^*)$, com **estado estacionário** $x^* = b/(1 - a)$; se $a = 1$, $x_t = x_0 + bt$.
 :::
+
+::: {.proof}
+Por indução: vale em $t = 0$, e, se vale em $t$, então $x_{t+1} = a\big(a^t x_0 + \sum_{s<t} a^{t-1-s}b_s\big) + b_t = a^{t+1}x_0 + \sum_{s \leq t} a^{t-s} b_s$. Para $b$ constante, o caso $a \neq 1$ é o @exm-mat-g02-linear, e o caso $a = 1$ é imediato.
+:::
+
+A solução é a soma de um termo que "esquece" a condição inicial à taxa $a^t$ com uma média ponderada dos choques passados, com pesos geometricamente decrescentes se $\abs{a} < 1$. Com $b$ constante, toda trajetória converge para $x^*$ se, e somente se, $\abs{a} < 1$; a convergência é monótona se $0 < a < 1$ e oscilante se $-1 < a < 0$, e a **meia-vida** de um desvio é $\log 2/\abs{\log\abs{a}}$ períodos (@exr-mat-g02-meia-vida).
+
+::: {#exm-mat-g08-teia}
+## A teia de aranha
+No mercado de um produto agrícola, a demanda depende do preço corrente, $q_t^d = \alpha - \beta p_t$, e a oferta, decidida no plantio, do preço do período anterior, $q_t^s = \gamma + \delta p_{t-1}$, com $\beta, \delta > 0$. O equilíbrio a cada período, $q_t^d = q_t^s$, dá
+$$
+p_t = \frac{\alpha - \gamma}{\beta} - \frac{\delta}{\beta}\,p_{t-1},
+$$
+uma equação de primeira ordem com $a = -\delta/\beta < 0$. O preço de equilíbrio estático $p^* = (\alpha - \gamma)/(\beta + \delta)$ é o estado estacionário, e as trajetórias **oscilam** em torno dele: um preço alto induz muito plantio, que derruba o preço, que induz pouco plantio. As oscilações se amortecem se, e somente se, $\delta < \beta$ — a oferta reage menos ao preço que a demanda. Com $\delta > \beta$, elas explodem; num diagrama de quantidade e preço, a trajetória desenha a "teia" que dá nome ao modelo.
+:::
+
+### A solução para frente
+
+Se $\abs a > 1$, as soluções da @eq-mat-g08-primeira em geral explodem. Mas, em modelos com expectativas, a condição inicial não é dada: é escolhida pelo próprio equilíbrio, e a solução economicamente relevante é a única que permanece limitada.
+
+::: {#prp-mat-g08-para-frente}
+## Solução limitada para frente
+Se $\abs a > 1$ e $(b_t)$ é limitada, a @eq-mat-g08-primeira tem uma única solução limitada, dada por
+$$
+x_t = -\sum_{k=0}^\infty a^{-(k+1)}\, b_{t+k} .
+$$
+Todas as outras soluções são $x_t + c\,a^t$, com $c \neq 0$, e são ilimitadas.
+:::
+
+::: {.proof}
+A série converge absolutamente por comparação com a geométrica de razão $1/\abs a < 1$, e é limitada por $\sup\abs{b_t}/(\abs a - 1)$. Ela satisfaz a equação: $a x_t + b_t = -\sum_{k \geq 0} a^{-k} b_{t+k} + b_t = -\sum_{k \geq 1} a^{-k} b_{t+k} = -\sum_{j \geq 0} a^{-(j+1)} b_{t+1+j} = x_{t+1}$. Se $y_t$ é outra solução, $d_t = y_t - x_t$ satisfaz $d_{t+1} = a d_t$, logo $d_t = a^t d_0$, que é ilimitada a menos que $d_0 = 0$.
+:::
+
+::: {#exm-mat-g08-bolhas}
+## Preços de ativos e bolhas
+Um ativo paga dividendos $d_t$ e é negociado por investidores neutros ao risco, com taxa de juros $r > 0$. Por não arbitragem, $p_t = \frac{d_{t+1} + p_{t+1}}{1 + r}$, isto é, $p_{t+1} = (1 + r)p_t - d_{t+1}$: uma equação com $a = 1 + r > 1$. Pela @prp-mat-g08-para-frente, a única solução limitada é o **valor fundamental**
+$$
+p_t^* = \sum_{k=1}^\infty \frac{d_{t+k}}{(1 + r)^k},
+$$
+o valor presente dos dividendos futuros. As demais soluções, $p_t = p_t^* + c(1 + r)^t$, têm um componente que cresce à taxa de juros sem nenhuma relação com os dividendos — uma **bolha racional**. Com dividendos constantes $d$, $p^* = d/r$, a perpetuidade da @prp-mat-g02-perpetuidades (@sec-fin-g03).
+:::
+
+## Números complexos {#sec-mat-g08-complexos}
+
+As raízes de um polinômio de segundo grau com discriminante negativo não são reais, e elas aparecerão nas equações de segunda ordem. Um **número complexo** é uma expressão $z = \alpha + i\beta$, com $\alpha, \beta \in \R$, somada e multiplicada pelas regras usuais da álgebra com $i^2 = -1$: $(\alpha + i\beta)(\gamma + i\delta) = (\alpha\gamma - \beta\delta) + i(\alpha\delta + \beta\gamma)$. O **conjugado** de $z$ é $\bar z = \alpha - i\beta$, seu **módulo** é $\abs z = \sqrt{\alpha^2 + \beta^2}$, e valem $z\bar z = \abs z^2$, $\overline{zw} = \bar z\,\bar w$ e $\abs{zw} = \abs z\abs w$.
+
+Admitimos as funções seno e cosseno, com $\cos^2\theta + \sin^2\theta = 1$, as fórmulas de adição $\cos(\theta + \varphi) = \cos\theta\cos\varphi - \sin\theta\sin\varphi$ e $\sin(\theta + \varphi) = \sin\theta\cos\varphi + \cos\theta\sin\varphi$, as derivadas $\cos' = -\sin$ e $\sin' = \cos$, e a periodicidade de período $2\pi$. Todo $z \neq 0$ se escreve na **forma polar** $z = \rho(\cos\theta + i\sin\theta)$, com $\rho = \abs z$ e um ângulo $\theta$ (o **argumento**). Pelas fórmulas de adição, multiplicar números complexos **multiplica os módulos e soma os ângulos**:
+$$
+\rho(\cos\theta + i\sin\theta) \cdot \sigma(\cos\varphi + i\sin\varphi) = \rho\sigma\big(\cos(\theta + \varphi) + i\sin(\theta + \varphi)\big),
+$$
+e, por indução, vale a **fórmula de De Moivre**: $z^t = \rho^t(\cos t\theta + i\sin t\theta)$ para $t \in \N$. Assim, $\abs{z^t} = \abs z^t \to 0$ se, e somente se, $\abs z < 1$, e a parte real de $z^t$ oscila com período $2\pi/\theta$ enquanto seu módulo cresce ou decresce geometricamente.
+
+Em tempo contínuo, define-se, para $\mu = \alpha + i\beta$, $e^{\mu t} \defeq e^{\alpha t}(\cos\beta t + i\sin\beta t)$. Derivando a parte real e a imaginária separadamente, as regras acima dão $\frac{\dd}{\dd t}e^{\mu t} = \mu\,e^{\mu t}$, e as fórmulas de adição dão $e^{\mu t}e^{\nu t} = e^{(\mu + \nu)t}$; em particular, $\abs{e^{\mu t}} = e^{\alpha t}$, que tende a zero se, e somente se, $\alpha = \operatorname{Re}\mu < 0$.
+
+## Equações em diferenças de segunda ordem {#sec-mat-g08-diferencas-2}
+
+Considere a equação **homogênea**
+$$
+x_{t+2} + a_1 x_{t+1} + a_2 x_t = 0, \qquad a_2 \neq 0,
+$$ {#eq-mat-g08-segunda}
+e seu **polinômio característico** $P(\lambda) = \lambda^2 + a_1\lambda + a_2$, com raízes $\lambda_1, \lambda_2$ (as **raízes características**). Como $a_2 = \lambda_1\lambda_2 \neq 0$, nenhuma raiz é nula.
+
+::: {#thm-mat-g08-segunda}
+## Solução da equação de segunda ordem
+(a) Para cada par $(x_0, x_1)$ há uma única solução da @eq-mat-g08-segunda, e combinações lineares de soluções são soluções.
+(b) Se $\lambda_1 \neq \lambda_2$, toda solução é da forma $x_t = c_1\lambda_1^t + c_2\lambda_2^t$; se $\lambda_1 = \lambda_2 = \lambda$, é da forma $x_t = (c_1 + c_2 t)\lambda^t$.
+(c) Se as raízes são complexas, $\lambda_{1,2} = \rho(\cos\theta \pm i\sin\theta)$, as soluções reais são $x_t = \rho^t (A\cos\theta t + B\sin\theta t)$, com $A, B \in \R$.
+:::
+
+::: {.proof}
+Para (a), a equação dá $x_{t+2}$ em função de $x_{t+1}$ e $x_t$, e a linearidade é imediata.
+
+Para (b), substituindo $x_t = \lambda^t$ na equação, obtemos $\lambda^t P(\lambda) = 0$: $\lambda^t$ é solução se, e somente se, $\lambda$ é raiz característica. Com raízes distintas, o sistema $c_1 + c_2 = x_0$, $c_1\lambda_1 + c_2\lambda_2 = x_1$ tem determinante $\lambda_2 - \lambda_1 \neq 0$, logo tem solução; a combinação correspondente é uma solução com os mesmos $(x_0, x_1)$ e, por (a), coincide com a solução dada. Com raiz dupla $\lambda$, também $t\lambda^t$ é solução, pois
+$$
+(t + 2)\lambda^{t+2} + a_1(t + 1)\lambda^{t+1} + a_2 t\lambda^t = \lambda^t\big[t\,P(\lambda) + \lambda\,P'(\lambda)\big] = 0,
+$$
+já que uma raiz dupla anula $P$ e $P'$; e o sistema $c_1 = x_0$, $(c_1 + c_2)\lambda = x_1$ sempre tem solução.
+
+Para (c), o argumento de (b) vale com números complexos: toda solução é $c_1\lambda_1^t + c_2\lambda_2^t$, com $c_1, c_2 \in \mathbb C$. Se $(x_t)$ é real, conjugando obtemos $x_t = \bar c_1\bar\lambda_1^t + \bar c_2\bar\lambda_2^t = \bar c_2\lambda_1^t + \bar c_1 \lambda_2^t$, e a unicidade dos coeficientes dá $c_2 = \bar c_1$. Logo $x_t = 2\operatorname{Re}(c_1\lambda_1^t)$, e, escrevendo $c_1 = (A - iB)/2$ e usando De Moivre, $x_t = \rho^t(A\cos\theta t + B\sin\theta t)$.
+:::
+
+Para a equação com constante, $x_{t+2} + a_1x_{t+1} + a_2x_t = b$, se $P(1) = 1 + a_1 + a_2 \neq 0$ o estado estacionário é $x^* = b/P(1)$, e $x_t - x^*$ satisfaz a equação homogênea. Pelo teorema, todas as soluções convergem para $x^*$ se, e somente se, as duas raízes têm módulo menor que 1 (a sequência $t\lambda^t$ tende a zero quando $\abs\lambda < 1$, pois $\sum_t t\abs\lambda^t$ converge pelo teste da razão). A condição pode ser lida diretamente nos coeficientes.
+
+::: {#thm-mat-g08-triangulo}
+## O triângulo de estabilidade
+As duas raízes de $P(\lambda) = \lambda^2 + a_1\lambda + a_2$ têm módulo menor que 1 se, e somente se,
+$$
+\abs{a_2} < 1 \qquad \text{e} \qquad \abs{a_1} < 1 + a_2 .
+$$
+:::
+
+::: {.proof}
+A segunda condição equivale a $P(1) = 1 + a_1 + a_2 > 0$ e $P(-1) = 1 - a_1 + a_2 > 0$.
+
+Se as raízes são complexas ($a_1^2 < 4a_2$), elas são conjugadas, com $\abs{\lambda}^2 = \lambda_1\lambda_2 = a_2 > 0$; logo $\abs\lambda < 1 \iff a_2 < 1$. Nesse caso, $P$ não tem raízes reais e é positivo em todo $\R$, de modo que $P(\pm1) > 0$ automaticamente: as condições do enunciado reduzem-se a $a_2 < 1$.
+
+Se as raízes são reais, $\lambda_1 \leq \lambda_2$, então $P \leq 0$ exatamente em $[\lambda_1, \lambda_2]$. Se ambas estão em $(-1, 1)$, então $P(\pm 1) > 0$ e $\abs{a_2} = \abs{\lambda_1}\abs{\lambda_2} < 1$. Reciprocamente, $P(\pm1) > 0$ diz que nem $1$ nem $-1$ estão em $[\lambda_1, \lambda_2]$; esse intervalo está então contido em $(-1, 1)$, ou à direita de $1$, ou à esquerda de $-1$. Nos dois últimos casos, $\abs{\lambda_1}, \abs{\lambda_2} > 1$ e $\abs{a_2} > 1$, o que a primeira condição exclui.
+:::
+
+No plano $(a_1, a_2)$, a região de estabilidade é um triângulo de vértices $(-2, 1)$, $(2, 1)$ e $(0, -1)$; acima da parábola $a_2 = a_1^2/4$ as raízes são complexas e as trajetórias oscilam. O interativo permite percorrê-lo.
+
+::: {#exm-mat-g08-samuelson}
+## Multiplicador–acelerador de Samuelson
+A renda é $Y_t = C_t + I_t + G$, o consumo responde à renda passada, $C_t = cY_{t-1}$, e o investimento à variação do consumo, $I_t = v(C_t - C_{t-1})$, com $0 < c < 1$ e $v > 0$. Substituindo,
+$$
+Y_t - c(1 + v)\,Y_{t-1} + cv\,Y_{t-2} = G,
+$$
+com $a_1 = -c(1 + v)$ e $a_2 = cv$. O estado estacionário é $Y^* = G/(1 - c)$ — o multiplicador keynesiano. Como $1 + a_1 + a_2 = 1 - c > 0$ e $1 - a_1 + a_2 > 0$, pelo @thm-mat-g08-triangulo a economia é estável se, e somente se, $cv < 1$; e oscila se $c^2(1 + v)^2 < 4cv$. Um acelerador forte ($v$ grande) gera ciclos explosivos: foi o primeiro modelo a gerar ciclos econômicos endogenamente.
+:::
+
+## Equações diferenciais lineares {#sec-mat-g08-edo}
+
+Em tempo contínuo, $x(t)$ é uma função diferenciável e escrevemos $\dot x = \dd x/\dd t$.
+
+::: {#prp-mat-g08-edo-primeira}
+## Equação de primeira ordem
+Sejam $a \neq 0$ e $b \in \R$. A única solução de $\dot x = a x + b$ com $x(0) = x_0$ é
+$$
+x(t) = x^* + (x_0 - x^*)\,e^{at}, \qquad x^* = -b/a .
+$$
+Mais geralmente, se $b(t)$ é contínua, a única solução de $\dot x = ax + b(t)$ com $x(0) = x_0$ é $x(t) = e^{at}x_0 + \int_0^t e^{a(t - s)} b(s)\,\dd s$.
+:::
+
+::: {.proof}
+A função proposta satisfaz a equação: pela regra do produto, pelo teorema fundamental do cálculo e pela regra de Leibniz com limites variáveis (@cor-mat-g04-leibniz-limites), $\frac{\dd}{\dd t}\int_0^t e^{a(t-s)}b(s)\,\dd s = b(t) + a\int_0^t e^{a(t-s)}b(s)\,\dd s$. Para a unicidade, se $y$ é solução, $\frac{\dd}{\dd t}\big(e^{-at}y(t)\big) = e^{-at}\big(\dot y - ay\big) = e^{-at}b(t)$, e, integrando de $0$ a $t$ (@thm-mat-g04-tfc2), $e^{-at}y(t) = x_0 + \int_0^t e^{-as}b(s)\,\dd s$, que é a fórmula. O caso constante resulta da integral $\int_0^t e^{a(t-s)}b\,\dd s = \frac ba(e^{at} - 1)$.
+:::
+
+Toda solução converge para $x^*$ se, e somente se, $a < 0$, e então a meia-vida de um desvio é $\log 2/\abs a$. O mesmo argumento, com o **fator integrante** $e^{-\int_0^t a(s)\,\dd s}$, resolve a equação com coeficiente variável $\dot x = a(t)x + b(t)$.
+
+Para a equação de segunda ordem $\ddot x + a_1\dot x + a_2 x = 0$, as soluções exponenciais $e^{rt}$ correspondem às raízes de $r^2 + a_1 r + a_2 = 0$, e a estrutura é a mesma do caso discreto.
+
+::: {#thm-mat-g08-edo-segunda}
+## Equação diferencial de segunda ordem
+Sejam $r_1, r_2$ as raízes de $r^2 + a_1r + a_2 = 0$. As soluções de $\ddot x + a_1\dot x + a_2x = 0$ são: $c_1e^{r_1t} + c_2e^{r_2t}$ se as raízes são reais e distintas; $(c_1 + c_2t)e^{rt}$ se há uma raiz dupla $r$; e $e^{\alpha t}(A\cos\beta t + B\sin\beta t)$ se as raízes são $\alpha \pm i\beta$. Cada par $(x(0), \dot x(0))$ determina uma única solução. Todas as soluções tendem a zero se, e somente se, $a_1 > 0$ e $a_2 > 0$.
+:::
+
+::: {.proof}
+Que as funções indicadas são soluções verifica-se derivando (no caso complexo, com $\frac{\dd}{\dd t}e^{\mu t} = \mu e^{\mu t}$ e tomando partes reais). Para a unicidade, note que a equação se fatora: com $y \defeq \dot x - r_2x$, temos $\dot y - r_1y = \ddot x - (r_1 + r_2)\dot x + r_1r_2x = \ddot x + a_1\dot x + a_2x = 0$. Pela @prp-mat-g08-edo-primeira (com $b = 0$; o mesmo argumento vale para $a = 0$ e, coordenada a coordenada, para coeficientes complexos), $y(t) = y(0)e^{r_1t}$, com $y(0) = \dot x(0) - r_2x(0)$. Então $x$ resolve $\dot x = r_2x + y(0)e^{r_1t}$ com $x(0)$ dado, e a mesma proposição dá unicidade. Por fim, as soluções tendem a zero se, e somente se, as raízes têm parte real negativa. Se são reais, isso equivale a $r_1 + r_2 = -a_1 < 0$ e $r_1r_2 = a_2 > 0$; se são complexas, a parte real é $-a_1/2$, e $a_2 = \abs{r}^2 > 0$ automaticamente.
+:::
+
+## Sistemas lineares e linearização {#sec-mat-g08-sistemas}
+
+Modelos com mais de uma variável de estado levam a sistemas $\vb x_{t+1} = \vb A\vb x_t$ ou $\dot{\vb x} = \vb A\vb x$, com $\vb A$ uma matriz $2 \times 2$. Um número $\lambda$ (real ou complexo) é **autovalor** de $\vb A$, com **autovetor** $\vb v \neq \vb 0$, se $\vb A\vb v = \lambda\vb v$. Como $(\vb A - \lambda\Id)\vb v = \vb 0$ tem solução não nula se, e somente se, $\det(\vb A - \lambda\Id) = 0$ (@thm-mat-g05-det-invertivel), os autovalores são as raízes do polinômio característico
+$$
+\det(\vb A - \lambda\Id) = \lambda^2 - (\tr\vb A)\,\lambda + \det\vb A .
+$$
+
+::: {#thm-mat-g08-sistemas}
+## Sistemas $2 \times 2$ com autovalores distintos
+Seja $\vb A$, $2 \times 2$, com autovalores reais distintos $\lambda_1 \neq \lambda_2$ e autovetores $\vb v_1, \vb v_2$. Então $\vb v_1, \vb v_2$ formam uma base de $\R^2$, e, escrevendo $\vb x_0 = c_1\vb v_1 + c_2\vb v_2$,
+
+(a) a solução de $\vb x_{t+1} = \vb A\vb x_t$ é $\vb x_t = c_1\lambda_1^t\vb v_1 + c_2\lambda_2^t\vb v_2$;
+(b) a solução de $\dot{\vb x} = \vb A\vb x$ com $\vb x(0) = \vb x_0$ é $\vb x(t) = c_1e^{\lambda_1t}\vb v_1 + c_2e^{\lambda_2t}\vb v_2$, e é única.
+:::
+
+::: {.proof}
+Se $\vb v_2 = k\vb v_1$, então $\lambda_2\vb v_2 = \vb A\vb v_2 = k\lambda_1\vb v_1 = \lambda_1\vb v_2$, e $\lambda_1 = \lambda_2$, contradição; logo os autovetores são LI e formam uma base (@exr-mat-g05-dimensao). Para (a), $\vb A^t\vb v_i = \lambda_i^t\vb v_i$, e a linearidade dá a fórmula. Para (b), a função proposta satisfaz a equação, pois $\frac{\dd}{\dd t}e^{\lambda_it}\vb v_i = \lambda_ie^{\lambda_it}\vb v_i = \vb A\,e^{\lambda_it}\vb v_i$. Para a unicidade, seja $\vb P$ a matriz de colunas $\vb v_1, \vb v_2$, invertível, e $\vb y = \vb P\inv\vb x$; como $\vb A\vb P = \vb P\diag(\lambda_1, \lambda_2)$, o sistema vira $\dot{\vb y} = \diag(\lambda_1, \lambda_2)\vb y$, isto é, duas equações escalares separadas, cada uma com solução única.
+:::
+
+O resultado se estende a autovalores complexos (com as soluções oscilantes da @sec-mat-g08-complexos) e, com algum cuidado, a autovalores repetidos (@sec-mat-m02). Em todos os casos:
+
+- o sistema discreto é estável — todas as trajetórias tendem a $\vb 0$ — se, e somente se, os dois autovalores têm módulo menor que 1, isto é, pelo @thm-mat-g08-triangulo com $a_1 = -\tr\vb A$ e $a_2 = \det\vb A$, se $\abs{\det\vb A} < 1$ e $\abs{\tr\vb A} < 1 + \det\vb A$;
+- o sistema contínuo é estável se, e somente se, os autovalores têm parte real negativa, isto é, pelo @thm-mat-g08-edo-segunda, se $\tr\vb A < 0$ e $\det\vb A > 0$.
+
+Se $\det\vb A < 0$ em tempo contínuo, os autovalores são reais e de sinais opostos: o estado estacionário é um **ponto de sela**. Quase todas as trajetórias divergem, exceto as que começam sobre a reta gerada pelo autovetor estável — o **braço estável**. Em modelos com variáveis que "pulam" (preços de ativos, consumo), o equilíbrio é justamente a trajetória sobre o braço estável, como no modelo de Ramsey (@sec-mac-m01) e na solução para frente da @prp-mat-g08-para-frente.
+
+### Linearização
+
+Sistemas não lineares $x_{t+1} = g(x_t)$ ou $\dot x = f(x)$ são estudados perto de seus estados estacionários pela aproximação linear. O caso de uma variável já mostra a ideia.
+
+::: {#prp-mat-g08-linearizacao}
+## Estabilidade local por linearização
+(a) Seja $g$ de classe $C^1$ com $g(x^*) = x^*$ e $\abs{g'(x^*)} < 1$. Então existe $\delta > 0$ tal que, para $\abs{x_0 - x^*} < \delta$, a sequência $x_{t+1} = g(x_t)$ converge para $x^*$.
+(b) Seja $f$ de classe $C^1$ com $f(x^*) = 0$ e $f'(x^*) < 0$, e suponha que $\dot x = f(x)$ tenha uma única solução para cada condição inicial (o teorema de Picard–Lindelöf, no @sec-mat-m06, garante isso). Então existe $\delta > 0$ tal que, para $\abs{x(0) - x^*} < \delta$, $x(t) \to x^*$.
+:::
+
+::: {.proof}
+Para (a), por continuidade há $\delta > 0$ e $\beta < 1$ com $\abs{g'(x)} \leq \beta$ para $\abs{x - x^*} \leq \delta$. Pelo valor médio, $\abs{g(x) - x^*} = \abs{g(x) - g(x^*)} \leq \beta\abs{x - x^*}$ nesse intervalo, que é portanto levado em si mesmo; por indução, $\abs{x_t - x^*} \leq \beta^t\abs{x_0 - x^*} \to 0$.
+
+Para (b), há $\delta > 0$ com $f' < 0$ em $[x^* - \delta, x^* + \delta]$; logo $f > 0$ à esquerda de $x^*$ e $f < 0$ à direita, nesse intervalo. Se $x^* < x(0) < x^* + \delta$, então $x(t)$ é decrescente enquanto $x(t) > x^*$, e não pode atingir $x^*$: a função constante $x^*$ é uma solução, e, se fosse $x(T) = x^*$, a unicidade (a partir do instante $T$) faria $x$ coincidir com ela, contra $x(0) \neq x^*$. Logo $x(t)$ é decrescente e limitada inferiormente por $x^*$, e converge para algum $L \geq x^*$. Se fosse $L > x^*$, teríamos $\dot x(t) = f(x(t)) \leq f(L)/2 < 0$ para $t$ grande, e $x(t) \to -\infty$ — contradição. O caso $x(0) < x^*$ é simétrico.
+:::
+
+A versão em várias dimensões — o estado estacionário é localmente estável se os autovalores da jacobiana satisfazem as condições acima — e a teoria geral de existência de soluções estão no @sec-mat-m06.
+
+## O modelo de Solow {#sec-mat-g08-solow}
+
+No modelo de Solow em tempo contínuo, o capital por trabalhador $k$ evolui segundo
+$$
+\dot k = s\,k^\alpha - (n + \delta)\,k, \qquad 0 < \alpha < 1,
+$$ {#eq-mat-g08-solow}
+onde $s$ é a taxa de poupança, $n$ o crescimento da população e $\delta$ a depreciação: o investimento por trabalhador, $s k^\alpha$, menos o necessário para manter $k$ constante. O estado estacionário positivo resolve $s k^{\alpha - 1} = n + \delta$:
+$$
+k^* = \Big(\frac{s}{n + \delta}\Big)^{1/(1-\alpha)} .
+$$
+
+::: {#prp-mat-g08-solow}
+## Estabilidade e velocidade de convergência no modelo de Solow
+Para todo $k(0) > 0$, $k(t) \to k^*$. Perto de $k^*$, o desvio $k(t) - k^*$ cai aproximadamente à taxa $\lambda = (1 - \alpha)(n + \delta)$, com meia-vida $\log 2/\lambda$.
+:::
+
+::: {.proof}
+Seja $\varphi(k) = s k^\alpha - (n + \delta)k = k\,\big(sk^{\alpha - 1} - (n + \delta)\big)$. Como $k^{\alpha - 1}$ é estritamente decrescente, $\varphi > 0$ em $(0, k^*)$ e $\varphi < 0$ em $(k^*, \infty)$. O argumento da @prp-mat-g08-linearizacao (b), agora com o sinal de $\varphi$ conhecido em toda a semirreta, mostra que $k(t)$ é monótona, não cruza $k^*$ e converge para um zero de $\varphi$ em $(0, \infty)$, que só pode ser $k^*$. Para a velocidade, $\varphi'(k^*) = \alpha s k^{*\alpha - 1} - (n + \delta) = (\alpha - 1)(n + \delta)$, e a linearização $\dot k \approx \varphi'(k^*)(k - k^*)$ tem solução $k - k^* \approx e^{-\lambda t}(k(0) - k^*)$.
+:::
+
+Com $\alpha = 1/3$ e $n + \delta = 0{,}06$, $\lambda = 0{,}04$: metade da distância ao estado estacionário é percorrida em cerca de 17 anos. A estimativa empírica clássica, de cerca de 2% ao ano, é mais lenta do que o modelo prevê com $\alpha = 1/3$, o que levou a interpretar $\alpha$ como a participação de um capital "amplo", que inclui o capital humano (@sec-mac-g02, @sec-mac-m01).
+
+## Aplicação: a persistência da inflação mensal no Brasil {#sec-mat-g08-aplicacao}
+
+A equação estocástica $\pi_t = c + \rho\,\pi_{t-1} + \varepsilon_t$ — um **processo autorregressivo de ordem 1**, AR(1) — é a @eq-mat-g08-primeira com choques aleatórios. Sua parte determinística tem estado estacionário $\pi^* = c/(1 - \rho)$, e um choque se dissipa à taxa $\rho$, com meia-vida $\log 2/\abs{\log\rho}$. Estimamos $c$ e $\rho$ por mínimos quadrados com a variação mensal do IPCA desde 2000 (série 433 do SGS).
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import Markdown
+from formacao import dados, graficos
+
+graficos.estilo()
+try:
+    ipca = dados.sgs("ipca", inicio="2000-01-01")     # variação % mensal
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponíveis neste ambiente de renderização ({erro}).")
+    print("Renderize com acesso à internet para baixar a série e preencher a cache.")
+
+if disponivel:
+    y, x = ipca.values[1:], ipca.values[:-1]
+    X = np.column_stack([np.ones_like(x), x])
+    c, rho = np.linalg.lstsq(X, y, rcond=None)[0]       # MQO: pi_t = c + rho * pi_{t-1}
+    pi_est = c / (1 - rho)
+    meia_vida = np.log(2) / abs(np.log(rho))
+    anual = 100 * ((1 + pi_est / 100) ** 12 - 1)
+    print(f"amostra: {ipca.index[0]:%m/%Y} a {ipca.index[-1]:%m/%Y} ({len(ipca)} meses)")
+    print(f"c = {c:.3f}, rho = {rho:.3f}")
+    print(f"estado estacionario: {pi_est:.3f}% ao mes ({anual:.1f}% ao ano)")
+    print(f"meia-vida de um choque: {meia_vida:.1f} meses")
+```
+
+```{python}
+if disponivel:
+    br = lambda v, d: f"{v:.{d}f}".replace(".", ",")
+    choque = pd.Series(rho ** np.arange(25), name="resposta")
+    fig, ax = plt.subplots(1, 2, figsize=(9, 3.4))
+    ax[0].plot(ipca.index, ipca.values, color=graficos.PALETA["azul"], lw=1)
+    ax[0].axhline(pi_est, color=graficos.PALETA["vinho"], ls="--", lw=1)
+    ax[0].set_ylabel("IPCA, variação mensal (%)")
+    ax[1].bar(choque.index, choque.values, color=graficos.PALETA["ambar"])
+    ax[1].set_xlabel("meses após o choque")
+    ax[1].set_ylabel("efeito remanescente")
+    graficos.fonte(ax[0], "IBGE (IPCA), via SGS/BCB, série 433.")
+    fig.tight_layout()
+    plt.show()
+    resumo = (f"Com a amostra disponível, $\\hat\\rho$ = {br(rho, 2)}: cerca de "
+              f"{br(100 * rho, 0)}% de um choque na inflação de um mês ainda aparece no mês seguinte, "
+              f"e a meia-vida é de {br(meia_vida, 1)} meses. O estado estacionário implícito, "
+              f"{br(pi_est, 2)}% ao mês, corresponde a {br(anual, 1)}% ao ano — próximo da média do período.")
+else:
+    resumo = "*(Os resultados aparecem quando o capítulo é renderizado com acesso aos dados.)*"
+Markdown(resumo)
+```
+
+Dois alertas. Primeiro, o IPCA mensal tem **sazonalidade** (alimentos, educação no início do ano, energia), que um AR(1) puro ignora; parte do que ele atribui à persistência pode ser padrão sazonal. Segundo, a estimativa supõe que $c$ e $\rho$ são constantes ao longo de duas décadas com mudanças na condução da política monetária. A modelagem cuidadosa — com sazonalidade, ordens maiores, testes de raiz unitária ($\rho = 1$) e quebras estruturais — é o tema do @sec-ecm-m09 e do @sec-ecm-m10.
+
+## Pontes {#sec-mat-g08-pontes}
+
+- **Sistemas dinâmicos (@sec-mat-m06).** Estabilidade de sistemas não lineares, diagramas de fase em duas dimensões e o teorema de Hartman–Grobman.
+- **Autovalores (@sec-mat-m02).** Diagonalização, autovalores complexos e repetidos, e o comportamento de $\vb A^t$ em geral.
+- **Séries temporais (@sec-ecm-m09, @sec-ecm-m10, @sec-ecm-m11).** Processos AR e ARMA, cuja estacionariedade é o triângulo de estabilidade; raízes unitárias; VARs são sistemas $\vb x_{t+1} = \vb A\vb x_t + \vb\varepsilon_{t+1}$.
+- **Crescimento (@sec-mac-g02, @sec-mac-m01).** Solow em detalhe; no modelo de Ramsey, o equilíbrio é o braço estável de um ponto de sela.
+- **Expectativas racionais (@sec-mac-m10, @sec-mac-d09).** A solução para frente e as condições de Blanchard–Kahn para a determinação do equilíbrio.
+- **Finanças (@sec-fin-g03, @sec-fin-d05).** Valor fundamental como solução para frente; bolhas racionais.
+- **Cadeias de Markov (@sec-est-d01).** A distribuição de probabilidades evolui segundo um sistema linear com a matriz de transição.
+
+## Interativo {#sec-mat-g08-interativo}
+
+::: {.content-visible when-format="html"}
+**O triângulo de estabilidade.** A equação $x_{t+2} = \phi_1 x_{t+1} + \phi_2 x_t$ — na notação de séries temporais, com $a_1 = -\phi_1$ e $a_2 = -\phi_2$ — parte de $x_0 = 0$, $x_1 = 1$. O ponto vinho no triângulo marca $(\phi_1, \phi_2)$; abaixo da parábola as raízes são complexas e a trajetória oscila.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof phi1 = controle("φ₁", [-2.2, 2.2], {valor: 1.2, passo: 0.05, casas: 2})
+viewof phi2 = controle("φ₂", [-1.2, 1.2], {valor: -0.5, passo: 0.05, casas: 2})
+```
+
+```{ojs}
+//| echo: false
+md`Raízes características: ${raizesTexto}. Maior módulo: **${modMax.toFixed(3).replace(".", ",")}**. ${modMax < 1 - 1e-9 ? "Estável" : (modMax <= 1 + 1e-9 ? "Na fronteira da estabilidade" : "Instável")}${complexas ? ", com oscilações de período " + (2 * Math.PI / Math.abs(angulo)).toFixed(1).replace(".", ",") + " períodos" : ""}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 260, grid: true,
+  x: {label: "t"}, y: {label: "x_t", domain: [-5, 5]},
+  marks: [Plot.ruleY([0]), Plot.line(trajetoria, {x: "t", y: "x", stroke: "#2F5D8A", clip: true}), Plot.dot(trajetoria, {x: "t", y: "x", r: 2, fill: "#2F5D8A", clip: true})]
+})
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 420, height: 300, grid: true,
+  x: {domain: [-2.3, 2.3], label: "φ₁"}, y: {domain: [-1.3, 1.3], label: "φ₂"},
+  marks: [
+    Plot.line([[-2, -1], [0, 1], [2, -1], [-2, -1]].map(([a, b]) => ({p1: a, p2: b})), {x: "p1", y: "p2", stroke: "#2E7D5B", fill: "#2E7D5B", fillOpacity: 0.12}),
+    Plot.line(d3.range(-2.3, 2.301, 0.02).map(p1 => ({p1, p2: -p1 * p1 / 4})), {x: "p1", y: "p2", stroke: "#B7791F", strokeDasharray: "4,3", clip: true}),
+    Plot.dot([{p1: phi1, p2: phi2}], {x: "p1", y: "p2", r: 6, fill: "#8C2F39"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+trajetoria = {
+  const xs = [{t: 0, x: 0}, {t: 1, x: 1}];
+  for (let t = 2; t <= 40; t++) xs.push({t, x: phi1 * xs[t - 1].x + phi2 * xs[t - 2].x});
+  return xs;
+}
+disc = phi1 * phi1 + 4 * phi2
+complexas = disc < 0
+angulo = complexas ? Math.atan2(Math.sqrt(-disc) / 2, phi1 / 2) : 0
+modMax = complexas ? Math.sqrt(-phi2) : Math.max(Math.abs((phi1 + Math.sqrt(disc)) / 2), Math.abs((phi1 - Math.sqrt(disc)) / 2))
+raizesTexto = complexas
+  ? `${(phi1 / 2).toFixed(3).replace(".", ",")} ± ${(Math.sqrt(-disc) / 2).toFixed(3).replace(".", ",")}i`
+  : `${((phi1 + Math.sqrt(disc)) / 2).toFixed(3).replace(".", ",")} e ${((phi1 - Math.sqrt(disc)) / 2).toFixed(3).replace(".", ",")}`
+```
+:::
+
+**Convergência no modelo de Solow.** A trajetória de $k(t)$ pela @eq-mat-g08-solow, a partir de $k(0)$, e o estado estacionário $k^*$ (tracejado). Aumente a poupança: $k^*$ sobe; aumente $\alpha$: a convergência fica mais lenta.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof sSol = controle("taxa de poupança s", [0.05, 0.5], {valor: 0.2, passo: 0.01, casas: 2})
+viewof alfaSol = controle("α", [0.1, 0.8], {valor: 0.33, passo: 0.01, casas: 2})
+viewof ndSol = controle("n + δ", [0.02, 0.15], {valor: 0.06, passo: 0.005, casas: 3})
+viewof k0Sol = controle("k(0)", [0.1, 20], {valor: 1, passo: 0.1, casas: 1})
+```
+
+```{ojs}
+//| echo: false
+md`k* = (s/(n + δ))^(1/(1 − α)) = **${kEst.toFixed(2).replace(".", ",")}**; velocidade de convergência λ = (1 − α)(n + δ) = ${lambdaSol.toFixed(3).replace(".", ",")} por ano; meia-vida ≈ **${(Math.log(2) / lambdaSol).toFixed(1).replace(".", ",")} anos**.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "anos"}, y: {label: "capital por trabalhador k", domain: [0, Math.max(kEst, k0Sol) * 1.15]},
+  marks: [
+    Plot.ruleY([kEst], {stroke: "#8C2F39", strokeDasharray: "4,3"}),
+    Plot.line(caminhoSol, {x: "t", y: "k", stroke: "#2F5D8A", strokeWidth: 2}),
+    Plot.line(caminhoSol, {x: "t", y: "kLin", stroke: "#B7791F", strokeDasharray: "2,3"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+kEst = Math.pow(sSol / ndSol, 1 / (1 - alfaSol))
+lambdaSol = (1 - alfaSol) * ndSol
+caminhoSol = {
+  const dt = 0.1, out = [];
+  let k = k0Sol;
+  for (let i = 0; i <= 1500; i++) {
+    const t = i * dt;
+    if (i % 10 === 0) out.push({t, k, kLin: kEst + (k0Sol - kEst) * Math.exp(-lambdaSol * t)});
+    k += dt * (sSol * Math.pow(k, alfaSol) - ndSol * k);
+  }
+  return out;
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — o triângulo de estabilidade e a convergência no modelo de Solow — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-mat-g08-laboratorio}
+
+### Fórmula fechada e iteração
+
+Conferimos o @thm-mat-g08-segunda (c) com a equação $x_{t+2} - x_{t+1} + 0{,}5\,x_t = 0$, cujas raízes são $(1 \pm i)/2 = \frac{1}{\sqrt2}(\cos\frac\pi4 \pm i\sin\frac\pi4)$.
+
+```{python}
+x = [1.0, 0.0]                                      # x_0 = 1, x_1 = 0
+for t in range(2, 13):
+    x.append(x[t - 1] - 0.5 * x[t - 2])
+rho, theta = 1 / np.sqrt(2), np.pi / 4
+A = 1.0                                             # x_0 = A
+B = (0.0 / rho - A * np.cos(theta)) / np.sin(theta) # x_1 = rho (A cos th + B sin th) = 0
+formula = [rho**t * (A * np.cos(theta * t) + B * np.sin(theta * t)) for t in range(13)]
+for t in range(0, 13, 2):
+    print(f"t = {t:>2}: iteracao {x[t]: .6f}   formula {formula[t]: .6f}")
+```
+
+A trajetória oscila com período $2\pi/\theta = 8$ e amplitude que cai à taxa $1/\sqrt 2$ por período.
+
+### Autovalores e potências de matrizes
+
+```{python}
+Amat = np.array([[0.5, 0.2], [0.1, 0.7]])
+lam, V = np.linalg.eig(Amat)
+lam, V = lam.real, V.real                           # autovalores reais neste exemplo
+print("autovalores:", np.round(lam, 4), "| traco:", np.trace(Amat), "| det:", round(np.linalg.det(Amat), 4))
+x0 = np.array([1.0, 1.0])
+c = np.linalg.solve(V, x0)                          # x0 = c1 v1 + c2 v2
+for t in [1, 5, 20]:
+    direto = np.linalg.matrix_power(Amat, t) @ x0
+    via_autovalores = V @ (c * lam**t)
+    print(f"t = {t:>2}: A^t x0 = {np.round(direto, 6)}   via autovalores = {np.round(via_autovalores, 6)}")
+```
+
+Os dois autovalores têm módulo menor que 1 (e $\abs{\det} < 1$, $\abs{\tr} < 1 + \det$): o sistema é estável, e o autovalor dominante, cerca de $0{,}77$, governa a velocidade de convergência.
+
+### Solow: solução numérica e linearização
+
+```{python}
+from scipy.integrate import solve_ivp
+
+s, alfa, nd = 0.2, 1 / 3, 0.06
+k_est = (s / nd) ** (1 / (1 - alfa))
+lam_sol = (1 - alfa) * nd
+sol = solve_ivp(lambda t, k: s * k**alfa - nd * k, (0, 100), [0.5 * k_est], dense_output=True, rtol=1e-10)
+print(f"k* = {k_est:.3f}; lambda = {lam_sol:.3f}; meia-vida da linearizacao = {np.log(2) / lam_sol:.1f} anos")
+for t in [0, 10, 17.3, 30, 60]:
+    k = sol.sol(t)[0]
+    desvio = (k - k_est) / (0.5 * k_est - k_est)
+    print(f"t = {t:>5}: k = {k:.3f}; fracao do desvio inicial = {desvio:.3f}; linearizacao = {np.exp(-lam_sol * t):.3f}")
+```
+
+Partindo de metade do estado estacionário, a fração do desvio remanescente segue de perto a previsão linear $e^{-\lambda t}$; a diferença vem dos termos não lineares, maiores longe de $k^*$.
+
+## Exercícios resolvidos {#sec-mat-g08-exercicios}
+
+::: {#exr-mat-g08-primeira}
+Resolva $x_{t+1} = 0{,}5\,x_t + 3$ com $x_0 = 0$. Em quantos períodos $x_t$ fica a menos de 1% do estado estacionário?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$x^* = 3/(1 - 0{,}5) = 6$ e $x_t = 6 - 6 \cdot 0{,}5^t$. Queremos $6 \cdot 0{,}5^t < 0{,}06$, isto é, $0{,}5^t < 0{,}01$, ou $t > \log 100/\log 2 \approx 6{,}64$: a partir de $t = 7$.
+:::
+
+::: {#exr-mat-g08-teia}
+No modelo da teia de aranha com demanda $q = 10 - p_t$ e oferta $q = 1 + \delta p_{t-1}$, encontre o preço de equilíbrio e as condições de estabilidade. Simule mentalmente o que acontece com $\delta = 0{,}5$ e com $\delta = 1{,}5$, partindo de $p_0 = 6$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$10 - p_t = 1 + \delta p_{t-1}$ dá $p_t = 9 - \delta p_{t-1}$, com $p^* = 9/(1 + \delta)$ e $p_t - p^* = (-\delta)^t(p_0 - p^*)$. É estável se, e somente se, $\delta < 1$. Com $\delta = 0{,}5$, $p^* = 6$ e $p_0 = 6$ é o próprio equilíbrio; com outra condição inicial, os desvios caem pela metade e trocam de sinal a cada período. Com $\delta = 1{,}5$, $p^* = 3{,}6$, o desvio inicial é $2{,}4$ e cresce 50% a cada período, alternando de sinal: $p_1 = 0$, $p_2 = 9$, $p_3 = -4{,}5$ — o modelo deixa de fazer sentido (preço negativo), sinal de que agricultores reais não formam expectativas tão ingênuas.
+:::
+
+::: {#exr-mat-g08-fibonacci}
+Resolva $x_{t+2} = x_{t+1} + x_t$, com $x_0 = 0$ e $x_1 = 1$ (a sequência de Fibonacci), e mostre que $x_{t+1}/x_t$ converge.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+O polinômio característico é $\lambda^2 - \lambda - 1$, com raízes $\varphi = \frac{1 + \sqrt5}{2}$ e $\psi = \frac{1 - \sqrt5}2$. Com $c_1 + c_2 = 0$ e $c_1\varphi + c_2\psi = 1$, obtemos $c_1 = -c_2 = 1/\sqrt5$: $x_t = \frac{\varphi^t - \psi^t}{\sqrt 5}$ (fórmula de Binet). Como $\abs\psi < 1 < \varphi$, $\frac{x_{t+1}}{x_t} = \frac{\varphi^{t+1} - \psi^{t+1}}{\varphi^t - \psi^t} = \varphi \cdot \frac{1 - (\psi/\varphi)^{t+1}}{1 - (\psi/\varphi)^t} \to \varphi$, a razão áurea. Em geral, quando há uma raiz dominante, a solução cresce, a longo prazo, à taxa dessa raiz.
+:::
+
+::: {#exr-mat-g08-edo}
+Resolva $\dot x = -0{,}5\,x + 2$ com $x(0) = 0$, e encontre a meia-vida.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$x^* = 2/0{,}5 = 4$ e $x(t) = 4(1 - e^{-0{,}5t})$. A meia-vida é $\log 2/0{,}5 \approx 1{,}39$ unidades de tempo: em $t = 1{,}39$, $x = 2$, metade do caminho até 4.
+:::
+
+::: {#exr-mat-g08-samuelson}
+No multiplicador–acelerador com $c = 0{,}8$ e $v = 1$, a economia é estável? Oscila?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$a_2 = cv = 0{,}8 < 1$ e as condições $P(\pm1) > 0$ valem sempre (@exm-mat-g08-samuelson): estável. O discriminante é $c^2(1 + v)^2 - 4cv = 0{,}64 \cdot 4 - 3{,}2 = -0{,}64 < 0$: raízes complexas, com módulo $\sqrt{a_2} = \sqrt{0{,}8} \approx 0{,}894$ e ângulo $\theta$ com $\cos\theta = \frac{c(1+v)/2}{\sqrt{cv}} = \frac{0{,}8}{0{,}894} \approx 0{,}894$, isto é, $\theta \approx 0{,}46$ radiano. A renda oscila em ciclos de cerca de $2\pi/0{,}46 \approx 13{,}6$ períodos, que se amortecem cerca de 10% por período.
+:::
+
+::: {#exr-mat-g08-sistemas}
+Classifique: (a) $\vb x_{t+1} = \begin{pmatrix} 0{,}5 & 0{,}2 \\ 0{,}1 & 0{,}7 \end{pmatrix}\vb x_t$; (b) $\dot{\vb x} = \begin{pmatrix} -1 & 2 \\ 1 & -1 \end{pmatrix}\vb x$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para (a), $\tr = 1{,}2$ e $\det = 0{,}33$; como $\abs{\det} < 1$ e $\abs{\tr} = 1{,}2 < 1{,}33$, é estável (os autovalores são aproximadamente $0{,}77$ e $0{,}43$). Para (b), $\tr = -2 < 0$, mas $\det = 1 - 2 = -1 < 0$: os autovalores, $-1 \pm \sqrt 2$, têm sinais opostos, e a origem é um **ponto de sela**. Só as trajetórias que começam na reta gerada pelo autovetor de $-1 - \sqrt2$ convergem.
+:::
+
+::: {#exr-mat-g08-gordon}
+Com dividendos $d_t = d(1 + g)^t$, $g < r$, encontre o valor fundamental da equação $p_t = (d_{t+1} + p_{t+1})/(1 + r)$ e verifique que ele satisfaz a equação.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$p_t^* = \sum_{k \geq 1} \frac{d(1 + g)^{t+k}}{(1 + r)^k} = d(1 + g)^t \sum_{k \geq 1}\Big(\frac{1 + g}{1 + r}\Big)^k = d_t\,\frac{1 + g}{r - g}$, a fórmula de Gordon com $d_{t+1} = d_t(1+g)$ no numerador. Verificação: $\frac{d_{t+1} + p_{t+1}^*}{1 + r} = \frac{d_{t+1}}{1+r}\Big(1 + \frac{1 + g}{r - g}\Big) = \frac{d_{t+1}}{1 + r}\cdot\frac{1 + r}{r - g} = \frac{d_t(1 + g)}{r - g} = p_t^*$. Como os dividendos crescem, a @prp-mat-g08-para-frente não se aplica literalmente (eles não são limitados), mas o mesmo argumento seleciona a única solução que cresce no máximo à taxa $g$.
+:::
+
+::: {#exr-mat-g08-segunda-ordem-edo}
+Encontre a solução de $\ddot x + 2\dot x + 5x = 0$ com $x(0) = 1$ e $\dot x(0) = 0$, e descreva-a.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$r^2 + 2r + 5 = 0$ tem raízes $-1 \pm 2i$, logo $x(t) = e^{-t}(A\cos 2t + B\sin 2t)$. De $x(0) = 1$, $A = 1$; de $\dot x(0) = -A + 2B = 0$, $B = 1/2$. A solução oscila com período $\pi$ e amplitude que decai como $e^{-t}$; é estável, de acordo com $a_1 = 2 > 0$ e $a_2 = 5 > 0$.
+:::
+
+## Flashcards {#sec-mat-g08-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a solução de $x_{t+1} = ax_t + b$, e quando ela é estável?
+$x_t = x^* + a^t(x_0 - x^*)$, $x^* = b/(1 - a)$; estável se, e somente se, $\abs a < 1$ (oscilando se $a < 0$).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando o modelo da teia de aranha é estável?
+Quando a oferta reage menos ao preço que a demanda ($\delta < \beta$); o preço sempre oscila em torno do equilíbrio.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é a solução para frente, e onde ela aparece?
+Para $\abs a > 1$, a única solução limitada é $x_t = -\sum_k a^{-(k+1)}b_{t+k}$. É o valor fundamental de um ativo; as outras soluções contêm bolhas.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a fórmula de De Moivre?
+$[\rho(\cos\theta + i\sin\theta)]^t = \rho^t(\cos t\theta + i\sin t\theta)$: potências multiplicam o módulo e somam o ângulo.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a forma geral das soluções de $x_{t+2} + a_1x_{t+1} + a_2x_t = 0$?
+$c_1\lambda_1^t + c_2\lambda_2^t$ (raízes distintas), $(c_1 + c_2t)\lambda^t$ (raiz dupla), ou $\rho^t(A\cos\theta t + B\sin\theta t)$ (raízes complexas).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o triângulo de estabilidade de uma equação de segunda ordem?
+Raízes de $\lambda^2 + a_1\lambda + a_2$ dentro do círculo unitário $\iff \abs{a_2} < 1$ e $\abs{a_1} < 1 + a_2$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando o multiplicador–acelerador é estável, e quando oscila?
+Estável se $cv < 1$; oscila se $c^2(1 + v)^2 < 4cv$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a solução de $\dot x = ax + b$, e quando ela é estável?
+$x(t) = x^* + (x_0 - x^*)e^{at}$, $x^* = -b/a$; estável se, e somente se, $a < 0$, com meia-vida $\log 2/\abs a$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando todas as soluções de $\ddot x + a_1\dot x + a_2x = 0$ tendem a zero?
+Quando $a_1 > 0$ e $a_2 > 0$ (raízes com parte real negativa).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se lê a estabilidade de sistemas $2 \times 2$ no traço e no determinante?
+Discreto: $\abs{\det\vb A} < 1$ e $\abs{\tr\vb A} < 1 + \det\vb A$. Contínuo: $\tr\vb A < 0$ e $\det\vb A > 0$; $\det\vb A < 0$ dá ponto de sela.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o braço estável de um ponto de sela?
+A reta (o autovetor do autovalor estável) ao longo da qual as trajetórias convergem; em modelos com variáveis que pulam, o equilíbrio está nela.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando um ponto fixo de $x_{t+1} = g(x_t)$ é localmente estável?
+Se $\abs{g'(x^*)} < 1$: perto de $x^*$, $g$ é uma contração.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a velocidade de convergência no modelo de Solow?
+$\lambda = (1 - \alpha)(n + \delta)$; com $\alpha = 1/3$ e $n + \delta = 0{,}06$, cerca de 4% ao ano (meia-vida de 17 anos).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como medir a persistência de choques num AR(1)?
+Pelo coeficiente $\rho$: a fração do choque que persiste após $k$ períodos é $\rho^k$, e a meia-vida é $\log 2/\abs{\log \rho}$.
+:::
+
+## Ficha-resumo {#sec-mat-g08-ficha}
+
+::: {.ficha-resumo}
+**Primeira ordem (discreta).** $x_{t+1} = ax_t + b_t$: $x_t = a^tx_0 + \sum_{s<t}a^{t-1-s}b_s$; com $b$ constante, $x_t = x^* + a^t(x_0 - x^*)$, $x^* = b/(1 - a)$; estável $\iff \abs a < 1$; meia-vida $\log 2/\abs{\log\abs a}$. Teia de aranha: $a = -\delta/\beta$. $\abs a > 1$: única solução limitada é a para frente (valor fundamental; bolhas $c(1 + r)^t$).
+
+**Complexos.** $z = \rho(\cos\theta + i\sin\theta)$; $z^t = \rho^t(\cos t\theta + i\sin t\theta)$; $e^{(\alpha + i\beta)t} = e^{\alpha t}(\cos\beta t + i\sin\beta t)$.
+
+**Segunda ordem (discreta).** $\lambda^2 + a_1\lambda + a_2 = 0$; soluções $c_1\lambda_1^t + c_2\lambda_2^t$, $(c_1 + c_2t)\lambda^t$, $\rho^t(A\cos\theta t + B\sin\theta t)$. Estável $\iff \abs{a_2} < 1$ e $\abs{a_1} < 1 + a_2$; oscila $\iff a_1^2 < 4a_2$. Samuelson: estável $\iff cv < 1$.
+
+**Contínuo.** $\dot x = ax + b$: $x^* + (x_0 - x^*)e^{at}$; com $b(t)$, $e^{at}x_0 + \int_0^te^{a(t-s)}b(s)\dd s$. $\ddot x + a_1\dot x + a_2x = 0$: $e^{rt}$; estável $\iff a_1, a_2 > 0$.
+
+**Sistemas $2 \times 2$.** Autovalores: $\lambda^2 - \tr\vb A\,\lambda + \det\vb A$. $\vb x_t = \sum c_i\lambda_i^t\vb v_i$; $\vb x(t) = \sum c_ie^{\lambda_it}\vb v_i$. Discreto estável: $\abs{\det} < 1$, $\abs{\tr} < 1 + \det$. Contínuo estável: $\tr < 0$, $\det > 0$; $\det < 0$: sela.
+
+**Linearização.** $\abs{g'(x^*)} < 1$ ou $f'(x^*) < 0 \Rightarrow$ estabilidade local. Solow: $k^* = (s/(n + \delta))^{1/(1-\alpha)}$, globalmente estável, $\lambda = (1 - \alpha)(n + \delta)$.
+:::
+
+## Notas bibliográficas {#sec-mat-g08-notas}
+
+@simon1994 trata equações em diferenças e equações diferenciais lineares, escalares e em sistemas, ligando-as aos autovalores e com aplicações econômicas; é a referência principal deste capítulo. @sydsaeter2016 traz uma introdução às equações diferenciais com exemplos econômicos e muitos exercícios. O multiplicador–acelerador é de Samuelson (1939), e a análise da teia de aranha remonta aos anos 1930. Para a teoria qualitativa de sistemas não lineares, veja o @sec-mat-m06; para a modelagem estatística da inflação, o @sec-ecm-m09.
