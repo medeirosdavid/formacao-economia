@@ -2,6 +2,37 @@
 
 Registro curto de cada sessão: o que foi feito, decisões e pendências. Entradas mais recentes no topo.
 
+## 24/11/2026 — MAT-M01 e MAT-M10
+
+**Feito** (dois capítulos, status rascunho, com referências padrão e duas novas: Lima, *Espaços Métricos*, e Kreyszig)
+
+- **MAT-M01** *Análise real em $\R^n$ e espaços métricos*:
+  - métricas ($d_1$, $d_2$, $d_\infty$, discreta, supremo em $B(S)$, $d_1$ em $C[a, b]$); abertos, fechados, interior, fecho e fronteira;
+  - topologia relativa, métricas equivalentes e uniformemente equivalentes, produtos; fecho por sequências;
+  - completude: $\R^n$ e $B(S)$ completos, teorema da interseção de Cantor, completamento pelo mergulho de Kuratowski (com unicidade);
+  - continuidade (quatro caracterizações), continuidade uniforme, Lipschitz, homeomorfismos (completude não é topológica), extensão de funções uniformemente contínuas;
+  - compacidade: três caracterizações métricas (com número de Lebesgue), celas encaixadas, celas compactas por bisseção, Heine–Borel, Bolzano–Weierstrass, Heine–Cantor;
+  - Weierstrass, existência da demanda, funções coercivas; conexidade, intervalos, valor intermediário, caminhos.
+  - Interativos: bolas em quatro métricas (com a métrica ferroviária) e bisseção de Bolzano–Weierstrass.
+- **MAT-M10** *Espaços normados e com produto interno*:
+  - normas; Young, Hölder e Minkowski; produtos internos, Cauchy–Schwarz, lei do paralelogramo;
+  - Banach $\iff$ séries absolutamente convergentes convergem; $\ell^p$ completo; exemplos incompletos ($c_{00}$, $C[0,1]$ com $\norm\cdot_1$, polinômios);
+  - equivalência das normas em dimensão finita; lema de Riesz e bola compacta só em dimensão finita;
+  - operadores limitados, norma de operador, $\mathcal L(X, Y)$ de Banach, derivação ilimitada; série de Neumann (generaliza Leontief);
+  - aplicação: preço de um ativo numa cadeia de Markov com investidor neutro ao risco (números ilustrativos);
+  - teorema da projeção (convexos completos), projeção sobre subespaços, complemento ortogonal, Gram–Schmidt, MQO como projeção, HJ como exercício.
+  - Interativos: bolas de $\norm\cdot_p$ (inclusive $p < 1$) e projeção de funções sobre polinômios de Legendre.
+- Cada capítulo tem laboratório, 9 exercícios resolvidos e 16 flashcards.
+- Estrutura: macros `\inner`, `\diam`, `\interior`; MAT-M10 entra na trilha "Base quantitativa" (depois de MAT-M01) e vira pré-requisito de MAT-M08, que pode citar o teorema da projeção em vez de reprová-lo.
+- Divisão de trabalho com MAT-M07: a completude de $B(S)$ ficou no MAT-M01; o MAT-M07 fica com $C_b$ fechado em $B(S)$, Dini, Arzelà–Ascoli e Bellman.
+- Admissão nova: recíproca da lei do paralelogramo (Jordan–von Neumann), apenas mencionada.
+
+**Pendências**
+
+- [ ] David revisar MAT-M01 e MAT-M10, em especial o nível de detalhe das provas de compacidade.
+- [ ] Pendências anteriores continuam: conferir a aplicação do IPCA do MAT-G08; informar a fonte dos sumários.
+- [ ] Próximos capítulos naturais: MAT-M02 *Álgebra linear II* (critério de Sylvester, SVD) e MAT-M08 *Conjuntos convexos e separação*.
+
 ## 24/11/2026 — MAT-G04 a MAT-G08
 
 **Feito** (cinco capítulos, status rascunho, com referências padrão: Lima, Rudin, Simon & Blume, Sydsæter, Strang, Sundaram)
