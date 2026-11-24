@@ -5,11 +5,11 @@
 [Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M04`
 
 ::: {.content-visible when-format="html"}
-**Pré-requisitos:** @sec-mat-m03 (*Convexidade e otimização com restrições de desigualdade*)
+**Pré-requisitos:** @sec-mat-m03 (*Otimização com restrições de desigualdade e dualidade*)
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Convexidade e otimização com restrições de desigualdade* (MAT-M03)
+**Pré-requisitos:** *Otimização com restrições de desigualdade e dualidade* (MAT-M03)
 :::
 
 **Leituras principais:** @sundaram1996, @simon1994
@@ -19,9 +19,11 @@
 ::: {.callout-note title="Capítulo em construção"}
 Roteiro planejado:
 
-1. Teorema da função implícita
-2. Teorema do envelope
-3. Correspondências e continuidade
-4. Teorema do máximo de Berge
-5. Estática comparativa monótona
+1. Teorema da função inversa
+2. Teorema da função implícita
+3. Conjuntos de nível e espaço tangente
+4. Teorema do envelope
+5. Correspondências e continuidade
+6. Teorema do máximo de Berge
+7. Estática comparativa monótona
 :::

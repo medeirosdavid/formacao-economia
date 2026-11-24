@@ -20,8 +20,9 @@
 Roteiro planejado:
 
 1. Esperança e variância
-2. Distribuições conjuntas, marginais e condicionais
-3. Covariância e correlação
-4. Esperança condicional (versão elementar)
-5. Normal multivariada
+2. Desigualdade de Jensen
+3. Distribuições conjuntas, marginais e condicionais
+4. Covariância e correlação
+5. Esperança condicional (versão elementar)
+6. Normal multivariada
 :::

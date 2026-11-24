@@ -16,9 +16,9 @@ Boa parte da teoria econômica depende de objetos que só existem porque os núm
 
 Os números racionais bastam para medir, mas não para tomar limites. O @thm-mat-g01-raiz2 mostrou que nenhum racional tem quadrado igual a 2; neste capítulo veremos que existe um número real com essa propriedade, e que isso é consequência de um único axioma — o **axioma do supremo** — que distingue $\R$ de $\Q$. A partir dele, desenvolvemos:
 
-1. as propriedades básicas de $\R$: supremo, propriedade arquimediana, densidade dos racionais;
-2. a teoria das **sequências**: limites, sequências monótonas, subsequências, Bolzano–Weierstrass e o critério de Cauchy, com o caso particular das **contrações**;
-3. a teoria das **séries**, com os critérios de convergência mais usados;
+1. as propriedades básicas de $\R$: supremo, propriedade arquimediana, densidade dos racionais e a reta estendida;
+2. a teoria das **sequências**: limites, sequências monótonas, intervalos encaixados, subsequências, Bolzano–Weierstrass e o critério de Cauchy, com o caso particular das **contrações** — e as formas equivalentes do axioma de completude;
+3. a teoria das **séries**, com os critérios de convergência mais usados, rearranjos e séries de potências;
 4. as **expansões decimais**, que completam a demonstração do @thm-mat-g01-reais;
 5. a aplicação a **valores presentes** e somas descontadas.
 
@@ -90,6 +90,28 @@ A mesma demonstração, feita dentro de $\Q$, mostra que $\{x \in \Q : x \geq 0,
 ## Supremo sem máximo
 Seja $A = \{1 - 1/n : n \in \N\}$. O número 1 é cota superior e, dado $\varepsilon > 0$, a propriedade arquimediana dá $n$ com $1/n < \varepsilon$, isto é, $1 - 1/n > 1 - \varepsilon$. Pela @prp-mat-g02-caracterizacao-sup, $\sup A = 1$, mas $1 \notin A$: o conjunto não tem máximo. Em otimização, essa é a situação de um problema cujo valor ótimo pode ser aproximado tanto quanto se queira, mas nunca atingido — o que ocorre, por exemplo, quando o conjunto de escolhas é aberto. O teorema de Weierstrass (@sec-mat-g03) dá condições para que isso não aconteça.
 :::
+
+### A reta estendida {#sec-mat-g02-reta-estendida}
+
+Muitas afirmações ficam mais simples se acrescentarmos a $\R$ dois símbolos, $-\infty$ e $+\infty$.
+
+::: {#def-mat-g02-reta-estendida}
+## Reta estendida
+A **reta estendida** é $\overline{\R} \defeq \R \cup \{-\infty, +\infty\}$, com a ordem de $\R$ acrescida de $-\infty < x < +\infty$ para todo $x \in \R$. Cotas, supremo e ínfimo de subconjuntos de $\overline{\R}$ são definidos como na @def-mat-g02-supremo, agora com cotas em $\overline{\R}$.
+:::
+
+::: {#prp-mat-g02-reta-estendida}
+## Todo conjunto tem supremo na reta estendida
+Todo subconjunto $A \subseteq \overline{\R}$ tem supremo e ínfimo em $\overline{\R}$. Em particular, se $A \subseteq \R$ não é limitado superiormente, $\sup A = +\infty$; e $\sup \emptyset = -\infty$, $\inf \emptyset = +\infty$.
+:::
+
+::: {.proof}
+Se $+\infty \in A$, a única cota superior de $A$ é $+\infty$, que é o supremo. Caso contrário, seja $A' \defeq A \cap \R$. Se $A' = \emptyset$, então $A \subseteq \{-\infty\}$, todo elemento de $\overline{\R}$ é cota superior e $\sup A = -\infty$. Se $A'$ é não vazio e limitado superiormente em $\R$, seja $s = \sup A'$, dado pelo axioma do supremo: $s$ é cota superior de $A$ (pois $-\infty < s$), e toda cota superior $b \in \overline{\R}$ de $A$ satisfaz $s \leq b$ — se $b = +\infty$, trivialmente; $b = -\infty$ é impossível, pois $A'$ tem elementos reais; e, se $b \in \R$, $b$ é cota superior de $A'$. Se $A'$ é não vazio e não limitado superiormente, nenhum real é cota superior de $A$, e $\sup A = +\infty$. O ínfimo é tratado do mesmo modo.
+:::
+
+As operações se estendem parcialmente: $x + (+\infty) = +\infty$ se $x \neq -\infty$; $x \cdot (+\infty) = +\infty$ se $x > 0$ e $-\infty$ se $x < 0$; $x / (\pm\infty) = 0$ se $x \in \R$; e analogamente com $-\infty$. As expressões $(+\infty) + (-\infty)$, $0 \cdot (\pm\infty)$ e $(\pm\infty)/(\pm\infty)$ ficam **indefinidas** — são as formas indeterminadas que a regra de L'Hôpital (@sec-mat-g03) ajuda a resolver. Por isso $\overline{\R}$ não é um corpo; é apenas um conjunto ordenado em que todo subconjunto tem supremo. Em teoria da medida convenciona-se $0 \cdot (\pm\infty) = 0$ (@sec-est-m01).
+
+A vantagem é de linguagem: com $\overline{\R}$, o valor $\sup_{x \in C} f(x)$ de um problema de maximização está sempre definido — vale $+\infty$ se o problema é ilimitado e $-\infty$ se $C = \emptyset$ —, toda sequência monótona tem limite (@thm-mat-g02-monotona) e o valor presente de um fluxo de pagamentos positivos está sempre definido, possivelmente igual a $+\infty$ (@prp-mat-g02-perpetuidades).
 
 ## Sequências e limites {#sec-mat-g02-sequencias}
 
@@ -282,6 +304,8 @@ Uma sequência limitada $(x_n)$ converge se, e somente se, $\liminf x_n = \limsu
 Por definição, $i_n \leq x_n \leq s_n$. Se $\lim i_n = \lim s_n = L$, o sanduíche dá $x_n \to L$. Reciprocamente, se $x_n \to L$, dado $\varepsilon > 0$ existe $N$ tal que $L - \varepsilon < x_k < L + \varepsilon$ para $k \geq N$; logo $L - \varepsilon \leq i_n \leq s_n \leq L + \varepsilon$ para $n \geq N$, e, passando ao limite (@prp-mat-g02-ordem), $L - \varepsilon \leq \liminf x_n \leq \limsup x_n \leq L + \varepsilon$. Como $\varepsilon$ é arbitrário, ambos valem $L$.
 :::
 
+Na reta estendida, os limites superior e inferior existem para **qualquer** sequência. As sequências $s_n = \sup_{k \geq n} x_k$ e $i_n = \inf_{k \geq n} x_k$ estão definidas em $\overline{\R}$ e são monótonas; define-se $\limsup x_n \defeq \inf_n s_n$ e $\liminf x_n \defeq \sup_n i_n$, que coincidem com a @def-mat-g02-limsup quando $(x_n)$ é limitada (o limite de uma sequência monótona limitada é o seu ínfimo ou supremo, pelo @thm-mat-g02-monotona). Se $(x_n)$ não é limitada superiormente, nenhuma cauda dela é, $s_n = +\infty$ para todo $n$ e $\limsup x_n = +\infty$; se é limitada superiormente por $M$, então $\limsup x_n \leq M$. Do mesmo modo, $x_n \to +\infty$ se, e somente se, $\liminf x_n = +\infty$: se $i_n > M$, então $x_k > M$ para todo $k \geq n$; e, se $x_k > M + 1$ para todo $k \geq n$, então $i_n \geq M + 1 > M$.
+
 ## Sequências de Cauchy e contrações {#sec-mat-g02-cauchy}
 
 A definição de limite exige conhecer o candidato $L$. O critério de Cauchy decide a convergência olhando apenas para os termos da sequência.
@@ -340,6 +364,35 @@ Como $\abs{x_{n+2} - x_{n+1}} = \abs{g(x_{n+1}) - g(x_n)} \leq \beta \abs{x_{n+1
 :::
 
 A função $g(x) = ax + b$ com $\abs{a} < 1$ é uma contração com $\beta = \abs{a}$, e o teorema reencontra o @exm-mat-g02-linear. A versão geral desse teorema — o teorema do ponto fixo de Banach, em espaços métricos completos — é o que garante que a equação de Bellman tem solução única e que a iteração da função valor converge para ela, à taxa $\beta^n$ (@sec-mat-d02, @sec-cmp-d01).
+
+## Equivalências da completude {#sec-mat-g02-equivalencias}
+
+Tomamos o axioma do supremo como ponto de partida, mas ele não é a única escolha possível. As definições de cota, supremo, limite, sequência de Cauchy e intervalo fazem sentido em qualquer corpo ordenado $K$ (com $\varepsilon \in K$, $\varepsilon > 0$), e as demonstrações das seções anteriores que não usam o axioma do supremo continuam válidas em $K$. Dizemos que $K$ é **arquimediano** se o conjunto $\{1, 1 + 1, 1 + 1 + 1, \dots\}$ não é limitado superiormente em $K$.
+
+::: {#thm-mat-g02-equivalencias}
+## Formas equivalentes da completude
+Seja $K$ um corpo ordenado. São equivalentes:
+
+(a) todo subconjunto não vazio e limitado superiormente de $K$ tem supremo;
+(b) toda sequência não decrescente e limitada superiormente converge;
+(c) toda sequência limitada tem uma subsequência convergente;
+(d) $K$ é arquimediano e toda sequência de Cauchy converge;
+(e) $K$ é arquimediano e toda sequência de intervalos fechados, limitados e encaixados tem interseção não vazia.
+:::
+
+::: {.proof}
+**(a) $\Rightarrow$ (b).** É o @thm-mat-g02-monotona, cuja demonstração usa apenas o axioma do supremo e as regras de corpo ordenado.
+
+**(b) $\Rightarrow$ (c).** A demonstração do @lem-mat-g02-monotona usa apenas a ordem e vale em $K$: toda sequência limitada tem uma subsequência monótona e limitada. Se ela é não decrescente, converge por (b); se é não crescente, sua simétrica é não decrescente e limitada, converge por (b), e a própria subsequência também.
+
+**(c) $\Rightarrow$ (d).** Se $K$ não fosse arquimediano, a sequência $x_n = 1 + \dots + 1$ ($n$ parcelas) seria limitada e, por (c), teria uma subsequência convergente $(x_{n_k})$, que seria de Cauchy (a demonstração da @prp-mat-g02-cauchy-basico vale em $K$). Mas $x_{n_{k+1}} - x_{n_k}$ é uma soma de $n_{k+1} - n_k \geq 1$ parcelas iguais a 1, e portanto é $\geq 1$ para todo $k$ — contradição. Que toda sequência de Cauchy converge segue como no @thm-mat-g02-cauchy, cuja demonstração usa apenas que sequências de Cauchy são limitadas e o teorema de Bolzano–Weierstrass, isto é, (c).
+
+**(d) $\Rightarrow$ (e).** Sejam $[a_n, b_n]$ intervalos encaixados; como na demonstração do @thm-mat-g02-encaixados, $(a_n)$ é não decrescente e $a_n \leq b_m$ para todos $n, m$. Mostramos que $(a_n)$ é de Cauchy. Se não fosse, existiria $\varepsilon > 0$ tal que, para todo $N$, há $m > n \geq N$ com $a_m - a_n \geq \varepsilon$. Escolha $n_1 = 1$ e, recursivamente, aplique essa propriedade com $N = n_j$: obtém-se $m > n \geq n_j$ com $a_m - a_n \geq \varepsilon$ e, como $a_n \geq a_{n_j}$, também $a_m - a_{n_j} \geq \varepsilon$; tome $n_{j+1} \defeq m$. Então $a_{n_j} \geq a_1 + (j - 1)\varepsilon$ e, pela propriedade arquimediana, $(j - 1)\varepsilon > b_1 - a_1$ para $j$ grande, o que contradiz $a_{n_j} \leq b_1$. Logo $a_n \to a$ para algum $a \in K$. Passando ao limite em $n$ nas desigualdades $a_n \leq b_m$ e, para $n \leq m$, em $a_n \leq a_m$ (@prp-mat-g02-ordem, válida em $K$), obtemos $a \leq b_m$ e $a_n \leq a$ para todos $n, m$: $a$ pertence a todos os intervalos.
+
+**(e) $\Rightarrow$ (a).** Seja $A$ não vazio e limitado superiormente; escolha $a_1 \in A$ e uma cota superior $b_1$. Construímos intervalos por **bisseção**: dado $[a_n, b_n]$, com $b_n$ cota superior de $A$ e algum elemento de $A$ maior ou igual a $a_n$, seja $c = (a_n + b_n)/2$; se $c$ é cota superior de $A$, tome $[a_{n+1}, b_{n+1}] = [a_n, c]$; caso contrário, existe $x \in A$ com $x > c$, e tome $[a_{n+1}, b_{n+1}] = [c, b_n]$. As duas propriedades se preservam, os intervalos são encaixados e $b_n - a_n = (b_1 - a_1)/2^{n-1} \leq (b_1 - a_1)/n$, que tende a zero porque $K$ é arquimediano. Por (e), existe $s$ em todos os intervalos. Se algum $x \in A$ satisfizesse $x > s$, tomaríamos $n$ com $b_n - a_n < x - s$; então $b_n < a_n + (x - s) \leq x$, contradizendo que $b_n$ é cota superior. Logo $s$ é cota superior. Se $t < s$ fosse cota superior, tomaríamos $n$ com $b_n - a_n < s - t$; há $x \in A$ com $x \geq a_n > b_n - (s - t) \geq t$, contradição. Portanto $s = \sup A$.
+:::
+
+Qualquer uma das cinco propriedades pode, portanto, servir de axioma de completude, e as três primeiras já implicam que o corpo é arquimediano. Nas duas últimas essa hipótese não pode ser omitida: existem corpos ordenados não arquimedianos — os hiper-reais da análise não padrão, por exemplo — em que toda sequência de Cauchy converge e todo encaixe de intervalos fechados tem interseção não vazia. A forma (d) é a que se generaliza: em espaços métricos, onde não há ordem e não faz sentido falar em supremo, **completude** passa a significar que toda sequência de Cauchy converge (@sec-mat-m01).
 
 ## Séries {#sec-mat-g02-series}
 
@@ -415,7 +468,80 @@ Se $(b_n)$ é não crescente e $b_n \to 0$, então $\sum_{n=1}^\infty (-1)^{n+1}
 As somas parciais pares crescem: $s_{2k+2} - s_{2k} = b_{2k+1} - b_{2k+2} \geq 0$; as ímpares decrescem: $s_{2k+1} - s_{2k-1} = -b_{2k} + b_{2k+1} \leq 0$. Além disso, $s_{2k} = s_{2k+1} - b_{2k+1} \leq s_{2k+1} \leq s_1$, de modo que as pares são limitadas superiormente e as ímpares, inferiormente por $s_2$. Ambas convergem (@thm-mat-g02-monotona), e para o mesmo limite $S$, pois $s_{2k+1} - s_{2k} = b_{2k+1} \to 0$. Como as pares crescem para $S$ e as ímpares decrescem para $S$, o número $S$ fica entre duas somas parciais consecutivas quaisquer; logo $\abs{S - s_n} \leq \abs{s_{n+1} - s_n} = b_{n+1}$. Por fim, a sequência $(s_n)$ converge para $S$ porque suas subsequências par e ímpar convergem para $S$ e, juntas, esgotam todos os índices.
 :::
 
-A série harmônica alternada $1 - \frac12 + \frac13 - \cdots$ converge (para $\log 2$, como veremos no @sec-mat-g03), mas não absolutamente. Séries assim são frágeis: um teorema de Riemann afirma que seus termos podem ser reordenados para produzir **qualquer** soma. Séries absolutamente convergentes, ao contrário, podem ser reordenadas livremente.
+A série harmônica alternada $1 - \frac12 + \frac13 - \cdots$ converge (para $\log 2$, como veremos no @sec-mat-g03), mas não absolutamente. Uma série convergente que não converge absolutamente é dita **condicionalmente convergente**, e a distinção importa assim que se mexe na ordem dos termos.
+
+### Rearranjos {#sec-mat-g02-rearranjos}
+
+::: {#def-mat-g02-rearranjo}
+## Rearranjo
+Um **rearranjo** da série $\sum a_n$ é uma série $\sum_{k} a_{\sigma(k)}$, em que $\sigma: \N \to \N$ é uma bijeção.
+:::
+
+::: {#thm-mat-g02-rearranjo-absoluto}
+## Rearranjos de séries absolutamente convergentes
+Se $\sum a_n$ converge absolutamente, todo rearranjo seu converge absolutamente e tem a mesma soma.
+:::
+
+::: {.proof}
+Sejam $S = \sum a_n$, $s_N = \sum_{n \leq N} a_n$ e $t_m = \sum_{k \leq m} a_{\sigma(k)}$. Como os índices $\sigma(1), \dots, \sigma(m)$ são distintos, $\sum_{k \leq m} \abs{a_{\sigma(k)}} \leq \sum_n \abs{a_n}$: as somas parciais de $\sum \abs{a_{\sigma(k)}}$ são limitadas e o rearranjo converge absolutamente. Dado $\varepsilon > 0$, o critério de Cauchy para $\sum \abs{a_n}$ dá $N$ com $\sum_{n > N} \abs{a_n} \leq \varepsilon/2$; em particular, $\abs{S - s_N} \leq \varepsilon/2$. Seja $M$ o maior dos índices $\sigma^{-1}(1), \dots, \sigma^{-1}(N)$, de modo que $\{1, \dots, N\} \subseteq \{\sigma(1), \dots, \sigma(M)\}$. Para $m \geq M$, a diferença $t_m - s_N$ é uma soma de termos $a_j$ com índices $j > N$ distintos, logo $\abs{t_m - s_N} \leq \sum_{j > N} \abs{a_j} \leq \varepsilon/2$, e $\abs{t_m - S} \leq \varepsilon$.
+:::
+
+::: {#thm-mat-g02-riemann}
+## Teorema de Riemann
+Se $\sum a_n$ converge condicionalmente, para todo $L \in \R$ existe um rearranjo de $\sum a_n$ que converge para $L$.
+:::
+
+::: {.proof}
+Sejam $p_1, p_2, \dots$ os termos $a_n \geq 0$, na ordem em que aparecem, e $q_1, q_2, \dots$ os valores absolutos dos termos $a_n < 0$, também em ordem. Somas parciais de $\sum a_n$ são diferenças de somas parciais de $\sum p_k$ e $\sum q_k$, e somas parciais de $\sum \abs{a_n}$ são as somas correspondentes. Se as somas parciais de $\sum p_k$ fossem limitadas, as de $\sum q_k$ também seriam (pois as de $\sum a_n$ são), e $\sum \abs{a_n}$ convergiria — contradição. Logo $\sum p_k = +\infty$ e, pelo mesmo argumento, $\sum q_k = +\infty$; em particular, as duas listas são infinitas. Como $a_n \to 0$, também $p_k \to 0$ e $q_k \to 0$.
+
+Construímos o rearranjo em blocos alternados, sempre usando os termos de cada lista na ordem e sem repeti-los. O primeiro bloco toma o menor número (pelo menos um) de termos $p$ que faz a soma acumulada ultrapassar $L$; o segundo, o menor número de termos $-q$ que a faz ficar abaixo de $L$; o terceiro volta aos $p$, e assim por diante. Cada bloco termina, porque, retirados finitos termos, $\sum p_k$ e $\sum q_k$ continuam divergindo; e cada bloco usa ao menos um termo novo. Como as duas listas são percorridas por inteiro, todo termo de $\sum a_n$ aparece exatamente uma vez: o resultado é um rearranjo.
+
+Pela minimalidade, a partir do segundo bloco, imediatamente antes do último termo de um bloco de termos $p$ a soma era $\leq L$, e ao final ela está em $(L, L + p]$, onde $p$ é o último termo usado; ao final de um bloco de termos $-q$, ela está em $[L - q, L)$. Dentro de cada bloco as somas parciais são monótonas, de modo que todas ficam entre os valores ao final do bloco anterior e do bloco corrente. Assim, para cada soma parcial $t_m$ a partir do terceiro bloco, $\abs{t_m - L}$ é no máximo o maior dos últimos termos usados nos dois blocos mais recentes. Esses termos são $p_k$ e $q_k$ com índices cada vez maiores, que tendem a zero; logo $t_m \to L$.
+:::
+
+O mesmo argumento produz rearranjos que divergem para $+\infty$ ou $-\infty$. O laboratório (@sec-mat-g02-laboratorio) constrói o rearranjo da harmônica alternada que soma $1{,}5$. Em economia, as somas que importam — utilidades descontadas e valores presentes de fluxos limitados — convergem absolutamente (@prp-mat-g02-perpetuidades), e o @thm-mat-g02-rearranjo-absoluto garante que a ordem em que os termos são somados é irrelevante.
+
+### Séries de potências {#sec-mat-g02-potencias}
+
+::: {#def-mat-g02-potencias}
+## Série de potências e raio de convergência
+Uma **série de potências** é uma série $\sum_{n=0}^\infty c_n x^n$, com coeficientes $c_n \in \R$, vista como função de $x$ (com a convenção $x^0 = 1$). Seu **raio de convergência** é
+$$
+R \defeq \sup\{r \geq 0 : (c_n r^n)_n \text{ é limitada}\} \in [0, +\infty],
+$$
+supremo tomado na reta estendida (o conjunto contém $r = 0$).
+:::
+
+::: {#thm-mat-g02-raio}
+## Raio de convergência
+Se $R$ é o raio de convergência de $\sum c_n x^n$, a série converge absolutamente para $\abs{x} < R$ e diverge para $\abs{x} > R$.
+:::
+
+::: {.proof}
+Seja $\abs{x} < R$. Pela definição de supremo, há $r > \abs{x}$ com $(c_n r^n)$ limitada, digamos $\abs{c_n} r^n \leq M$. Então $\abs{c_n x^n} = \abs{c_n} r^n (\abs{x}/r)^n \leq M (\abs{x}/r)^n$, e a comparação com a série geométrica de razão $\abs{x}/r < 1$ dá a convergência absoluta. Se $\abs{x} > R$, então $\abs{x}$ não pertence ao conjunto da definição; como $\abs{c_n x^n} = \abs{c_n}\,\abs{x}^n$, a sequência $(c_n x^n)$ é ilimitada, não tende a zero, e a série diverge (@prp-mat-g02-termo).
+:::
+
+O teorema nada diz sobre $\abs{x} = R$: nas extremidades do intervalo de convergência, cada caso deve ser examinado separadamente.
+
+::: {#cor-mat-g02-raio-razao}
+## O raio pela razão dos coeficientes
+Se $c_n \neq 0$ e $\abs{c_{n+1}/c_n} \to \rho \in [0, +\infty]$, então $R = 1/\rho$, com as convenções $1/0 = +\infty$ e $1/(+\infty) = 0$.
+:::
+
+::: {.proof}
+Para $x \neq 0$, $\abs{c_{n+1} x^{n+1}}/\abs{c_n x^n} \to \rho \abs{x}$. Pelo teste da razão (@thm-mat-g02-criterios), a série converge se $\rho\abs{x} < 1$ e diverge se $\rho\abs{x} > 1$ (incluindo o caso $\rho = +\infty$, em que os termos acabam crescendo em valor absoluto). Se a série converge em $x$, seus termos são limitados e $\abs{x} \leq R$; logo todo $\abs{x} < 1/\rho$ satisfaz $\abs{x} \leq R$, e $1/\rho \leq R$. Se $\abs{x} < R$, a série converge, e portanto não pode valer $\abs{x} > 1/\rho$; logo $R \leq 1/\rho$.
+:::
+
+::: {#exm-mat-g02-potencias}
+## Raios e extremidades
+(a) $\sum x^n$ tem $R = 1$ e diverge em $x = \pm 1$.
+(b) $\sum_{n \geq 1} x^n/n$ tem $R = 1$ (a razão é $n/(n+1) \to 1$); diverge em $x = 1$ (série harmônica) e converge em $x = -1$ (Leibniz).
+(c) $\sum x^n/n!$ tem $R = +\infty$ (a razão é $1/(n+1) \to 0$): converge para todo $x$ — é a série da exponencial (@sec-mat-g03).
+(d) $\sum n!\, x^n$ tem $R = 0$: só converge em $x = 0$.
+:::
+
+O valor presente de um fluxo $(c_t)$ é uma série de potências no fator de desconto, $\mathrm{VP}(\beta) = \sum_{t \geq 1} c_t \beta^t$. Com $c_t = c(1 + g)^{t-1}$, a razão dos coeficientes é $1 + g$, o raio é $1/(1+g)$, e a série converge para $\beta < 1/(1 + g)$, isto é, $g < i$ — o critério de Gordon da @prp-mat-g02-perpetuidades visto de outro ângulo. Séries de potências também aparecem em séries temporais, onde $(1 - aL)^{-1} = \sum_k a^k L^k$ expressa um processo autorregressivo em termos de choques passados (@sec-ecm-m09). Dentro do intervalo de convergência, uma série de potências define uma função contínua e derivável termo a termo, como se vê no @sec-mat-m07. Com raízes $n$-ésimas à disposição (@sec-mat-g03), o raio também é dado pela fórmula de Cauchy–Hadamard, $R = 1/\limsup \abs{c_n}^{1/n}$.
+
 
 ## Expansões decimais {#sec-mat-g02-decimais}
 
@@ -470,9 +596,10 @@ O item (b) é o **modelo de Gordon** de avaliação de ações (@sec-fin-g03): s
 ## Pontes {#sec-mat-g02-pontes}
 
 - **Funções (@sec-mat-g03).** Limites de funções e continuidade são definidos e estudados por meio de sequências; o teorema de Weierstrass usa Bolzano–Weierstrass.
-- **Análise em $\R^n$ (@sec-mat-m01).** Completude, compacidade e Bolzano–Weierstrass generalizam-se a espaços métricos.
+- **Análise em $\R^n$ (@sec-mat-m01).** Completude, compacidade e Bolzano–Weierstrass generalizam-se a espaços métricos; das formas equivalentes da completude (@thm-mat-g02-equivalencias), a de Cauchy é a que sobrevive sem ordem.
+- **Sequências de funções (@sec-mat-m07).** Séries de potências são o primeiro exemplo de séries de funções: dentro do raio de convergência, são contínuas e deriváveis termo a termo.
 - **Ponto fixo e programação dinâmica (@sec-mat-m05, @sec-mat-d02, @sec-cmp-d01).** O @thm-mat-g02-ponto-fixo é o caso unidimensional do teorema de Banach; a cota $\beta^n$ é a taxa de convergência da iteração da função valor.
-- **Dinâmica (@sec-mat-g08, @sec-ecm-m09).** A recursão linear do @exm-mat-g02-linear é a base das equações em diferenças e dos processos autorregressivos.
+- **Dinâmica (@sec-mat-g08, @sec-ecm-m09).** A recursão linear do @exm-mat-g02-linear é a base das equações em diferenças e dos processos autorregressivos; a inversão $(1 - aL)^{-1} = \sum_k a^k L^k$ é uma série de potências no operador de defasagem.
 - **Probabilidade (@sec-est-g04, @sec-est-m03).** A lei dos grandes números é uma afirmação sobre a convergência de uma sequência de médias; limites superiores e inferiores aparecem no lema de Borel–Cantelli.
 - **Finanças (@sec-fin-g01, @sec-fin-g03).** Anuidades, perpetuidades e o modelo de Gordon são séries geométricas.
 
@@ -727,6 +854,35 @@ parcial = Fraction(4, 10) + sum(Fraction(9, 10**k) for k in range(2, 30))
 print("1/2 - (0,4 seguido de 28 noves) =", Fraction(1, 2) - parcial)
 ```
 
+### Rearranjos: a harmônica alternada somando 1,5
+
+A construção da demonstração do @thm-mat-g02-riemann é um algoritmo: termos positivos até passar do alvo, negativos até ficar abaixo, e assim por diante.
+
+```{python}
+def rearranjo(alvo, n_termos):
+    """Rearranja 1 - 1/2 + 1/3 - ... para somar `alvo` (teorema de Riemann)."""
+    prox_pos, prox_neg = 1, 2          # próximos denominadores ímpar e par
+    soma, usados_pos, usados_neg, somas = 0.0, 0, 0, []
+    for _ in range(n_termos):
+        if soma <= alvo:
+            soma += 1 / prox_pos
+            prox_pos += 2
+            usados_pos += 1
+        else:
+            soma -= 1 / prox_neg
+            prox_neg += 2
+            usados_neg += 1
+        somas.append(soma)
+    return somas, usados_pos, usados_neg
+
+for alvo in [1.5, -1.0]:
+    somas, npos, nneg = rearranjo(alvo, 100_000)
+    print(f"alvo {alvo:>5}: soma apos 1e3 termos = {somas[999]:.6f}; apos 1e5 = {somas[-1]:.6f}"
+          f"  ({npos} positivos, {nneg} negativos)")
+```
+
+Para somar $1{,}5$, o rearranjo acaba usando cerca de cinco termos positivos para cada negativo; para somar $-1$, cerca de trinta negativos para cada positivo. É a proporção entre positivos e negativos, e não os termos em si, que determina a soma: a série original, com um termo de cada, soma $\log 2 \approx 0{,}693$.
+
 ### Valor presente: Gordon e somas truncadas
 
 ```{python}
@@ -812,6 +968,22 @@ $0{,}999\ldots = \sum_{k \geq 1} 9 \cdot 10^{-k} = \frac{9/10}{1 - 1/10} = 1$. E
 O ponto fixo é $x^* = 1/(1 - 0{,}8) = 5$, e $\abs{x_t - 5} = 0{,}8^t \cdot 5$ (@exm-mat-g02-linear). (a) Queremos $5 \cdot 0{,}8^t < 0{,}01$, isto é, $0{,}8^t < 0{,}002$. Tomando logaritmos (que são crescentes; @sec-mat-g03), $t > \log 0{,}002 / \log 0{,}8 \approx 27{,}85$; logo $t = 28$ períodos. (b) A meia-vida $h$ resolve $0{,}8^h = 1/2$: $h = \log(1/2)/\log 0{,}8 \approx 3{,}1$ períodos. Em geral, com coeficiente $a \in (0,1)$, a meia-vida é $\log 2 / \abs{\log a}$ — a medida usual de persistência de choques em macroeconomia e em séries temporais.
 :::
 
+::: {#exr-mat-g02-limsup-infinito}
+Calcule, na reta estendida, $\limsup$ e $\liminf$ de $x_n = (-1)^n n$ e de $y_n = n\,(1 + (-1)^n)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para $x_n$: os termos pares são $2, 4, 6, \dots$ e os ímpares, $-1, -3, -5, \dots$ Toda cauda contém termos arbitrariamente grandes e arbitrariamente negativos, logo $\sup_{k \geq n} x_k = +\infty$ e $\inf_{k \geq n} x_k = -\infty$ para todo $n$: $\limsup x_n = +\infty$ e $\liminf x_n = -\infty$. Para $y_n$: os termos ímpares são $0$ e os pares, $2n$. Cada cauda tem supremo $+\infty$ e ínfimo $0$; logo $\limsup y_n = +\infty$ e $\liminf y_n = 0$. Nenhuma das duas sequências converge, nem mesmo em $\overline{\R}$, pois os limites superior e inferior diferem.
+:::
+
+::: {#exr-mat-g02-raio}
+Determine o raio de convergência e o comportamento nas extremidades de $\sum_{n \geq 1} n\,x^n$ e de $\sum_{n \geq 1} x^n/n^2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Nas duas séries, a razão entre coeficientes consecutivos tende a 1 ($\frac{n+1}{n}$ e $\frac{n^2}{(n+1)^2}$), e o @cor-mat-g02-raio-razao dá $R = 1$. Para $\sum n x^n$, em $x = \pm 1$ os termos têm valor absoluto $n$, que não tende a zero: a série diverge nas duas extremidades e converge exatamente em $(-1, 1)$. Para $\sum x^n/n^2$, em $x = \pm 1$ temos $\abs{x^n/n^2} = 1/n^2$, e a série converge absolutamente (@prp-mat-g02-p-serie): o intervalo de convergência é $[-1, 1]$. Junto com o @exm-mat-g02-potencias (b), os exemplos mostram que, na fronteira, tudo pode acontecer.
+:::
+
 ## Flashcards {#sec-mat-g02-flashcards}
 
 ::: {.callout-note .flashcard collapse="true"}
@@ -889,10 +1061,30 @@ $c/(i - g)$, se $g < i$ (modelo de Gordon); se $g \geq i$, a série diverge.
 Só quando uma termina em noves repetidos e a outra em zeros, como $0{,}4999\ldots = 0{,}5$.
 :::
 
+::: {.callout-note .flashcard collapse="true"}
+## O que é a reta estendida, e quais expressões ficam indefinidas nela?
+$\overline{\R} = \R \cup \{\pm\infty\}$; nela todo conjunto tem supremo e ínfimo ($\sup A = +\infty$ se $A$ é ilimitado). Ficam indefinidas $\infty - \infty$, $0 \cdot \infty$ e $\infty/\infty$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais propriedades equivalem ao axioma do supremo num corpo ordenado?
+Convergência monótona; Bolzano–Weierstrass; e, junto com a propriedade arquimediana, a convergência das sequências de Cauchy ou o teorema dos intervalos encaixados.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que acontece ao rearranjar os termos de uma série?
+Se a série converge absolutamente, todo rearranjo tem a mesma soma. Se converge só condicionalmente, há rearranjos que convergem para qualquer número real (teorema de Riemann).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o raio de convergência de uma série de potências, e como calculá-lo?
+O número $R \in [0, \infty]$ tal que $\sum c_n x^n$ converge absolutamente para $\abs{x} < R$ e diverge para $\abs{x} > R$. Se $\abs{c_{n+1}/c_n} \to \rho$, então $R = 1/\rho$; as extremidades devem ser examinadas à parte.
+:::
+
 ## Ficha-resumo {#sec-mat-g02-ficha}
 
 ::: {.ficha-resumo}
-**Reais.** $\R$ é um corpo ordenado completo: todo conjunto não vazio limitado superiormente tem supremo. $s = \sup A \iff s$ é cota superior e $\forall \varepsilon\ \exists a > s - \varepsilon$. Consequências: propriedade arquimediana, parte inteira, densidade de $\Q$, existência de $\sqrt 2$.
+**Reais.** $\R$ é um corpo ordenado completo: todo conjunto não vazio limitado superiormente tem supremo. $s = \sup A \iff s$ é cota superior e $\forall \varepsilon\ \exists a > s - \varepsilon$. Consequências: propriedade arquimediana, parte inteira, densidade de $\Q$, existência de $\sqrt 2$. Em $\overline{\R} = \R \cup \{\pm\infty\}$ todo conjunto tem sup e inf; $\infty - \infty$, $0 \cdot \infty$, $\infty/\infty$ são indefinidos.
 
 **Sequências.** $x_n \to L \iff \forall \varepsilon\ \exists N\ \forall n \geq N: \abs{x_n - L} < \varepsilon$. Limite único; convergente $\Rightarrow$ limitada; limites preservam somas, produtos, quocientes e $\leq$ (não $<$); sanduíche. $1/n \to 0$; $r^n \to 0$ se $\abs{r} < 1$.
 
@@ -900,9 +1092,9 @@ Só quando uma termina em noves repetidos e a outra em zeros, como $0{,}4999\ldo
 
 **Subsequências.** Herdam o limite. Toda sequência tem subsequência monótona; **Bolzano–Weierstrass**: limitada $\Rightarrow$ subsequência convergente. Converge $\iff \liminf = \limsup$.
 
-**Cauchy.** Em $\R$, converge $\iff$ é de Cauchy. Contração ($\beta < 1$): ponto fixo único, $\abs{x_n - x^*} \leq \beta^n \abs{x_0 - x^*}$.
+**Cauchy.** Em $\R$, converge $\iff$ é de Cauchy. Num corpo ordenado, sup $\iff$ monótona $\iff$ Bolzano–Weierstrass $\iff$ (arquimediano + Cauchy) $\iff$ (arquimediano + encaixados). Contração ($\beta < 1$): ponto fixo único, $\abs{x_n - x^*} \leq \beta^n \abs{x_0 - x^*}$.
 
-**Séries.** Converge $\Rightarrow a_n \to 0$. Geométrica: $1/(1-r)$ se $\abs{r} < 1$. Harmônica diverge; $\sum 1/n^p$ converge $\iff p > 1$. Critérios: Cauchy, comparação, absoluta $\Rightarrow$ simples, razão ($\rho < 1$), Leibniz (erro $\leq b_{n+1}$).
+**Séries.** Converge $\Rightarrow a_n \to 0$. Geométrica: $1/(1-r)$ se $\abs{r} < 1$. Harmônica diverge; $\sum 1/n^p$ converge $\iff p > 1$. Critérios: Cauchy, comparação, absoluta $\Rightarrow$ simples, razão ($\rho < 1$), Leibniz (erro $\leq b_{n+1}$). Absolutamente convergente: qualquer rearranjo tem a mesma soma; condicionalmente: rearranjos atingem qualquer soma (Riemann). Potências: $\sum c_n x^n$ converge absolutamente em $\abs{x} < R$ e diverge em $\abs{x} > R$; $R = 1/\rho$ se $\abs{c_{n+1}/c_n} \to \rho$.
 
 **Decimais.** Toda $x \in [0,1)$ tem expansão; duas expansões só coincidem no caso $\ldots d\,999\ldots = \ldots (d+1)\,000\ldots$
 

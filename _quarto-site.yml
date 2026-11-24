@@ -15,8 +15,11 @@ book:
     - partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd
     - partes/01-matematica/mat-g08-equacoes-em-diferencas-e-equacoes-diferenciais-lineares.qmd
     - partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd
+    - partes/01-matematica/mat-m10-espacos-normados-e-com-produto-interno.qmd
     - partes/01-matematica/mat-m07-sequencias-de-funcoes-convergencia-uniforme-e.qmd
     - partes/01-matematica/mat-m02-algebra-linear-ii-autovalores-decomposicoes-e-formas.qmd
+    - partes/01-matematica/mat-m08-conjuntos-convexos-e-separacao.qmd
+    - partes/01-matematica/mat-m09-funcoes-convexas-e-subdiferencial.qmd
     - partes/01-matematica/mat-m03-convexidade-e-otimizacao-com-restricoes-de-desigualdade.qmd
     - partes/01-matematica/mat-m04-estatica-comparativa-funcao-implicita-envelope-e-teorema-do.qmd
     - partes/01-matematica/mat-m05-correspondencias-e-teoremas-de-ponto-fixo.qmd

@@ -5,11 +5,11 @@
 [Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAT-D01`
 
 ::: {.content-visible when-format="html"}
-**Pré-requisitos:** @sec-mat-m03 (*Convexidade e otimização com restrições de desigualdade*); @sec-mat-m06 (*Sistemas dinâmicos: estabilidade, linearização e diagramas de fase*)
+**Pré-requisitos:** @sec-mat-m03 (*Otimização com restrições de desigualdade e dualidade*); @sec-mat-m06 (*Sistemas dinâmicos: estabilidade, linearização e diagramas de fase*)
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Convexidade e otimização com restrições de desigualdade* (MAT-M03); *Sistemas dinâmicos: estabilidade, linearização e diagramas de fase* (MAT-M06)
+**Pré-requisitos:** *Otimização com restrições de desigualdade e dualidade* (MAT-M03); *Sistemas dinâmicos: estabilidade, linearização e diagramas de fase* (MAT-M06)
 :::
 
 **Leituras principais:** @kamien1991, @acemoglu2009

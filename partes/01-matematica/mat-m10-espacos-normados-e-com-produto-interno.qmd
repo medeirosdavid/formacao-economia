@@ -1,0 +1,28 @@
+# Espaços normados e com produto interno {#sec-mat-m10}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M10`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-m01 (*Análise real em $\mathbb{R}^n$ e espaços métricos*); @sec-mat-g05 (*Álgebra linear I: vetores, matrizes e sistemas lineares*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Análise real em $\mathbb{R}^n$ e espaços métricos* (MAT-M01); *Álgebra linear I: vetores, matrizes e sistemas lineares* (MAT-G05)
+:::
+
+**Leituras principais:** @ok2007, @luenberger1969
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Normas e produtos internos
+2. Cauchy–Schwarz e a geometria do produto interno
+3. Espaços de Banach e de Hilbert
+4. Equivalência de normas em dimensão finita
+5. Operadores lineares limitados
+6. Projeção ortogonal
+:::

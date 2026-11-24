@@ -5,23 +5,23 @@
 [Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAT-D04`
 
 ::: {.content-visible when-format="html"}
-**Pré-requisitos:** @sec-mat-m01 (*Análise real em $\mathbb{R}^n$ e espaços métricos*); @sec-mat-m02 (*Álgebra linear II: autovalores, decomposições e formas quadráticas*); @sec-mat-m07 (*Sequências de funções: convergência uniforme e equicontinuidade*)
+**Pré-requisitos:** @sec-mat-m10 (*Espaços normados e com produto interno*); @sec-mat-m02 (*Álgebra linear II: autovalores, decomposições e formas quadráticas*); @sec-mat-m07 (*Sequências de funções: convergência uniforme e equicontinuidade*)
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Análise real em $\mathbb{R}^n$ e espaços métricos* (MAT-M01); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02); *Sequências de funções: convergência uniforme e equicontinuidade* (MAT-M07)
+**Pré-requisitos:** *Espaços normados e com produto interno* (MAT-M10); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02); *Sequências de funções: convergência uniforme e equicontinuidade* (MAT-M07)
 :::
 
-**Leituras principais:** @ok2007, @stokey1989
+**Leituras principais:** @ok2007, @luenberger1969, @stokey1989
 :::
 <!-- cabecalho:fim -->
 
 ::: {.callout-note title="Capítulo em construção"}
 Roteiro planejado:
 
-1. Espaços de Banach e de Hilbert
-2. Operadores lineares
-3. O espaço $L^2$ e projeções
-4. Teorema de representação de Riesz
+1. Espaços $L^p$
+2. O espaço $L^2$ e projeções
+3. Espaços duais e o teorema de representação de Riesz
+4. Operadores lineares e adjuntos
 5. Aplicações a econometria e dinâmica
 :::

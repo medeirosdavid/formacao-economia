@@ -35,7 +35,7 @@ niveis:
 trilhas:
   - nome: "Base quantitativa"
     descricao: "Matemática, probabilidade e computação até o nível de mestrado — o mínimo para ler qualquer outra parte com conforto."
-    capitulos: [MAT-G01, MAT-G02, MAT-G03, MAT-G04, MAT-G05, MAT-G06, MAT-G07, EST-G01, EST-G02, EST-G03, EST-G05, EST-G06, CMP-G01, CMP-G02, MAT-M01, MAT-M02, MAT-M03, EST-M02, EST-M03]
+    capitulos: [MAT-G01, MAT-G02, MAT-G03, MAT-G04, MAT-G05, MAT-G06, MAT-G07, EST-G01, EST-G02, EST-G03, EST-G05, EST-G06, CMP-G01, CMP-G02, MAT-M01, MAT-M02, MAT-M08, MAT-M09, MAT-M03, EST-M02, EST-M03]
   - nome: "Graduação completa"
     descricao: "Todos os capítulos de nível G, na ordem do livro."
     filtro_nivel: G
@@ -72,14 +72,14 @@ partes:
         prereq: [MAT-G01]
         leituras: [lima1989, rudin1976]
         status: rascunho
-        topicos: ["Axioma do supremo, propriedade arquimediana e densidade", "Sequências e limites", "Sequências monótonas e intervalos encaixados", "Subsequências, Bolzano–Weierstrass, limite superior e inferior", "Sequências de Cauchy e contrações", "Séries e critérios de convergência", "Expansões decimais", "Valor presente e somas descontadas"]
+        topicos: ["Axioma do supremo, propriedade arquimediana e densidade", "A reta estendida", "Sequências e limites", "Sequências monótonas e intervalos encaixados", "Subsequências, Bolzano–Weierstrass, limite superior e inferior", "Sequências de Cauchy e contrações", "Equivalências da completude", "Séries e critérios de convergência", "Rearranjos", "Séries de potências", "Expansões decimais", "Valor presente e somas descontadas"]
       - id: MAT-G03
         titulo: "Funções de uma variável: limites, continuidade e derivadas"
         nivel: G
         prereq: [MAT-G02]
         leituras: [lima1989, simon1994, sydsaeter2016]
         status: rascunho
-        topicos: ["Limites de funções", "Continuidade", "Valor intermediário, ponto fixo e existência de equilíbrio", "Teorema de Weierstrass", "Derivada e regras de derivação", "Fermat, Rolle e valor médio", "Fórmula de Taylor e aproximações logarítmicas", "Concavidade e elasticidade"]
+        topicos: ["Limites de funções", "Continuidade", "Descontinuidades de funções monótonas", "Valor intermediário, ponto fixo e existência de equilíbrio", "Teorema de Weierstrass", "Derivada e regras de derivação", "Fermat, Rolle e valor médio", "Regra de L'Hôpital", "Fórmula de Taylor e aproximações logarítmicas", "Concavidade e elasticidade"]
       - id: MAT-G04
         titulo: "Integração e aplicações"
         nivel: G
@@ -97,13 +97,13 @@ partes:
         nivel: G
         prereq: [MAT-G03, MAT-G05]
         leituras: [simon1994, sydsaeter2016]
-        topicos: ["Funções de $\\mathbb{R}^n$ em $\\mathbb{R}$", "Derivadas parciais, gradiente e diferencial", "Regra da cadeia", "Matriz hessiana", "Fórmula de Taylor em várias variáveis", "Funções homogêneas e teorema de Euler", "Integrais múltiplas"]
+        topicos: ["Funções de $\\mathbb{R}^n$ em $\\mathbb{R}^m$", "A derivada como aplicação linear", "Derivadas parciais e direcionais", "Galeria de contraexemplos", "Funções de classe $C^1$", "Regra da cadeia", "Desigualdade do valor médio", "Gradiente e conjuntos de nível", "Teorema de Schwarz e matriz hessiana", "Fórmula de Taylor em várias variáveis", "Funções homogêneas e teorema de Euler", "Integrais múltiplas"]
       - id: MAT-G07
         titulo: "Otimização: sem restrições e com restrições de igualdade"
         nivel: G
         prereq: [MAT-G06]
         leituras: [simon1994, sundaram1996]
-        topicos: ["Condições de primeira e segunda ordem", "Concavidade e ótimos globais", "Método de Lagrange", "Interpretação dos multiplicadores", "Hessiana orlada", "Aplicações: consumidor e firma"]
+        topicos: ["Condições de primeira e segunda ordem", "Concavidade e ótimos globais", "Método de Lagrange", "Qualificação de restrições", "Interpretação dos multiplicadores", "Hessiana orlada", "Aplicações: consumidor e firma"]
       - id: MAT-G08
         titulo: "Equações em diferenças e equações diferenciais lineares"
         nivel: G
@@ -115,37 +115,55 @@ partes:
         nivel: M
         prereq: [MAT-G02, MAT-G06]
         leituras: [ok2007, rudin1976, delafuente2000]
-        topicos: ["Produto interno, normas e Cauchy–Schwarz em $\\mathbb{R}^n$", "Espaços métricos e normados", "Abertos, fechados e compactos", "Celas encaixadas, Bolzano–Weierstrass e Heine–Borel em $\\mathbb{R}^n$", "Completude", "Continuidade e continuidade uniforme", "Teorema de Weierstrass em espaços métricos", "Conexidade"]
+        topicos: ["Métricas e exemplos", "Bolas, abertos, fechados, interior, fecho e fronteira", "Subespaços, topologia relativa, métricas equivalentes e produtos", "Convergência e caracterização sequencial de fechados", "Completude, teorema de Cantor e completamento", "Continuidade, continuidade uniforme, funções Lipschitz e homeomorfismos", "Extensão de funções uniformemente contínuas", "Compacidade: coberturas, caracterizações métricas e Heine–Borel", "Celas encaixadas e Bolzano–Weierstrass em $\\mathbb{R}^n$", "Teorema de Weierstrass em espaços métricos", "Conexidade e valor intermediário"]
+      - id: MAT-M10
+        titulo: "Espaços normados e com produto interno"
+        nivel: M
+        prereq: [MAT-M01, MAT-G05]
+        leituras: [ok2007, luenberger1969]
+        topicos: ["Normas e produtos internos", "Cauchy–Schwarz e a geometria do produto interno", "Espaços de Banach e de Hilbert", "Equivalência de normas em dimensão finita", "Operadores lineares limitados", "Projeção ortogonal"]
       - id: MAT-M07
         titulo: "Sequências de funções: convergência uniforme e equicontinuidade"
         nivel: M
-        prereq: [MAT-M01, MAT-G04]
+        prereq: [MAT-M10, MAT-G04]
         leituras: [rudin1976, ok2007, stokey1989]
-        topicos: ["Convergência pontual e uniforme", "Continuidade, integração e derivação no limite", "Séries de funções e o teste M de Weierstrass", "O espaço das funções contínuas limitadas com a norma do supremo e sua completude", "Equicontinuidade e o teorema de Arzelà–Ascoli", "Aplicação: o operador de Bellman como contração em funções limitadas"]
+        topicos: ["Convergência pontual e uniforme", "Continuidade, integração e derivação no limite", "Séries de funções, teste M de Weierstrass e séries de potências", "O espaço das funções contínuas limitadas com a norma do supremo e sua completude", "Teorema de Dini", "Equicontinuidade e o teorema de Arzelà–Ascoli", "Teorema de aproximação de Weierstrass", "Aplicação: o operador de Bellman como contração em funções limitadas"]
       - id: MAT-M02
         titulo: "Álgebra linear II: autovalores, decomposições e formas quadráticas"
         nivel: M
         prereq: [MAT-G05]
         leituras: [strang2016, delafuente2000]
         topicos: ["Autovalores e autovetores", "Diagonalização e teorema espectral", "Formas quadráticas e definição de matrizes", "Decomposições: Cholesky, QR, SVD", "Projeções ortogonais", "Cálculo matricial"]
-      - id: MAT-M03
-        titulo: "Convexidade e otimização com restrições de desigualdade"
+      - id: MAT-M08
+        titulo: "Conjuntos convexos e separação"
         nivel: M
-        prereq: [MAT-G07, MAT-M01]
-        leituras: [sundaram1996, delafuente2000]
-        topicos: ["Conjuntos e funções convexas", "Quase-concavidade", "Teoremas de separação", "Condições de Kuhn–Tucker", "Qualificação de restrições", "Dualidade"]
+        prereq: [MAT-M01, MAT-G05]
+        leituras: [rockafellar1970, boyd2004, ok2007]
+        topicos: ["Variedades afins e hiperplanos", "Conjuntos convexos e operações", "Envoltória convexa e o teorema de Carathéodory", "Cones", "Interior relativo", "Projeção sobre convexos fechados", "Teoremas de separação e hiperplanos suporte", "Teoremas de alternativa: Farkas e Gordan", "Aplicações: não-arbitragem e teoremas do bem-estar"]
+      - id: MAT-M09
+        titulo: "Funções convexas e subdiferencial"
+        nivel: M
+        prereq: [MAT-M08, MAT-G06]
+        leituras: [rockafellar1970, boyd2004, sundaram1996]
+        topicos: ["Funções a valores estendidos e epígrafo", "Desigualdade de Jensen", "Operações que preservam convexidade", "Continuidade e Lipschitz local", "Critérios de primeira e segunda ordem", "Quase-concavidade e quase-convexidade", "Derivada direcional e subgradientes", "Regra da soma, cone normal e condições de otimalidade"]
+      - id: MAT-M03
+        titulo: "Otimização com restrições de desigualdade e dualidade"
+        nivel: M
+        prereq: [MAT-G07, MAT-M09]
+        leituras: [sundaram1996, boyd2004, delafuente2000]
+        topicos: ["O teorema de Fritz John", "Condições de Karush–Kuhn–Tucker", "Qualificações de restrições e condição de Slater", "Suficiência sob convexidade", "Ponto de sela do lagrangeano", "Dualidade fraca e forte", "Sensibilidade e a função perturbação"]
       - id: MAT-M04
         titulo: "Estática comparativa: função implícita, envelope e teorema do máximo"
         nivel: M
         prereq: [MAT-M03]
         leituras: [sundaram1996, simon1994]
-        topicos: ["Teorema da função inversa", "Teorema da função implícita", "Teorema do envelope", "Correspondências e continuidade", "Teorema do máximo de Berge", "Estática comparativa monótona"]
+        topicos: ["Teorema da função inversa", "Teorema da função implícita", "Conjuntos de nível e espaço tangente", "Teorema do envelope", "Correspondências e continuidade", "Teorema do máximo de Berge", "Estática comparativa monótona"]
       - id: MAT-M05
         titulo: "Correspondências e teoremas de ponto fixo"
         nivel: M
         prereq: [MAT-M01, MAT-M04]
         leituras: [ok2007, sundaram1996]
-        topicos: ["Teorema do ponto fixo de Banach", "Teorema de Brouwer", "Teorema de Kakutani", "Ponto fixo de Tarski", "Aplicações a existência de equilíbrio"]
+        topicos: ["Teorema do ponto fixo de Banach", "Simplexos e o lema de Sperner", "Teorema de Brouwer", "Teorema de Kakutani", "Teorema de Schauder", "Ponto fixo de Tarski", "Aplicações a existência de equilíbrio"]
       - id: MAT-M06
         titulo: "Sistemas dinâmicos: estabilidade, linearização e diagramas de fase"
         nivel: M
@@ -173,9 +191,9 @@ partes:
       - id: MAT-D04
         titulo: "Espaços de funções e operadores"
         nivel: D
-        prereq: [MAT-M01, MAT-M02, MAT-M07]
-        leituras: [ok2007, stokey1989]
-        topicos: ["Espaços de Banach e de Hilbert", "Operadores lineares", "O espaço $L^2$ e projeções", "Teorema de representação de Riesz", "Aplicações a econometria e dinâmica"]
+        prereq: [MAT-M10, MAT-M02, MAT-M07]
+        leituras: [ok2007, luenberger1969, stokey1989]
+        topicos: ["Espaços $L^p$", "O espaço $L^2$ e projeções", "Espaços duais e o teorema de representação de Riesz", "Operadores lineares e adjuntos", "Aplicações a econometria e dinâmica"]
 
   # ---------------------------------------------------------------------------
   - id: EST
@@ -202,7 +220,7 @@ partes:
         nivel: G
         prereq: [EST-G02, MAT-G06]
         leituras: [degroot2012, casella2002]
-        topicos: ["Esperança e variância", "Distribuições conjuntas, marginais e condicionais", "Covariância e correlação", "Esperança condicional (versão elementar)", "Normal multivariada"]
+        topicos: ["Esperança e variância", "Desigualdade de Jensen", "Distribuições conjuntas, marginais e condicionais", "Covariância e correlação", "Esperança condicional (versão elementar)", "Normal multivariada"]
       - id: EST-G04
         titulo: "Amostragem e teoremas-limite"
         nivel: G

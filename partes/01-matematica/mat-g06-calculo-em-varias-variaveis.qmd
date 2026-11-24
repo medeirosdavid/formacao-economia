@@ -19,10 +19,16 @@
 ::: {.callout-note title="Capítulo em construção"}
 Roteiro planejado:
 
-1. Funções de $\mathbb{R}^n$ em $\mathbb{R}$
-2. Derivadas parciais, gradiente e diferencial
-3. Regra da cadeia
-4. Matriz hessiana
-5. Funções homogêneas e teorema de Euler
-6. Integrais múltiplas
+1. Funções de $\mathbb{R}^n$ em $\mathbb{R}^m$
+2. A derivada como aplicação linear
+3. Derivadas parciais e direcionais
+4. Galeria de contraexemplos
+5. Funções de classe $C^1$
+6. Regra da cadeia
+7. Desigualdade do valor médio
+8. Gradiente e conjuntos de nível
+9. Teorema de Schwarz e matriz hessiana
+10. Fórmula de Taylor em várias variáveis
+11. Funções homogêneas e teorema de Euler
+12. Integrais múltiplas
 :::

@@ -53,6 +53,12 @@
   "status": "planejado",
   "no_pdf": false
  },
+ "MAT-M10": {
+  "titulo": "Espaços normados e com produto interno",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
  "MAT-M07": {
   "titulo": "Sequências de funções: convergência uniforme e equicontinuidade",
   "nivel": "M",
@@ -65,8 +71,20 @@
   "status": "planejado",
   "no_pdf": false
  },
+ "MAT-M08": {
+  "titulo": "Conjuntos convexos e separação",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
+ "MAT-M09": {
+  "titulo": "Funções convexas e subdiferencial",
+  "nivel": "M",
+  "status": "planejado",
+  "no_pdf": false
+ },
  "MAT-M03": {
-  "titulo": "Convexidade e otimização com restrições de desigualdade",
+  "titulo": "Otimização com restrições de desigualdade e dualidade",
   "nivel": "M",
   "status": "planejado",
   "no_pdf": false

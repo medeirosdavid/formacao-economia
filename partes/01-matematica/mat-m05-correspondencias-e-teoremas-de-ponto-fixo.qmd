@@ -20,8 +20,10 @@
 Roteiro planejado:
 
 1. Teorema do ponto fixo de Banach
-2. Teorema de Brouwer
-3. Teorema de Kakutani
-4. Ponto fixo de Tarski
-5. Aplicações a existência de equilíbrio
+2. Simplexos e o lema de Sperner
+3. Teorema de Brouwer
+4. Teorema de Kakutani
+5. Teorema de Schauder
+6. Ponto fixo de Tarski
+7. Aplicações a existência de equilíbrio
 :::

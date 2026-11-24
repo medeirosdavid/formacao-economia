@@ -1,0 +1,30 @@
+# Funções convexas e subdiferencial {#sec-mat-m09}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M09`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-m08 (*Conjuntos convexos e separação*); @sec-mat-g06 (*Cálculo em várias variáveis*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Conjuntos convexos e separação* (MAT-M08); *Cálculo em várias variáveis* (MAT-G06)
+:::
+
+**Leituras principais:** @rockafellar1970, @boyd2004, @sundaram1996
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Funções a valores estendidos e epígrafo
+2. Desigualdade de Jensen
+3. Operações que preservam convexidade
+4. Continuidade e Lipschitz local
+5. Critérios de primeira e segunda ordem
+6. Quase-concavidade e quase-convexidade
+7. Derivada direcional e subgradientes
+8. Regra da soma, cone normal e condições de otimalidade
+:::

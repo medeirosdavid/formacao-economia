@@ -216,6 +216,18 @@ Roteiro planejado:
 """
 
 
+ESBOCO_CORPO = re.compile(
+    r'\A\s*::: \{\.callout-note title="Capítulo em construção"\}\nRoteiro planejado:\n\n'
+    r'(?:\d+\. [^\n]*\n)+:::\s*\Z')
+
+
+def eh_esboco_intocado(texto: str) -> bool:
+    """Verdadeiro se o arquivo é só o esboço gerado (título, cabeçalho e roteiro)."""
+    if not texto.startswith("# ") or MARCA_FIM not in texto:
+        return False
+    return bool(ESBOCO_CORPO.match(texto.split(MARCA_FIM, 1)[1]))
+
+
 def atualizar_capitulo(cap: dict, por_id: dict) -> Path:
     caminho = caminho_capitulo(cap)
     cab = bloco_cabecalho(cap, por_id)
@@ -223,6 +235,9 @@ def atualizar_capitulo(cap: dict, por_id: dict) -> Path:
         gravar(caminho, esboco(cap, cab))
         return caminho
     texto = caminho.read_text(encoding="utf-8")
+    if eh_esboco_intocado(texto):  # esboço sem texto próprio: título e roteiro seguem o currículo
+        gravar(caminho, esboco(cap, cab))
+        return caminho
     padrao = re.compile(re.escape(MARCA_INI.split(" — ")[0]) + r".*?" + re.escape(MARCA_FIM), re.S)
     if padrao.search(texto):
         novo = padrao.sub(lambda _: cab, texto, count=1)

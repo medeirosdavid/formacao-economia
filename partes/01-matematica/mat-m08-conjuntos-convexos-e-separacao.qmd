@@ -1,0 +1,31 @@
+# Conjuntos convexos e separação {#sec-mat-m08}
+
+<!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
+::: {.cabecalho-capitulo}
+[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M08`
+
+::: {.content-visible when-format="html"}
+**Pré-requisitos:** @sec-mat-m01 (*Análise real em $\mathbb{R}^n$ e espaços métricos*); @sec-mat-g05 (*Álgebra linear I: vetores, matrizes e sistemas lineares*)
+:::
+
+::: {.content-visible unless-format="html"}
+**Pré-requisitos:** *Análise real em $\mathbb{R}^n$ e espaços métricos* (MAT-M01); *Álgebra linear I: vetores, matrizes e sistemas lineares* (MAT-G05)
+:::
+
+**Leituras principais:** @rockafellar1970, @boyd2004, @ok2007
+:::
+<!-- cabecalho:fim -->
+
+::: {.callout-note title="Capítulo em construção"}
+Roteiro planejado:
+
+1. Variedades afins e hiperplanos
+2. Conjuntos convexos e operações
+3. Envoltória convexa e o teorema de Carathéodory
+4. Cones
+5. Interior relativo
+6. Projeção sobre convexos fechados
+7. Teoremas de separação e hiperplanos suporte
+8. Teoremas de alternativa: Farkas e Gordan
+9. Aplicações: não-arbitragem e teoremas do bem-estar
+:::

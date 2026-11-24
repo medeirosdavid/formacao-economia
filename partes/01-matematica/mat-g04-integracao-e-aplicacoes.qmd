@@ -15,8 +15,9 @@ Roteiro planejado:
 
 1. Integral de Riemann
 2. Teorema fundamental do cálculo
-3. Técnicas de integração
-4. Integrais impróprias
-5. Regra de Leibniz
-6. Aplicações: excedentes, valor presente contínuo
+3. Logaritmo e exponencial
+4. Técnicas de integração
+5. Integrais impróprias
+6. Regra de Leibniz
+7. Aplicações: excedentes, valor presente contínuo
 :::

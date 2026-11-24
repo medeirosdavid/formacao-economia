@@ -5,11 +5,11 @@
 [Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `FIN-M02`
 
 ::: {.content-visible when-format="html"}
-**Pré-requisitos:** @sec-mic-m04 (*Equilíbrio geral com tempo e incerteza*); @sec-mat-m03 (*Convexidade e otimização com restrições de desigualdade*)
+**Pré-requisitos:** @sec-mic-m04 (*Equilíbrio geral com tempo e incerteza*); @sec-mat-m03 (*Otimização com restrições de desigualdade e dualidade*)
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Equilíbrio geral com tempo e incerteza* (MIC-M04); *Convexidade e otimização com restrições de desigualdade* (MAT-M03)
+**Pré-requisitos:** *Equilíbrio geral com tempo e incerteza* (MIC-M04); *Otimização com restrições de desigualdade e dualidade* (MAT-M03)
 :::
 
 **Leituras principais:** @back2017, @duffie2001

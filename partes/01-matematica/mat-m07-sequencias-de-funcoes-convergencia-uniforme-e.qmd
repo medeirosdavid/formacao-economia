@@ -5,11 +5,11 @@
 [Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M07`
 
 ::: {.content-visible when-format="html"}
-**Pré-requisitos:** @sec-mat-m01 (*Análise real em $\mathbb{R}^n$ e espaços métricos*); @sec-mat-g04 (*Integração e aplicações*)
+**Pré-requisitos:** @sec-mat-m10 (*Espaços normados e com produto interno*); @sec-mat-g04 (*Integração e aplicações*)
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Análise real em $\mathbb{R}^n$ e espaços métricos* (MAT-M01); *Integração e aplicações* (MAT-G04)
+**Pré-requisitos:** *Espaços normados e com produto interno* (MAT-M10); *Integração e aplicações* (MAT-G04)
 :::
 
 **Leituras principais:** @rudin1976, @ok2007, @stokey1989
@@ -21,8 +21,10 @@ Roteiro planejado:
 
 1. Convergência pontual e uniforme
 2. Continuidade, integração e derivação no limite
-3. Séries de funções e o teste M de Weierstrass
+3. Séries de funções, teste M de Weierstrass e séries de potências
 4. O espaço das funções contínuas limitadas com a norma do supremo e sua completude
-5. Equicontinuidade e o teorema de Arzelà–Ascoli
-6. Aplicação: o operador de Bellman como contração em funções limitadas
+5. Teorema de Dini
+6. Equicontinuidade e o teorema de Arzelà–Ascoli
+7. Teorema de aproximação de Weierstrass
+8. Aplicação: o operador de Bellman como contração em funções limitadas
 :::

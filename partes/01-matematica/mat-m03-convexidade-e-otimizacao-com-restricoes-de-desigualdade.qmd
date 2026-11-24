@@ -1,28 +1,29 @@
-# Convexidade e otimização com restrições de desigualdade {#sec-mat-m03}
+# Otimização com restrições de desigualdade e dualidade {#sec-mat-m03}
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
 [Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M03`
 
 ::: {.content-visible when-format="html"}
-**Pré-requisitos:** @sec-mat-g07 (*Otimização: sem restrições e com restrições de igualdade*); @sec-mat-m01 (*Análise real em $\mathbb{R}^n$ e espaços métricos*)
+**Pré-requisitos:** @sec-mat-g07 (*Otimização: sem restrições e com restrições de igualdade*); @sec-mat-m09 (*Funções convexas e subdiferencial*)
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Otimização: sem restrições e com restrições de igualdade* (MAT-G07); *Análise real em $\mathbb{R}^n$ e espaços métricos* (MAT-M01)
+**Pré-requisitos:** *Otimização: sem restrições e com restrições de igualdade* (MAT-G07); *Funções convexas e subdiferencial* (MAT-M09)
 :::
 
-**Leituras principais:** @sundaram1996, @delafuente2000
+**Leituras principais:** @sundaram1996, @boyd2004, @delafuente2000
 :::
 <!-- cabecalho:fim -->
 
 ::: {.callout-note title="Capítulo em construção"}
 Roteiro planejado:
 
-1. Conjuntos e funções convexas
-2. Quase-concavidade
-3. Teoremas de separação
-4. Condições de Kuhn–Tucker
-5. Qualificação de restrições
-6. Dualidade
+1. O teorema de Fritz John
+2. Condições de Karush–Kuhn–Tucker
+3. Qualificações de restrições e condição de Slater
+4. Suficiência sob convexidade
+5. Ponto de sela do lagrangeano
+6. Dualidade fraca e forte
+7. Sensibilidade e a função perturbação
 :::

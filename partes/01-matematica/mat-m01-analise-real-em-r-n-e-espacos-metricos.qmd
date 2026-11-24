@@ -19,10 +19,15 @@
 ::: {.callout-note title="Capítulo em construção"}
 Roteiro planejado:
 
-1. Espaços métricos e normados
-2. Abertos, fechados e compactos
-3. Completude
-4. Continuidade e continuidade uniforme
-5. Teorema de Weierstrass em espaços métricos
-6. Conexidade
+1. Métricas e exemplos
+2. Bolas, abertos, fechados, interior, fecho e fronteira
+3. Subespaços, topologia relativa, métricas equivalentes e produtos
+4. Convergência e caracterização sequencial de fechados
+5. Completude, teorema de Cantor e completamento
+6. Continuidade, continuidade uniforme, funções Lipschitz e homeomorfismos
+7. Extensão de funções uniformemente contínuas
+8. Compacidade: coberturas, caracterizações métricas e Heine–Borel
+9. Celas encaixadas e Bolzano–Weierstrass em $\mathbb{R}^n$
+10. Teorema de Weierstrass em espaços métricos
+11. Conexidade e valor intermediário
 :::

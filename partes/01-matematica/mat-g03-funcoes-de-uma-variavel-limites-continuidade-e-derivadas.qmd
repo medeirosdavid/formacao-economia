@@ -21,10 +21,10 @@ Por fim, economistas aproximam o tempo todo: "o PIB cresceu 2%" é, quase sempre
 
 Este capítulo desenvolve, sobre a base de sequências do @sec-mat-g02:
 
-1. **limites** e **continuidade**, com a caracterização por sequências;
+1. **limites** e **continuidade**, com a caracterização por sequências e as descontinuidades de funções monótonas;
 2. os três grandes teoremas sobre funções contínuas em intervalos: **valor intermediário**, **ponto fixo** e **Weierstrass**;
 3. a **derivada**, suas regras e a derivada da função inversa;
-4. os teoremas de **Fermat**, **Rolle** e do **valor médio**, com suas consequências para monotonia;
+4. os teoremas de **Fermat**, **Rolle** e do **valor médio**, com suas consequências para monotonia e a **regra de L'Hôpital**;
 5. a **fórmula de Taylor** com resto, condições de segunda ordem e aproximações logarítmicas;
 6. **concavidade** e **elasticidade**.
 
@@ -103,6 +103,38 @@ Seja $x_n \to a$ em $X$. Pela @prp-mat-g03-continuidade-sequencial, $f(x_n) \to 
 :::
 
 Como as funções constantes e a identidade $x \mapsto x$ são contínuas, todo **polinômio** é contínuo em $\R$ e toda função **racional** $p/q$ é contínua onde $q \neq 0$. O valor absoluto é contínuo, pois $\big\lvert \abs{x} - \abs{a} \big\rvert \leq \abs{x - a}$. Já a parte inteira $\lfloor x \rfloor$ é descontínua em cada inteiro, e a função do @exm-mat-g03-dirichlet é descontínua em todo ponto.
+
+### Descontinuidades de funções monótonas {#sec-mat-g03-monotonas}
+
+Funções monótonas — demandas, ofertas, funções de distribuição — podem ser descontínuas, mas só de um jeito: por saltos, e em poucos pontos.
+
+::: {#thm-mat-g03-monotonas}
+## Descontinuidades de funções monótonas
+Seja $f: I \to \R$ não decrescente num intervalo $I$.
+
+(a) Em cada ponto $a$ interior a $I$, existem os limites laterais $f(a^-) \defeq \lim_{x \to a^-} f(x) = \sup_{x < a} f(x)$ e $f(a^+) \defeq \lim_{x \to a^+} f(x) = \inf_{x > a} f(x)$, e $f(a^-) \leq f(a) \leq f(a^+)$.
+(b) $f$ é contínua num ponto interior $a$ se, e somente se, $f(a^-) = f(a^+)$.
+(c) O conjunto dos pontos de descontinuidade de $f$ é contável.
+:::
+
+::: {.proof}
+Para (a), o conjunto $\{f(x) : x \in I,\ x < a\}$ é não vazio e limitado superiormente por $f(a)$; seja $\ell$ o seu supremo, de modo que $\ell \leq f(a)$. Dado $\varepsilon > 0$, há $x_0 < a$ em $I$ com $f(x_0) > \ell - \varepsilon$ (@prp-mat-g02-caracterizacao-sup), e para $x \in (x_0, a)$ a monotonia dá $\ell - \varepsilon < f(x_0) \leq f(x) \leq \ell$. Logo $\lim_{x \to a^-} f(x) = \ell$, com $\delta = a - x_0$. O limite à direita é análogo, com o ínfimo.
+
+Para (b), se $f$ é contínua em $a$, os dois limites laterais valem $f(a)$. Reciprocamente, se $f(a^-) = f(a^+)$, a desigualdade $f(a^-) \leq f(a) \leq f(a^+)$ força os dois limites laterais a valerem $f(a)$, e $\lim_{x \to a} f(x) = f(a)$.
+
+Para (c), as extremidades de $I$ contribuem com no máximo dois pontos. Se $a$ é um ponto interior de descontinuidade, o intervalo $J_a \defeq (f(a^-), f(a^+))$ é não vazio, por (b). Se $a < b$ são dois desses pontos e $a < c < b$, então $f(a^+) \leq f(c) \leq f(b^-)$; logo $J_a$ e $J_b$ são disjuntos. Escolhendo, pela densidade de $\Q$ (@thm-mat-g02-densidade), um racional $q(a) \in J_a$ para cada $a$, obtemos uma função injetiva dos pontos de descontinuidade em $\Q$. Como $\Q$ é enumerável (@thm-mat-g01-enumeraveis), há uma injeção desse conjunto em $\N$, e ele é contável (@lem-mat-g01-subconjuntos).
+:::
+
+::: {#cor-mat-g03-monotona-intervalo}
+## Monótona com imagem intervalo é contínua
+Se $f: I \to \R$ é monótona num intervalo e $f(I)$ é um intervalo, então $f$ é contínua.
+:::
+
+::: {.proof}
+Suponha $f$ não decrescente (o outro caso é simétrico) e descontínua num ponto interior $a$. Para $x < a < y$ em $I$, o intervalo $J_a = (f(a^-), f(a^+))$ está contido em $[f(x), f(y)] \subseteq f(I)$, pois $f(I)$ é um intervalo. Mas nenhum valor de $f$ está em $J_a$, exceto possivelmente $f(a)$: se $x < a$, $f(x) \leq f(a^-)$; se $x > a$, $f(x) \geq f(a^+)$. Um intervalo aberto não vazio não pode conter um único ponto de $f(I)$ — contradição. Nas extremidades de $I$, o argumento é o mesmo, com um só limite lateral.
+:::
+
+O corolário dá outra demonstração da continuidade da inversa (@prp-mat-g03-inversa-continua): $f^{-1}$ é monótona e sua imagem, $I$, é um intervalo. Em probabilidade, o teorema diz que uma função de distribuição — não decrescente por definição — tem no máximo uma quantidade enumerável de saltos, isto é, de valores com probabilidade positiva (@sec-est-g02; veja o @exr-mat-g03-saltos).
 
 Usaremos as funções exponencial e logaritmo antes de construí-las rigorosamente. O resultado a seguir reúne o que é admitido; a demonstração, a partir da definição $\log x \defeq \int_1^x \dd t/t$, está no @sec-mat-g04.
 
@@ -354,6 +386,55 @@ com igualdades somente em $x = 0$. Em particular, $0 \leq x - \log(1 + x) \leq \
 Para $x = 0$, os três membros são nulos. Para $x \neq 0$, o @thm-mat-g03-valor-medio aplicado a $t \mapsto \log(1 + t)$ entre $0$ e $x$ dá $\log(1 + x) = x/(1 + c)$ para algum $c$ estritamente entre $0$ e $x$. Se $x > 0$, então $0 < c < x$ e $\frac{1}{1+x} < \frac{1}{1+c} < 1$; multiplicando por $x > 0$, obtemos as desigualdades estritas. Se $-1 < x < 0$, então $x < c < 0$ e $1 < \frac{1}{1+c} < \frac{1}{1+x}$; multiplicando por $x < 0$, as desigualdades se invertem e obtemos $\frac{x}{1+x} < \log(1+x) < x$. A última afirmação segue de $x - \frac{x}{1+x} = \frac{x^2}{1+x}$.
 :::
 
+### A regra de L'Hôpital {#sec-mat-g03-lhopital}
+
+Limites de quocientes em que numerador e denominador tendem ambos a zero, ou ambos a infinito, são **formas indeterminadas**: o resultado depende de qual dos dois "vai mais depressa". A regra de L'Hôpital compara as velocidades pelas derivadas. Ela se apoia numa versão do valor médio para duas funções.
+
+::: {#thm-mat-g03-cauchy}
+## Valor médio de Cauchy
+Sejam $f, g$ contínuas em $[a, b]$ e diferenciáveis em $(a, b)$. Existe $c \in (a, b)$ com
+$$
+\big(f(b) - f(a)\big)\, g'(c) = \big(g(b) - g(a)\big)\, f'(c) .
+$$
+:::
+
+::: {.proof}
+A função $h(x) \defeq \big(f(b) - f(a)\big) g(x) - \big(g(b) - g(a)\big) f(x)$ é contínua em $[a, b]$, diferenciável em $(a, b)$, e $h(a) = f(b) g(a) - g(b) f(a) = h(b)$. Pelo @thm-mat-g03-rolle, $h'(c) = 0$ para algum $c \in (a, b)$, que é a igualdade do enunciado. Com $g(x) = x$, recupera-se o @thm-mat-g03-valor-medio.
+:::
+
+::: {#thm-mat-g03-lhopital}
+## Regra de L'Hôpital
+Sejam $f, g$ diferenciáveis em $(a, b)$, com $g'(x) \neq 0$ para todo $x \in (a, b)$, e suponha que $\lim_{x \to a^+} f'(x)/g'(x) = L \in \R$. Se
+(i) $\lim_{x \to a^+} f(x) = \lim_{x \to a^+} g(x) = 0$, ou
+(ii) $\lim_{x \to a^+} \abs{g(x)} = +\infty$,
+então $\lim_{x \to a^+} f(x)/g(x) = L$. O mesmo vale para limites à esquerda e, portanto, para limites bilaterais.
+:::
+
+::: {.proof}
+Duas observações preliminares. Pelo @thm-mat-g03-rolle, $g$ é injetiva em $(a, b)$: se $g(x) = g(y)$ com $x < y$, haveria $c \in (x, y)$ com $g'(c) = 0$. Além disso, para $a < x < y < b$, o @thm-mat-g03-cauchy aplicado a $[x, y]$ dá $c \in (x, y)$ com
+$$
+\frac{f(y) - f(x)}{g(y) - g(x)} = \frac{f'(c)}{g'(c)} .
+$$ {#eq-mat-g03-cauchy-quociente}
+
+No caso (i), defina $f(a) = g(a) = 0$, o que torna $f$ e $g$ contínuas em $[a, y]$ para todo $y \in (a, b)$. Então $g(y) \neq 0$ (senão, Rolle em $[a, y]$ daria um zero de $g'$), e o valor médio de Cauchy em $[a, y]$ dá $c_y \in (a, y)$ com $f(y)/g(y) = f'(c_y)/g'(c_y)$. Se $y_n \to a^+$, então $c_{y_n} \to a^+$ pelo sanduíche, e $f(y_n)/g(y_n) = f'(c_{y_n})/g'(c_{y_n}) \to L$ pelo @thm-mat-g03-sequencial; o mesmo teorema dá a conclusão.
+
+No caso (ii), seja $\varepsilon \in (0, 1)$ e escolha $y \in (a, b)$ tal que $\abs{f'(c)/g'(c) - L} < \varepsilon$ para todo $c \in (a, y)$. Para $x \in (a, y)$, seja $Q(x)$ o quociente à esquerda da @eq-mat-g03-cauchy-quociente; então $\abs{Q(x) - L} < \varepsilon$. Uma conta direta mostra que, quando $g(x) \neq 0$,
+$$
+\frac{f(x)}{g(x)} - L = \big(Q(x) - L\big)\Big(1 - \frac{g(y)}{g(x)}\Big) - L\,\frac{g(y)}{g(x)} + \frac{f(y)}{g(x)} .
+$$
+Como $\abs{g(x)} \to +\infty$ quando $x \to a^+$, existe $\delta > 0$ tal que, para $x \in (a, a + \delta)$, $\abs{g(y)/g(x)} < \varepsilon$ e $\abs{f(y)/g(x)} < \varepsilon$. Para esses $x$, $\abs{f(x)/g(x) - L} < 2\varepsilon + \abs{L}\varepsilon + \varepsilon$, que é arbitrariamente pequeno. Para limites à esquerda, o argumento é o mesmo, com os papéis das extremidades trocados.
+:::
+
+A regra também vale quando $x \to +\infty$: com $F(t) = f(1/t)$ e $G(t) = g(1/t)$, a regra da cadeia dá $F'(t)/G'(t) = f'(1/t)/g'(1/t)$, e o caso $x \to +\infty$ vira o caso $t \to 0^+$. Ela **não** se aplica fora das formas indeterminadas: $\lim_{x \to 0} (1 + x)/(2 + x) = 1/2$, mas o quociente das derivadas vale 1.
+
+::: {#exm-mat-g03-lhopital}
+## Logaritmos, potências e a utilidade CRRA
+(a) Para $\alpha > 0$, $\lim_{x \to +\infty} (\log x)/x^\alpha = 0$: pelo caso (ii), o quociente das derivadas é $(1/x)/(\alpha x^{\alpha - 1}) = 1/(\alpha x^\alpha) \to 0$. O logaritmo cresce mais devagar que qualquer potência.
+(b) Para $\alpha > 0$, $\lim_{x \to 0^+} x^\alpha \log x = 0$: escrevendo $x^\alpha \log x = (\log x)/x^{-\alpha}$, o caso (ii) dá o quociente $(1/x)/(-\alpha x^{-\alpha - 1}) = -x^\alpha/\alpha \to 0$.
+(c) $\lim_{x \to 0} (e^x - 1 - x)/x^2 = 1/2$: o caso (i) leva a $(e^x - 1)/(2x)$, de novo da forma $0/0$, e uma segunda aplicação dá $e^x/2 \to 1/2$ — o coeficiente de $x^2$ no polinômio de Taylor.
+(d) **Utilidade CRRA.** Para $c > 0$ e $\gamma \neq 1$, seja $u_\gamma(c) \defeq (c^{1 - \gamma} - 1)/(1 - \gamma)$, que difere de $c^{1-\gamma}/(1-\gamma)$ por uma transformação afim e representa as mesmas preferências. Como função de $\gamma$, numerador e denominador tendem a zero quando $\gamma \to 1$; suas derivadas em relação a $\gamma$ são $-c^{1-\gamma}\log c$ e $-1$, cujo quociente tende a $\log c$. Logo $\lim_{\gamma \to 1} u_\gamma(c) = \log c$: a utilidade logarítmica é o caso limite da família CRRA.
+:::
+
 ## A fórmula de Taylor {#sec-mat-g03-taylor}
 
 A derivada aproxima $f$ por uma reta. Derivadas de ordem superior permitem aproximações por polinômios, com controle explícito do erro.
@@ -487,7 +568,7 @@ Essa é a condição suficiente anunciada no @sec-mat-g01: sob concavidade, a co
 
 ::: {#exm-mat-g03-concavas}
 ## Exemplos
-O logaritmo é estritamente côncavo em $(0, \infty)$: $\log''(x) = -1/x^2 < 0$. Daí, com $\lambda = 1/2$, $\log \frac{x + y}{2} \geq \frac{\log x + \log y}{2} = \log\sqrt{xy}$, que é a desigualdade entre as médias aritmética e geométrica, $\frac{x + y}{2} \geq \sqrt{xy}$. A utilidade **CRRA** $u(c) = c^{1 - \gamma}/(1 - \gamma)$, com $\gamma > 0$ e $\gamma \neq 1$, tem $u''(c) = -\gamma c^{-\gamma - 1} < 0$ e é estritamente côncava; o caso $\gamma = 1$ corresponde a $u = \log$. A exponencial é estritamente convexa, e (b) dá $e^x \geq 1 + x$ (@exr-mat-g03-exp).
+O logaritmo é estritamente côncavo em $(0, \infty)$: $\log''(x) = -1/x^2 < 0$. Daí, com $\lambda = 1/2$, $\log \frac{x + y}{2} \geq \frac{\log x + \log y}{2} = \log\sqrt{xy}$, que é a desigualdade entre as médias aritmética e geométrica, $\frac{x + y}{2} \geq \sqrt{xy}$. A utilidade **CRRA** $u(c) = c^{1 - \gamma}/(1 - \gamma)$, com $\gamma > 0$ e $\gamma \neq 1$, tem $u''(c) = -\gamma c^{-\gamma - 1} < 0$ e é estritamente côncava; o caso $\gamma = 1$ corresponde a $u = \log$, como mostra a regra de L'Hôpital (@exm-mat-g03-lhopital). A exponencial é estritamente convexa, e (b) dá $e^x \geq 1 + x$ (@exr-mat-g03-exp).
 :::
 
 ::: {#def-mat-g03-elasticidade}
@@ -529,7 +610,7 @@ O **índice de Lerner** à esquerda da @eq-mat-g03-lerner mede o poder de mercad
 - **Microeconomia (@sec-mic-g01, @sec-mic-g02).** Utilidade marginal, produtividade marginal, custo marginal e elasticidades-preço e renda são derivadas; a regra de Lerner reaparece na teoria da firma.
 - **Existência de equilíbrio (@sec-mat-m01, @sec-mat-m05).** Weierstrass em conjuntos compactos e os teoremas de Brouwer e Kakutani estendem o @thm-mat-g03-weierstrass e o @cor-mat-g03-ponto-fixo a muitas dimensões.
 - **Métodos numéricos (@sec-cmp-m01).** Bisseção e Newton resolvem $f(x) = 0$; a fórmula de Taylor explica o erro da diferenciação numérica e a convergência quadrática de Newton.
-- **Probabilidade (@sec-est-g02).** A densidade de uma variável contínua é a derivada da sua função de distribuição.
+- **Probabilidade (@sec-est-g02).** A densidade de uma variável contínua é a derivada da sua função de distribuição; e, por ser monótona, uma função de distribuição tem no máximo uma quantidade enumerável de saltos (@thm-mat-g03-monotonas).
 - **Renda fixa (@sec-fin-g02).** Duration e convexidade são a primeira e a segunda derivadas (normalizadas) do preço de um título em relação à taxa — uma expansão de Taylor de segunda ordem.
 - **Macroeconomia (@sec-mac-g01, @sec-mac-g04).** Taxas de crescimento e inflação calculadas por diferenças de logaritmos; a aplicação abaixo mostra quando a aproximação falha.
 
@@ -710,6 +791,20 @@ print(f"quantidade: D = {10 * p_est ** -0.5:.6f}, S = {2 * p_est ** 0.8:.6f}")
 
 Cada passo divide o intervalo por 2: para reduzir uma incerteza inicial de 9 a $10^{-10}$, bastam $\lceil \log_2(9 \cdot 10^{10}) \rceil = 37$ passos.
 
+### Do CRRA ao logaritmo
+
+O @exm-mat-g03-lhopital (d) diz que a utilidade CRRA normalizada converge para o logaritmo quando a aversão relativa ao risco $\gamma$ tende a 1. Numericamente, com $c = 2$:
+
+```{python}
+c = 2.0
+print(f"log(2) = {math.log(c):.8f}")
+for gama in [0.5, 0.9, 0.99, 0.999, 1.001, 1.01, 1.1, 2.0]:
+    u = (c ** (1 - gama) - 1) / (1 - gama)
+    print(f"gama = {gama:>5}: u(2) = {u:.8f}   diferenca = {u - math.log(c):+.2e}")
+```
+
+A diferença é aproximadamente proporcional a $1 - \gamma$, como prevê a fórmula de Taylor aplicada a $\gamma \mapsto c^{1-\gamma}$ em torno de $\gamma = 1$.
+
 ### Aproximações do logaritmo
 
 Comparamos $\log(1 + x)$ com as aproximações de primeira e segunda ordem e com a cota da @prp-mat-g03-log.
@@ -868,6 +963,26 @@ $\varepsilon_D(p) = \frac{-b\,p}{a - bp}$, que vai de $0$ (em $p \to 0$) a $-\in
 Para (a), $P'(i) = -T(1+i)^{-T-1}$, logo $\mathcal D = T(1+i)^{-T-1}(1+i)/(1+i)^{-T} = T$: a duration de um título de cupom zero é o seu prazo. Para (b), $P'(i) = -c/i^2$, logo $\mathcal D = \frac{c}{i^2}\cdot\frac{1+i}{c/i} = \frac{1+i}{i}$; com $i = 10\%$, $\mathcal D = 11$. Para (c), a aproximação de primeira ordem dá $\Delta P/P \approx -11 \times 0{,}01/1{,}1 = -10\%$; o valor exato é $\frac{c/0{,}11}{c/0{,}10} - 1 = -9{,}09\%$. A diferença vem do termo de segunda ordem: $P$ é convexa em $i$, e a **convexidade** (@sec-fin-g02) corrige a aproximação.
 :::
 
+::: {#exr-mat-g03-xx}
+Mostre que $\lim_{x \to 0^+} x^x = 1$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para $x > 0$, $x^x = \exp(x \log x)$ (@prp-mat-g03-exp). Pelo @exm-mat-g03-lhopital (b) com $\alpha = 1$, $x \log x \to 0$ quando $x \to 0^+$; pela continuidade da exponencial e pelo @thm-mat-g03-sequencial, $x^x \to e^0 = 1$. A forma "$0^0$" é indeterminada: o logaritmo a transforma em "$0 \cdot \infty$", que a regra de L'Hôpital resolve.
+:::
+
+::: {#exr-mat-g03-saltos}
+Seja $F: \R \to [0, 1]$ não decrescente (por exemplo, uma função de distribuição). Mostre que, para cada $k \in \N$, há no máximo $k$ pontos $a$ com salto $F(a^+) - F(a^-) \geq 1/k$, e conclua, por outro caminho, que $F$ tem no máximo uma quantidade contável de descontinuidades.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Sejam $a_1 < \dots < a_m$ pontos com salto $\geq 1/k$, e escolha $c_0 < a_1 < c_1 < a_2 < \dots < a_m < c_m$. Pelo @thm-mat-g03-monotonas, $F(c_{i-1}) \leq F(a_i^-)$ e $F(a_i^+) \leq F(c_i)$, logo
+$$
+1 \geq F(c_m) - F(c_0) = \sum_{i=1}^m \big(F(c_i) - F(c_{i-1})\big) \geq \sum_{i=1}^m \big(F(a_i^+) - F(a_i^-)\big) \geq \frac{m}{k},
+$$
+e $m \leq k$. O conjunto $D$ das descontinuidades é a união dos conjuntos $D_k$ de pontos com salto $\geq 1/k$, cada um com no máximo $k$ elementos. Listando os elementos de $D_1$, depois os de $D_2$, e assim por diante, obtemos uma sequência cuja imagem é $D$; se $D \neq \emptyset$, isso dá uma sobrejeção de $\N$ (ou de um conjunto finito) sobre $D$, e $D$ é contável (@lem-mat-g01-subconjuntos). Em probabilidade, os saltos de $F$ são as probabilidades dos pontos — os **átomos** da distribuição —, e o argumento mostra que há no máximo $k$ átomos com probabilidade $\geq 1/k$.
+:::
+
 ## Flashcards {#sec-mat-g03-flashcards}
 
 ::: {.callout-note .flashcard collapse="true"}
@@ -940,18 +1055,28 @@ Quando $f$ é côncava e diferenciável num intervalo aberto; se for estritament
 $R'(p) = D(p)(1 + \varepsilon_D)$: subir o preço aumenta a receita se, e somente se, a demanda é inelástica; o monopolista satisfaz $(p - C')/p = -1/\varepsilon_D$.
 :::
 
+::: {.callout-note .flashcard collapse="true"}
+## Que tipo de descontinuidade uma função monótona pode ter, e quantas?
+Só saltos: os limites laterais sempre existem. E o conjunto das descontinuidades é contável — em probabilidade, uma distribuição tem no máximo uma quantidade enumerável de átomos.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a regra de L'Hôpital, e quando ela se aplica?
+Se $f/g$ é da forma $0/0$ ou $\cdot/\infty$, $g' \neq 0$ perto do ponto e $f'/g' \to L$, então $f/g \to L$. Fora das formas indeterminadas, ela dá resultados errados.
+:::
+
 ## Ficha-resumo {#sec-mat-g03-ficha}
 
 ::: {.ficha-resumo}
 **Limites.** $\lim_{x\to a} f(x) = L \iff \forall\varepsilon\ \exists\delta: 0 < \abs{x-a} < \delta \Rightarrow \abs{f(x) - L} < \varepsilon \iff f(x_n) \to L$ para toda $x_n \to a$, $x_n \neq a$. Herdam as regras de sequências.
 
-**Continuidade.** $f$ contínua em $a \iff x_n \to a \Rightarrow f(x_n) \to f(a)$. Somas, produtos, quocientes e composições preservam continuidade.
+**Continuidade.** $f$ contínua em $a \iff x_n \to a \Rightarrow f(x_n) \to f(a)$. Somas, produtos, quocientes e composições preservam continuidade. Monótona: limites laterais existem, descontinuidades são saltos e formam um conjunto contável.
 
 **Teoremas em $[a, b]$.** Valor intermediário (existência de zeros, de equilíbrio e, com $g(x) - x$, de ponto fixo); Weierstrass (máximo e mínimo atingidos). Contínua e estritamente monótona $\Rightarrow$ inversa contínua.
 
 **Derivada.** $f'(a) = \lim_{h\to 0} \frac{f(a+h) - f(a)}{h}$; $f(x) - f(a) = \varphi(x)(x - a)$ com $\varphi$ contínua em $a$. Diferenciável $\Rightarrow$ contínua. Produto, quociente, cadeia $(g\circ f)' = g'(f)\,f'$, inversa $(f^{-1})' = 1/f'(f^{-1})$. $(x^\alpha)' = \alpha x^{\alpha - 1}$, $\exp' = \exp$, $\log' = 1/x$; $(1 + x/n)^n \to e^x$.
 
-**Valor médio.** Fermat (extremo interior $\Rightarrow f' = 0$) $\Rightarrow$ Rolle $\Rightarrow f(b) - f(a) = f'(c)(b-a)$. Sinal de $f'$ dá monotonia; $\abs{f'} \leq K$ dá $\abs{f(x) - f(y)} \leq K\abs{x - y}$.
+**Valor médio.** Fermat (extremo interior $\Rightarrow f' = 0$) $\Rightarrow$ Rolle $\Rightarrow f(b) - f(a) = f'(c)(b-a)$. Sinal de $f'$ dá monotonia; $\abs{f'} \leq K$ dá $\abs{f(x) - f(y)} \leq K\abs{x - y}$. Cauchy: $(f(b) - f(a))g'(c) = (g(b) - g(a))f'(c)$ $\Rightarrow$ L'Hôpital: em $0/0$ ou $\cdot/\infty$, $\lim f/g = \lim f'/g'$.
 
 **Taylor.** $f(x) = P_n(x) + \frac{f^{(n+1)}(c)}{(n+1)!}(x-a)^{n+1}$. $e^x = \sum x^k/k!$; $\log 2 = 1 - \frac12 + \frac13 - \cdots$. $f' = 0, f'' < 0 \Rightarrow$ máximo local estrito. $\frac{x}{1+x} \leq \log(1+x) \leq x$; com $x_t \geq 0$, $\prod(1+x_t) - 1 \geq \sum x_t$.
 

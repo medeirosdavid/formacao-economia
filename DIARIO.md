@@ -2,6 +2,24 @@
 
 Registro curto de cada sessão: o que foi feito, decisões e pendências. Entradas mais recentes no topo.
 
+## 24/11/2026 — Currículo confrontado com o sumário de um livro de análise para economistas
+
+**Feito**
+
+- Segundo sumário enviado por David (26 capítulos, de lógica a pontos fixos): 97 de 140 itens já cobertos, 16 parciais, 27 ausentes; a lacuna principal era a análise convexa.
+- Novos capítulos planejados:
+  - **MAT-M10** *Espaços normados e com produto interno* (entre MAT-M01 e MAT-M07; traz Banach e Hilbert para o mestrado);
+  - **MAT-M08** *Conjuntos convexos e separação* (com Farkas e Gordan);
+  - **MAT-M09** *Funções convexas e subdiferencial* (com Jensen).
+- MAT-M03 passa a se chamar *Otimização com restrições de desigualdade e dualidade* (Fritz John, KKT, Slater, ponto de sela, dualidade, sensibilidade) e depende de MAT-M09. O nome do arquivo foi mantido, para não quebrar links.
+- Tópicos acrescentados: MAT-M01 (topologia relativa, métricas equivalentes, completamento, Lipschitz, homeomorfismos, extensão de uniformemente contínuas), MAT-M07 (Dini, aproximação de Weierstrass, séries de potências), MAT-G06 (derivada como aplicação linear, direcionais, contraexemplos, $C^1$, desigualdade do valor médio, conjuntos de nível, Schwarz), MAT-G07 (qualificação de restrições), MAT-M04 (conjuntos de nível e espaço tangente), MAT-M05 (Sperner, Schauder), MAT-D04 (reorientado para $L^p$, duais e Riesz), EST-G03 (Jensen).
+- Trilha "Base quantitativa": MAT-M08 e MAT-M09 antes de MAT-M03.
+- Seções novas nos capítulos escritos:
+  - MAT-G02: reta estendida; limites superior e inferior na reta estendida; equivalências da completude (cinco formas, com demonstração); rearranjos (Dirichlet e Riemann); séries de potências e raio de convergência; laboratório do rearranjo; 2 exercícios e 4 flashcards.
+  - MAT-G03: descontinuidades de funções monótonas; valor médio de Cauchy e regra de L'Hôpital (0/0 e ∞/∞), com a utilidade CRRA convergindo para o logaritmo; laboratório; 2 exercícios e 2 flashcards.
+- `gerar_estrutura.py`: esboços de capítulos planejados sem texto próprio passam a ser regenerados por inteiro (título e roteiro acompanham o currículo).
+- Referências novas: Rockafellar (1970), Boyd e Vandenberghe (2004), Luenberger (1969).
+
 ## 24/11/2026 — Currículo confrontado com um sumário de Análise
 
 **Feito**

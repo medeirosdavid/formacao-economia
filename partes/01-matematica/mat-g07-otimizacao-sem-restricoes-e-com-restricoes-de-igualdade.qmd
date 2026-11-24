@@ -22,7 +22,8 @@ Roteiro planejado:
 1. Condições de primeira e segunda ordem
 2. Concavidade e ótimos globais
 3. Método de Lagrange
-4. Interpretação dos multiplicadores
-5. Hessiana orlada
-6. Aplicações: consumidor e firma
+4. Qualificação de restrições
+5. Interpretação dos multiplicadores
+6. Hessiana orlada
+7. Aplicações: consumidor e firma
 :::
