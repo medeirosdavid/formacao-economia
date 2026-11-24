@@ -6,23 +6,640 @@
 
 **Pré-requisitos:** @sec-mat-g03 (*Funções de uma variável: limites, continuidade e derivadas*); @sec-mat-g05 (*Álgebra linear I: vetores, matrizes e sistemas lineares*)
 
-**Leituras principais:** @simon1994, @sydsaeter2016
+**Leituras principais:** @simon1994, @sydsaeter2016, @rudin1976
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-mat-g06-motivacao}
 
-1. Funções de $\mathbb{R}^n$ em $\mathbb{R}^m$
-2. A derivada como aplicação linear
-3. Derivadas parciais e direcionais
-4. Galeria de contraexemplos
-5. Funções de classe $C^1$
-6. Regra da cadeia
-7. Desigualdade do valor médio
-8. Gradiente e conjuntos de nível
-9. Teorema de Schwarz e matriz hessiana
-10. Fórmula de Taylor em várias variáveis
-11. Funções homogêneas e teorema de Euler
-12. Integrais múltiplas
+Quase nada em economia depende de uma variável só. A utilidade depende das quantidades de vários bens, a produção de capital, trabalho e insumos, o valor de uma carteira dos pesos de muitos ativos. As perguntas marginais continuam as mesmas — quanto a produção aumenta com mais uma hora de trabalho, mantido o capital? quanto de um bem o consumidor abriria mão por uma unidade de outro? —, e as respostas são **derivadas parciais** e suas razões. Mas há fenômenos novos:
+
+- a derivada de $f: \R^n \to \R^m$ é uma **transformação linear** — a melhor aproximação linear de $f$ perto de um ponto —, e a regra da cadeia é um produto de matrizes;
+- os **conjuntos de nível** — curvas de indiferença, isoquantas — são perpendiculares ao **gradiente**, e suas inclinações são razões de derivadas parciais;
+- a **matriz hessiana** e a fórmula de Taylor de segunda ordem decidem se um ponto crítico é máximo ou mínimo (@sec-mat-g07);
+- funções **homogêneas**, como as funções de produção com retornos constantes, satisfazem o **teorema de Euler**, que diz que remunerar cada fator pelo seu produto marginal esgota o produto.
+
+E há armadilhas: em várias variáveis, ter todas as derivadas parciais **não** garante continuidade. Este capítulo desenvolve:
+
+1. limites e continuidade em $\R^n$;
+2. a derivada como aplicação linear, derivadas parciais e direcionais, e uma galeria de contraexemplos;
+3. funções de classe $C^1$, a regra da cadeia e a desigualdade do valor médio;
+4. gradiente e conjuntos de nível;
+5. o teorema de Schwarz, a hessiana e a fórmula de Taylor de segunda ordem;
+6. funções homogêneas e o teorema de Euler;
+7. integrais duplas e o teorema de Fubini.
+
+## Funções de $\R^n$ em $\R^m$ {#sec-mat-g06-funcoes}
+
+Usamos a norma euclidiana do @sec-mat-g05. A **bola aberta** de centro $\vb a$ e raio $r > 0$ é $B(\vb a, r) \defeq \{\vb x : \norm{\vb x - \vb a} < r\}$, e um conjunto $U \subseteq \R^n$ é **aberto** se, para cada $\vb a \in U$, alguma bola $B(\vb a, r)$ está contida em $U$. Bolas abertas e o próprio $\R^n$ são abertos; os domínios das funções deste capítulo são, em geral, abertos — assim, perto de cada ponto, podemos nos mover em todas as direções.
+
+::: {#def-mat-g06-limite}
+## Limite e continuidade
+Seja $f: U \to \R^m$, $U \subseteq \R^n$. Uma sequência $\vb x_k \to \vb a$ em $\R^n$ se $\norm{\vb x_k - \vb a} \to 0$. Dizemos que $\lim_{\vb x \to \vb a} f(\vb x) = \vb L$ se para todo $\varepsilon > 0$ existe $\delta > 0$ tal que $\norm{f(\vb x) - \vb L} < \varepsilon$ sempre que $\vb x \in U$ e $0 < \norm{\vb x - \vb a} < \delta$; e $f$ é **contínua** em $\vb a \in U$ se $\norm{f(\vb x) - f(\vb a)} < \varepsilon$ sempre que $\vb x \in U$ e $\norm{\vb x - \vb a} < \delta$.
 :::
+
+Como $\abs{x_i} \leq \norm{\vb x} \leq \abs{x_1} + \dots + \abs{x_n}$, uma sequência converge em $\R^n$ se, e somente se, converge coordenada a coordenada, e $f = (f_1, \dots, f_m)$ é contínua se, e somente se, cada $f_i$ é. As demonstrações do @thm-mat-g03-sequencial, da @prp-mat-g03-continuidade-sequencial e da @prp-mat-g03-operacoes-continuas valem palavra por palavra com $\norm{\cdot}$ no lugar de $\abs{\cdot}$: limites e continuidade podem ser testados por sequências, e somas, produtos, quocientes e composições de funções contínuas são contínuos. Como as projeções $\vb x \mapsto x_i$ são contínuas, todo polinômio em $n$ variáveis é contínuo.
+
+Uma diferença em relação a uma variável é que $\vb x$ pode se aproximar de $\vb a$ por infinitos caminhos. Para mostrar que um limite **não** existe, basta exibir dois caminhos com limites diferentes.
+
+::: {#lem-mat-g06-norma-matriz}
+## Cota para transformações lineares
+Para toda matriz $\vb A$, $m \times n$, e todo $\vb h \in \R^n$, $\norm{\vb A\vb h} \leq \norm{\vb A}_F\,\norm{\vb h}$, onde $\norm{\vb A}_F \defeq \big(\sum_{i,j} a_{ij}^2\big)^{1/2}$.
+:::
+
+::: {.proof}
+A $i$-ésima coordenada de $\vb A\vb h$ é o produto interno da linha $i$ de $\vb A$ com $\vb h$; por Cauchy–Schwarz, seu quadrado é no máximo $\big(\sum_j a_{ij}^2\big)\norm{\vb h}^2$. Somando em $i$, obtém-se a desigualdade.
+:::
+
+Em particular, toda transformação linear é contínua.
+
+## A derivada {#sec-mat-g06-derivada}
+
+Em uma variável, $f'(a)$ é o número tal que $f(a + h) \approx f(a) + f'(a)h$ com erro pequeno em relação a $h$ (@cor-mat-g03-continua). Em várias variáveis, o papel do número é desempenhado por uma matriz.
+
+::: {#def-mat-g06-diferenciavel}
+## Derivada
+Seja $U \subseteq \R^n$ aberto. $f: U \to \R^m$ é **diferenciável** em $\vb a \in U$ se existe uma matriz $\vb A$, $m \times n$, com
+$$
+\lim_{\vb h \to \vb 0} \frac{\norm{f(\vb a + \vb h) - f(\vb a) - \vb A\vb h}}{\norm{\vb h}} = 0 .
+$$ {#eq-mat-g06-diferenciavel}
+Essa matriz é a **derivada** (ou **diferencial**) de $f$ em $\vb a$, denotada $Df(\vb a)$.
+:::
+
+::: {#def-mat-g06-parciais}
+## Derivadas parciais e direcionais
+A **derivada direcional** de $f$ em $\vb a$ na direção $\vb u \neq \vb 0$ é $D_{\vb u} f(\vb a) \defeq \lim_{t \to 0} \frac{f(\vb a + t\vb u) - f(\vb a)}{t}$, quando o limite existe. Para $\vb u = \vb e_j$, obtém-se a **derivada parcial** $\pd{f}{x_j}(\vb a)$: a derivada da função de uma variável $x_j \mapsto f$, com as outras coordenadas fixas.
+:::
+
+::: {#prp-mat-g06-derivada}
+## Propriedades da derivada
+Se $f$ é diferenciável em $\vb a$, então:
+
+(a) $Df(\vb a)$ é única;
+(b) $f$ é contínua em $\vb a$;
+(c) todas as derivadas direcionais existem e $D_{\vb u} f(\vb a) = Df(\vb a)\,\vb u$; em particular, $Df(\vb a)$ é a **matriz jacobiana** $\big(\partial f_i/\partial x_j(\vb a)\big)_{ij}$.
+:::
+
+::: {.proof}
+Para (c), com $\vb h = t\vb u$ e $t \to 0$,
+$$
+\Big\lVert \frac{f(\vb a + t\vb u) - f(\vb a)}{t} - \vb A\vb u \Big\rVert = \frac{\norm{f(\vb a + t\vb u) - f(\vb a) - \vb A(t\vb u)}}{\norm{t\vb u}}\,\norm{\vb u} \to 0 ,
+$$
+pela @eq-mat-g06-diferenciavel. Com $\vb u = \vb e_j$, a $j$-ésima coluna de $\vb A$ é o vetor das derivadas parciais $\partial f_i/\partial x_j(\vb a)$. Isso também prova (a): $\vb A$ fica determinada pelas parciais. Para (b), $f(\vb a + \vb h) - f(\vb a) = \vb A\vb h + \vb r(\vb h)$ com $\norm{\vb r(\vb h)}/\norm{\vb h} \to 0$; pelo @lem-mat-g06-norma-matriz, $\norm{\vb A\vb h} \to 0$, e $\norm{\vb r(\vb h)} = \norm{\vb h} \cdot \norm{\vb r(\vb h)}/\norm{\vb h} \to 0$.
+:::
+
+Para $f$ com valores reais, $Df(\vb a)$ é uma linha; a coluna correspondente é o **gradiente**, $\nabla f(\vb a) \defeq Df(\vb a)\T = \big(\pd{f}{x_1}(\vb a), \dots, \pd{f}{x_n}(\vb a)\big)\T$, e $D_{\vb u} f(\vb a) = \nabla f(\vb a)\T \vb u$. Como $\norm{\vb v} \leq \sum_i \abs{v_i}$, $f$ é diferenciável se, e somente se, cada coordenada $f_i$ é.
+
+### Galeria de contraexemplos {#sec-mat-g06-contraexemplos}
+
+A @prp-mat-g06-derivada não tem recíproca, e os exemplos a seguir — todos com $f(0, 0) = 0$ — mostram o quanto ela falha.
+
+::: {#exm-mat-g06-contraexemplos}
+## Derivadas parciais sem diferenciabilidade
+(a) $f(x, y) = \dfrac{xy}{x^2 + y^2}$ para $(x, y) \neq \vb 0$. Como $f(x, 0) = f(0, y) = 0$, as duas derivadas parciais na origem existem e valem zero. Mas $f(t, t) = 1/2$ para $t \neq 0$: ao longo da diagonal, $f$ não tende a $f(0,0)$, e **$f$ nem sequer é contínua** na origem.
+(b) $f(x, y) = \dfrac{x^2 y}{x^4 + y^2}$. Para $\vb u = (u_1, u_2)$ com $u_2 \neq 0$, $\frac{f(t\vb u)}{t} = \frac{u_1^2 u_2}{t^2 u_1^4 + u_2^2} \to \frac{u_1^2}{u_2}$, e, para $u_2 = 0$, $f(t\vb u) = 0$: **todas as derivadas direcionais existem**. Ainda assim, $f(t, t^2) = 1/2$, e $f$ não é contínua na origem. O valor $D_{\vb u} f(\vb 0)$ nem é linear em $\vb u$.
+(c) $f(x, y) = \sqrt{\abs{xy}}$. É contínua, e as parciais na origem são nulas. Se $f$ fosse diferenciável, a derivada seria a matriz nula, e $D_{\vb u} f(\vb 0) = 0$ para todo $\vb u$; mas, na direção $\vb u = (1, 1)$, $f(t, t)/t = \abs{t}/t$ não tem limite. **Contínua e com parciais, mas não diferenciável.**
+:::
+
+A moral é que derivadas parciais olham apenas para duas retas pela origem, e uma função pode se comportar mal entre elas. O que resolve o problema é exigir que as parciais sejam **contínuas**.
+
+::: {#thm-mat-g06-c1}
+## Parciais contínuas implicam diferenciabilidade
+Se todas as derivadas parciais de $f: U \to \R^m$ existem numa bola em torno de $\vb a$ e são contínuas em $\vb a$, então $f$ é diferenciável em $\vb a$. Em particular, toda função de **classe $C^1$** em $U$ — com parciais existentes e contínuas em todo $U$ — é diferenciável em todo $U$.
+:::
+
+::: {.proof}
+Basta tratar $f$ com valores reais. Para $\vb h$ pequeno, sejam $\vb h^{(0)} = \vb 0$ e $\vb h^{(j)} = (h_1, \dots, h_j, 0, \dots, 0)$, de modo que
+$$
+f(\vb a + \vb h) - f(\vb a) = \sum_{j=1}^n \big[f(\vb a + \vb h^{(j)}) - f(\vb a + \vb h^{(j-1)})\big] .
+$$
+Na $j$-ésima parcela só a coordenada $j$ varia, de $a_j$ a $a_j + h_j$; pelo teorema do valor médio em uma variável, ela vale $h_j\,\pd{f}{x_j}(\vb c_j)$ para algum $\vb c_j$ no segmento entre $\vb a + \vb h^{(j-1)}$ e $\vb a + \vb h^{(j)}$, com $\norm{\vb c_j - \vb a} \leq \norm{\vb h}$. Logo
+$$
+\Big\lvert f(\vb a + \vb h) - f(\vb a) - \sum_j h_j \pd{f}{x_j}(\vb a) \Big\rvert \leq \sum_j \abs{h_j}\, \Big\lvert \pd{f}{x_j}(\vb c_j) - \pd{f}{x_j}(\vb a) \Big\rvert \leq \norm{\vb h} \sum_j \Big\lvert \pd{f}{x_j}(\vb c_j) - \pd{f}{x_j}(\vb a) \Big\rvert ,
+$$
+e a soma à direita tende a zero quando $\vb h \to \vb 0$, pela continuidade das parciais em $\vb a$.
+:::
+
+Na prática, quase todas as funções usadas em economia — polinômios, exponenciais, logaritmos, Cobb–Douglas, CES — são $C^1$ (e $C^2$) no interior dos seus domínios, e o teorema permite calcular a derivada simplesmente montando a matriz das parciais.
+
+## A regra da cadeia {#sec-mat-g06-cadeia}
+
+::: {#thm-mat-g06-cadeia}
+## Regra da cadeia
+Sejam $g: U \to \R^m$ diferenciável em $\vb a$ ($U \subseteq \R^n$ aberto) e $f: V \to \R^p$ diferenciável em $g(\vb a)$ ($V \subseteq \R^m$ aberto, $g(U) \subseteq V$). Então $f \circ g$ é diferenciável em $\vb a$ e
+$$
+D(f \circ g)(\vb a) = Df\big(g(\vb a)\big)\,Dg(\vb a) .
+$$
+:::
+
+::: {.proof}
+Sejam $\vb b = g(\vb a)$, $\vb A = Dg(\vb a)$ e $\vb B = Df(\vb b)$. Escrevemos $g(\vb a + \vb h) = \vb b + \vb A\vb h + \vb r_1(\vb h)$ e $f(\vb b + \vb k) = f(\vb b) + \vb B\vb k + \vb r_2(\vb k)$, com $\norm{\vb r_1(\vb h)}/\norm{\vb h} \to 0$ e $\norm{\vb r_2(\vb k)}/\norm{\vb k} \to 0$ (e $\vb r_2(\vb 0) = \vb 0$). Com $\vb k = g(\vb a + \vb h) - \vb b = \vb A\vb h + \vb r_1(\vb h)$,
+$$
+f\big(g(\vb a + \vb h)\big) - f(\vb b) - \vb B\vb A\vb h = \vb B\vb r_1(\vb h) + \vb r_2(\vb k) .
+$$
+Pelo @lem-mat-g06-norma-matriz, $\norm{\vb B\vb r_1(\vb h)} \leq \norm{\vb B}_F \norm{\vb r_1(\vb h)}$, que é pequeno em relação a $\norm{\vb h}$. Para $\vb h$ pequeno, $\norm{\vb r_1(\vb h)} \leq \norm{\vb h}$, logo $\norm{\vb k} \leq (\norm{\vb A}_F + 1)\norm{\vb h}$. Dado $\varepsilon > 0$, há $\delta$ com $\norm{\vb r_2(\vb k)} \leq \varepsilon \norm{\vb k}$ para $\norm{\vb k} < \delta$; para $\vb h$ pequeno, então, $\norm{\vb r_2(\vb k)} \leq \varepsilon (\norm{\vb A}_F + 1) \norm{\vb h}$. Somando, o erro é pequeno em relação a $\norm{\vb h}$.
+:::
+
+O caso mais usado é o de uma curva: se $\vb x: \R \to \R^n$ é diferenciável e $f: \R^n \to \R$ também, então
+$$
+\frac{\dd}{\dd t} f\big(\vb x(t)\big) = \nabla f\big(\vb x(t)\big)\T \vb x'(t) = \sum_{j=1}^n \pd{f}{x_j}\big(\vb x(t)\big)\, x_j'(t) .
+$$ {#eq-mat-g06-cadeia-curva}
+
+::: {#exm-mat-g06-contabilidade}
+## Contabilidade do crescimento
+Com uma função de produção $Y = A\,K^{\alpha} L^{1 - \alpha}$ e insumos que variam no tempo, $\log Y(t) = \log A(t) + \alpha \log K(t) + (1 - \alpha)\log L(t)$. Derivando pela regra da cadeia, com $g_X \defeq \dot X/X = \frac{\dd}{\dd t}\log X$,
+$$
+g_Y = g_A + \alpha\, g_K + (1 - \alpha)\, g_L .
+$$
+O crescimento do produto se decompõe em crescimento da produtividade total dos fatores e contribuições do capital e do trabalho, ponderadas pelas elasticidades. Medidos $g_Y$, $g_K$ e $g_L$, a produtividade é o **resíduo de Solow** $g_A$ (@sec-mac-g02).
+:::
+
+## O valor médio e o gradiente {#sec-mat-g06-valor-medio}
+
+O segmento entre $\vb a$ e $\vb b$ é $\{\vb a + t(\vb b - \vb a) : t \in [0, 1]\}$, e um conjunto é **convexo** se contém o segmento entre quaisquer dois de seus pontos.
+
+::: {#thm-mat-g06-valor-medio}
+## Valor médio
+Seja $f: U \to \R$ diferenciável num aberto $U$ que contém o segmento entre $\vb a$ e $\vb b$. Existe $\vb c$ nesse segmento com $f(\vb b) - f(\vb a) = \nabla f(\vb c)\T (\vb b - \vb a)$. Em consequência, $\abs{f(\vb b) - f(\vb a)} \leq M \norm{\vb b - \vb a}$ se $\norm{\nabla f} \leq M$ no segmento.
+:::
+
+::: {.proof}
+$\varphi(t) \defeq f(\vb a + t(\vb b - \vb a))$ é diferenciável em $[0, 1]$, com $\varphi'(t) = \nabla f(\vb a + t(\vb b - \vb a))\T (\vb b - \vb a)$, pela @eq-mat-g06-cadeia-curva. O teorema do valor médio dá $\varphi(1) - \varphi(0) = \varphi'(\tau)$ para algum $\tau \in (0, 1)$. A cota segue de Cauchy–Schwarz.
+:::
+
+Para $f$ com valores vetoriais, a igualdade falha: $f(t) = (t^2, t^3)$ em $[0, 1]$ tem $f(1) - f(0) = (1, 1)$, mas $f'(c) = (2c, 3c^2) = (1, 1)$ exigiria $c = 1/2$ e $c = 1/\sqrt 3$ ao mesmo tempo. A desigualdade, porém, sobrevive.
+
+::: {#cor-mat-g06-desigualdade-valor-medio}
+## Desigualdade do valor médio
+Seja $f: U \to \R^m$ diferenciável num aberto que contém o segmento entre $\vb a$ e $\vb b$, com $\norm{Df(\vb c)}_F \leq M$ nos pontos do segmento. Então $\norm{f(\vb b) - f(\vb a)} \leq M \norm{\vb b - \vb a}$. Em particular, se $U$ é convexo e $Df = \vb 0$ em $U$, $f$ é constante.
+:::
+
+::: {.proof}
+Seja $\vb v = f(\vb b) - f(\vb a)$ e aplique o teorema à função real $\psi(\vb x) = \vb v\T f(\vb x)$, cujo gradiente é $Df(\vb x)\T \vb v$: existe $\vb c$ no segmento com $\norm{\vb v}^2 = \psi(\vb b) - \psi(\vb a) = \vb v\T Df(\vb c)(\vb b - \vb a) \leq \norm{\vb v}\,M\,\norm{\vb b - \vb a}$, por Cauchy–Schwarz e pelo @lem-mat-g06-norma-matriz. Se $\vb v \neq \vb 0$, divida por $\norm{\vb v}$.
+:::
+
+::: {#prp-mat-g06-gradiente}
+## Significado do gradiente
+Seja $f: U \to \R$ diferenciável em $\vb a$, com $\nabla f(\vb a) \neq \vb 0$.
+
+(a) Entre as direções unitárias $\vb u$, a derivada direcional $D_{\vb u} f(\vb a)$ é máxima para $\vb u = \nabla f(\vb a)/\norm{\nabla f(\vb a)}$, com valor $\norm{\nabla f(\vb a)}$: o gradiente aponta na direção de **maior crescimento**.
+(b) Se $\vb x: (-\varepsilon, \varepsilon) \to U$ é uma curva diferenciável contida no **conjunto de nível** $\{\vb x : f(\vb x) = f(\vb a)\}$, com $\vb x(0) = \vb a$, então $\nabla f(\vb a)\T \vb x'(0) = 0$: o gradiente é **perpendicular** ao conjunto de nível.
+:::
+
+::: {.proof}
+Para (a), por Cauchy–Schwarz, $D_{\vb u} f(\vb a) = \nabla f(\vb a)\T \vb u \leq \norm{\nabla f(\vb a)}$, com igualdade se, e somente se, $\vb u$ é um múltiplo positivo de $\nabla f(\vb a)$. Para (b), $f(\vb x(t))$ é constante; pela @eq-mat-g06-cadeia-curva, sua derivada em $t = 0$, $\nabla f(\vb a)\T \vb x'(0)$, é zero.
+:::
+
+Em economia, os conjuntos de nível de uma utilidade $u(x, y)$ são as **curvas de indiferença**, e os de uma função de produção, as **isoquantas**. Se uma curva de indiferença é o gráfico de uma função diferenciável $y = \phi(x)$, então $u(x, \phi(x)) = c$, e a regra da cadeia dá $u_x + u_y\,\phi'(x) = 0$, isto é,
+$$
+\phi'(x) = -\frac{u_x(x, y)}{u_y(x, y)} = -\mathrm{TMS}(x, y) ,
+$$
+onde $u_x$, $u_y$ denotam as parciais. A **taxa marginal de substituição**, $\mathrm{TMS} \defeq u_x/u_y$, é a razão das utilidades marginais: quanto de $y$ o consumidor cede por uma unidade adicional de $x$, mantida a utilidade. A existência de $\phi$ quando $u_y \neq 0$ é garantida pelo teorema da função implícita (@sec-mat-g07, @sec-mat-m04).
+
+## Derivadas de segunda ordem {#sec-mat-g06-segunda-ordem}
+
+Se as parciais de $f: U \to \R$ são, elas mesmas, diferenciáveis, obtemos as **derivadas parciais de segunda ordem**; escrevemos $f_{x_i x_j} \defeq \pd{}{x_j}\Big(\pd{f}{x_i}\Big)$, e também $\frac{\partial^2 f}{\partial x_j \partial x_i}$. $f$ é de **classe $C^2$** se todas elas existem e são contínuas. A **matriz hessiana** de $f$ em $\vb a$ é $\vb H f(\vb a) \defeq \big(f_{x_i x_j}(\vb a)\big)_{ij}$.
+
+::: {#thm-mat-g06-schwarz}
+## Teorema de Schwarz
+Se $f$ é de classe $C^2$ num aberto $U$, então $f_{x_i x_j} = f_{x_j x_i}$ em $U$; em particular, a hessiana é simétrica.
+:::
+
+::: {.proof}
+Só duas coordenadas variam, e podemos supor $n = 2$, com variáveis $(x, y)$ e ponto $(a, b)$. Para $h, k$ pequenos, seja
+$$
+\Delta \defeq f(a + h, b + k) - f(a + h, b) - f(a, b + k) + f(a, b) .
+$$
+Com $\varphi(x) \defeq f(x, b + k) - f(x, b)$, temos $\Delta = \varphi(a + h) - \varphi(a) = h\,\varphi'(a + \theta_1 h)$ pelo valor médio, isto é, $\Delta = h\,[f_x(a + \theta_1 h, b + k) - f_x(a + \theta_1 h, b)]$; aplicando de novo o valor médio, agora em $y$, $\Delta = hk\, f_{xy}(a + \theta_1 h, b + \theta_2 k)$. Partindo de $\psi(y) \defeq f(a + h, y) - f(a, y)$, o mesmo argumento dá $\Delta = hk\, f_{yx}(a + \theta_3 h, b + \theta_4 k)$, com $\theta_i \in (0, 1)$. Logo $f_{xy}(\vb p_{h,k}) = f_{yx}(\vb q_{h,k})$ para pontos $\vb p_{h,k}, \vb q_{h,k}$ que tendem a $(a, b)$ quando $h, k \to 0$, e a continuidade das duas derivadas mistas dá $f_{xy}(a, b) = f_{yx}(a, b)$.
+:::
+
+::: {#exm-mat-g06-schwarz-falha}
+## Derivadas mistas diferentes
+Para $f(x, y) = \dfrac{xy(x^2 - y^2)}{x^2 + y^2}$, $f(0, 0) = 0$: para $y \neq 0$, $f_x(0, y) = \lim_{x \to 0} f(x, y)/x = -y$, e, para $x \neq 0$, $f_y(x, 0) = x$ (e ambas são nulas na origem). Logo $f_{xy}(0, 0) = \frac{\dd}{\dd y} f_x(0, y)\big|_{y=0} = -1$, enquanto $f_{yx}(0, 0) = \frac{\dd}{\dd x} f_y(x, 0)\big|_{x=0} = 1$. As derivadas mistas existem, mas não são contínuas na origem.
+:::
+
+::: {#thm-mat-g06-taylor}
+## Fórmula de Taylor de segunda ordem
+Seja $f$ de classe $C^2$ num aberto $U$ que contém o segmento entre $\vb a$ e $\vb a + \vb h$. Existe $\vb c$ nesse segmento com
+$$
+f(\vb a + \vb h) = f(\vb a) + \nabla f(\vb a)\T \vb h + \tfrac12\, \vb h\T \vb H f(\vb c)\, \vb h .
+$$ {#eq-mat-g06-taylor}
+Em consequência, $f(\vb a + \vb h) = f(\vb a) + \nabla f(\vb a)\T\vb h + \tfrac12 \vb h\T \vb H f(\vb a)\vb h + r(\vb h)$ com $r(\vb h)/\norm{\vb h}^2 \to 0$.
+:::
+
+::: {.proof}
+Seja $\varphi(t) \defeq f(\vb a + t\vb h)$. Pela @eq-mat-g06-cadeia-curva, $\varphi'(t) = \sum_i f_{x_i}(\vb a + t\vb h)\, h_i$. Cada $f_{x_i}$ é $C^1$, logo diferenciável (@thm-mat-g06-c1), e a mesma fórmula, aplicada a ela, dá $\varphi''(t) = \sum_{i,j} f_{x_i x_j}(\vb a + t\vb h)\,h_i h_j = \vb h\T \vb H f(\vb a + t\vb h)\vb h$. A fórmula de Taylor de uma variável com $n = 1$ (@thm-mat-g03-taylor) dá $\varphi(1) = \varphi(0) + \varphi'(0) + \frac12 \varphi''(\tau)$, que é a @eq-mat-g06-taylor com $\vb c = \vb a + \tau\vb h$. Para a segunda afirmação, $\abs{r(\vb h)} = \frac12 \abs{\vb h\T (\vb H f(\vb c) - \vb H f(\vb a))\vb h} \leq \frac12 \norm{\vb H f(\vb c) - \vb H f(\vb a)}_F \norm{\vb h}^2$, pelo @lem-mat-g06-norma-matriz e por Cauchy–Schwarz, e a continuidade das segundas derivadas faz o fator da norma tender a zero.
+:::
+
+A aproximação quadrática é a base das condições de segunda ordem do @sec-mat-g07: num ponto com gradiente nulo, o sinal de $\vb h\T \vb H f(\vb a)\vb h$ decide se $f$ sobe ou desce em torno de $\vb a$.
+
+## Funções homogêneas e o teorema de Euler {#sec-mat-g06-euler}
+
+::: {#def-mat-g06-homogenea}
+## Função homogênea
+Seja $C \subseteq \R^n$ um **cone** (se $\vb x \in C$ e $t > 0$, então $t\vb x \in C$), como o ortante positivo. $f: C \to \R$ é **homogênea de grau $k$** se $f(t\vb x) = t^k f(\vb x)$ para todos $\vb x \in C$ e $t > 0$.
+:::
+
+Funções de produção com **retornos constantes de escala** são homogêneas de grau 1: dobrar todos os insumos dobra o produto. A Cobb–Douglas $A K^\alpha L^\beta$ é homogênea de grau $\alpha + \beta$, e funções de demanda são homogêneas de grau zero em preços e renda (não há ilusão monetária).
+
+::: {#thm-mat-g06-euler}
+## Teorema de Euler
+Seja $f$ diferenciável num cone aberto $C$. Então $f$ é homogênea de grau $k$ se, e somente se,
+$$
+\nabla f(\vb x)\T \vb x = \sum_{i=1}^n x_i \pd{f}{x_i}(\vb x) = k\, f(\vb x) \qquad \text{para todo } \vb x \in C.
+$$
+Além disso, se $f$ é homogênea de grau $k$, cada derivada parcial é homogênea de grau $k - 1$.
+:::
+
+::: {.proof}
+Se $f$ é homogênea, derive $f(t\vb x) = t^k f(\vb x)$ em relação a $t$ pela @eq-mat-g06-cadeia-curva: $\nabla f(t\vb x)\T \vb x = k t^{k-1} f(\vb x)$, e tome $t = 1$. Reciprocamente, fixado $\vb x$, seja $\phi(t) \defeq t^{-k} f(t\vb x)$ para $t > 0$. Então
+$$
+\phi'(t) = -k t^{-k-1} f(t\vb x) + t^{-k}\, \nabla f(t\vb x)\T \vb x = t^{-k-1}\big[\nabla f(t\vb x)\T (t\vb x) - k f(t\vb x)\big] = 0,
+$$
+pela hipótese aplicada ao ponto $t\vb x$; logo $\phi$ é constante, $\phi(t) = \phi(1) = f(\vb x)$. Para a última afirmação, derive $f(t\vb x) = t^k f(\vb x)$ em relação a $x_i$: $t\,\pd{f}{x_i}(t\vb x) = t^k \pd{f}{x_i}(\vb x)$.
+:::
+
+Para uma função de produção $F(K, L)$ com retornos constantes, o teorema dá $F(K, L) = F_K K + F_L L$: se cada fator recebe o seu produto marginal — como em concorrência perfeita —, a remuneração dos fatores **esgota o produto**, sem sobra nem falta. Com Cobb–Douglas $F = AK^\alpha L^{1-\alpha}$, $F_K K = \alpha F$: a participação do capital na renda é $\alpha$, constante — um dos fatos de Kaldor que motivam o uso dessa forma funcional (@sec-mac-g02). E, como as parciais de uma função homogênea de grau 1 são homogêneas de grau 0, os produtos marginais dependem apenas da razão $K/L$.
+
+## Integrais duplas {#sec-mat-g06-integrais}
+
+Densidades conjuntas, esperanças de funções de duas variáveis e excedentes em mercados com vários bens levam a integrais em regiões do plano. Para funções contínuas num retângulo, elas podem ser calculadas como **integrais iteradas**, e a ordem de integração não importa.
+
+::: {#thm-mat-g06-fubini}
+## Fubini para funções contínuas num retângulo
+Seja $f$ contínua em $R = [a, b] \times [c, d]$. Então $x \mapsto \int_c^d f(x, y)\,\dd y$ e $y \mapsto \int_a^b f(x, y)\,\dd x$ são contínuas, e
+$$
+\int_a^b \Big(\int_c^d f(x, y)\,\dd y\Big)\dd x = \int_c^d \Big(\int_a^b f(x, y)\,\dd x\Big)\dd y .
+$$
+Esse valor comum é a **integral dupla** $\iint_R f$.
+:::
+
+::: {.proof}
+Seja $M = \max_R \abs{f}$ (o teorema de Weierstrass vale no retângulo pela mesma demonstração, com Bolzano–Weierstrass aplicado às duas coordenadas). Pelo @lem-mat-g04-uniforme-2d, dado $\varepsilon > 0$ há $\delta$ com $\abs{f(x, y) - f(x', y)} < \varepsilon$ se $\abs{x - x'} < \delta$; então $\abs{\int_c^d f(x, y)\,\dd y - \int_c^d f(x', y)\,\dd y} \leq \varepsilon (d - c)$, o que prova a continuidade da primeira função; a outra é análoga. Para $t \in [a, b]$, seja
+$$
+\Phi(t) \defeq \int_a^t \Big(\int_c^d f(x, y)\,\dd y\Big)\dd x - \int_c^d g(t, y)\,\dd y, \qquad g(t, y) \defeq \int_a^t f(x, y)\,\dd x .
+$$
+A função $g$ é contínua no retângulo $[a, b] \times [c, d]$: $\abs{g(t, y) - g(s, z)} \leq M\abs{t - s} + (b - a)\sup_x \abs{f(x, y) - f(x, z)}$, e o último termo é pequeno para $\abs{y - z}$ pequeno, pela continuidade uniforme. Além disso, $\partial g/\partial t = f(t, y)$ é contínua (@thm-mat-g04-tfc1). Pelo @thm-mat-g04-tfc1 e pela regra de Leibniz (@thm-mat-g04-leibniz), $\Phi'(t) = \int_c^d f(t, y)\,\dd y - \int_c^d f(t, y)\,\dd y = 0$. Como $\Phi(a) = 0$, $\Phi(b) = 0$, que é a igualdade.
+:::
+
+Para uma região $D = \{(x, y) : a \leq x \leq b,\ \phi_1(x) \leq y \leq \phi_2(x)\}$ entre os gráficos de funções contínuas, define-se $\iint_D f \defeq \int_a^b \int_{\phi_1(x)}^{\phi_2(x)} f(x, y)\,\dd y\,\dd x$; quando a região também pode ser descrita "na outra ordem", os dois cálculos coincidem — o que se demonstra com a teoria geral da integração em $\R^n$ (@sec-est-m01). A mesma teoria justifica a **fórmula de mudança de variáveis**, que admitimos aqui: se $T$ é uma bijeção de classe $C^1$ entre regiões, com inversa de classe $C^1$,
+$$
+\iint_{T(D)} f(x, y)\,\dd x\,\dd y = \iint_D f\big(T(u, v)\big)\,\abs{\det DT(u, v)}\,\dd u\,\dd v .
+$$
+O fator $\abs{\det DT}$ é o quanto $T$ dilata áreas localmente (@sec-mat-g05-determinante). Em **coordenadas polares**, $T(r, \theta) = (r\cos\theta, r\sin\theta)$ e $\det DT = r$; daí
+$$
+\Big(\int_{-\infty}^\infty e^{-x^2}\,\dd x\Big)^2 = \iint_{\R^2} e^{-(x^2 + y^2)}\,\dd x\,\dd y = \int_0^{2\pi}\int_0^\infty e^{-r^2}\, r\,\dd r\,\dd\theta = 2\pi \cdot \tfrac12 = \pi ,
+$$
+a demonstração clássica do valor da integral gaussiana, que o @exm-mat-g04-gauss obteve por outro caminho.
+
+## Pontes {#sec-mat-g06-pontes}
+
+- **Otimização (@sec-mat-g07).** Pontos críticos são zeros do gradiente; a hessiana classifica-os; a perpendicularidade entre gradiente e conjunto de nível é a geometria do método de Lagrange.
+- **Funções implícita e inversa (@sec-mat-m04).** A inclinação $-u_x/u_y$ de uma curva de indiferença pressupõe que ela seja o gráfico de uma função; o teorema da função implícita garante isso e calcula derivadas de equilíbrios em estática comparativa.
+- **Topologia de $\R^n$ (@sec-mat-m01).** Abertos, fechados, compactos e o teorema de Weierstrass em várias variáveis.
+- **Microeconomia (@sec-mic-g01, @sec-mic-g02).** Utilidades e produtos marginais, TMS e TMST, homogeneidade das demandas e retornos de escala.
+- **Crescimento (@sec-mac-g02).** Contabilidade do crescimento e o teorema de Euler na distribuição da renda.
+- **Econometria e estatística (@sec-ecm-m05, @sec-est-g03).** Gradiente e hessiana da log-verossimilhança; o método delta usa a derivada de funções de parâmetros; integrais duplas de densidades conjuntas.
+- **Finanças (@sec-fin-m01).** O gradiente da variância de uma carteira em relação aos pesos é $2\vb\Sigma\vb w$.
+
+## Interativo {#sec-mat-g06-interativo}
+
+::: {.content-visible when-format="html"}
+**Curvas de indiferença e gradiente.** Utilidade Cobb–Douglas $u(x, y) = x^{a} y^{1-a}$. Escolha um ponto $(x_0, y_0)$: a seta vinho é o gradiente (perpendicular à curva de nível que passa pelo ponto) e a reta âmbar é a tangente, de inclinação $-\mathrm{TMS} = -\frac{a}{1-a}\frac{y_0}{x_0}$.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof aCD = controle("parâmetro a", [0.1, 0.9], {valor: 0.5, passo: 0.05, casas: 2})
+viewof x0CD = controle("x₀", [0.5, 9], {valor: 3, passo: 0.1, casas: 1})
+viewof y0CD = controle("y₀", [0.5, 9], {valor: 4, passo: 0.1, casas: 1})
+```
+
+```{ojs}
+//| echo: false
+md`u(x₀, y₀) = ${u0CD.toFixed(3).replace(".", ",")}; gradiente = (${gradCD[0].toFixed(3).replace(".", ",")}; ${gradCD[1].toFixed(3).replace(".", ",")}); TMS = ${(gradCD[0] / gradCD[1]).toFixed(3).replace(".", ",")}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 520, grid: true, aspectRatio: 1,
+  x: {domain: [0, 10], label: "x"}, y: {domain: [0, 10], label: "y"},
+  marks: [
+    Plot.line(nivelCD.flatMap(n => n.pontos), {x: "x", y: "y", z: "nivel", stroke: "#9AA5B1", clip: true}),
+    Plot.line(nivelPonto, {x: "x", y: "y", stroke: "#2F5D8A", strokeWidth: 2.5, clip: true}),
+    Plot.line([0, 10].map(x => ({x, y: y0CD - (gradCD[0] / gradCD[1]) * (x - x0CD)})), {x: "x", y: "y", stroke: "#B7791F", clip: true}),
+    Plot.arrow([{x1: x0CD, y1: y0CD, x2: x0CD + escalaG * gradCD[0], y2: y0CD + escalaG * gradCD[1]}], {x1: "x1", y1: "y1", x2: "x2", y2: "y2", stroke: "#8C2F39", strokeWidth: 2}),
+    Plot.dot([{x: x0CD, y: y0CD}], {x: "x", y: "y", r: 5, fill: "#8C2F39"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+uCD = (x, y) => Math.pow(x, aCD) * Math.pow(y, 1 - aCD)
+u0CD = uCD(x0CD, y0CD)
+gradCD = [aCD * u0CD / x0CD, (1 - aCD) * u0CD / y0CD]
+escalaG = 1.5 / Math.hypot(gradCD[0], gradCD[1])
+curva = c => d3.range(0.05, 10.001, 0.05).map(x => ({x, y: Math.pow(c / Math.pow(x, aCD), 1 / (1 - aCD))}))
+nivelCD = [1, 2, 3, 4, 5, 6, 7, 8].map(c => ({nivel: c, pontos: curva(c).map(p => ({...p, nivel: c}))}))
+nivelPonto = curva(u0CD)
+```
+:::
+
+**Derivadas direcionais.** Escolha uma função e uma direção $\vb u = (\cos\theta, \sin\theta)$ a partir da origem. O gráfico mostra $t \mapsto f(t\vb u)$ perto de $t = 0$; a derivada direcional é a sua inclinação em zero. Para $x^2 + 3xy$, ela vale $\nabla f(\vb 0)\T\vb u = 0$ em toda direção; para o contraexemplo do @exm-mat-g06-contraexemplos (b), ela existe em toda direção, mas a função salta para $1/2$ ao longo da parábola $y = x^2$.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof funcDir = seletor("função", funcoesDir.map(f => f.nome), {valor: funcoesDir[0].nome})
+viewof thetaDir = controle("ângulo θ da direção (graus)", [0, 180], {valor: 30, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Direção u = (${uDir[0].toFixed(3).replace(".", ",")}; ${uDir[1].toFixed(3).replace(".", ",")}). Derivada direcional na origem: **${fDir.dir(uDir).toFixed(3).replace(".", ",")}**.${fDir.nota ? " " + fDir.nota : ""}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "t", domain: [-1, 1]}, y: {label: "f(t·u)", domain: [-1, 1]},
+  marks: [
+    Plot.ruleX([0]), Plot.ruleY([0]),
+    Plot.line(d3.range(-1, 1.0001, 0.002).filter(t => Math.abs(t) > 1e-9).map(t => ({t, v: fDir.f(t * uDir[0], t * uDir[1])})), {x: "t", y: "v", stroke: "#2F5D8A", strokeWidth: 2, clip: true}),
+    Plot.line([-1, 1].map(t => ({t, v: fDir.dir(uDir) * t})), {x: "t", y: "v", stroke: "#8C2F39", strokeDasharray: "5,3", clip: true})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+uDir = [Math.cos(thetaDir * Math.PI / 180), Math.sin(thetaDir * Math.PI / 180)]
+funcoesDir = [
+  {nome: "f(x, y) = x² + 3xy", f: (x, y) => x * x + 3 * x * y, dir: u => 0},
+  {nome: "f(x, y) = x + 2y (linear)", f: (x, y) => x + 2 * y, dir: u => u[0] + 2 * u[1]},
+  {nome: "f(x, y) = x²y/(x⁴ + y²) — contraexemplo (b)", f: (x, y) => (x * x * y) / (x ** 4 + y * y),
+   dir: u => Math.abs(u[1]) < 1e-12 ? 0 : u[0] * u[0] / u[1],
+   nota: "O valor u₁²/u₂ não é linear em u: não existe matriz Df(0) que o produza."}
+]
+fDir = funcoesDir.find(f => f.nome === funcDir)
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — curvas de indiferença com gradiente e derivadas direcionais — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-mat-g06-laboratorio}
+
+### Gradiente e hessiana numéricos
+
+Diferenças centrais aproximam derivadas parciais com erro da ordem de $h^2$ (@sec-mat-g03-laboratorio). Conferimos com as fórmulas exatas para $f(x, y) = x^{0{,}3} y^{0{,}7}$.
+
+```{python}
+import numpy as np
+
+def gradiente(f, x, h=1e-6):
+    x = np.asarray(x, float)
+    g = np.zeros_like(x)
+    for i in range(len(x)):
+        e = np.zeros_like(x); e[i] = h
+        g[i] = (f(x + e) - f(x - e)) / (2 * h)
+    return g
+
+def hessiana(f, x, h=1e-4):
+    x = np.asarray(x, float)
+    n = len(x); H = np.zeros((n, n))
+    for i in range(n):
+        for j in range(n):
+            ei = np.zeros(n); ej = np.zeros(n); ei[i] = h; ej[j] = h
+            H[i, j] = (f(x + ei + ej) - f(x + ei - ej) - f(x - ei + ej) + f(x - ei - ej)) / (4 * h * h)
+    return H
+
+f = lambda v: v[0] ** 0.3 * v[1] ** 0.7
+x0 = np.array([2.0, 5.0])
+u0 = f(x0)
+grad_exato = np.array([0.3 * u0 / x0[0], 0.7 * u0 / x0[1]])
+print("gradiente numerico:", gradiente(f, x0), " exato:", grad_exato)
+print("hessiana numerica:\n", np.round(hessiana(f, x0), 6))
+print("Euler (grau 1): x . grad f =", x0 @ grad_exato, " f(x) =", u0)
+```
+
+A hessiana numérica sai simétrica, como garante o teorema de Schwarz, e o teorema de Euler confere: $x\,f_x + y\,f_y = f$.
+
+### Quando Schwarz falha
+
+Para a função do @exm-mat-g06-schwarz-falha, as derivadas mistas na origem, calculadas por diferenças finitas encaixadas, dão valores opostos.
+
+```{python}
+def f_sch(x, y):
+    return 0.0 if x == 0 and y == 0 else x * y * (x * x - y * y) / (x * x + y * y)
+
+def fx(x, y, h=1e-7):
+    return (f_sch(x + h, y) - f_sch(x - h, y)) / (2 * h)
+
+def fy(x, y, h=1e-7):
+    return (f_sch(x, y + h) - f_sch(x, y - h)) / (2 * h)
+
+k = 1e-4
+print("f_xy(0,0) ~", (fx(0, k) - fx(0, -k)) / (2 * k))
+print("f_yx(0,0) ~", (fy(k, 0) - fy(-k, 0)) / (2 * k))
+```
+
+### O erro da aproximação de Taylor
+
+Pela @eq-mat-g06-taylor, o erro da aproximação quadrática cai mais rápido que $\norm{\vb h}^2$. Para $f$ de classe $C^3$, ele é da ordem de $\norm{\vb h}^3$: dividir $\vb h$ por 2 divide o erro por cerca de 8.
+
+```{python}
+H0 = np.array([[0.3 * (0.3 - 1) * u0 / x0[0]**2, 0.3 * 0.7 * u0 / (x0[0] * x0[1])],
+               [0.3 * 0.7 * u0 / (x0[0] * x0[1]), 0.7 * (0.7 - 1) * u0 / x0[1]**2]])
+direcao = np.array([1.0, -1.0]) / np.sqrt(2)
+anterior = None
+for passo in [1.0, 0.5, 0.25, 0.125, 0.0625]:
+    h = passo * direcao
+    aprox = u0 + grad_exato @ h + 0.5 * h @ H0 @ h
+    erro = abs(f(x0 + h) - aprox)
+    razao = "" if anterior is None else f"   razao = {anterior / erro:.2f}"
+    print(f"||h|| = {passo:<7} erro = {erro:.3e}{razao}")
+    anterior = erro
+```
+
+### Fubini e a integral gaussiana em duas dimensões
+
+```{python}
+from scipy import integrate
+
+g = lambda y, x: x * np.exp(x * y)                  # integrando, argumentos (y, x) para dblquad
+v1, _ = integrate.dblquad(g, 0, 1, 0, 1)            # x externo, y interno
+v2, _ = integrate.dblquad(lambda x, y: x * np.exp(x * y), 0, 1, 0, 1)   # y externo, x interno
+print(f"ordem dy dx: {v1:.10f}; ordem dx dy: {v2:.10f}; e - 2 = {np.e - 2:.10f}")
+
+v, _ = integrate.dblquad(lambda y, x: np.exp(-(x * x + y * y)), -np.inf, np.inf, -np.inf, np.inf)
+print(f"integral de exp(-(x^2+y^2)) no plano: {v:.10f}   pi = {np.pi:.10f}")
+```
+
+## Exercícios resolvidos {#sec-mat-g06-exercicios}
+
+::: {#exr-mat-g06-continuidade}
+Mostre que $f(x, y) = \dfrac{x^2 y^2}{x^2 + y^2}$, com $f(0, 0) = 0$, é contínua na origem.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Como $x^2 \leq x^2 + y^2$, temos $0 \leq f(x, y) \leq y^2 \leq \norm{(x, y)}^2$. Dado $\varepsilon > 0$, basta $\delta = \sqrt\varepsilon$: se $\norm{(x, y)} < \delta$, então $\abs{f(x, y)} < \varepsilon$. Compare com o @exm-mat-g06-contraexemplos (a): o grau do numerador (4) supera o do denominador (2), e o quociente vai a zero junto com a norma.
+:::
+
+::: {#exr-mat-g06-polares}
+Calcule a derivada de $T(r, \theta) = (r\cos\theta, r\sin\theta)$ e seu determinante.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+As parciais são contínuas, logo $T$ é diferenciável (@thm-mat-g06-c1), com $DT(r, \theta) = \begin{pmatrix} \cos\theta & -r\sin\theta \\ \sin\theta & r\cos\theta \end{pmatrix}$ e $\det DT = r\cos^2\theta + r\sin^2\theta = r$. Um retângulo pequeno de lados $\Delta r$ e $\Delta\theta$ é levado numa região de área aproximadamente $r\,\Delta r\,\Delta\theta$ — mais longe da origem, o mesmo $\Delta\theta$ abrange um arco maior.
+:::
+
+::: {#exr-mat-g06-ces}
+Mostre que a função CES $F(K, L) = \big(\alpha K^\rho + (1 - \alpha)L^\rho\big)^{1/\rho}$, com $\rho \neq 0$ e $\alpha \in (0, 1)$, tem retornos constantes de escala, e verifique o teorema de Euler diretamente.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$F(tK, tL) = \big(t^\rho(\alpha K^\rho + (1 - \alpha)L^\rho)\big)^{1/\rho} = t\,F(K, L)$ para $t > 0$. Pela regra da cadeia, $F_K = \frac1\rho (\cdot)^{1/\rho - 1}\,\alpha\rho K^{\rho - 1} = \alpha K^{\rho-1} F^{1 - \rho}$ e, analogamente, $F_L = (1 - \alpha) L^{\rho - 1} F^{1-\rho}$. Então $K F_K + L F_L = F^{1 - \rho}\big(\alpha K^\rho + (1 - \alpha)L^\rho\big) = F^{1-\rho}F^\rho = F$.
+:::
+
+::: {#exr-mat-g06-tms}
+Para $u(x, y) = x^a y^{1-a}$, calcule a TMS e mostre que ela depende apenas de $y/x$. Interprete.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$u_x = a u/x$ e $u_y = (1 - a)u/y$, logo $\mathrm{TMS} = \frac{u_x}{u_y} = \frac{a}{1 - a}\frac{y}{x}$. Ela depende só da razão $y/x$: ao longo de um raio pela origem, todas as curvas de indiferença têm a mesma inclinação — as preferências são **homotéticas**, porque $u$ é homogênea e suas parciais são homogêneas de grau zero (@thm-mat-g06-euler). Consequência econômica: dobrar a renda, com preços fixos, dobra o consumo de cada bem.
+:::
+
+::: {#exr-mat-g06-taylor}
+Escreva a aproximação de Taylor de segunda ordem de $f(x, y) = \log x + \log y$ em torno de $(1, 1)$ e use-a para aproximar $f(1{,}1;\ 0{,}9)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$f(1, 1) = 0$, $\nabla f = (1/x, 1/y) = (1, 1)$ e $\vb H f = \diag(-1/x^2, -1/y^2) = \diag(-1, -1)$ em $(1, 1)$. Com $\vb h = (h_1, h_2)$: $f \approx h_1 + h_2 - \frac12(h_1^2 + h_2^2)$. Para $\vb h = (0{,}1;\ -0{,}1)$, a aproximação dá $0 - 0{,}01 = -0{,}01$; o valor exato é $\log 0{,}99 \approx -0{,}01005$. O termo de primeira ordem se anula — as variações se compensam —, e é o termo quadrático, que mede a curvatura, que capta a perda.
+:::
+
+::: {#exr-mat-g06-modulo}
+Mostre que $f(x, y) = \abs{x} + \abs{y}$ é contínua, mas não tem derivadas parciais na origem.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+É soma de funções contínuas. Mas $\frac{f(t, 0) - f(0, 0)}{t} = \frac{\abs t}{t}$ vale $1$ para $t > 0$ e $-1$ para $t < 0$, sem limite: não existe $\partial f/\partial x(0, 0)$, nem, por simetria, $\partial f/\partial y(0, 0)$. Funções desse tipo — como custos com componentes "em módulo" ou utilidades com aversão a perdas — exigem as ferramentas de análise não diferenciável do @sec-mat-m09.
+:::
+
+::: {#exr-mat-g06-ordem}
+Calcule $\iint_{[0,1]^2} x\,e^{xy}\,\dd x\,\dd y$, escolhendo a ordem de integração mais conveniente.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Integrando primeiro em $y$: $\int_0^1 x e^{xy}\,\dd y = [e^{xy}]_{y=0}^{y=1} = e^x - 1$, e $\int_0^1 (e^x - 1)\,\dd x = e - 2$. Na outra ordem, $\int_0^1 x e^{xy}\,\dd x$ exige integração por partes e produz uma expressão em $y$ mais difícil de integrar. O teorema de Fubini garante que as duas ordens dão o mesmo resultado, e o laboratório confirma numericamente.
+:::
+
+::: {#exr-mat-g06-carteira}
+A variância de uma carteira com pesos $\vb w$ é $V(\vb w) = \vb w\T \vb\Sigma \vb w$, com $\vb\Sigma$ simétrica. Mostre que $\nabla V(\vb w) = 2\vb\Sigma\vb w$ e que $\vb H V = 2\vb \Sigma$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$V(\vb w) = \sum_{i,j} \sigma_{ij} w_i w_j$. Derivando em relação a $w_k$, os termos que contêm $w_k$ são os com $i = k$ ou $j = k$: $\pd{V}{w_k} = \sum_j \sigma_{kj} w_j + \sum_i \sigma_{ik} w_i = 2\sum_j \sigma_{kj} w_j$, pela simetria. Logo $\nabla V = 2\vb\Sigma\vb w$, e, derivando de novo, $\frac{\partial^2 V}{\partial w_k \partial w_l} = 2\sigma_{kl}$. A contribuição marginal do ativo $k$ ao risco da carteira é proporcional à sua covariância com a carteira, $(\vb\Sigma\vb w)_k$ — não à sua variância isolada.
+:::
+
+## Flashcards {#sec-mat-g06-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## O que significa $f: \R^n \to \R^m$ ser diferenciável em $\vb a$?
+Existe uma matriz $Df(\vb a)$ com $f(\vb a + \vb h) = f(\vb a) + Df(\vb a)\vb h + \vb r(\vb h)$, $\norm{\vb r(\vb h)}/\norm{\vb h} \to 0$. Ela é a jacobiana das parciais.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Ter todas as derivadas parciais (ou direcionais) garante diferenciabilidade?
+Não; nem continuidade. $xy/(x^2 + y^2)$ tem parciais na origem e é descontínua; $x^2y/(x^4 + y^2)$ tem todas as direcionais e é descontínua.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual condição sobre as parciais garante diferenciabilidade?
+Que existam perto do ponto e sejam contínuas nele. Toda função $C^1$ é diferenciável.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a regra da cadeia em várias variáveis?
+$D(f \circ g)(\vb a) = Df(g(\vb a))\,Dg(\vb a)$: a derivada da composição é o produto das jacobianas. Para uma curva, $\frac{\dd}{\dd t} f(\vb x(t)) = \nabla f\T \vb x'(t)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a fórmula da contabilidade do crescimento?
+Com $Y = AK^\alpha L^{1-\alpha}$: $g_Y = g_A + \alpha g_K + (1 - \alpha) g_L$; o resíduo $g_A$ é a produtividade total dos fatores.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O valor médio vale com igualdade para funções vetoriais?
+Não ($f(t) = (t^2, t^3)$ é contraexemplo), mas vale a desigualdade $\norm{f(\vb b) - f(\vb a)} \leq M\norm{\vb b - \vb a}$, com $M$ uma cota para a derivada no segmento.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Que propriedades geométricas tem o gradiente?
+Aponta na direção de maior crescimento, com taxa $\norm{\nabla f}$, e é perpendicular aos conjuntos de nível.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a inclinação de uma curva de indiferença?
+$-u_x/u_y = -\mathrm{TMS}$: a razão das utilidades marginais.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema de Schwarz, e quando ele falha?
+Se $f$ é $C^2$, as derivadas mistas coincidem e a hessiana é simétrica. Falha se as mistas não são contínuas, como em $xy(x^2 - y^2)/(x^2 + y^2)$ na origem.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a fórmula de Taylor de segunda ordem em várias variáveis?
+$f(\vb a + \vb h) = f(\vb a) + \nabla f(\vb a)\T\vb h + \frac12\vb h\T\vb Hf(\vb c)\vb h$, com $\vb c$ no segmento; o erro da aproximação com $\vb Hf(\vb a)$ é $o(\norm{\vb h}^2)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema de Euler?
+$f$ é homogênea de grau $k$ se, e somente se, $\sum_i x_i f_{x_i} = kf$. Com retornos constantes, $F = F_K K + F_L L$: pagar os produtos marginais esgota o produto.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## As parciais de uma função homogênea de grau $k$ são homogêneas de que grau?
+$k - 1$. Por isso produtos marginais e TMS de funções homogêneas de grau 1 dependem só das razões entre as variáveis.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que garante o teorema de Fubini para funções contínuas num retângulo?
+Que as duas integrais iteradas existem e coincidem — a ordem de integração pode ser escolhida pela conveniência.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o fator da mudança para coordenadas polares?
+$\abs{\det DT} = r$: $\dd x\,\dd y = r\,\dd r\,\dd\theta$.
+:::
+
+## Ficha-resumo {#sec-mat-g06-ficha}
+
+::: {.ficha-resumo}
+**Limites em $\R^n$.** Com $\norm{\cdot}$ no lugar de $\abs{\cdot}$; convergência $\iff$ coordenada a coordenada; testes por sequências; caminhos diferentes com limites diferentes $\Rightarrow$ sem limite. $\norm{\vb A\vb h} \leq \norm{\vb A}_F\norm{\vb h}$.
+
+**Derivada.** $f(\vb a + \vb h) = f(\vb a) + Df(\vb a)\vb h + o(\norm{\vb h})$; $Df(\vb a)$ = jacobiana; diferenciável $\Rightarrow$ contínua e $D_{\vb u}f = Df\,\vb u$. Recíproca falsa (galeria). $C^1 \Rightarrow$ diferenciável.
+
+**Cadeia.** $D(f \circ g) = Df(g)\,Dg$; $\frac{\dd}{\dd t}f(\vb x(t)) = \nabla f\T\vb x'$. Crescimento: $g_Y = g_A + \alpha g_K + (1-\alpha)g_L$.
+
+**Valor médio.** Escalar: $f(\vb b) - f(\vb a) = \nabla f(\vb c)\T(\vb b - \vb a)$. Vetorial: só desigualdade. $Df = 0$ em convexo $\Rightarrow$ constante.
+
+**Gradiente.** Direção de maior subida; $\perp$ conjuntos de nível; inclinação da curva de indiferença $-u_x/u_y$.
+
+**Segunda ordem.** Schwarz: $C^2 \Rightarrow f_{x_ix_j} = f_{x_jx_i}$. Taylor: $f(\vb a + \vb h) = f(\vb a) + \nabla f\T\vb h + \frac12\vb h\T\vb Hf(\vb c)\vb h$.
+
+**Euler.** Homogênea de grau $k \iff \nabla f(\vb x)\T\vb x = kf(\vb x)$; parciais homogêneas de grau $k - 1$; retornos constantes: $F = F_KK + F_LL$.
+
+**Integrais duplas.** Contínua no retângulo: Fubini. Regiões entre gráficos: integrais iteradas. Mudança de variáveis com $\abs{\det DT}$; polares: $r\,\dd r\,\dd\theta$; $\iint e^{-(x^2+y^2)} = \pi$.
+:::
+
+## Notas bibliográficas {#sec-mat-g06-notas}
+
+@simon1994 e @sydsaeter2016 apresentam o cálculo em várias variáveis com ênfase nas aplicações econômicas — utilidade e produtividade marginais, homogeneidade, contabilidade do crescimento — e muitos exercícios. O capítulo 9 de @rudin1976 trata a diferenciabilidade em $\R^n$ com todo o rigor, incluindo a derivada como aplicação linear, o teorema das parciais contínuas e o teorema de Schwarz; é a leitura recomendada para quem quer ir além. A integração em $\R^n$, com a justificativa da mudança de variáveis, é feita com a teoria da medida (@sec-est-m01).

@@ -98,7 +98,7 @@ partes:
         titulo: "Cálculo em várias variáveis"
         nivel: G
         prereq: [MAT-G03, MAT-G05]
-        leituras: [simon1994, sydsaeter2016]
+        leituras: [simon1994, sydsaeter2016, rudin1976]
         topicos: ["Funções de $\\mathbb{R}^n$ em $\\mathbb{R}^m$", "A derivada como aplicação linear", "Derivadas parciais e direcionais", "Galeria de contraexemplos", "Funções de classe $C^1$", "Regra da cadeia", "Desigualdade do valor médio", "Gradiente e conjuntos de nível", "Teorema de Schwarz e matriz hessiana", "Fórmula de Taylor em várias variáveis", "Funções homogêneas e teorema de Euler", "Integrais múltiplas"]
         status: rascunho
       - id: MAT-G07
