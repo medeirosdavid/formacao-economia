@@ -72,7 +72,7 @@ partes:
         prereq: [MAT-G01]
         leituras: [lima1989, rudin1976]
         status: rascunho
-        topicos: ["Axioma do supremo, propriedade arquimediana e densidade", "Sequências e limites", "Sequências monótonas", "Subsequências, Bolzano–Weierstrass, limite superior e inferior", "Sequências de Cauchy e contrações", "Séries e critérios de convergência", "Expansões decimais", "Valor presente e somas descontadas"]
+        topicos: ["Axioma do supremo, propriedade arquimediana e densidade", "Sequências e limites", "Sequências monótonas e intervalos encaixados", "Subsequências, Bolzano–Weierstrass, limite superior e inferior", "Sequências de Cauchy e contrações", "Séries e critérios de convergência", "Expansões decimais", "Valor presente e somas descontadas"]
       - id: MAT-G03
         titulo: "Funções de uma variável: limites, continuidade e derivadas"
         nivel: G
@@ -97,7 +97,7 @@ partes:
         nivel: G
         prereq: [MAT-G03, MAT-G05]
         leituras: [simon1994, sydsaeter2016]
-        topicos: ["Funções de $\\mathbb{R}^n$ em $\\mathbb{R}$", "Derivadas parciais, gradiente e diferencial", "Regra da cadeia", "Matriz hessiana", "Funções homogêneas e teorema de Euler", "Integrais múltiplas"]
+        topicos: ["Funções de $\\mathbb{R}^n$ em $\\mathbb{R}$", "Derivadas parciais, gradiente e diferencial", "Regra da cadeia", "Matriz hessiana", "Fórmula de Taylor em várias variáveis", "Funções homogêneas e teorema de Euler", "Integrais múltiplas"]
       - id: MAT-G07
         titulo: "Otimização: sem restrições e com restrições de igualdade"
         nivel: G
@@ -115,7 +115,13 @@ partes:
         nivel: M
         prereq: [MAT-G02, MAT-G06]
         leituras: [ok2007, rudin1976, delafuente2000]
-        topicos: ["Espaços métricos e normados", "Abertos, fechados e compactos", "Completude", "Continuidade e continuidade uniforme", "Teorema de Weierstrass em espaços métricos", "Conexidade"]
+        topicos: ["Produto interno, normas e Cauchy–Schwarz em $\\mathbb{R}^n$", "Espaços métricos e normados", "Abertos, fechados e compactos", "Celas encaixadas, Bolzano–Weierstrass e Heine–Borel em $\\mathbb{R}^n$", "Completude", "Continuidade e continuidade uniforme", "Teorema de Weierstrass em espaços métricos", "Conexidade"]
+      - id: MAT-M07
+        titulo: "Sequências de funções: convergência uniforme e equicontinuidade"
+        nivel: M
+        prereq: [MAT-M01, MAT-G04]
+        leituras: [rudin1976, ok2007, stokey1989]
+        topicos: ["Convergência pontual e uniforme", "Continuidade, integração e derivação no limite", "Séries de funções e o teste M de Weierstrass", "O espaço das funções contínuas limitadas com a norma do supremo e sua completude", "Equicontinuidade e o teorema de Arzelà–Ascoli", "Aplicação: o operador de Bellman como contração em funções limitadas"]
       - id: MAT-M02
         titulo: "Álgebra linear II: autovalores, decomposições e formas quadráticas"
         nivel: M
@@ -133,7 +139,7 @@ partes:
         nivel: M
         prereq: [MAT-M03]
         leituras: [sundaram1996, simon1994]
-        topicos: ["Teorema da função implícita", "Teorema do envelope", "Correspondências e continuidade", "Teorema do máximo de Berge", "Estática comparativa monótona"]
+        topicos: ["Teorema da função inversa", "Teorema da função implícita", "Teorema do envelope", "Correspondências e continuidade", "Teorema do máximo de Berge", "Estática comparativa monótona"]
       - id: MAT-M05
         titulo: "Correspondências e teoremas de ponto fixo"
         nivel: M
@@ -155,7 +161,7 @@ partes:
       - id: MAT-D02
         titulo: "Programação dinâmica determinística"
         nivel: D
-        prereq: [MAT-M04, MAT-M05]
+        prereq: [MAT-M04, MAT-M05, MAT-M07]
         leituras: [stokey1989, ljungqvist2018]
         topicos: ["Problema sequencial e equação de Bellman", "Princípio da otimalidade", "Operador de Bellman e contração", "Condições de Blackwell", "Propriedades da função valor", "Teorema do envelope de Benveniste–Scheinkman"]
       - id: MAT-D03
@@ -167,7 +173,7 @@ partes:
       - id: MAT-D04
         titulo: "Espaços de funções e operadores"
         nivel: D
-        prereq: [MAT-M01, MAT-M02]
+        prereq: [MAT-M01, MAT-M02, MAT-M07]
         leituras: [ok2007, stokey1989]
         topicos: ["Espaços de Banach e de Hilbert", "Operadores lineares", "O espaço $L^2$ e projeções", "Teorema de representação de Riesz", "Aplicações a econometria e dinâmica"]
 

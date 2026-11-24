@@ -10,14 +10,14 @@ Legenda de status: ○ planejado · ◔ rascunho · ◑ em revisão · ● compl
 
 | Parte | Capítulos | G | M | D | Escritos | Completos |
 |:--|--:|--:|--:|--:|--:|--:|
-| Matemática | 18 | 8 | 6 | 4 | 3 | 0 |
+| Matemática | 19 | 8 | 7 | 4 | 3 | 0 |
 | Probabilidade e Estatística | 16 | 6 | 6 | 4 | 0 | 0 |
 | Computação | 11 | 3 | 4 | 4 | 0 | 0 |
 | Microfundamentos | 12 | 5 | 6 | 1 | 0 | 0 |
 | Econometria | 30 | 9 | 11 | 10 | 1 | 0 |
 | Macroeconomia | 33 | 10 | 13 | 10 | 0 | 0 |
 | Finanças | 24 | 8 | 9 | 7 | 0 | 0 |
-| **Total** | **144** | 49 | 55 | 40 | 4 | 0 |
+| **Total** | **145** | 49 | 56 | 40 | 4 | 0 |
 
 ## Trilhas de leitura
 
@@ -118,15 +118,16 @@ Ferramentas de análise, álgebra linear, otimização e dinâmica usadas no res
 | MAT-G07 | G | [Otimização: sem restrições e com restrições de igualdade](partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) | MAT-G06 | ○ planejado |
 | MAT-G08 | G | [Equações em diferenças e equações diferenciais lineares](partes/01-matematica/mat-g08-equacoes-em-diferencas-e-equacoes-diferenciais-lineares.qmd) | MAT-G04, MAT-G05 | ○ planejado |
 | MAT-M01 | M | [Análise real em $\mathbb{R}^n$ e espaços métricos](partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) | MAT-G02, MAT-G06 | ○ planejado |
+| MAT-M07 | M | [Sequências de funções: convergência uniforme e equicontinuidade](partes/01-matematica/mat-m07-sequencias-de-funcoes-convergencia-uniforme-e.qmd) | MAT-M01, MAT-G04 | ○ planejado |
 | MAT-M02 | M | [Álgebra linear II: autovalores, decomposições e formas quadráticas](partes/01-matematica/mat-m02-algebra-linear-ii-autovalores-decomposicoes-e-formas.qmd) | MAT-G05 | ○ planejado |
 | MAT-M03 | M | [Convexidade e otimização com restrições de desigualdade](partes/01-matematica/mat-m03-convexidade-e-otimizacao-com-restricoes-de-desigualdade.qmd) | MAT-G07, MAT-M01 | ○ planejado |
 | MAT-M04 | M | [Estática comparativa: função implícita, envelope e teorema do máximo](partes/01-matematica/mat-m04-estatica-comparativa-funcao-implicita-envelope-e-teorema-do.qmd) | MAT-M03 | ○ planejado |
 | MAT-M05 | M | [Correspondências e teoremas de ponto fixo](partes/01-matematica/mat-m05-correspondencias-e-teoremas-de-ponto-fixo.qmd) | MAT-M01, MAT-M04 | ○ planejado |
 | MAT-M06 | M | [Sistemas dinâmicos: estabilidade, linearização e diagramas de fase](partes/01-matematica/mat-m06-sistemas-dinamicos-estabilidade-linearizacao-e-diagramas-de.qmd) | MAT-G08, MAT-M02 | ○ planejado |
 | MAT-D01 | D | [Cálculo das variações e controle ótimo](partes/01-matematica/mat-d01-calculo-das-variacoes-e-controle-otimo.qmd) | MAT-M03, MAT-M06 | ○ planejado |
-| MAT-D02 | D | [Programação dinâmica determinística](partes/01-matematica/mat-d02-programacao-dinamica-deterministica.qmd) | MAT-M04, MAT-M05 | ○ planejado |
+| MAT-D02 | D | [Programação dinâmica determinística](partes/01-matematica/mat-d02-programacao-dinamica-deterministica.qmd) | MAT-M04, MAT-M05, MAT-M07 | ○ planejado |
 | MAT-D03 | D | [Programação dinâmica estocástica](partes/01-matematica/mat-d03-programacao-dinamica-estocastica.qmd) | MAT-D02, EST-D01 | ○ planejado |
-| MAT-D04 | D | [Espaços de funções e operadores](partes/01-matematica/mat-d04-espacos-de-funcoes-e-operadores.qmd) | MAT-M01, MAT-M02 | ○ planejado |
+| MAT-D04 | D | [Espaços de funções e operadores](partes/01-matematica/mat-d04-espacos-de-funcoes-e-operadores.qmd) | MAT-M01, MAT-M02, MAT-M07 | ○ planejado |
 
 ### Parte 2 — Probabilidade e Estatística
 

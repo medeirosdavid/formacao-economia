@@ -162,7 +162,7 @@ Note que desigualdades estritas não passam ao limite: $1/n > 0$ para todo $n$, 
 Para (a), dado $\varepsilon > 0$, a propriedade arquimediana dá $N$ com $1/N < \varepsilon$, e $1/n \leq 1/N$ para $n \geq N$. Para (b), o caso $r = 0$ é trivial; se $0 < \abs{r} < 1$, escreva $1/\abs{r} = 1 + h$ com $h > 0$. Pela desigualdade de Bernoulli (@prp-mat-g01-bernoulli), $(1 + h)^n \geq 1 + nh > nh$, logo $0 \leq \abs{r^n} < 1/(nh)$, que tende a zero por (a); o sanduíche dá $\abs{r^n} \to 0$, e portanto $r^n \to 0$. Para (c), com $r = 1 + h$, Bernoulli dá $r^n \geq 1 + nh$, e $1 + nh$ supera qualquer $M$ pela propriedade arquimediana.
 :::
 
-## Sequências monótonas {#sec-mat-g02-monotonas}
+## Sequências monótonas e intervalos encaixados {#sec-mat-g02-monotonas}
 
 Uma sequência é **não decrescente** se $x_n \leq x_{n+1}$ para todo $n$, **crescente** se $x_n < x_{n+1}$, e analogamente **não crescente** e **decrescente**; é **monótona** se é de um desses tipos.
 
@@ -176,6 +176,21 @@ Seja $(x_n)$ não decrescente e limitada superiormente, e $s \defeq \sup_n x_n$,
 :::
 
 Esse é o teorema que mais usa o axioma do supremo: ele produz um limite sem que precisemos adivinhá-lo.
+
+::: {#thm-mat-g02-encaixados}
+## Intervalos encaixados
+Seja $I_n = [a_n, b_n]$, $n \in \N$, uma sequência de intervalos fechados e limitados **encaixados**: $I_1 \supseteq I_2 \supseteq I_3 \supseteq \cdots$. Então $\bigcap_{n} I_n = [a, b]$, com $a \defeq \sup_n a_n$ e $b \defeq \inf_n b_n$; em particular, a interseção é não vazia. Se, além disso, $b_n - a_n \to 0$, a interseção tem um único ponto.
+:::
+
+::: {.proof}
+O encaixe significa $a_n \leq a_{n+1} \leq b_{n+1} \leq b_n$: $(a_n)$ é não decrescente e $(b_n)$, não crescente. Além disso, $a_n \leq b_m$ para todos $n, m$: se $n \leq m$, $a_n \leq a_m \leq b_m$; se $n > m$, $a_n \leq b_n \leq b_m$. Assim, cada $b_m$ é cota superior de $\{a_n\}$, e $a = \sup_n a_n$ existe e satisfaz $a \leq b_m$ para todo $m$; logo $a$ é cota inferior de $\{b_m\}$, e $a \leq b = \inf_m b_m$.
+
+Se $x \in [a, b]$, então $a_n \leq a \leq x \leq b \leq b_n$ para todo $n$, e $x \in \bigcap_n I_n$. Reciprocamente, se $a_n \leq x \leq b_n$ para todo $n$, então $x$ é cota superior de $\{a_n\}$ e cota inferior de $\{b_n\}$, logo $a \leq x \leq b$. Portanto $\bigcap_n I_n = [a, b] \neq \emptyset$.
+
+Por fim, pelo @thm-mat-g02-monotona, $a_n \to a$ e $b_n \to b$; se $b_n - a_n \to 0$, então $b - a = \lim (b_n - a_n) = 0$ (@thm-mat-g02-operacoes), e $\bigcap_n I_n = \{a\}$.
+:::
+
+As hipóteses importam: os intervalos $(0, 1/n]$ são encaixados e limitados, mas não fechados, e sua interseção é vazia; os intervalos $[n, \infty)$ são fechados e encaixados, mas não limitados, e também têm interseção vazia. Em $\Q$, o teorema falha mesmo para intervalos fechados e limitados: as aproximações decimais por falta e por excesso de $\sqrt 2$ definem intervalos encaixados de racionais cuja interseção, em $\Q$, é vazia. A **bisseção** do laboratório (@sec-mat-g02-laboratorio) é uma aplicação direta: ela produz intervalos encaixados de comprimento $2^{-n}$, cujo único ponto comum é o número procurado. A versão em $\R^n$, com "celas" (produtos de intervalos) no lugar de intervalos, está no @sec-mat-m01.
 
 ::: {#prp-mat-g02-e}
 ## O número $e$
@@ -830,6 +845,11 @@ Toda sequência limitada de números reais tem uma subsequência convergente.
 :::
 
 ::: {.callout-note .flashcard collapse="true"}
+## O que garante o teorema dos intervalos encaixados, e quais hipóteses são essenciais?
+Uma sequência de intervalos fechados, limitados e encaixados tem interseção não vazia, igual a $[\sup a_n, \inf b_n]$; se os comprimentos tendem a zero, a interseção é um ponto. Sem "fechados" ($(0, 1/n]$) ou sem "limitados" ($[n, \infty)$), a interseção pode ser vazia.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
 ## O que é uma sequência de Cauchy, e por que ela importa?
 Uma sequência cujos termos ficam arbitrariamente próximos entre si a partir de algum índice. Em $\R$ (espaço completo), toda sequência de Cauchy converge, o que permite provar convergência sem conhecer o limite.
 :::
@@ -876,7 +896,7 @@ Só quando uma termina em noves repetidos e a outra em zeros, como $0{,}4999\ldo
 
 **Sequências.** $x_n \to L \iff \forall \varepsilon\ \exists N\ \forall n \geq N: \abs{x_n - L} < \varepsilon$. Limite único; convergente $\Rightarrow$ limitada; limites preservam somas, produtos, quocientes e $\leq$ (não $<$); sanduíche. $1/n \to 0$; $r^n \to 0$ se $\abs{r} < 1$.
 
-**Monótonas.** Monótona e limitada $\Rightarrow$ converge (para sup/inf). $(1 + 1/n)^n \uparrow e$. Recursão $x_{t+1} = a x_t + b$: $x_t - x^* = a^t (x_0 - x^*)$.
+**Monótonas.** Monótona e limitada $\Rightarrow$ converge (para sup/inf). Intervalos fechados, limitados e encaixados têm interseção $[\sup a_n, \inf b_n] \neq \emptyset$. $(1 + 1/n)^n \uparrow e$. Recursão $x_{t+1} = a x_t + b$: $x_t - x^* = a^t (x_0 - x^*)$.
 
 **Subsequências.** Herdam o limite. Toda sequência tem subsequência monótona; **Bolzano–Weierstrass**: limitada $\Rightarrow$ subsequência convergente. Converge $\iff \liminf = \limsup$.
 

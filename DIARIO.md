@@ -2,6 +2,19 @@
 
 Registro curto de cada sessão: o que foi feito, decisões e pendências. Entradas mais recentes no topo.
 
+## 24/11/2026 — Currículo confrontado com um sumário de Análise
+
+**Feito**
+
+- David enviou o sumário de um curso de Análise (pré-requisitos, $\R$ e $\R^n$, sequências, continuidade, diferenciação, sequências de funções) para conferir a cobertura do currículo: 19 de 26 itens já cobertos, 4 parciais, 3 ausentes.
+- Novo capítulo **MAT-M07** *Sequências de funções: convergência uniforme e equicontinuidade* (planejado), entre MAT-M01 e MAT-M05; passa a ser pré-requisito de MAT-D02 (o operador de Bellman precisa da completude das funções limitadas com a norma do supremo) e de MAT-D04.
+- Tópicos acrescentados: MAT-M01 (produto interno, normas e Cauchy–Schwarz; celas encaixadas, Bolzano–Weierstrass e Heine–Borel em $\R^n$), MAT-G06 (Taylor em várias variáveis), MAT-M04 (teorema da função inversa).
+- MAT-G02: teorema dos intervalos encaixados, com demonstração, contraexemplos, flashcard e linha na ficha-resumo.
+
+**Pendências**
+
+- [ ] Saber de que livro ou notas é o sumário, para incluí-lo nas leituras.
+
 ## 22/11/2026 — MAT-G02 e MAT-G03
 
 **Feito**

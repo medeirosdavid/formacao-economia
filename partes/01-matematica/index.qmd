@@ -16,6 +16,7 @@ Ferramentas de análise, álgebra linear, otimização e dinâmica usadas no res
 | MAT-G07 | G | [Otimização: sem restrições e com restrições de igualdade](mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) | ○ planejado |
 | MAT-G08 | G | [Equações em diferenças e equações diferenciais lineares](mat-g08-equacoes-em-diferencas-e-equacoes-diferenciais-lineares.qmd) | ○ planejado |
 | MAT-M01 | M | [Análise real em $\mathbb{R}^n$ e espaços métricos](mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) | ○ planejado |
+| MAT-M07 | M | [Sequências de funções: convergência uniforme e equicontinuidade](mat-m07-sequencias-de-funcoes-convergencia-uniforme-e.qmd) | ○ planejado |
 | MAT-M02 | M | [Álgebra linear II: autovalores, decomposições e formas quadráticas](mat-m02-algebra-linear-ii-autovalores-decomposicoes-e-formas.qmd) | ○ planejado |
 | MAT-M03 | M | [Convexidade e otimização com restrições de desigualdade](mat-m03-convexidade-e-otimizacao-com-restricoes-de-desigualdade.qmd) | ○ planejado |
 | MAT-M04 | M | [Estática comparativa: função implícita, envelope e teorema do máximo](mat-m04-estatica-comparativa-funcao-implicita-envelope-e-teorema-do.qmd) | ○ planejado |

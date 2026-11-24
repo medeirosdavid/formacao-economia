@@ -5,11 +5,11 @@
 [Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `MAT-D02`
 
 ::: {.content-visible when-format="html"}
-**Pré-requisitos:** @sec-mat-m04 (*Estática comparativa: função implícita, envelope e teorema do máximo*); @sec-mat-m05 (*Correspondências e teoremas de ponto fixo*)
+**Pré-requisitos:** @sec-mat-m04 (*Estática comparativa: função implícita, envelope e teorema do máximo*); @sec-mat-m05 (*Correspondências e teoremas de ponto fixo*); @sec-mat-m07 (*Sequências de funções: convergência uniforme e equicontinuidade*)
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Estática comparativa: função implícita, envelope e teorema do máximo* (MAT-M04); *Correspondências e teoremas de ponto fixo* (MAT-M05)
+**Pré-requisitos:** *Estática comparativa: função implícita, envelope e teorema do máximo* (MAT-M04); *Correspondências e teoremas de ponto fixo* (MAT-M05); *Sequências de funções: convergência uniforme e equicontinuidade* (MAT-M07)
 :::
 
 **Leituras principais:** @stokey1989, @ljungqvist2018
