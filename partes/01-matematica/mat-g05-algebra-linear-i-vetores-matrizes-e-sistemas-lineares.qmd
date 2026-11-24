@@ -2,7 +2,7 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAT-G05`
+[Graduação]{.nivel .nivel-G} · [rascunho]{.status} · `MAT-G05`
 
 **Pré-requisitos:** @sec-mat-g01 (*Lógica, conjuntos e métodos de demonstração*)
 
@@ -13,8 +13,8 @@
 ::: {.callout-note title="Capítulo em construção"}
 Roteiro planejado:
 
-1. Vetores e o espaço $\mathbb{R}^n$
-2. Operações com matrizes
+1. Vetores, produto interno e norma em $\mathbb{R}^n$
+2. Matrizes e transformações lineares
 3. Eliminação gaussiana e posto
 4. Determinante e inversa
 5. Independência linear, base e dimensão

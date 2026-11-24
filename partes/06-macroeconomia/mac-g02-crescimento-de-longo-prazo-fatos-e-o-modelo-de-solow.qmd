@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Contas nacionais e medidas macroeconômicas* (MAC-G01); *Equações em diferenças e equações diferenciais lineares* (MAT-G08)
+**Pré-requisitos:** *Contas nacionais e medidas macroeconômicas* (MAC-G01); @sec-mat-g08 (*Equações em diferenças e equações diferenciais lineares*)
 :::
 
 **Leituras principais:** @blanchard2021, @mankiw2019, @barro2004

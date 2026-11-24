@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Espaços normados e com produto interno* (MAT-M10); *Integração e aplicações* (MAT-G04)
+**Pré-requisitos:** *Espaços normados e com produto interno* (MAT-M10); @sec-mat-g04 (*Integração e aplicações*)
 :::
 
 **Leituras principais:** @rudin1976, @ok2007, @stokey1989

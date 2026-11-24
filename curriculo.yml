@@ -84,32 +84,37 @@ partes:
         titulo: "Integração e aplicações"
         nivel: G
         prereq: [MAT-G03]
-        leituras: [simon1994, sydsaeter2016]
-        topicos: ["Integral de Riemann", "Teorema fundamental do cálculo", "Logaritmo e exponencial", "Técnicas de integração", "Integrais impróprias", "Regra de Leibniz", "Aplicações: excedentes, valor presente contínuo"]
+        leituras: [lima1989, simon1994, sydsaeter2016]
+        topicos: ["Integral de Riemann", "Teorema fundamental do cálculo", "Logaritmo e exponencial", "Técnicas de integração", "Integrais impróprias", "Regra de Leibniz", "Aplicações: excedentes, valor presente contínuo, curva de Lorenz e índice de Gini"]
+        status: rascunho
       - id: MAT-G05
         titulo: "Álgebra linear I: vetores, matrizes e sistemas lineares"
         nivel: G
         prereq: [MAT-G01]
         leituras: [strang2016, simon1994]
-        topicos: ["Vetores e o espaço $\\mathbb{R}^n$", "Operações com matrizes", "Eliminação gaussiana e posto", "Determinante e inversa", "Independência linear, base e dimensão", "Aplicação: modelo insumo-produto"]
+        topicos: ["Vetores, produto interno e norma em $\\mathbb{R}^n$", "Matrizes e transformações lineares", "Eliminação gaussiana e posto", "Determinante e inversa", "Independência linear, base e dimensão", "Aplicação: modelo insumo-produto"]
+        status: rascunho
       - id: MAT-G06
         titulo: "Cálculo em várias variáveis"
         nivel: G
         prereq: [MAT-G03, MAT-G05]
         leituras: [simon1994, sydsaeter2016]
         topicos: ["Funções de $\\mathbb{R}^n$ em $\\mathbb{R}^m$", "A derivada como aplicação linear", "Derivadas parciais e direcionais", "Galeria de contraexemplos", "Funções de classe $C^1$", "Regra da cadeia", "Desigualdade do valor médio", "Gradiente e conjuntos de nível", "Teorema de Schwarz e matriz hessiana", "Fórmula de Taylor em várias variáveis", "Funções homogêneas e teorema de Euler", "Integrais múltiplas"]
+        status: rascunho
       - id: MAT-G07
         titulo: "Otimização: sem restrições e com restrições de igualdade"
         nivel: G
         prereq: [MAT-G06]
         leituras: [simon1994, sundaram1996]
         topicos: ["Condições de primeira e segunda ordem", "Concavidade e ótimos globais", "Método de Lagrange", "Qualificação de restrições", "Interpretação dos multiplicadores", "Hessiana orlada", "Aplicações: consumidor e firma"]
+        status: rascunho
       - id: MAT-G08
         titulo: "Equações em diferenças e equações diferenciais lineares"
         nivel: G
         prereq: [MAT-G04, MAT-G05]
         leituras: [simon1994, sydsaeter2016]
-        topicos: ["Equações em diferenças de 1ª e 2ª ordem", "Equações diferenciais de 1ª e 2ª ordem", "Estado estacionário e estabilidade", "Sistemas lineares", "Aplicações: teia de aranha, Solow"]
+        topicos: ["Equações em diferenças de 1ª e 2ª ordem", "Números complexos e raízes características", "Equações diferenciais de 1ª e 2ª ordem", "Estado estacionário e estabilidade", "Sistemas lineares e linearização", "Aplicações: teia de aranha, Solow, persistência da inflação"]
+        status: rascunho
       - id: MAT-M01
         titulo: "Análise real em $\\mathbb{R}^n$ e espaços métricos"
         nivel: M

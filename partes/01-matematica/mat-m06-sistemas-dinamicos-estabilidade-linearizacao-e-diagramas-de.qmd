@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Equações em diferenças e equações diferenciais lineares* (MAT-G08); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02)
+**Pré-requisitos:** @sec-mat-g08 (*Equações em diferenças e equações diferenciais lineares*); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02)
 :::
 
 **Leituras principais:** @delafuente2000, @acemoglu2009

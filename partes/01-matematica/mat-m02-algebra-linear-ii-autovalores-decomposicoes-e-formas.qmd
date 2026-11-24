@@ -4,13 +4,7 @@
 ::: {.cabecalho-capitulo}
 [Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M02`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-mat-g05 (*Álgebra linear I: vetores, matrizes e sistemas lineares*)
-:::
-
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Álgebra linear I: vetores, matrizes e sistemas lineares* (MAT-G05)
-:::
 
 **Leituras principais:** @strang2016, @delafuente2000
 :::

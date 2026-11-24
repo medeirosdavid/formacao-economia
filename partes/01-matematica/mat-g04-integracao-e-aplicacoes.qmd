@@ -2,22 +2,754 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MAT-G04`
+[Graduação]{.nivel .nivel-G} · [rascunho]{.status} · `MAT-G04`
 
 **Pré-requisitos:** @sec-mat-g03 (*Funções de uma variável: limites, continuidade e derivadas*)
 
-**Leituras principais:** @simon1994, @sydsaeter2016
+**Leituras principais:** @lima1989, @simon1994, @sydsaeter2016
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-mat-g04-motivacao}
 
-1. Integral de Riemann
-2. Teorema fundamental do cálculo
-3. Logaritmo e exponencial
-4. Técnicas de integração
-5. Integrais impróprias
-6. Regra de Leibniz
-7. Aplicações: excedentes, valor presente contínuo
+A derivada mede taxas; a integral **acumula**. Sempre que uma grandeza econômica é a soma de muitas contribuições pequenas, aparece uma integral:
+
+- o **excedente do consumidor** soma, sobre todas as unidades compradas, a diferença entre o que cada unidade vale para o comprador e o que ele paga;
+- o **valor presente** de um fluxo contínuo de pagamentos soma pagamentos instantâneos descontados, $\int_0^T c(t)\,e^{-rt}\,\dd t$;
+- em probabilidade, uma **densidade** atribui probabilidade a intervalos por meio de áreas, e a **esperança** é uma integral;
+- a **desigualdade** de uma distribuição de renda é medida pela área entre a curva de Lorenz e a diagonal — o índice de Gini.
+
+O teorema fundamental do cálculo mostra que acumular e derivar são operações inversas, e é isso que torna as integrais calculáveis. Ele também permite cumprir uma promessa do @sec-mat-g03: construir o **logaritmo** como uma área e, a partir dele, a **exponencial**, demonstrando as propriedades que a @prp-mat-g03-exp admitiu. Este capítulo desenvolve:
+
+1. a integral de Riemann, pelas somas de Darboux, e a integrabilidade de funções monótonas e contínuas;
+2. as propriedades da integral e o teorema fundamental do cálculo;
+3. o logaritmo e a exponencial;
+4. as técnicas de substituição e de integração por partes, e as integrais impróprias, com o teste da integral para séries;
+5. a regra de Leibniz de derivação sob o sinal de integral, com o cálculo da integral gaussiana;
+6. aplicações: excedentes e peso morto de um imposto, valor presente contínuo, e curva de Lorenz e índice de Gini.
+
+## A integral de Riemann {#sec-mat-g04-riemann}
+
+Ao longo do capítulo, $f: [a, b] \to \R$ é uma função **limitada**, $a < b$.
+
+::: {#def-mat-g04-darboux}
+## Partições e somas de Darboux
+Uma **partição** de $[a, b]$ é um conjunto finito $P = \{x_0, x_1, \dots, x_n\}$ com $a = x_0 < x_1 < \dots < x_n = b$; escrevemos $\Delta x_i \defeq x_i - x_{i-1}$. Com $m_i \defeq \inf\{f(x) : x \in [x_{i-1}, x_i]\}$ e $M_i \defeq \sup\{f(x) : x \in [x_{i-1}, x_i]\}$, as **somas inferior e superior** de $f$ relativas a $P$ são
+$$
+L(f, P) \defeq \sum_{i=1}^n m_i\, \Delta x_i, \qquad U(f, P) \defeq \sum_{i=1}^n M_i\, \Delta x_i .
+$$
+Uma partição $Q$ **refina** $P$ se $P \subseteq Q$.
 :::
+
+Se $f \geq 0$, $L(f, P)$ é a área de retângulos inscritos sob o gráfico, e $U(f, P)$, a de retângulos que o cobrem. Refinar a partição só pode melhorar as duas aproximações.
+
+::: {#lem-mat-g04-refinamento}
+## Refinamentos
+Se $Q$ refina $P$, então $L(f, P) \leq L(f, Q) \leq U(f, Q) \leq U(f, P)$. Para quaisquer partições $P$ e $Q$, $L(f, P) \leq U(f, Q)$.
+:::
+
+::: {.proof}
+Basta tratar o acréscimo de um único ponto $y \in (x_{i-1}, x_i)$; o caso geral segue por indução no número de pontos acrescentados. Os ínfimos de $f$ em $[x_{i-1}, y]$ e em $[y, x_i]$ são ambos $\geq m_i$, pois são ínfimos sobre conjuntos menores; logo a contribuição do intervalo à soma inferior passa de $m_i \Delta x_i$ a um valor $\geq m_i (y - x_{i-1}) + m_i (x_i - y) = m_i \Delta x_i$, e $L$ não diminui. O argumento para $U$ é simétrico, e $L(f, Q) \leq U(f, Q)$ porque $m_i \leq M_i$ em cada intervalo. Para partições quaisquer, $P \cup Q$ refina ambas, e $L(f, P) \leq L(f, P \cup Q) \leq U(f, P \cup Q) \leq U(f, Q)$.
+:::
+
+::: {#def-mat-g04-integral}
+## Integral de Riemann
+As **integrais inferior e superior** de $f$ são $\underline{\int_a^b} f \defeq \sup_P L(f, P)$ e $\overline{\int_a^b} f \defeq \inf_P U(f, P)$, que existem porque as somas estão entre $m(b - a)$ e $M(b - a)$, com $m \leq f \leq M$. Pelo @lem-mat-g04-refinamento, $\underline{\int_a^b} f \leq \overline{\int_a^b} f$. Se elas coincidem, $f$ é **integrável** e o valor comum é a **integral** $\int_a^b f = \int_a^b f(x)\,\dd x$.
+:::
+
+::: {#thm-mat-g04-criterio}
+## Critério de integrabilidade
+$f$ é integrável em $[a, b]$ se, e somente se, para todo $\varepsilon > 0$ existe uma partição $P$ com $U(f, P) - L(f, P) < \varepsilon$.
+:::
+
+::: {.proof}
+Se a condição vale, então $0 \leq \overline{\int} f - \underline{\int} f \leq U(f, P) - L(f, P) < \varepsilon$ para todo $\varepsilon > 0$, e as integrais coincidem. Reciprocamente, se $f$ é integrável com integral $I$, pela @prp-mat-g02-caracterizacao-sup existem partições $P_1$ e $P_2$ com $L(f, P_1) > I - \varepsilon/2$ e $U(f, P_2) < I + \varepsilon/2$; para $P = P_1 \cup P_2$, o @lem-mat-g04-refinamento dá $U(f, P) - L(f, P) \leq U(f, P_2) - L(f, P_1) < \varepsilon$.
+:::
+
+Se $\xi_i \in [x_{i-1}, x_i]$, a **soma de Riemann** $S(f, P, \xi) \defeq \sum_i f(\xi_i)\,\Delta x_i$ fica entre $L(f, P)$ e $U(f, P)$. Assim, se $f$ é integrável e $U(f, P) - L(f, P) < \varepsilon$, toda soma de Riemann relativa a $P$ dista menos de $\varepsilon$ da integral: é por isso que somas de retângulos — o que o computador calcula — aproximam integrais.
+
+::: {#thm-mat-g04-monotonas}
+## Funções monótonas são integráveis
+Toda função monótona $f: [a, b] \to \R$ é integrável.
+:::
+
+::: {.proof}
+Suponha $f$ não decrescente e tome a partição uniforme $P_n$ com $\Delta x_i = (b - a)/n$. Em cada intervalo, $m_i = f(x_{i-1})$ e $M_i = f(x_i)$; logo
+$$
+U(f, P_n) - L(f, P_n) = \frac{b - a}{n} \sum_{i=1}^n \big(f(x_i) - f(x_{i-1})\big) = \frac{(b - a)\big(f(b) - f(a)\big)}{n},
+$$
+que é menor que qualquer $\varepsilon > 0$ para $n$ grande. O caso não crescente é análogo.
+:::
+
+Para funções contínuas precisamos de uma forma mais forte de continuidade.
+
+::: {#lem-mat-g04-uniforme}
+## Continuidade uniforme em intervalos fechados
+Se $f$ é contínua em $[a, b]$, então para todo $\varepsilon > 0$ existe $\delta > 0$ tal que $\abs{f(x) - f(y)} < \varepsilon$ para todos $x, y \in [a, b]$ com $\abs{x - y} < \delta$.
+:::
+
+::: {.proof}
+Se não, existiriam $\varepsilon > 0$ e, para cada $n$, pontos $x_n, y_n \in [a, b]$ com $\abs{x_n - y_n} < 1/n$ e $\abs{f(x_n) - f(y_n)} \geq \varepsilon$. Por Bolzano–Weierstrass (@thm-mat-g02-bolzano), uma subsequência $x_{n_k}$ converge para algum $c \in [a, b]$, e então $y_{n_k} \to c$ também. Pela continuidade em $c$, $f(x_{n_k}) - f(y_{n_k}) \to f(c) - f(c) = 0$, o que contradiz $\abs{f(x_{n_k}) - f(y_{n_k})} \geq \varepsilon$.
+:::
+
+A diferença em relação à continuidade comum é que $\delta$ não depende do ponto: serve para o intervalo inteiro. Sem intervalo fechado e limitado, isso falha — $f(x) = 1/x$ é contínua em $(0, 1]$, mas não uniformemente.
+
+::: {#thm-mat-g04-continuas}
+## Funções contínuas são integráveis
+Toda função contínua $f: [a, b] \to \R$ é integrável.
+:::
+
+::: {.proof}
+Dado $\varepsilon > 0$, seja $\delta$ como no @lem-mat-g04-uniforme para $\varepsilon/(b - a)$, e seja $P$ uma partição com todos os $\Delta x_i < \delta$. Pelo teorema de Weierstrass, $f$ atinge $M_i$ e $m_i$ em pontos de $[x_{i-1}, x_i]$, que distam menos de $\delta$; logo $M_i - m_i < \varepsilon/(b - a)$ e $U(f, P) - L(f, P) < \varepsilon$.
+:::
+
+Nem toda função limitada é integrável. Para $f(x) = 1$ se $x \in \Q$ e $0$ caso contrário (@exm-mat-g03-dirichlet), todo intervalo da partição contém racionais e irracionais, de modo que $m_i = 0$ e $M_i = 1$: $L(f, P) = 0$ e $U(f, P) = b - a$ para toda $P$. A integral de Lebesgue, que integra essa função (com integral zero), é o tema do @sec-est-m01.
+
+## Propriedades da integral {#sec-mat-g04-propriedades}
+
+Convencionamos $\int_b^a f \defeq -\int_a^b f$ e $\int_a^a f \defeq 0$.
+
+::: {#prp-mat-g04-propriedades}
+## Propriedades da integral
+Sejam $f, g$ integráveis em $[a, b]$ e $c \in \R$.
+
+(a) **Linearidade:** $f + g$ e $cf$ são integráveis, com $\int (f + g) = \int f + \int g$ e $\int cf = c \int f$.
+(b) **Monotonicidade:** se $f \leq g$, então $\int f \leq \int g$.
+(c) **Aditividade:** se $a < d < b$, então $f$ é integrável em $[a, d]$ e em $[d, b]$, e $\int_a^b f = \int_a^d f + \int_d^b f$.
+(d) $\abs{f}$ é integrável e $\abs{\int_a^b f} \leq \int_a^b \abs{f}$.
+:::
+
+::: {.proof}
+Para (a), em cada intervalo, $\inf(f + g) \geq \inf f + \inf g$ e $\sup(f + g) \leq \sup f + \sup g$; logo
+$$
+L(f, P) + L(g, P) \leq L(f + g, P) \leq U(f + g, P) \leq U(f, P) + U(g, P).
+$$
+Dado $\varepsilon > 0$, tome $P$ (um refinamento comum) com $U - L < \varepsilon/2$ para $f$ e para $g$. Então $U(f+g, P) - L(f+g, P) < \varepsilon$, e $f + g$ é integrável; além disso, $\int(f + g)$ e $\int f + \int g$ estão ambos entre $L(f, P) + L(g, P)$ e $U(f, P) + U(g, P)$, que distam menos de $\varepsilon$, e portanto coincidem. Para $c \geq 0$, $L(cf, P) = c\,L(f, P)$ e $U(cf, P) = c\,U(f, P)$; para $c < 0$, os papéis se trocam: $L(cf, P) = c\,U(f, P)$ e $U(cf, P) = c\,L(f, P)$. Em ambos os casos o resultado segue.
+
+Para (b), $g - f \geq 0$ é integrável por (a) e $L(g - f, P) \geq 0$; logo $\int (g - f) \geq 0$, e a linearidade conclui.
+
+Para (c), dado $\varepsilon > 0$, seja $P$ com $U(f, P) - L(f, P) < \varepsilon$ e $P' = P \cup \{d\}$. Os pontos de $P'$ em $[a, d]$ e em $[d, b]$ formam partições $P_1$ e $P_2$ desses intervalos, e $U(f, P') - L(f, P') = [U(f, P_1) - L(f, P_1)] + [U(f, P_2) - L(f, P_2)] < \varepsilon$, de modo que cada colchete é $< \varepsilon$ e $f$ é integrável nos dois intervalos. Os números $\int_a^b f$ e $\int_a^d f + \int_d^b f$ estão ambos entre $L(f, P_1) + L(f, P_2) = L(f, P')$ e $U(f, P')$, que distam menos de $\varepsilon$; logo são iguais. Com as convenções acima, a igualdade $\int_a^b = \int_a^d + \int_d^b$ vale para quaisquer $a, b, d$ num intervalo em que $f$ seja integrável.
+
+Para (d), em cada intervalo e para quaisquer $x, y$ nele, $\abs{f(x)} - \abs{f(y)} \leq \abs{f(x) - f(y)} \leq M_i - m_i$. Tomando o supremo em $x$ e o ínfimo em $y$, a oscilação de $\abs{f}$ no intervalo é no máximo $M_i - m_i$; logo $U(\abs{f}, P) - L(\abs{f}, P) \leq U(f, P) - L(f, P)$, e $\abs{f}$ é integrável. Como $-\abs{f} \leq f \leq \abs{f}$, (b) dá $-\int \abs{f} \leq \int f \leq \int \abs{f}$.
+:::
+
+::: {#thm-mat-g04-valor-medio}
+## Valor médio para integrais
+Se $f$ é contínua em $[a, b]$, existe $c \in [a, b]$ com $\int_a^b f = f(c)\,(b - a)$.
+:::
+
+::: {.proof}
+Pelo teorema de Weierstrass, $f$ atinge um mínimo $m$ e um máximo $M$ em $[a, b]$. Pela monotonicidade, $m(b - a) \leq \int_a^b f \leq M(b - a)$, de modo que $\mu \defeq \frac{1}{b - a}\int_a^b f \in [m, M]$. Pelo teorema do valor intermediário, aplicado entre os pontos de mínimo e de máximo, $f$ assume o valor $\mu$ em algum $c$.
+:::
+
+O número $\mu$ é a **média** de $f$ em $[a, b]$ — a versão contínua de $\frac1n \sum_i f(x_i)$.
+
+## O teorema fundamental do cálculo {#sec-mat-g04-tfc}
+
+::: {#thm-mat-g04-tfc1}
+## Teorema fundamental do cálculo, primeira forma
+Seja $f$ integrável em $[a, b]$ e $F(x) \defeq \int_a^x f(t)\,\dd t$. Então $\abs{F(x) - F(y)} \leq K\abs{x - y}$, com $K = \sup \abs{f}$, e $F$ é contínua. Se $f$ é contínua em $x_0 \in [a, b]$, então $F$ é diferenciável em $x_0$ (lateralmente, nas extremidades) e $F'(x_0) = f(x_0)$.
+:::
+
+::: {.proof}
+Pela aditividade e pela @prp-mat-g04-propriedades (d), $\abs{F(x) - F(y)} = \big\lvert \int_y^x f \big\rvert \leq K \abs{x - y}$. Para a derivada, para $h \neq 0$ com $x_0 + h \in [a, b]$,
+$$
+\frac{F(x_0 + h) - F(x_0)}{h} - f(x_0) = \frac{1}{h} \int_{x_0}^{x_0 + h} \big(f(t) - f(x_0)\big)\,\dd t .
+$$
+Dado $\varepsilon > 0$, a continuidade em $x_0$ dá $\delta$ com $\abs{f(t) - f(x_0)} < \varepsilon$ para $\abs{t - x_0} < \delta$. Para $0 < \abs{h} < \delta$, a integral à direita tem valor absoluto $\leq \varepsilon \abs{h}$, e o quociente fica a menos de $\varepsilon$ de zero.
+:::
+
+::: {#thm-mat-g04-tfc2}
+## Teorema fundamental do cálculo, segunda forma
+Seja $F$ contínua em $[a, b]$ e diferenciável em $(a, b)$, com $F' = f$ integrável em $[a, b]$. Então
+$$
+\int_a^b f(x)\,\dd x = F(b) - F(a) .
+$$
+:::
+
+::: {.proof}
+Seja $P$ uma partição qualquer. Pelo teorema do valor médio, $F(x_i) - F(x_{i-1}) = f(c_i)\,\Delta x_i$ para algum $c_i \in (x_{i-1}, x_i)$, e, somando, $F(b) - F(a) = \sum_i f(c_i)\,\Delta x_i$, uma soma de Riemann. Logo $L(f, P) \leq F(b) - F(a) \leq U(f, P)$ para toda partição, e, tomando supremo e ínfimo, $F(b) - F(a)$ está entre a integral inferior e a superior, que são iguais a $\int_a^b f$.
+:::
+
+A primeira forma garante que toda função contínua tem uma **primitiva** — uma $F$ com $F' = f$ —, a saber $x \mapsto \int_a^x f$; a segunda diz que qualquer primitiva serve para calcular a integral. Primitivas de uma mesma função num intervalo diferem por constantes (@cor-mat-g03-monotonia), e escrevemos $\int f(x)\,\dd x = F(x) + C$ e $[F]_a^b \defeq F(b) - F(a)$.
+
+## Logaritmo e exponencial {#sec-mat-g04-log-exp}
+
+Agora podemos demonstrar o que a @prp-mat-g03-exp admitiu.
+
+::: {#def-mat-g04-log}
+## Logaritmo natural
+Para $x > 0$, $\log x \defeq \displaystyle\int_1^x \frac{\dd t}{t}$.
+:::
+
+::: {#thm-mat-g04-log}
+## Propriedades do logaritmo
+(a) $\log$ é diferenciável em $(0, \infty)$, com $\log'(x) = 1/x$; é estritamente crescente e $\log 1 = 0$.
+(b) $\log(xy) = \log x + \log y$ para $x, y > 0$.
+(c) $\log$ é uma bijeção de $(0, \infty)$ sobre $\R$.
+:::
+
+::: {.proof}
+Para (a), $1/t$ é contínua em $(0, \infty)$, e o @thm-mat-g04-tfc1 dá $\log'(x) = 1/x > 0$; o crescimento estrito segue do @cor-mat-g03-monotonia, e $\log 1 = \int_1^1 = 0$.
+
+Para (b), fixe $y > 0$ e seja $h(x) \defeq \log(xy) - \log x$. Pela regra da cadeia, $h'(x) = y \cdot \frac{1}{xy} - \frac1x = 0$, de modo que $h$ é constante, igual a $h(1) = \log y$.
+
+Para (c), a injetividade vem de (a). Por (b) e indução, $\log 2^n = n \log 2$ e $\log 2^{-n} = -n \log 2$, com $\log 2 > 0$; pela propriedade arquimediana, $\log$ assume valores arbitrariamente grandes e arbitrariamente negativos. Sendo contínua num intervalo, sua imagem é um intervalo (@thm-mat-g03-tvi), e um intervalo ilimitado nos dois sentidos é $\R$.
+:::
+
+::: {#def-mat-g04-exp}
+## Exponencial
+A **exponencial** $\exp: \R \to (0, \infty)$ é a inversa do logaritmo. O número $e \defeq \exp(1)$ é o único real positivo com $\log e = 1$, e, para $a > 0$ e $b \in \R$, $a^b \defeq \exp(b \log a)$.
+:::
+
+A definição de potência é coerente com a usual: por (b) e indução, $\log(a^n) = n \log a$ para $n \in \N$, de modo que $\exp(n \log a) = a^n$.
+
+::: {#cor-mat-g04-exp}
+## Propriedades da exponencial
+$\exp$ é bijetiva, estritamente crescente, diferenciável, com $\exp' = \exp$, $\exp(0) = 1$ e $\exp(x + y) = \exp(x)\exp(y)$. Em particular, a @prp-mat-g03-exp está demonstrada.
+:::
+
+::: {.proof}
+Como inversa de uma função contínua e estritamente crescente num intervalo, $\exp$ é contínua e estritamente crescente (@prp-mat-g03-inversa-continua). Pelo @thm-mat-g03-inversa, $\exp'(x) = 1/\log'(\exp x) = \exp x$. De $\log 1 = 0$ vem $\exp 0 = 1$. Por fim, com $u = \exp x$ e $v = \exp y$, (b) dá $\log(uv) = x + y$, isto é, $uv = \exp(x + y)$.
+:::
+
+O @exm-mat-g03-capitalizacao usou apenas $\log'(1) = 1$ para mostrar que $\exp(1) = \lim(1 + 1/n)^n$; assim, o $e$ definido aqui é o mesmo da @prp-mat-g02-e. As funções trigonométricas, que aparecerão em algumas aplicações, serão admitidas, com suas derivadas usuais; sua construção rigorosa, por séries de potências ou por integrais, está em @lima1989.
+
+## Técnicas de integração {#sec-mat-g04-tecnicas}
+
+::: {#thm-mat-g04-substituicao}
+## Mudança de variável
+Seja $\varphi: [a, b] \to \R$ com derivada contínua, e $f$ contínua num intervalo $I \supseteq \varphi([a, b])$. Então
+$$
+\int_a^b f\big(\varphi(t)\big)\,\varphi'(t)\,\dd t = \int_{\varphi(a)}^{\varphi(b)} f(x)\,\dd x .
+$$
+:::
+
+::: {.proof}
+Seja $F$ uma primitiva de $f$ em $I$ (@thm-mat-g04-tfc1). Pela regra da cadeia, $(F \circ \varphi)' = f(\varphi)\,\varphi'$, que é contínua. Pelo @thm-mat-g04-tfc2, os dois lados valem $F(\varphi(b)) - F(\varphi(a))$.
+:::
+
+::: {#thm-mat-g04-partes}
+## Integração por partes
+Se $u$ e $v$ têm derivadas contínuas em $[a, b]$, então $\displaystyle\int_a^b u\,v' = \big[uv\big]_a^b - \int_a^b u'\,v$.
+:::
+
+::: {.proof}
+$(uv)' = u'v + uv'$ é contínua; pelo @thm-mat-g04-tfc2, $\int_a^b (u'v + uv') = [uv]_a^b$, e a linearidade conclui.
+:::
+
+::: {#exm-mat-g04-tecnicas}
+## Integrais que aparecerão adiante
+(a) Para $r \neq 0$, $\int_0^T e^{-rt}\,\dd t = \big[-e^{-rt}/r\big]_0^T = (1 - e^{-rT})/r$.
+(b) Por partes, com $u = t$ e $v' = e^{-rt}$: $\int_0^T t\,e^{-rt}\,\dd t = -\frac{T e^{-rT}}{r} + \frac{1 - e^{-rT}}{r^2}$.
+(c) Por partes, com $u = \log t$ e $v' = 1$: $\int_1^x \log t\,\dd t = x \log x - x + 1$.
+(d) Pela substituição $x = 1 + t^2$: $\int_0^s \frac{2t}{1 + t^2}\,\dd t = \int_1^{1 + s^2} \frac{\dd x}{x} = \log(1 + s^2)$.
+:::
+
+## Integrais impróprias {#sec-mat-g04-improprias}
+
+::: {#def-mat-g04-impropria}
+## Integral imprópria
+Seja $f$ integrável em $[a, c]$ para todo $c > a$. A integral $\int_a^\infty f$ **converge** se o limite $\lim_{c \to \infty} \int_a^c f$ existe (em $\R$), e esse limite é o seu valor. Analogamente, se $f$ é integrável em $[c, b]$ para todo $c \in (a, b]$, mas possivelmente ilimitada perto de $a$, define-se $\int_a^b f \defeq \lim_{c \to a^+} \int_c^b f$.
+:::
+
+::: {#exm-mat-g04-improprias}
+## Exemplos básicos
+(a) Para $p \neq 1$, $\int_1^c x^{-p}\,\dd x = \frac{c^{1-p} - 1}{1 - p}$, que converge quando $c \to \infty$ se, e somente se, $p > 1$, com limite $\frac{1}{p - 1}$; para $p = 1$, $\int_1^c \frac{\dd x}{x} = \log c \to \infty$.
+(b) Do mesmo modo, $\int_0^1 x^{-p}\,\dd x$ converge se, e somente se, $p < 1$.
+(c) Para $r > 0$, $\int_0^\infty e^{-rt}\,\dd t = \lim_{T \to \infty} (1 - e^{-rT})/r = 1/r$.
+:::
+
+::: {#prp-mat-g04-comparacao}
+## Comparação
+Sejam $0 \leq f \leq g$ em $[a, \infty)$, integráveis em cada $[a, c]$. Se $\int_a^\infty g$ converge, então $\int_a^\infty f$ converge.
+:::
+
+::: {.proof}
+$\Phi(c) \defeq \int_a^c f$ é não decrescente em $c$ (pois $f \geq 0$) e limitada por $S \defeq \int_a^\infty g$. Seja $s = \sup_c \Phi(c)$. Dado $\varepsilon > 0$, há $c_0$ com $\Phi(c_0) > s - \varepsilon$, e, para $c \geq c_0$, $s - \varepsilon < \Phi(c) \leq s$; logo $\Phi(c) \to s$.
+:::
+
+::: {#thm-mat-g04-teste-integral}
+## Teste da integral
+Seja $f: [1, \infty) \to [0, \infty)$ não crescente. Então $\sum_{n \geq 1} f(n)$ e $\int_1^\infty f$ convergem ou divergem juntas, e, para todo $N \geq 2$,
+$$
+\sum_{n=2}^N f(n) \leq \int_1^N f(x)\,\dd x \leq \sum_{n=1}^{N-1} f(n) .
+$$
+:::
+
+::: {.proof}
+$f$ é integrável em cada intervalo limitado (@thm-mat-g04-monotonas). Em $[k, k+1]$, $f(k+1) \leq f(x) \leq f(k)$, e a monotonicidade da integral dá $f(k+1) \leq \int_k^{k+1} f \leq f(k)$; somando de $k = 1$ a $N - 1$, obtém-se a desigualdade. As somas parciais e as integrais $\int_1^N f$ são não decrescentes; pela desigualdade, umas são limitadas se, e somente se, as outras são, e o @thm-mat-g02-monotona, junto com o argumento da @prp-mat-g04-comparacao, conclui.
+:::
+
+Com $f(x) = x^{-p}$, o teste reencontra o critério das séries $\sum 1/n^p$ (@prp-mat-g02-p-serie). Com $f(x) = 1/x$, ele mostra que $a_n \defeq \sum_{k=1}^n \frac1k - \log n$ converge, como o laboratório do @sec-mat-g02 sugeriu: pela desigualdade, $\sum_{k \leq n} \frac1k \geq \int_1^{n+1} \frac{\dd x}{x} > \log n$, logo $a_n > 0$; e $a_n - a_{n+1} = \int_n^{n+1} \big(\frac1x - \frac{1}{n+1}\big)\dd x \geq 0$. Uma sequência não crescente e limitada inferiormente converge; seu limite é a **constante de Euler–Mascheroni**, $\gamma \approx 0{,}5772$.
+
+::: {#exm-mat-g04-gama}
+## A função gama nos inteiros
+Para $n \in \N_0$, $\int_0^\infty t^n e^{-t}\,\dd t = n!$. A integral converge porque $t^n e^{-t/2} \to 0$ quando $t \to \infty$ (seu logaritmo é $t\,(n \log t / t - 1/2) \to -\infty$, pelo @exm-mat-g03-lhopital), de modo que $t^n e^{-t} \leq C e^{-t/2}$ para alguma constante $C$, e a @prp-mat-g04-comparacao se aplica. Para $n = 0$, a integral vale 1 (@exm-mat-g04-improprias). Por partes, $\int_0^T t^n e^{-t}\,\dd t = -T^n e^{-T} + n \int_0^T t^{n-1} e^{-t}\,\dd t$, e, fazendo $T \to \infty$, a integral com $n$ é $n$ vezes a integral com $n - 1$; por indução, vale $n!$. A **função gama**, $\Gamma(x) \defeq \int_0^\infty t^{x-1} e^{-t}\,\dd t$, estende o fatorial aos reais positivos e aparece em várias distribuições de probabilidade (@sec-est-g02).
+:::
+
+## A regra de Leibniz {#sec-mat-g04-leibniz}
+
+Muitas grandezas econômicas são integrais que dependem de um parâmetro — o valor presente depende da taxa de juros, uma esperança depende dos parâmetros da distribuição. Para derivá-las, precisamos derivar **sob o sinal de integral**. Uma função $f$ de duas variáveis, definida no retângulo $[\alpha, \beta] \times [a, b]$, é **contínua** em $(t, x)$ se $f(t_n, x_n) \to f(t, x)$ sempre que $t_n \to t$ e $x_n \to x$; e $\partial f/\partial t\,(t, x)$ denota a derivada de $s \mapsto f(s, x)$ em $s = t$. O @sec-mat-g06 trata essas noções em geral.
+
+::: {#lem-mat-g04-uniforme-2d}
+## Continuidade uniforme no retângulo
+Se $f$ é contínua em $R = [\alpha, \beta] \times [a, b]$, então para todo $\varepsilon > 0$ existe $\delta > 0$ tal que $\abs{f(t, x) - f(s, y)} < \varepsilon$ sempre que $(t, x), (s, y) \in R$, $\abs{t - s} < \delta$ e $\abs{x - y} < \delta$.
+:::
+
+::: {.proof}
+É a demonstração do @lem-mat-g04-uniforme, aplicando Bolzano–Weierstrass duas vezes: se a conclusão falhasse, haveria pontos $(t_n, x_n)$ e $(s_n, y_n)$ com $\abs{t_n - s_n} < 1/n$, $\abs{x_n - y_n} < 1/n$ e $\abs{f(t_n, x_n) - f(s_n, y_n)} \geq \varepsilon$; uma subsequência faz $t_{n_k}$ convergir, e uma subsequência dela faz também $x_{n_k}$ convergir, digamos para $(t^*, x^*) \in R$. Então $(s_{n_k}, y_{n_k}) \to (t^*, x^*)$ também, e a continuidade dá $f(t_{n_k}, x_{n_k}) - f(s_{n_k}, y_{n_k}) \to 0$ — contradição.
+:::
+
+::: {#thm-mat-g04-leibniz}
+## Regra de Leibniz
+Sejam $f$ e $\partial f/\partial t$ contínuas em $[\alpha, \beta] \times [a, b]$. Então $F(t) \defeq \int_a^b f(t, x)\,\dd x$ é diferenciável em $[\alpha, \beta]$, e
+$$
+F'(t) = \int_a^b \pd{f}{t}(t, x)\,\dd x .
+$$ {#eq-mat-g04-leibniz}
+:::
+
+::: {.proof}
+Para cada $t$, $x \mapsto f(t, x)$ é contínua, e $F$ está bem definida. Fixe $t$ e $h \neq 0$ com $t + h \in [\alpha, \beta]$. Pelo teorema do valor médio aplicado a $s \mapsto f(s, x)$, para cada $x$ existe $\theta_x \in (0, 1)$ com $f(t + h, x) - f(t, x) = h\,\pd{f}{t}(t + \theta_x h, x)$. Logo
+$$
+\frac{F(t + h) - F(t)}{h} - \int_a^b \pd{f}{t}(t, x)\,\dd x = \int_a^b \Big[\pd{f}{t}(t + \theta_x h, x) - \pd{f}{t}(t, x)\Big]\dd x ,
+$$
+onde o integrando, igual a $\frac{f(t+h, x) - f(t, x)}{h} - \pd{f}{t}(t, x)$, é contínuo em $x$. Dado $\varepsilon > 0$, o @lem-mat-g04-uniforme-2d aplicado a $\partial f/\partial t$ dá $\delta$ tal que, para $\abs{h} < \delta$, o colchete tem valor absoluto menor que $\varepsilon/(b - a)$ para todo $x$; a integral, então, é menor que $\varepsilon$ em valor absoluto.
+:::
+
+::: {#cor-mat-g04-leibniz-limites}
+## Limites variáveis
+Sejam $f$ e $\partial f/\partial t$ contínuas num retângulo que contém os pontos $(t, x)$ com $t \in [\alpha, \beta]$ e $x$ entre $u(t)$ e $v(t)$, com $u$, $v$ diferenciáveis. Então $G(t) \defeq \int_{u(t)}^{v(t)} f(t, x)\,\dd x$ satisfaz
+$$
+G'(t) = f\big(t, v(t)\big)\,v'(t) - f\big(t, u(t)\big)\,u'(t) + \int_{u(t)}^{v(t)} \pd{f}{t}(t, x)\,\dd x .
+$$
+:::
+
+::: {.proof}
+Pela aditividade,
+$$
+G(t + h) - G(t) = \int_{v(t)}^{v(t+h)} f(t + h, x)\,\dd x - \int_{u(t)}^{u(t+h)} f(t + h, x)\,\dd x + \int_{u(t)}^{v(t)} \big[f(t + h, x) - f(t, x)\big]\dd x .
+$$
+Dividida por $h$, a última parcela tende a $\int_{u(t)}^{v(t)} \partial f/\partial t$, pelo @thm-mat-g04-leibniz aplicado ao intervalo fixo de extremidades $u(t)$ e $v(t)$. Pelo @thm-mat-g04-valor-medio, a primeira parcela vale $f(t + h, \xi_h)\,(v(t+h) - v(t))$ para algum $\xi_h$ entre $v(t)$ e $v(t + h)$; quando $h \to 0$, $\xi_h \to v(t)$, e a continuidade de $f$ dá o limite $f(t, v(t))\,v'(t)$ para a parcela dividida por $h$. A segunda é análoga.
+:::
+
+::: {#exm-mat-g04-gauss}
+## A integral gaussiana
+$\displaystyle\int_0^\infty e^{-x^2}\,\dd x = \frac{\sqrt{\pi}}{2}$.
+
+Admitimos a função arco-tangente, com $\arctan' x = 1/(1 + x^2)$, $\arctan 0 = 0$ e $\arctan 1 = \pi/4$. Sejam
+$$
+A(t) \defeq \Big(\int_0^t e^{-x^2}\,\dd x\Big)^2, \qquad B(t) \defeq \int_0^1 \frac{e^{-t^2(1 + y^2)}}{1 + y^2}\,\dd y, \qquad t \geq 0 .
+$$
+Pelo @thm-mat-g04-tfc1, $A'(t) = 2 e^{-t^2} \int_0^t e^{-x^2}\,\dd x$. Pela regra de Leibniz, $B'(t) = -\int_0^1 2t\,e^{-t^2(1 + y^2)}\,\dd y = -2 e^{-t^2} \int_0^1 t\,e^{-t^2 y^2}\,\dd y$, e a substituição $x = ty$ transforma a última integral em $\int_0^t e^{-x^2}\,\dd x$. Assim $A' + B' = 0$, e $A(t) + B(t) = A(0) + B(0) = \int_0^1 \frac{\dd y}{1 + y^2} = \arctan 1 = \frac{\pi}{4}$. Como $0 \leq B(t) \leq e^{-t^2} \cdot \frac{\pi}{4} \to 0$, temos $A(t) \to \pi/4$; e, como $\int_0^t e^{-x^2}$ é positiva e crescente, ela converge para $\sqrt{\pi}/2$. Por simetria, $\int_{-\infty}^{\infty} e^{-x^2}\,\dd x = \sqrt{\pi}$ e, pela substituição $x = z/\sqrt 2$, $\int_{-\infty}^\infty e^{-z^2/2}\,\dd z = \sqrt{2\pi}$: é por isso que a densidade normal padrão tem a constante $1/\sqrt{2\pi}$ (@sec-est-g02).
+:::
+
+## Aplicações econômicas {#sec-mat-g04-aplicacoes}
+
+### Excedentes e o peso morto de um imposto
+
+Sejam $P_d(q)$ e $P_s(q)$ as curvas de demanda e de oferta **inversas** — o preço máximo que os compradores pagariam pela $q$-ésima unidade e o preço mínimo pelo qual os vendedores a ofereceriam —, contínuas, com $P_d$ decrescente e $P_s$ crescente. Se $q$ unidades são transacionadas, o **excedente total** gerado é
+$$
+W(q) \defeq \int_0^q \big[P_d(x) - P_s(x)\big]\,\dd x ,
+$$
+a soma, sobre as unidades, da diferença entre o valor para quem compra e o custo para quem vende. Pelo @thm-mat-g04-tfc1, $W'(q) = P_d(q) - P_s(q)$, positivo antes do equilíbrio $q^*$ (onde $P_d = P_s$) e negativo depois: $W$ é máximo em $q^*$. Ao preço de equilíbrio $p^*$, o excedente se divide entre o **excedente do consumidor**, $\int_0^{q^*} [P_d(x) - p^*]\,\dd x$, e o **do produtor**, $\int_0^{q^*} [p^* - P_s(x)]\,\dd x$.
+
+::: {#prp-mat-g04-peso-morto}
+## Peso morto de um imposto com curvas lineares
+Com demanda $D(p) = a - bp$ e oferta $S(p) = c + dp$ ($b, d > 0$), um imposto específico $t$ (a diferença entre o preço pago pelo comprador e o recebido pelo vendedor) reduz a quantidade de $q^*$ para $q_t = q^* - \frac{bd}{b + d}\,t$, e a perda de excedente total que não vira arrecadação — o **peso morto** — é
+$$
+\mathrm{PM}(t) = \frac12\,\frac{bd}{b + d}\,t^2 .
+$$
+:::
+
+::: {.proof}
+Sem imposto, $a - bp^* = c + dp^*$. Com imposto, o comprador paga $p_d$ e o vendedor recebe $p_d - t$, com $a - bp_d = c + d(p_d - t)$; subtraindo, $p_d = p^* + \frac{d}{b + d}t$ e $q_t = a - bp_d = q^* - \frac{bd}{b + d}t$. O excedente total cai de $W(q^*)$ para $W(q_t)$, e a arrecadação $t\,q_t$ é apenas uma transferência; a perda líquida é $W(q^*) - W(q_t) = \int_{q_t}^{q^*} [P_d(x) - P_s(x)]\,\dd x$. Nas curvas inversas, $P_d(x) - P_s(x) = \frac{a - x}{b} - \frac{x - c}{d}$ é afim em $x$, vale $t$ em $q_t$ e $0$ em $q^*$; a integral de uma função afim é a área de um triângulo, $\frac12\,t\,(q^* - q_t) = \frac12 \frac{bd}{b + d} t^2$.
+:::
+
+O peso morto cresce com o **quadrado** da alíquota: dobrar um imposto pequeno quadruplica a distorção. Esse é o ponto de partida da teoria da tributação ótima (@sec-mac-m12) e da regra de que é mais eficiente tributar bens de demanda e oferta pouco elásticas ($b$ e $d$ pequenos).
+
+### Valor presente em tempo contínuo
+
+Se um ativo paga continuamente à taxa $c(t)$ por unidade de tempo e a taxa de juros instantânea é $r$, um pagamento no instante $t$ vale hoje $e^{-rt}$ por real (@exm-mat-g03-capitalizacao), e
+$$
+\mathrm{VP}(r) = \int_0^T c(t)\,e^{-rt}\,\dd t .
+$$
+Pelo @exm-mat-g04-tecnicas, um fluxo constante $c$ vale $c(1 - e^{-rT})/r$, que tende a $c/r$ quando $T \to \infty$ — a perpetuidade contínua. Um fluxo que cresce à taxa $g$, $c(t) = c\,e^{gt}$, tem valor presente $\int_0^\infty c\,e^{-(r - g)t}\,\dd t = c/(r - g)$ se $g < r$, e diverge se $g \geq r$: é o modelo de Gordon em tempo contínuo (@prp-mat-g02-perpetuidades). Pela regra de Leibniz,
+$$
+\mathrm{VP}'(r) = -\int_0^T t\,c(t)\,e^{-rt}\,\dd t, \qquad \mathcal{D} \defeq -\frac{\mathrm{VP}'(r)}{\mathrm{VP}(r)} = \frac{\int_0^T t\,c(t)\,e^{-rt}\,\dd t}{\int_0^T c(t)\,e^{-rt}\,\dd t},
+$$
+de modo que a sensibilidade do preço à taxa — a **duration** — é o prazo médio dos pagamentos, ponderado pelos seus valores presentes (@sec-fin-g02).
+
+## Aplicação: curva de Lorenz e índice de Gini no Brasil {#sec-mat-g04-gini}
+
+Ordene a população da menor para a maior renda. A **curva de Lorenz** $L: [0, 1] \to [0, 1]$ associa a cada fração $p$ da população a fração $L(p)$ da renda total recebida pelos $100p\%$ mais pobres. Ela é crescente, convexa, satisfaz $L(0) = 0$, $L(1) = 1$ e $L(p) \leq p$, com igualdade em todo ponto somente sob igualdade perfeita. O **índice de Gini** é o dobro da área entre a diagonal e a curva:
+$$
+G \defeq 2 \int_0^1 \big(p - L(p)\big)\,\dd p = 1 - 2 \int_0^1 L(p)\,\dd p \in [0, 1].
+$$ {#eq-mat-g04-gini}
+
+Duas famílias de um parâmetro permitem calcular a integral explicitamente:
+
+- $L_k(p) = p^k$, $k \geq 1$: $\int_0^1 p^k\,\dd p = \frac{1}{k + 1}$, logo $G = \frac{k - 1}{k + 1}$, isto é, $k = \frac{1 + G}{1 - G}$;
+- $\tilde L_a(p) = 1 - (1 - p)^a$, $0 < a \leq 1$: pela substituição $u = 1 - p$, $\int_0^1 (1 - p)^a\,\dd p = \frac{1}{a + 1}$, logo $G = 1 - \frac{2a}{a + 1} = \frac{1 - a}{1 + a}$, isto é, $a = \frac{1 - G}{1 + G}$.
+
+Segundo a PNAD Contínua do IBGE, o índice de Gini do rendimento domiciliar per capita no Brasil foi de 0,518 em 2023, e os 10% com menores rendimentos receberam cerca de 1,1% da massa de rendimentos. Calibramos as duas famílias para reproduzir o Gini e comparamos o que elas implicam para a renda dos mais pobres e dos mais ricos.
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+from formacao import graficos
+
+graficos.estilo()
+G = 0.518                                    # IBGE, PNAD Contínua 2023
+k = (1 + G) / (1 - G)                        # família L(p) = p^k
+a = (1 - G) / (1 + G)                        # família L(p) = 1 - (1-p)^a
+L1 = lambda p: p ** k
+L2 = lambda p: 1 - (1 - p) ** a
+
+p = np.linspace(0, 1, 2001)
+for nome, L in [("p^k", L1), ("1-(1-p)^a", L2)]:
+    gini_num = 1 - 2 * np.trapezoid(L(p), p)          # regra do trapézio
+    print(f"{nome:>10}: Gini (integral numerica) = {gini_num:.4f}; "
+          f"10% mais pobres = {100 * L(0.1):5.2f}%; 10% mais ricos = {100 * (1 - L(0.9)):5.1f}%")
+
+fig, ax = plt.subplots()
+ax.plot(p, p, color=graficos.PALETA["cinza"], lw=1, label="igualdade perfeita")
+ax.plot(p, L1(p), color=graficos.PALETA["azul"], lw=2, label=f"$p^{{{k:.2f}}}$")
+ax.plot(p, L2(p), color=graficos.PALETA["vinho"], lw=2, ls="--", label=f"$1-(1-p)^{{{a:.2f}}}$")
+ax.set_xlabel("fração da população (mais pobres primeiro)")
+ax.set_ylabel("fração da renda")
+ax.legend()
+graficos.fonte(ax, "Gini de 0,518 (IBGE, PNAD Contínua 2023); curvas calibradas.")
+plt.show()
+```
+
+As duas curvas têm **o mesmo** Gini, mas descrevem distribuições muito diferentes. A primeira atribui aos 10% mais pobres menos de 0,1% da renda — muito abaixo do 1,1% medido pelo IBGE —; a segunda atribui a eles mais de 3%, muito acima. O Gini resume a distribuição inteira num número, e, como uma integral, não distingue onde está a desigualdade: na cauda de baixo, na de cima ou no meio. Curvas de Lorenz com dois ou mais parâmetros, ajustadas a várias frações da renda ao mesmo tempo, reproduzem melhor os dados.
+
+## Pontes {#sec-mat-g04-pontes}
+
+- **Várias variáveis (@sec-mat-g06).** Integrais duplas são calculadas como integrais iteradas, e a regra de Leibniz mostra que a ordem não importa.
+- **Probabilidade (@sec-est-g02, @sec-est-g03).** Densidades são funções com integral 1; esperanças são integrais; a integral gaussiana dá a constante da normal, e a função gama, a das distribuições qui-quadrado e gama.
+- **Teoria da medida (@sec-est-m01).** A integral de Lebesgue estende a de Riemann e integra funções como a do @exm-mat-g03-dirichlet; seus teoremas de convergência substituem a regra de Leibniz em contextos mais gerais.
+- **Sequências de funções (@sec-mat-m07).** A integral comuta com limites uniformes — é o tipo de argumento usado na demonstração da regra de Leibniz.
+- **Finanças (@sec-fin-g01, @sec-fin-g02).** Valor presente e duration em tempo contínuo.
+- **Macroeconomia (@sec-mac-m01, @sec-mat-d01).** O bem-estar no modelo de Ramsey é $\int_0^\infty e^{-\rho t} u(c(t))\,\dd t$, e o cálculo das variações otimiza integrais desse tipo.
+- **Bem-estar (@sec-mic-g03, @sec-mac-m12).** Excedentes e peso morto medem os custos de distorções.
+- **Integração numérica (@sec-cmp-m02).** Somas de Riemann, trapézios e regras mais precisas.
+
+## Interativo {#sec-mat-g04-interativo}
+
+::: {.content-visible when-format="html"}
+**Somas de Darboux.** Escolha uma função e o número $n$ de subintervalos. Os retângulos azuis formam a soma inferior; os contornos vinho, a superior. A diferença $U - L$ cai à medida que $n$ cresce, como exige o critério de integrabilidade.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof funcDarboux = seletor("função", funcoesDarboux.map(f => f.nome), {valor: funcoesDarboux[0].nome})
+viewof nDarboux = controle("número de subintervalos n", [1, 60], {valor: 6, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Soma inferior L = **${somaL.toFixed(4).replace(".", ",")}**; soma superior U = **${somaU.toFixed(4).replace(".", ",")}**; U − L = ${(somaU - somaL).toFixed(4).replace(".", ",")}; integral = ${fD.integral.toFixed(4).replace(".", ",")}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 320, grid: true,
+  x: {domain: [fD.a, fD.b], label: "x"}, y: {label: "f(x)"},
+  marks: [
+    Plot.rect(retangulos, {x1: "x1", x2: "x2", y1: 0, y2: "m", fill: "#2F5D8A", fillOpacity: 0.35}),
+    Plot.rect(retangulos, {x1: "x1", x2: "x2", y1: 0, y2: "M", stroke: "#8C2F39", fill: "none"}),
+    Plot.line(d3.range(fD.a, fD.b + 1e-9, (fD.b - fD.a) / 400).map(x => ({x, y: fD.f(x)})), {x: "x", y: "y", stroke: "#1a1a1a", strokeWidth: 1.5}),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+funcoesDarboux = [
+  {nome: "f(x) = x² em [0, 2]", f: x => x * x, a: 0, b: 2, integral: 8 / 3},
+  {nome: "f(x) = e^(−x²) em [−2, 2]", f: x => Math.exp(-x * x), a: -2, b: 2, integral: 1.7641627815},
+  {nome: "f(x) = 1/x em [1, e]", f: x => 1 / x, a: 1, b: Math.E, integral: 1},
+  {nome: "degrau: 1 se x ≥ 1, 0 se x < 1, em [0, 2]", f: x => (x >= 1 ? 1 : 0), a: 0, b: 2, integral: 1}
+]
+fD = funcoesDarboux.find(f => f.nome === funcDarboux)
+retangulos = d3.range(nDarboux).map(i => {
+  const h = (fD.b - fD.a) / nDarboux, x1 = fD.a + i * h, x2 = x1 + h;
+  const vals = d3.range(0, 101).map(j => fD.f(x1 + j * h / 100));
+  return {x1, x2, m: d3.min(vals), M: d3.max(vals)};
+})
+somaL = d3.sum(retangulos, r => r.m * (r.x2 - r.x1))
+somaU = d3.sum(retangulos, r => r.M * (r.x2 - r.x1))
+```
+:::
+
+**Excedentes e o peso morto de um imposto.** Demanda inversa $P_d(q) = 10 - q$ e oferta inversa $P_s(q) = q$. Aumente o imposto $t$ e veja o excedente do consumidor (azul), o do produtor (verde), a arrecadação (âmbar) e o peso morto (vinho), que cresce com $t^2$.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof impostoT = controle("imposto t", [0, 9], {valor: 2, passo: 0.1, casas: 1})
+```
+
+```{ojs}
+//| echo: false
+md`Quantidade q = ${qT.toFixed(2).replace(".", ",")}; preço ao comprador ${(10 - qT).toFixed(2).replace(".", ",")}, ao vendedor ${qT.toFixed(2).replace(".", ",")}. Excedente do consumidor ${(qT * qT / 2).toFixed(2).replace(".", ",")}, do produtor ${(qT * qT / 2).toFixed(2).replace(".", ",")}, arrecadação ${(impostoT * qT).toFixed(2).replace(".", ",")}, **peso morto ${(impostoT * impostoT / 4).toFixed(2).replace(".", ",")}** = t²/4.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 340, grid: true,
+  x: {domain: [0, 10], label: "quantidade q"}, y: {domain: [0, 10], label: "preço"},
+  marks: [
+    Plot.areaY(gradeQ(0, qT), {x: "q", y1: d => 10 - qT, y2: d => 10 - d.q, fill: "#2F5D8A", fillOpacity: 0.35}),
+    Plot.areaY(gradeQ(0, qT), {x: "q", y1: d => d.q, y2: d => qT, fill: "#2E7D5B", fillOpacity: 0.35}),
+    Plot.areaY(gradeQ(0, qT), {x: "q", y1: d => qT, y2: d => 10 - qT, fill: "#B7791F", fillOpacity: 0.35}),
+    Plot.areaY(gradeQ(qT, 5), {x: "q", y1: d => d.q, y2: d => 10 - d.q, fill: "#8C2F39", fillOpacity: 0.5}),
+    Plot.line([[0, 10], [10, 0]], {stroke: "#2F5D8A", strokeWidth: 2}),
+    Plot.line([[0, 0], [10, 10]], {stroke: "#2E7D5B", strokeWidth: 2})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+qT = (10 - impostoT) / 2
+gradeQ = (q0, q1) => d3.range(0, 51).map(j => ({q: q0 + (q1 - q0) * j / 50}))
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — somas de Darboux e excedentes com imposto — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-mat-g04-laboratorio}
+
+### Somas de Riemann e a velocidade de convergência
+
+Para $\int_0^1 e^x\,\dd x = e - 1$, comparamos as somas com o ponto da esquerda, com o ponto médio e a regra do trapézio. A fórmula de Taylor explica o resultado: na soma da esquerda, o erro em cada subintervalo é da ordem de $h^2$, e o total, de $h$; no ponto médio e no trapézio, os termos de primeira ordem se cancelam e o erro total é da ordem de $h^2$.
+
+```{python}
+import math
+
+exato = math.e - 1
+print(f"{'n':>6} {'esquerda':>11} {'ponto medio':>12} {'trapezio':>10}")
+for n in [4, 16, 64, 256, 1024]:
+    h = 1 / n
+    x = np.arange(n) * h
+    esq = h * np.exp(x).sum()
+    med = h * np.exp(x + h / 2).sum()
+    trap = h * (np.exp(x).sum() + np.exp(x + h).sum()) / 2
+    print(f"{n:>6} {abs(esq - exato):>11.2e} {abs(med - exato):>12.2e} {abs(trap - exato):>10.2e}")
+```
+
+Multiplicar $n$ por 4 divide o erro da soma da esquerda por cerca de 4, e os dos outros dois métodos por cerca de 16.
+
+### Integrais impróprias numéricas
+
+```{python}
+from scipy import integrate
+
+v, _ = integrate.quad(lambda x: math.exp(-x * x), 0, np.inf)
+print(f"integral gaussiana de 0 a infinito: {v:.10f}   sqrt(pi)/2 = {math.sqrt(math.pi) / 2:.10f}")
+v, _ = integrate.quad(lambda z: math.exp(-z * z / 2) / math.sqrt(2 * math.pi), -np.inf, np.inf)
+print(f"integral da densidade normal padrao: {v:.10f}")
+for n in range(6):
+    v, _ = integrate.quad(lambda t: t ** n * math.exp(-t), 0, np.inf)
+    print(f"integral de t^{n} e^-t: {v:10.6f}   {n}! = {math.factorial(n)}")
+```
+
+### A constante de Euler–Mascheroni
+
+```{python}
+H = 0.0
+for n in range(1, 10**6 + 1):
+    H += 1 / n
+    if n in (10, 1000, 10**6):
+        print(f"n = {n:>7}: H_n - log n = {H - math.log(n):.8f}")
+print("gamma = 0.57721566...")
+```
+
+### Valor presente discreto e contínuo
+
+Uma taxa anual efetiva $i$ corresponde à taxa contínua $r = \log(1 + i)$, pois $e^{r} = 1 + i$. Com essa equivalência, descontar continuamente ou anualmente dá o mesmo valor para pagamentos nas mesmas datas.
+
+```{python}
+i = 0.10
+r = math.log1p(i)
+print(f"i = {i:.2%} ao ano equivale a r = {r:.4%} ao ano em tempo continuo")
+vp_discreto = sum(1 / (1 + i) ** t for t in range(1, 11))
+vp_continuo_datas = sum(math.exp(-r * t) for t in range(1, 11))
+vp_fluxo = (1 - math.exp(-r * 10)) / r
+print(f"10 pagamentos anuais de 1: discreto {vp_discreto:.4f}, continuo nas mesmas datas {vp_continuo_datas:.4f}")
+print(f"fluxo continuo de 1 por ano durante 10 anos: {vp_fluxo:.4f}")
+```
+
+O fluxo contínuo vale um pouco mais que os pagamentos anuais, porque cada real chega, em média, meio ano antes.
+
+## Exercícios resolvidos {#sec-mat-g04-exercicios}
+
+::: {#exr-mat-g04-darboux}
+Usando somas de Darboux com partições uniformes, mostre que $\int_0^1 x^2\,\dd x = 1/3$. (Use $\sum_{i=1}^n i^2 = n(n+1)(2n+1)/6$, demonstrável por indução.)
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Com $x_i = i/n$, a função é crescente em $[0, 1]$, logo $m_i = ((i-1)/n)^2$ e $M_i = (i/n)^2$. Assim $U(f, P_n) = \frac{1}{n^3}\sum_{i=1}^n i^2 = \frac{(n+1)(2n+1)}{6n^2}$ e $L(f, P_n) = \frac{1}{n^3}\sum_{i=0}^{n-1} i^2 = \frac{(n-1)(2n-1)}{6n^2}$. Ambas tendem a $1/3$, e $U - L = 1/n \to 0$. Como a integral está entre $L(f, P_n)$ e $U(f, P_n)$ para todo $n$, ela vale $1/3$ — o que o @thm-mat-g04-tfc2 confirma em uma linha: $[x^3/3]_0^1 = 1/3$.
+:::
+
+::: {#exr-mat-g04-ponto}
+Seja $f: [0, 1] \to \R$ igual a zero, exceto num ponto $c$, onde $f(c) = 1$. Mostre que $f$ é integrável e que $\int_0^1 f = 0$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Como $f \geq 0$, $L(f, P) \geq 0$; e todo intervalo de $P$ contém pontos diferentes de $c$, logo $m_i = 0$ e $L(f, P) = 0$. Na soma superior, só os intervalos que contêm $c$ — no máximo dois — têm $M_i = 1$. Se todos os $\Delta x_i$ são menores que $\varepsilon/2$, então $U(f, P) < \varepsilon$. Pelo critério, $f$ é integrável, com integral entre $0$ e $\varepsilon$ para todo $\varepsilon$, isto é, igual a zero. Alterar uma função integrável num número finito de pontos não altera a integral.
+:::
+
+::: {#exr-mat-g04-tfc-cadeia}
+Calcule a derivada de $H(x) = \int_0^{x^2} e^{-t^2}\,\dd t$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$H = F \circ \varphi$, com $F(u) = \int_0^u e^{-t^2}\,\dd t$ e $\varphi(x) = x^2$. Pelo @thm-mat-g04-tfc1, $F'(u) = e^{-u^2}$; pela regra da cadeia, $H'(x) = e^{-x^4} \cdot 2x$. É também um caso particular do @cor-mat-g04-leibniz-limites, com integrando que não depende do parâmetro.
+:::
+
+::: {#exr-mat-g04-e}
+Use a definição do logaritmo como integral para mostrar que $(1 + 1/n)^n < e$ para todo $n \in \N$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $h = 1/n$ e divida $[1, 1 + h]$ ao meio. No primeiro meio, $1/t \leq 1$; no segundo, $1/t \leq 1/(1 + h/2) < 1$. Pela monotonicidade e pela aditividade da integral, $\log(1 + h) = \int_1^{1+h} \frac{\dd t}{t} \leq \frac h2 + \frac h2 \cdot \frac{1}{1 + h/2} < h$. Logo $n \log(1 + 1/n) < 1$ e, aplicando a exponencial, que é crescente, $(1 + 1/n)^n < e^1 = e$. Compare com a demonstração da @prp-mat-g02-e, que usou a desigualdade de Bernoulli.
+:::
+
+::: {#exr-mat-g04-excedente-elastico}
+Com demanda de elasticidade constante $D(p) = A p^{-\eta}$, $A, \eta > 0$, o excedente do consumidor ao preço $p$ é $\mathrm{EC}(p) = \int_p^\infty D(x)\,\dd x$ (a área à esquerda da curva de demanda, acima do preço). Calcule-o e interprete o caso $\eta \leq 1$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pelo @exm-mat-g04-improprias (a), $\int_p^\infty A x^{-\eta}\,\dd x$ converge se, e somente se, $\eta > 1$, e então vale $\frac{A p^{1 - \eta}}{\eta - 1} = \frac{p\,D(p)}{\eta - 1}$: o excedente é a despesa dividida por $\eta - 1$. Se $\eta \leq 1$, o excedente é **infinito**: a demanda cai tão devagar com o preço que os consumidores pagariam quantias arbitrariamente grandes pelas primeiras unidades. É um sinal de que a forma funcional não deve ser levada a sério para preços muito altos — na prática, todo bem tem um preço de reserva finito.
+:::
+
+::: {#exr-mat-g04-harmonica-log}
+Mostre que $\sum_{n \geq 2} \frac{1}{n \log n}$ diverge.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$f(x) = \frac{1}{x \log x}$ é positiva e decrescente em $[2, \infty)$. Pela substituição $u = \log x$, $\int_2^c \frac{\dd x}{x \log x} = \int_{\log 2}^{\log c} \frac{\dd u}{u} = \log\log c - \log\log 2 \to \infty$. Pelo teste da integral (aplicado a partir de $x = 2$), a série diverge — embora seus termos sejam menores que os de $\sum 1/n$ e tendam a zero muito devagar: a soma dos primeiros $10^{100}$ termos ainda não chega a 7.
+:::
+
+::: {#exr-mat-g04-duration}
+Calcule a duration $\mathcal D$ de um fluxo constante $c$ durante $[0, T]$, descontado à taxa contínua $r$, e mostre que $\mathcal D < T/2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pelo @exm-mat-g04-tecnicas (a) e (b), $\mathcal{D} = \frac{\int_0^T t e^{-rt}\,\dd t}{\int_0^T e^{-rt}\,\dd t} = \frac{1}{r} - \frac{T e^{-rT}}{1 - e^{-rT}} = \frac1r - \frac{T}{e^{rT} - 1}$. Para mostrar que $\mathcal D < T/2$: a média de $t$ ponderada por $e^{-rt}$, que é decrescente, dá mais peso aos instantes iniciais do que a média simples, que vale $T/2$. Formalmente, $\int_0^T (t - T/2)\,e^{-rt}\,\dd t < 0$, pois a substituição $t \mapsto T - t$ mostra que essa integral é igual a $\int_0^{T/2} (t - T/2)\big(e^{-rt} - e^{-r(T - t)}\big)\dd t$, cujo integrando é negativo em $[0, T/2)$. Com $r = 10\%$ e $T = 10$, $\mathcal{D} \approx 4{,}18$ anos.
+:::
+
+::: {#exr-mat-g04-gini-familia}
+Verifique que $L(p) = p^k$, $k \geq 1$, satisfaz as propriedades de uma curva de Lorenz, e mostre que o Gini da família é $(k - 1)/(k + 1)$. Que valor de $k$ corresponde a um Gini de 0,5?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$L(0) = 0$, $L(1) = 1$, $L'(p) = k p^{k-1} \geq 0$, $L''(p) = k(k-1)p^{k-2} \geq 0$ (convexa) e $p^k \leq p$ em $[0, 1]$ para $k \geq 1$. Pela @eq-mat-g04-gini, $G = 1 - \frac{2}{k + 1} = \frac{k-1}{k+1}$. Para $G = 1/2$, $k = \frac{1 + G}{1 - G} = 3$: os $50\%$ mais pobres ficariam com $0{,}5^3 = 12{,}5\%$ da renda.
+:::
+
+## Flashcards {#sec-mat-g04-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## O que são as somas de Darboux, e quando uma função é integrável?
+$L(f, P) = \sum m_i \Delta x_i$ e $U(f, P) = \sum M_i \Delta x_i$, com $m_i$, $M_i$ o ínfimo e o supremo de $f$ em cada intervalo. $f$ é integrável se, e somente se, para todo $\varepsilon$ existe $P$ com $U - L < \varepsilon$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Que funções são integráveis a Riemann?
+As monótonas e as contínuas em $[a, b]$ (e as que diferem destas em finitos pontos). A função indicadora dos racionais não é.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é continuidade uniforme, e onde ela vale automaticamente?
+$\delta$ não depende do ponto: $\abs{x - y} < \delta \Rightarrow \abs{f(x) - f(y)} < \varepsilon$ em todo o domínio. Toda função contínua num intervalo fechado e limitado é uniformemente contínua.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que dizem as duas formas do teorema fundamental do cálculo?
+(1) Se $f$ é contínua, $F(x) = \int_a^x f$ tem $F' = f$. (2) Se $F' = f$ integrável, $\int_a^b f = F(b) - F(a)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como o logaritmo é definido, e por que $\log(xy) = \log x + \log y$?
+$\log x = \int_1^x \dd t/t$. A função $\log(xy) - \log x$ tem derivada nula em $x$, logo é constante, igual a $\log y$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são as fórmulas de substituição e de integração por partes?
+$\int_a^b f(\varphi(t))\varphi'(t)\,\dd t = \int_{\varphi(a)}^{\varphi(b)} f$ e $\int_a^b u v' = [uv]_a^b - \int_a^b u' v$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando $\int_1^\infty x^{-p}\,\dd x$ e $\int_0^1 x^{-p}\,\dd x$ convergem?
+A primeira se, e somente se, $p > 1$; a segunda se, e somente se, $p < 1$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teste da integral?
+Se $f \geq 0$ é não crescente, $\sum f(n)$ e $\int_1^\infty f$ convergem ou divergem juntas.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quanto vale $\int_0^\infty t^n e^{-t}\,\dd t$?
+$n!$ — por partes e indução. É a função gama nos inteiros: $\Gamma(n + 1) = n!$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a regra de Leibniz?
+Se $f$ e $\partial f/\partial t$ são contínuas, $\frac{\dd}{\dd t}\int_a^b f(t, x)\,\dd x = \int_a^b \pd{f}{t}(t, x)\,\dd x$; com limites variáveis, somam-se $f(t, v)v' - f(t, u)u'$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quanto vale $\int_{-\infty}^\infty e^{-x^2/2}\,\dd x$?
+$\sqrt{2\pi}$ — daí a constante $1/\sqrt{2\pi}$ na densidade normal.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o peso morto de um imposto $t$ com oferta e demanda lineares?
+$\frac12 \frac{bd}{b+d} t^2$: cresce com o quadrado da alíquota e com as inclinações $b$ e $d$ das curvas de demanda e oferta.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o valor presente de um fluxo contínuo $c\,e^{gt}$ descontado à taxa $r$?
+$c/(r - g)$ se $g < r$; a integral diverge se $g \geq r$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como o índice de Gini se relaciona com a curva de Lorenz?
+$G = 1 - 2\int_0^1 L(p)\,\dd p$: o dobro da área entre a diagonal e a curva. Curvas diferentes podem ter o mesmo Gini.
+:::
+
+## Ficha-resumo {#sec-mat-g04-ficha}
+
+::: {.ficha-resumo}
+**Integral de Riemann.** $L(f, P) \leq L(f, Q) \leq U(f, Q) \leq U(f, P)$ se $Q \supseteq P$. $f$ integrável $\iff \underline\int = \overline\int \iff \forall \varepsilon\ \exists P: U - L < \varepsilon$. Monótonas e contínuas são integráveis (contínua em $[a, b]$ $\Rightarrow$ uniformemente contínua).
+
+**Propriedades.** Linear, monótona, aditiva em intervalos; $\abs{\int f} \leq \int \abs{f}$; $f$ contínua $\Rightarrow \int_a^b f = f(c)(b - a)$.
+
+**TFC.** $F(x) = \int_a^x f$ é Lipschitz e $F' = f$ onde $f$ é contínua; $F' = f \Rightarrow \int_a^b f = F(b) - F(a)$.
+
+**Log e exp.** $\log x = \int_1^x \dd t/t$: $\log' = 1/x$, $\log(xy) = \log x + \log y$, bijeção $(0, \infty) \to \R$. $\exp = \log^{-1}$: $\exp' = \exp$, $\exp(x + y) = \exp x \exp y$; $a^b = e^{b \log a}$.
+
+**Técnicas.** Substituição: $\int f(\varphi)\varphi' = \int f$. Partes: $\int u v' = [uv] - \int u' v$.
+
+**Impróprias.** $\int_1^\infty x^{-p}$ converge $\iff p > 1$; $\int_0^1 x^{-p}$ $\iff p < 1$; $\int_0^\infty e^{-rt} = 1/r$; $\int_0^\infty t^n e^{-t} = n!$. Comparação; teste da integral ($\sum f(n) \sim \int f$); $H_n - \log n \to \gamma$.
+
+**Leibniz.** $\frac{\dd}{\dd t}\int_{u(t)}^{v(t)} f(t, x)\,\dd x = f(t, v)v' - f(t, u)u' + \int_u^v f_t$. $\int_0^\infty e^{-x^2} = \sqrt\pi/2$.
+
+**Aplicações.** $W(q) = \int_0^q (P_d - P_s)$, máximo em $q^*$; peso morto $\frac12 \frac{bd}{b+d}t^2$. $\mathrm{VP} = \int c(t) e^{-rt}\dd t$; $c/(r - g)$; duration $= $ prazo médio ponderado. Gini $= 1 - 2\int_0^1 L$.
+:::
+
+## Notas bibliográficas {#sec-mat-g04-notas}
+
+Os capítulos 10 e 11 de @lima1989 apresentam a integral de Riemann pelas somas de Darboux, o teorema fundamental do cálculo, o logaritmo definido como integral e as integrais impróprias, com o rigor deste capítulo. @simon1994 e @sydsaeter2016 tratam a integração com foco nas aplicações econômicas — excedentes, valor presente, distribuições de renda — e trazem muitos exercícios de cálculo de integrais. A demonstração da integral gaussiana pela regra de Leibniz é clássica e evita integrais duplas; a demonstração usual, por coordenadas polares, aparece no @sec-mat-g06. Os dados de desigualdade são da PNAD Contínua do IBGE (*Rendimento de todas as fontes*, 2023).

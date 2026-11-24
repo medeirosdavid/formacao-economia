@@ -4,13 +4,7 @@
 ::: {.cabecalho-capitulo}
 [Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M01`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-mat-g02 (*Números reais, sequências e séries*); @sec-mat-g06 (*Cálculo em várias variáveis*)
-:::
-
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** @sec-mat-g02 (*Números reais, sequências e séries*); *Cálculo em várias variáveis* (MAT-G06)
-:::
 
 **Leituras principais:** @ok2007, @rudin1976, @delafuente2000
 :::

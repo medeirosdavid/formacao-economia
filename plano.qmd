@@ -9,14 +9,14 @@ Legenda de status: ○ planejado · ◔ rascunho · ◑ em revisão · ● compl
 
 | Parte | Capítulos | G | M | D | Escritos | Completos |
 |:--|--:|--:|--:|--:|--:|--:|
-| Matemática | 22 | 8 | 10 | 4 | 3 | 0 |
+| Matemática | 22 | 8 | 10 | 4 | 8 | 0 |
 | Probabilidade e Estatística | 16 | 6 | 6 | 4 | 0 | 0 |
 | Computação | 11 | 3 | 4 | 4 | 0 | 0 |
 | Microfundamentos | 12 | 5 | 6 | 1 | 0 | 0 |
 | Econometria | 30 | 9 | 11 | 10 | 1 | 0 |
 | Macroeconomia | 33 | 10 | 13 | 10 | 0 | 0 |
 | Finanças | 24 | 8 | 9 | 7 | 0 | 0 |
-| **Total** | **148** | 49 | 59 | 40 | 4 | 0 |
+| **Total** | **148** | 49 | 59 | 40 | 9 | 0 |
 
 ## Trilhas de leitura
 
@@ -27,10 +27,10 @@ Matemática, probabilidade e computação até o nível de mestrado — o mínim
 1. ◔ [Lógica, conjuntos e métodos de demonstração](partes/01-matematica/mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd) `MAT-G01`
 2. ◔ [Números reais, sequências e séries](partes/01-matematica/mat-g02-numeros-reais-sequencias-e-series.qmd) `MAT-G02`
 3. ◔ [Funções de uma variável: limites, continuidade e derivadas](partes/01-matematica/mat-g03-funcoes-de-uma-variavel-limites-continuidade-e-derivadas.qmd) `MAT-G03`
-4. ○ [Integração e aplicações](partes/01-matematica/mat-g04-integracao-e-aplicacoes.qmd) `MAT-G04`
-5. ○ [Álgebra linear I: vetores, matrizes e sistemas lineares](partes/01-matematica/mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd) `MAT-G05`
-6. ○ [Cálculo em várias variáveis](partes/01-matematica/mat-g06-calculo-em-varias-variaveis.qmd) `MAT-G06`
-7. ○ [Otimização: sem restrições e com restrições de igualdade](partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) `MAT-G07`
+4. ◔ [Integração e aplicações](partes/01-matematica/mat-g04-integracao-e-aplicacoes.qmd) `MAT-G04`
+5. ◔ [Álgebra linear I: vetores, matrizes e sistemas lineares](partes/01-matematica/mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd) `MAT-G05`
+6. ◔ [Cálculo em várias variáveis](partes/01-matematica/mat-g06-calculo-em-varias-variaveis.qmd) `MAT-G06`
+7. ◔ [Otimização: sem restrições e com restrições de igualdade](partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) `MAT-G07`
 8. ○ [Probabilidade: axiomas, condicionamento e Bayes](partes/02-probabilidade-estatistica/est-g01-probabilidade-axiomas-condicionamento-e-bayes.qmd) `EST-G01`
 9. ○ [Variáveis aleatórias e distribuições](partes/02-probabilidade-estatistica/est-g02-variaveis-aleatorias-e-distribuicoes.qmd) `EST-G02`
 10. ○ [Esperança, momentos e distribuições conjuntas](partes/02-probabilidade-estatistica/est-g03-esperanca-momentos-e-distribuicoes-conjuntas.qmd) `EST-G03`
@@ -113,11 +113,11 @@ Ferramentas de análise, álgebra linear, otimização e dinâmica usadas no res
 | MAT-G01 | G | [Lógica, conjuntos e métodos de demonstração](partes/01-matematica/mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd) | — | ◔ rascunho |
 | MAT-G02 | G | [Números reais, sequências e séries](partes/01-matematica/mat-g02-numeros-reais-sequencias-e-series.qmd) | MAT-G01 | ◔ rascunho |
 | MAT-G03 | G | [Funções de uma variável: limites, continuidade e derivadas](partes/01-matematica/mat-g03-funcoes-de-uma-variavel-limites-continuidade-e-derivadas.qmd) | MAT-G02 | ◔ rascunho |
-| MAT-G04 | G | [Integração e aplicações](partes/01-matematica/mat-g04-integracao-e-aplicacoes.qmd) | MAT-G03 | ○ planejado |
-| MAT-G05 | G | [Álgebra linear I: vetores, matrizes e sistemas lineares](partes/01-matematica/mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd) | MAT-G01 | ○ planejado |
-| MAT-G06 | G | [Cálculo em várias variáveis](partes/01-matematica/mat-g06-calculo-em-varias-variaveis.qmd) | MAT-G03, MAT-G05 | ○ planejado |
-| MAT-G07 | G | [Otimização: sem restrições e com restrições de igualdade](partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) | MAT-G06 | ○ planejado |
-| MAT-G08 | G | [Equações em diferenças e equações diferenciais lineares](partes/01-matematica/mat-g08-equacoes-em-diferencas-e-equacoes-diferenciais-lineares.qmd) | MAT-G04, MAT-G05 | ○ planejado |
+| MAT-G04 | G | [Integração e aplicações](partes/01-matematica/mat-g04-integracao-e-aplicacoes.qmd) | MAT-G03 | ◔ rascunho |
+| MAT-G05 | G | [Álgebra linear I: vetores, matrizes e sistemas lineares](partes/01-matematica/mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd) | MAT-G01 | ◔ rascunho |
+| MAT-G06 | G | [Cálculo em várias variáveis](partes/01-matematica/mat-g06-calculo-em-varias-variaveis.qmd) | MAT-G03, MAT-G05 | ◔ rascunho |
+| MAT-G07 | G | [Otimização: sem restrições e com restrições de igualdade](partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) | MAT-G06 | ◔ rascunho |
+| MAT-G08 | G | [Equações em diferenças e equações diferenciais lineares](partes/01-matematica/mat-g08-equacoes-em-diferencas-e-equacoes-diferenciais-lineares.qmd) | MAT-G04, MAT-G05 | ◔ rascunho |
 | MAT-M01 | M | [Análise real em $\mathbb{R}^n$ e espaços métricos](partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) | MAT-G02, MAT-G06 | ○ planejado |
 | MAT-M10 | M | [Espaços normados e com produto interno](partes/01-matematica/mat-m10-espacos-normados-e-com-produto-interno.qmd) | MAT-M01, MAT-G05 | ○ planejado |
 | MAT-M07 | M | [Sequências de funções: convergência uniforme e equicontinuidade](partes/01-matematica/mat-m07-sequencias-de-funcoes-convergencia-uniforme-e.qmd) | MAT-M10, MAT-G04 | ○ planejado |

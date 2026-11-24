@@ -4,13 +4,7 @@
 ::: {.cabecalho-capitulo}
 [Graduação]{.nivel .nivel-G} · [planejado]{.status} · `MIC-G02`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-mat-g07 (*Otimização: sem restrições e com restrições de igualdade*)
-:::
-
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Otimização: sem restrições e com restrições de igualdade* (MAT-G07)
-:::
 
 **Leituras principais:** @varian2014
 :::

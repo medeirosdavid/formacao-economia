@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Análise real em $\mathbb{R}^n$ e espaços métricos* (MAT-M01); *Álgebra linear I: vetores, matrizes e sistemas lineares* (MAT-G05)
+**Pré-requisitos:** *Análise real em $\mathbb{R}^n$ e espaços métricos* (MAT-M01); @sec-mat-g05 (*Álgebra linear I: vetores, matrizes e sistemas lineares*)
 :::
 
 **Leituras principais:** @ok2007, @luenberger1969

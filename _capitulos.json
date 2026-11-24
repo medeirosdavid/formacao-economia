@@ -20,32 +20,32 @@
  "MAT-G04": {
   "titulo": "Integração e aplicações",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "MAT-G05": {
   "titulo": "Álgebra linear I: vetores, matrizes e sistemas lineares",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "MAT-G06": {
   "titulo": "Cálculo em várias variáveis",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "MAT-G07": {
   "titulo": "Otimização: sem restrições e com restrições de igualdade",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "MAT-G08": {
   "titulo": "Equações em diferenças e equações diferenciais lineares",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "MAT-M01": {
   "titulo": "Análise real em $\\mathbb{R}^n$ e espaços métricos",

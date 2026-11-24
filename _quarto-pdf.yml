@@ -8,6 +8,11 @@ book:
     - partes/01-matematica/mat-g01-logica-conjuntos-e-metodos-de-demonstracao.qmd
     - partes/01-matematica/mat-g02-numeros-reais-sequencias-e-series.qmd
     - partes/01-matematica/mat-g03-funcoes-de-uma-variavel-limites-continuidade-e-derivadas.qmd
+    - partes/01-matematica/mat-g04-integracao-e-aplicacoes.qmd
+    - partes/01-matematica/mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd
+    - partes/01-matematica/mat-g06-calculo-em-varias-variaveis.qmd
+    - partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd
+    - partes/01-matematica/mat-g08-equacoes-em-diferencas-e-equacoes-diferenciais-lineares.qmd
   - part: partes/05-econometria/index.qmd
     chapters:
     - partes/05-econometria/ecm-g01-regressao-linear-simples.qmd

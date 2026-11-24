@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Otimização: sem restrições e com restrições de igualdade* (MAT-G07); *Funções convexas e subdiferencial* (MAT-M09)
+**Pré-requisitos:** @sec-mat-g07 (*Otimização: sem restrições e com restrições de igualdade*); *Funções convexas e subdiferencial* (MAT-M09)
 :::
 
 **Leituras principais:** @sundaram1996, @boyd2004, @delafuente2000

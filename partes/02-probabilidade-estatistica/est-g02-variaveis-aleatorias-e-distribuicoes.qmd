@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Probabilidade: axiomas, condicionamento e Bayes* (EST-G01); *Integração e aplicações* (MAT-G04)
+**Pré-requisitos:** *Probabilidade: axiomas, condicionamento e Bayes* (EST-G01); @sec-mat-g04 (*Integração e aplicações*)
 :::
 
 **Leituras principais:** @degroot2012, @casella2002

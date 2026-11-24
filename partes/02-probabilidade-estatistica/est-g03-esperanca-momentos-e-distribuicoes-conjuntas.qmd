@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Variáveis aleatórias e distribuições* (EST-G02); *Cálculo em várias variáveis* (MAT-G06)
+**Pré-requisitos:** *Variáveis aleatórias e distribuições* (EST-G02); @sec-mat-g06 (*Cálculo em várias variáveis*)
 :::
 
 **Leituras principais:** @degroot2012, @casella2002

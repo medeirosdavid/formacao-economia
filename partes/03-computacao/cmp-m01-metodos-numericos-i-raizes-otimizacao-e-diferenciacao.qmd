@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Python para economistas* (CMP-G01); *Otimização: sem restrições e com restrições de igualdade* (MAT-G07)
+**Pré-requisitos:** *Python para economistas* (CMP-G01); @sec-mat-g07 (*Otimização: sem restrições e com restrições de igualdade*)
 :::
 
 **Leituras principais:** @judd1998, @miranda2002

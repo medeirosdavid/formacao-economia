@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Conjuntos convexos e separação* (MAT-M08); *Cálculo em várias variáveis* (MAT-G06)
+**Pré-requisitos:** *Conjuntos convexos e separação* (MAT-M08); @sec-mat-g06 (*Cálculo em várias variáveis*)
 :::
 
 **Leituras principais:** @rockafellar1970, @boyd2004, @sundaram1996
