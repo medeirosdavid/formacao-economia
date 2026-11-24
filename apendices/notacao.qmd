@@ -46,6 +46,8 @@ As macros abaixo estão definidas em `tex/macros.tex` e funcionam igualmente no 
 | `\defeq` | $\defeq$ | definição |
 | `\Lag` | $\Lag$ | operador de defasagem ($\Lag x_t = x_{t-1}$) |
 | `\abs{x}`, `\norm{x}` | $\abs{x}$, $\norm{x}$ | valor absoluto, norma |
+| `\inner{x}{y}` | $\inner{x}{y}$ | produto interno |
+| `\diam`, `\interior` | $\diam A$, $\interior A$ | diâmetro, interior |
 | `\ind{A}` | $\ind{A}$ | função indicadora |
 | `\SQT`, `\SQE`, `\SQR` | $\SQT, \SQE, \SQR$ | somas dos quadrados total, explicada e dos resíduos |
 | `\ep` | $\ep(\hat\beta)$ | erro-padrão |

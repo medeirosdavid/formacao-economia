@@ -35,7 +35,7 @@ niveis:
 trilhas:
   - nome: "Base quantitativa"
     descricao: "Matemática, probabilidade e computação até o nível de mestrado — o mínimo para ler qualquer outra parte com conforto."
-    capitulos: [MAT-G01, MAT-G02, MAT-G03, MAT-G04, MAT-G05, MAT-G06, MAT-G07, EST-G01, EST-G02, EST-G03, EST-G05, EST-G06, CMP-G01, CMP-G02, MAT-M01, MAT-M02, MAT-M08, MAT-M09, MAT-M03, EST-M02, EST-M03]
+    capitulos: [MAT-G01, MAT-G02, MAT-G03, MAT-G04, MAT-G05, MAT-G06, MAT-G07, EST-G01, EST-G02, EST-G03, EST-G05, EST-G06, CMP-G01, CMP-G02, MAT-M01, MAT-M10, MAT-M02, MAT-M08, MAT-M09, MAT-M03, EST-M02, EST-M03]
   - nome: "Graduação completa"
     descricao: "Todos os capítulos de nível G, na ordem do livro."
     filtro_nivel: G
@@ -119,14 +119,16 @@ partes:
         titulo: "Análise real em $\\mathbb{R}^n$ e espaços métricos"
         nivel: M
         prereq: [MAT-G02, MAT-G06]
-        leituras: [ok2007, rudin1976, delafuente2000]
-        topicos: ["Métricas e exemplos", "Bolas, abertos, fechados, interior, fecho e fronteira", "Subespaços, topologia relativa, métricas equivalentes e produtos", "Convergência e caracterização sequencial de fechados", "Completude, teorema de Cantor e completamento", "Continuidade, continuidade uniforme, funções Lipschitz e homeomorfismos", "Extensão de funções uniformemente contínuas", "Compacidade: coberturas, caracterizações métricas e Heine–Borel", "Celas encaixadas e Bolzano–Weierstrass em $\\mathbb{R}^n$", "Teorema de Weierstrass em espaços métricos", "Conexidade e valor intermediário"]
+        leituras: [ok2007, rudin1976, lima1977, delafuente2000]
+        status: rascunho
+        topicos: ["Métricas e exemplos", "Bolas, abertos, fechados, interior, fecho e fronteira", "Subespaços, topologia relativa, métricas equivalentes e produtos", "Convergência e caracterização sequencial de fechados", "Completude, o espaço das funções limitadas, teorema da interseção de Cantor e completamento", "Continuidade, continuidade uniforme, funções Lipschitz e homeomorfismos", "Extensão de funções uniformemente contínuas", "Compacidade: coberturas, caracterizações métricas e Heine–Borel", "Celas encaixadas e Bolzano–Weierstrass em $\\mathbb{R}^n$", "Teorema de Weierstrass em espaços métricos", "Conexidade e valor intermediário"]
       - id: MAT-M10
         titulo: "Espaços normados e com produto interno"
         nivel: M
         prereq: [MAT-M01, MAT-G05]
-        leituras: [ok2007, luenberger1969]
-        topicos: ["Normas e produtos internos", "Cauchy–Schwarz e a geometria do produto interno", "Espaços de Banach e de Hilbert", "Equivalência de normas em dimensão finita", "Operadores lineares limitados", "Projeção ortogonal"]
+        leituras: [ok2007, luenberger1969, kreyszig1978]
+        status: rascunho
+        topicos: ["Espaços vetoriais e normas", "Desigualdades de Young, Hölder e Minkowski", "Produtos internos, Cauchy–Schwarz e a lei do paralelogramo", "Espaços de Banach e de Hilbert; séries absolutamente convergentes", "Equivalência de normas em dimensão finita e o lema de Riesz", "Operadores lineares limitados e norma de operador", "Série de Neumann", "Teorema da projeção, complemento ortogonal e Gram–Schmidt", "Aplicações: preços de ativos com cadeia de Markov e mínimos quadrados"]
       - id: MAT-M07
         titulo: "Sequências de funções: convergência uniforme e equicontinuidade"
         nivel: M
@@ -142,7 +144,7 @@ partes:
       - id: MAT-M08
         titulo: "Conjuntos convexos e separação"
         nivel: M
-        prereq: [MAT-M01, MAT-G05]
+        prereq: [MAT-M10]
         leituras: [rockafellar1970, boyd2004, ok2007]
         topicos: ["Variedades afins e hiperplanos", "Conjuntos convexos e operações", "Envoltória convexa e o teorema de Carathéodory", "Cones", "Interior relativo", "Projeção sobre convexos fechados", "Teoremas de separação e hiperplanos suporte", "Teoremas de alternativa: Farkas e Gordan", "Aplicações: não-arbitragem e teoremas do bem-estar"]
       - id: MAT-M09

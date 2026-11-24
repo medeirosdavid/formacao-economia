@@ -4,13 +4,7 @@
 ::: {.cabecalho-capitulo}
 [Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M07`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-mat-m10 (*Espaços normados e com produto interno*); @sec-mat-g04 (*Integração e aplicações*)
-:::
-
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Espaços normados e com produto interno* (MAT-M10); @sec-mat-g04 (*Integração e aplicações*)
-:::
 
 **Leituras principais:** @rudin1976, @ok2007, @stokey1989
 :::

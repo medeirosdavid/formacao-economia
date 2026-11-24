@@ -15,8 +15,8 @@ Ferramentas de análise, álgebra linear, otimização e dinâmica usadas no res
 | MAT-G06 | G | [Cálculo em várias variáveis](mat-g06-calculo-em-varias-variaveis.qmd) | ◔ rascunho |
 | MAT-G07 | G | [Otimização: sem restrições e com restrições de igualdade](mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) | ◔ rascunho |
 | MAT-G08 | G | [Equações em diferenças e equações diferenciais lineares](mat-g08-equacoes-em-diferencas-e-equacoes-diferenciais-lineares.qmd) | ◔ rascunho |
-| MAT-M01 | M | [Análise real em $\mathbb{R}^n$ e espaços métricos](mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) | ○ planejado |
-| MAT-M10 | M | [Espaços normados e com produto interno](mat-m10-espacos-normados-e-com-produto-interno.qmd) | ○ planejado |
+| MAT-M01 | M | [Análise real em $\mathbb{R}^n$ e espaços métricos](mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) | ◔ rascunho |
+| MAT-M10 | M | [Espaços normados e com produto interno](mat-m10-espacos-normados-e-com-produto-interno.qmd) | ◔ rascunho |
 | MAT-M07 | M | [Sequências de funções: convergência uniforme e equicontinuidade](mat-m07-sequencias-de-funcoes-convergencia-uniforme-e.qmd) | ○ planejado |
 | MAT-M02 | M | [Álgebra linear II: autovalores, decomposições e formas quadráticas](mat-m02-algebra-linear-ii-autovalores-decomposicoes-e-formas.qmd) | ○ planejado |
 | MAT-M08 | M | [Conjuntos convexos e separação](mat-m08-conjuntos-convexos-e-separacao.qmd) | ○ planejado |

@@ -10,14 +10,14 @@ Legenda de status: ○ planejado · ◔ rascunho · ◑ em revisão · ● compl
 
 | Parte | Capítulos | G | M | D | Escritos | Completos |
 |:--|--:|--:|--:|--:|--:|--:|
-| Matemática | 22 | 8 | 10 | 4 | 8 | 0 |
+| Matemática | 22 | 8 | 10 | 4 | 10 | 0 |
 | Probabilidade e Estatística | 16 | 6 | 6 | 4 | 0 | 0 |
 | Computação | 11 | 3 | 4 | 4 | 0 | 0 |
 | Microfundamentos | 12 | 5 | 6 | 1 | 0 | 0 |
 | Econometria | 30 | 9 | 11 | 10 | 1 | 0 |
 | Macroeconomia | 33 | 10 | 13 | 10 | 0 | 0 |
 | Finanças | 24 | 8 | 9 | 7 | 0 | 0 |
-| **Total** | **148** | 49 | 59 | 40 | 9 | 0 |
+| **Total** | **148** | 49 | 59 | 40 | 11 | 0 |
 
 ## Trilhas de leitura
 
@@ -39,13 +39,14 @@ Matemática, probabilidade e computação até o nível de mestrado — o mínim
 12. ○ [Testes de hipóteses](partes/02-probabilidade-estatistica/est-g06-testes-de-hipoteses.qmd) `EST-G06`
 13. ○ [Python para economistas](partes/03-computacao/cmp-g01-python-para-economistas.qmd) `CMP-G01`
 14. ○ [Dados: pandas, APIs públicas brasileiras e visualização](partes/03-computacao/cmp-g02-dados-pandas-apis-publicas-brasileiras-e-visualizacao.qmd) `CMP-G02`
-15. ○ [Análise real em $\mathbb{R}^n$ e espaços métricos](partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) `MAT-M01`
-16. ○ [Álgebra linear II: autovalores, decomposições e formas quadráticas](partes/01-matematica/mat-m02-algebra-linear-ii-autovalores-decomposicoes-e-formas.qmd) `MAT-M02`
-17. ○ [Conjuntos convexos e separação](partes/01-matematica/mat-m08-conjuntos-convexos-e-separacao.qmd) `MAT-M08`
-18. ○ [Funções convexas e subdiferencial](partes/01-matematica/mat-m09-funcoes-convexas-e-subdiferencial.qmd) `MAT-M09`
-19. ○ [Otimização com restrições de desigualdade e dualidade](partes/01-matematica/mat-m03-convexidade-e-otimizacao-com-restricoes-de-desigualdade.qmd) `MAT-M03`
-20. ○ [Esperança condicional](partes/02-probabilidade-estatistica/est-m02-esperanca-condicional.qmd) `EST-M02`
-21. ○ [Modos de convergência e teoremas-limite](partes/02-probabilidade-estatistica/est-m03-modos-de-convergencia-e-teoremas-limite.qmd) `EST-M03`
+15. ◔ [Análise real em $\mathbb{R}^n$ e espaços métricos](partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) `MAT-M01`
+16. ◔ [Espaços normados e com produto interno](partes/01-matematica/mat-m10-espacos-normados-e-com-produto-interno.qmd) `MAT-M10`
+17. ○ [Álgebra linear II: autovalores, decomposições e formas quadráticas](partes/01-matematica/mat-m02-algebra-linear-ii-autovalores-decomposicoes-e-formas.qmd) `MAT-M02`
+18. ○ [Conjuntos convexos e separação](partes/01-matematica/mat-m08-conjuntos-convexos-e-separacao.qmd) `MAT-M08`
+19. ○ [Funções convexas e subdiferencial](partes/01-matematica/mat-m09-funcoes-convexas-e-subdiferencial.qmd) `MAT-M09`
+20. ○ [Otimização com restrições de desigualdade e dualidade](partes/01-matematica/mat-m03-convexidade-e-otimizacao-com-restricoes-de-desigualdade.qmd) `MAT-M03`
+21. ○ [Esperança condicional](partes/02-probabilidade-estatistica/est-m02-esperanca-condicional.qmd) `EST-M02`
+22. ○ [Modos de convergência e teoremas-limite](partes/02-probabilidade-estatistica/est-m03-modos-de-convergencia-e-teoremas-limite.qmd) `EST-M03`
 
 ### Graduação completa
 
@@ -119,11 +120,11 @@ Ferramentas de análise, álgebra linear, otimização e dinâmica usadas no res
 | MAT-G06 | G | [Cálculo em várias variáveis](partes/01-matematica/mat-g06-calculo-em-varias-variaveis.qmd) | MAT-G03, MAT-G05 | ◔ rascunho |
 | MAT-G07 | G | [Otimização: sem restrições e com restrições de igualdade](partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) | MAT-G06 | ◔ rascunho |
 | MAT-G08 | G | [Equações em diferenças e equações diferenciais lineares](partes/01-matematica/mat-g08-equacoes-em-diferencas-e-equacoes-diferenciais-lineares.qmd) | MAT-G04, MAT-G05 | ◔ rascunho |
-| MAT-M01 | M | [Análise real em $\mathbb{R}^n$ e espaços métricos](partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) | MAT-G02, MAT-G06 | ○ planejado |
-| MAT-M10 | M | [Espaços normados e com produto interno](partes/01-matematica/mat-m10-espacos-normados-e-com-produto-interno.qmd) | MAT-M01, MAT-G05 | ○ planejado |
+| MAT-M01 | M | [Análise real em $\mathbb{R}^n$ e espaços métricos](partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) | MAT-G02, MAT-G06 | ◔ rascunho |
+| MAT-M10 | M | [Espaços normados e com produto interno](partes/01-matematica/mat-m10-espacos-normados-e-com-produto-interno.qmd) | MAT-M01, MAT-G05 | ◔ rascunho |
 | MAT-M07 | M | [Sequências de funções: convergência uniforme e equicontinuidade](partes/01-matematica/mat-m07-sequencias-de-funcoes-convergencia-uniforme-e.qmd) | MAT-M10, MAT-G04 | ○ planejado |
 | MAT-M02 | M | [Álgebra linear II: autovalores, decomposições e formas quadráticas](partes/01-matematica/mat-m02-algebra-linear-ii-autovalores-decomposicoes-e-formas.qmd) | MAT-G05 | ○ planejado |
-| MAT-M08 | M | [Conjuntos convexos e separação](partes/01-matematica/mat-m08-conjuntos-convexos-e-separacao.qmd) | MAT-M01, MAT-G05 | ○ planejado |
+| MAT-M08 | M | [Conjuntos convexos e separação](partes/01-matematica/mat-m08-conjuntos-convexos-e-separacao.qmd) | MAT-M10 | ○ planejado |
 | MAT-M09 | M | [Funções convexas e subdiferencial](partes/01-matematica/mat-m09-funcoes-convexas-e-subdiferencial.qmd) | MAT-M08, MAT-G06 | ○ planejado |
 | MAT-M03 | M | [Otimização com restrições de desigualdade e dualidade](partes/01-matematica/mat-m03-convexidade-e-otimizacao-com-restricoes-de-desigualdade.qmd) | MAT-G07, MAT-M09 | ○ planejado |
 | MAT-M04 | M | [Estática comparativa: função implícita, envelope e teorema do máximo](partes/01-matematica/mat-m04-estatica-comparativa-funcao-implicita-envelope-e-teorema-do.qmd) | MAT-M03 | ○ planejado |

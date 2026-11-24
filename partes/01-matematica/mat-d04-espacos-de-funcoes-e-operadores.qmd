@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Espaços normados e com produto interno* (MAT-M10); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02); *Sequências de funções: convergência uniforme e equicontinuidade* (MAT-M07)
+**Pré-requisitos:** @sec-mat-m10 (*Espaços normados e com produto interno*); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02); *Sequências de funções: convergência uniforme e equicontinuidade* (MAT-M07)
 :::
 
 **Leituras principais:** @ok2007, @luenberger1969, @stokey1989

@@ -50,14 +50,14 @@
  "MAT-M01": {
   "titulo": "Análise real em $\\mathbb{R}^n$ e espaços métricos",
   "nivel": "M",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "MAT-M10": {
   "titulo": "Espaços normados e com produto interno",
   "nivel": "M",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "MAT-M07": {
   "titulo": "Sequências de funções: convergência uniforme e equicontinuidade",
