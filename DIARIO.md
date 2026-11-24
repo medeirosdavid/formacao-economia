@@ -2,6 +2,47 @@
 
 Registro curto de cada sessão: o que foi feito, decisões e pendências. Entradas mais recentes no topo.
 
+## 24/11/2026 — MAT-G04 a MAT-G08
+
+**Feito** (cinco capítulos, status rascunho, com referências padrão: Lima, Rudin, Simon & Blume, Sydsæter, Strang, Sundaram)
+
+- **MAT-G04** *Integração e aplicações*:
+  - Darboux, integrabilidade de funções monótonas e contínuas (continuidade uniforme), propriedades e TFC;
+  - logaritmo como integral e exponencial, cumprindo o que o MAT-G03 admitiu; substituição e partes;
+  - integrais impróprias, teste da integral, constante de Euler–Mascheroni e função gama;
+  - regra de Leibniz com limites variáveis e integral gaussiana;
+  - excedentes e peso morto, valor presente contínuo e duration;
+  - aplicação com curva de Lorenz e Gini calibrados ao Gini do IBGE (PNAD 2023).
+- **MAT-G05** *Álgebra linear I*:
+  - Cauchy–Schwarz e correlação; matrizes como transformações lineares;
+  - eliminação de Gauss–Jordan, existência e unicidade, lema da troca, dimensão, posto linha = posto coluna, núcleo e imagem;
+  - sete caracterizações da inversa; determinante pela fórmula de Leibniz, Laplace, Cramer;
+  - Leontief com série de Neumann (matriz ilustrativa de três setores); mercados completos.
+- **MAT-G06** *Cálculo em várias variáveis*:
+  - derivada como aplicação linear e galeria de contraexemplos; $C^1$ implica diferenciável;
+  - regra da cadeia, contabilidade do crescimento, valor médio e desigualdade do valor médio;
+  - gradiente e TMS; Schwarz (e contraexemplo); Taylor de segunda ordem; Euler e esgotamento do produto;
+  - Fubini no retângulo, demonstrado pela regra de Leibniz; mudança de variáveis admitida.
+- **MAT-G07** *Otimização*:
+  - CPO, formas quadráticas ($2 \times 2$ demonstrado; Sylvester admitido) e CSO;
+  - concavidade e ótimos globais; MQO como otimização;
+  - função implícita no plano (demonstrada), Lagrange ($n = 2$ demonstrado, geral enunciado), qualificação (cúspide);
+  - multiplicador como preço sombra; hessiana orlada ($n = 2$ demonstrado);
+  - consumidor, firma, carteira de variância mínima.
+- **MAT-G08** *Equações em diferenças e diferenciais*:
+  - primeira ordem, teia de aranha, solução para frente e bolhas; complexos e De Moivre (trigonometria admitida);
+  - segunda ordem e triângulo de estabilidade (demonstrado); Samuelson;
+  - EDOs de primeira e segunda ordem; sistemas $2 \times 2$ com autovalores; linearização; Solow;
+  - aplicação: AR(1) da inflação mensal (IPCA, SGS 433, desde 2000).
+- Cada capítulo tem 2 interativos, laboratório, 7 a 9 exercícios resolvidos e cerca de 14 flashcards.
+- Admissões explícitas, para cumprir depois: funções trigonométricas; critério de Sylvester (MAT-M02); teorema de Lagrange geral e função implícita em $\R^n$ (MAT-M04); mudança de variáveis em integrais duplas (EST-M01); Picard–Lindelöf (MAT-M06).
+
+**Pendências**
+
+- [ ] David conferir, no site, os números da aplicação do IPCA do MAT-G08 (testada só com dados simulados).
+- [ ] Saber de que livro ou notas são os sumários enviados, para incluí-los nas leituras.
+- [ ] Próximos capítulos naturais: MAT-M01 *Análise real em $\R^n$ e espaços métricos* e MAT-M02 *Álgebra linear II* (que demonstra o critério de Sylvester).
+
 ## 24/11/2026 — Currículo confrontado com o sumário de um livro de análise para economistas
 
 **Feito**

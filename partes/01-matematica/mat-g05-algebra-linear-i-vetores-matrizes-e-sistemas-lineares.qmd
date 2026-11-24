@@ -369,10 +369,10 @@ Um real a mais de demanda final por bens industriais eleva a produção industri
 ```{ojs}
 //| echo: false
 import {controle, alternador, seletor} from "/ojs/controles.js"
-viewof ma = controle("a", [-2, 2], {valor: 1.5, passo: 0.1, casas: 1})
-viewof mb = controle("b", [-2, 2], {valor: 0.5, passo: 0.1, casas: 1})
-viewof mc = controle("c", [-2, 2], {valor: 0.3, passo: 0.1, casas: 1})
-viewof md = controle("d", [-2, 2], {valor: 1, passo: 0.1, casas: 1})
+viewof m11 = controle("a", [-2, 2], {valor: 1.5, passo: 0.1, casas: 1})
+viewof m12 = controle("b", [-2, 2], {valor: 0.5, passo: 0.1, casas: 1})
+viewof m21 = controle("c", [-2, 2], {valor: 0.3, passo: 0.1, casas: 1})
+viewof m22 = controle("d", [-2, 2], {valor: 1, passo: 0.1, casas: 1})
 ```
 
 ```{ojs}
@@ -389,15 +389,15 @@ Plot.plot({
     Plot.ruleX([0]), Plot.ruleY([0]),
     Plot.line([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]].map(([x, y]) => ({x, y})), {x: "x", y: "y", stroke: "#9AA5B1", fill: "#9AA5B1", fillOpacity: 0.3}),
     Plot.line(paralelogramo, {x: "x", y: "y", stroke: "#2F5D8A", strokeWidth: 2, fill: "#2F5D8A", fillOpacity: 0.25}),
-    Plot.arrow([{x1: 0, y1: 0, x2: ma, y2: mc}, {x1: 0, y1: 0, x2: mb, y2: md}], {x1: "x1", y1: "y1", x2: "x2", y2: "y2", stroke: "#8C2F39", strokeWidth: 2})
+    Plot.arrow([{x1: 0, y1: 0, x2: m11, y2: m21}, {x1: 0, y1: 0, x2: m12, y2: m22}], {x1: "x1", y1: "y1", x2: "x2", y2: "y2", stroke: "#8C2F39", strokeWidth: 2})
   ]
 })
 ```
 
 ```{ojs}
 //| echo: false
-detA = ma * md - mb * mc
-paralelogramo = [[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]].map(([x, y]) => ({x: ma * x + mb * y, y: mc * x + md * y}))
+detA = m11 * m22 - m12 * m21
+paralelogramo = [[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]].map(([x, y]) => ({x: m11 * x + m12 * y, y: m21 * x + m22 * y}))
 ```
 :::
 

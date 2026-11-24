@@ -386,7 +386,7 @@ viewof k0Sol = controle("k(0)", [0.1, 20], {valor: 1, passo: 0.1, casas: 1})
 
 ```{ojs}
 //| echo: false
-md`k* = (s/(n + δ))^(1/(1 − α)) = **${kEst.toFixed(2).replace(".", ",")}**; velocidade de convergência λ = (1 − α)(n + δ) = ${lambdaSol.toFixed(3).replace(".", ",")} por ano; meia-vida ≈ **${(Math.log(2) / lambdaSol).toFixed(1).replace(".", ",")} anos**.`
+md`k\\* = (s/(n + δ))^(1/(1 − α)) = **${kEst.toFixed(2).replace(".", ",")}**; velocidade de convergência λ = (1 − α)(n + δ) = ${lambdaSol.toFixed(3).replace(".", ",")} por ano; meia-vida ≈ **${(Math.log(2) / lambdaSol).toFixed(1).replace(".", ",")} anos**.`
 ```
 
 ```{ojs}
