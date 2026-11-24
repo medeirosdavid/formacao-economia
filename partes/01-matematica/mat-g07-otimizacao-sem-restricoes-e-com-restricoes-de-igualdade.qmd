@@ -10,14 +10,537 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-mat-g07-motivacao}
 
-1. Condições de primeira e segunda ordem
-2. Concavidade e ótimos globais
-3. Método de Lagrange
-4. Qualificação de restrições
-5. Interpretação dos multiplicadores
-6. Hessiana orlada
-7. Aplicações: consumidor e firma
+A teoria econômica é, em grande parte, uma coleção de problemas de otimização. O consumidor maximiza a utilidade sujeito ao orçamento; a firma minimiza o custo de produzir uma quantidade dada; o investidor escolhe a carteira de menor variância; o econometrista escolhe os coeficientes que minimizam a soma dos quadrados dos resíduos. Em todos os casos, o trabalho matemático tem três etapas:
+
+1. **condições necessárias** de primeira ordem, que reduzem a busca a poucos candidatos — pontos com gradiente nulo, ou pontos em que o gradiente do objetivo é combinação dos gradientes das restrições (o método de **Lagrange**);
+2. **condições suficientes**, locais (segunda ordem: hessiana, hessiana orlada) ou globais (concavidade), que dizem quais candidatos são de fato ótimos;
+3. **interpretação**: o multiplicador de Lagrange é um **preço sombra** — quanto o valor ótimo aumenta quando a restrição é relaxada em uma unidade.
+
+Este capítulo desenvolve essas três etapas para problemas sem restrições e com restrições de igualdade. As restrições de desigualdade — não negatividade, orçamento que pode não ser gasto por inteiro — e a dualidade ficam para o @sec-mat-m03.
+
+## Otimização sem restrições {#sec-mat-g07-sem-restricoes}
+
+Seja $f: U \to \R$, com $U \subseteq \R^n$ aberto. Um ponto $\vb a \in U$ é **máximo local** se existe $r > 0$ com $f(\vb x) \leq f(\vb a)$ para $\vb x \in B(\vb a, r)$; **estrito** se a desigualdade é estrita para $\vb x \neq \vb a$; **global** se vale para todo $\vb x \in U$. Analogamente para mínimos. Um **ponto crítico** é um $\vb a$ com $\nabla f(\vb a) = \vb 0$.
+
+::: {#thm-mat-g07-cpo}
+## Condição de primeira ordem
+Se $f$ é diferenciável em $\vb a$ e $\vb a$ é máximo ou mínimo local, então $\nabla f(\vb a) = \vb 0$.
 :::
+
+::: {.proof}
+Para cada $j$, a função de uma variável $\varphi_j(t) \defeq f(\vb a + t\vb e_j)$ tem extremo local em $t = 0$, ponto interior do seu domínio (pois $U$ é aberto). Pelo teorema de Fermat (@thm-mat-g03-fermat), $0 = \varphi_j'(0) = \pd{f}{x_j}(\vb a)$.
+:::
+
+Para classificar pontos críticos, usamos a fórmula de Taylor de segunda ordem (@thm-mat-g06-taylor): perto de um ponto crítico, $f(\vb a + \vb h) - f(\vb a) \approx \frac12 \vb h\T \vb H f(\vb a)\vb h$, e o sinal dessa **forma quadrática** decide.
+
+::: {#def-mat-g07-definida}
+## Formas quadráticas definidas
+Uma matriz simétrica $\vb A$ (ou a forma quadrática $Q(\vb h) = \vb h\T\vb A\vb h$) é **positiva definida** se $Q(\vb h) > 0$ para todo $\vb h \neq \vb 0$; **negativa definida** se $Q(\vb h) < 0$ para todo $\vb h \neq \vb 0$; **positiva** (ou **negativa**) **semidefinida** se as desigualdades valem com $\geq$ (ou $\leq$); e **indefinida** se assume valores positivos e negativos.
+:::
+
+::: {#prp-mat-g07-definida-2x2}
+## O caso $2 \times 2$
+Seja $\vb A = \begin{pmatrix} a & b \\ b & c \end{pmatrix}$. Então $\vb A$ é positiva definida se, e somente se, $a > 0$ e $ac - b^2 > 0$; negativa definida se, e somente se, $a < 0$ e $ac - b^2 > 0$; e indefinida se $ac - b^2 < 0$.
+:::
+
+::: {.proof}
+Se $a \neq 0$, completando o quadrado,
+$$
+Q(h_1, h_2) = a h_1^2 + 2b h_1 h_2 + c h_2^2 = a\Big(h_1 + \frac ba h_2\Big)^2 + \frac{ac - b^2}{a}\, h_2^2 .
+$$
+Se $a > 0$ e $ac - b^2 > 0$, as duas parcelas são não negativas e só se anulam juntas quando $h_2 = 0$ e $h_1 = 0$: $Q$ é positiva definida. Se $a < 0$ e $ac - b^2 > 0$, ambas são não positivas, e $Q$ é negativa definida. Se $ac - b^2 < 0$, os vetores $(1, 0)$ e $(-b/a, 1)$ dão valores $a$ e $(ac - b^2)/a$, de sinais opostos. Se $a = 0$ e $ac - b^2 = -b^2 < 0$, então $Q(t, 1) = 2bt + c$ muda de sinal com $t$. Reciprocamente, se $Q$ é positiva definida, $a = Q(1, 0) > 0$, e $ac - b^2 \leq 0$ é impossível: o caso $< 0$ dá indefinição, e no caso $= 0$ o vetor $(-b/a, 1) \neq \vb 0$ tem $Q = 0$. O caso negativo é simétrico.
+:::
+
+Em dimensão $n$, vale o **critério de Sylvester**: sejam $D_k$ os **menores principais líderes** de $\vb A$, os determinantes das submatrizes formadas pelas $k$ primeiras linhas e colunas. Então $\vb A$ é positiva definida se, e somente se, $D_k > 0$ para $k = 1, \dots, n$, e negativa definida se, e somente se, $(-1)^k D_k > 0$ para todo $k$ (os sinais alternam, começando por $D_1 < 0$). A @prp-mat-g07-definida-2x2 é o caso $n = 2$; a demonstração geral, com autovalores, está no @sec-mat-m02, e a usamos aqui sem demonstrá-la.
+
+::: {#thm-mat-g07-cso}
+## Condições de segunda ordem
+Seja $f$ de classe $C^2$ em $U$ e $\vb a$ um ponto crítico.
+
+(a) Se $\vb H f(\vb a)$ é negativa definida, $\vb a$ é máximo local estrito; se é positiva definida, mínimo local estrito.
+(b) Se $\vb H f(\vb a)$ é indefinida, $\vb a$ não é máximo nem mínimo local — é um **ponto de sela**.
+(c) Se $\vb a$ é máximo local, $\vb Hf(\vb a)$ é negativa semidefinida; se é mínimo local, positiva semidefinida.
+:::
+
+::: {.proof}
+Para (a), os menores principais líderes de $\vb Hf(\vb x)$ são polinômios nas segundas derivadas, que são contínuas; se têm os sinais do critério de Sylvester em $\vb a$, mantêm esses sinais numa bola $B(\vb a, r) \subseteq U$, e $\vb Hf(\vb x)$ é negativa definida para todo $\vb x$ nessa bola. Para $0 < \norm{\vb h} < r$, a @eq-mat-g06-taylor com $\nabla f(\vb a) = \vb 0$ dá $f(\vb a + \vb h) = f(\vb a) + \frac12 \vb h\T\vb Hf(\vb c)\vb h < f(\vb a)$, pois $\vb c$ está na bola. O caso do mínimo é análogo.
+
+Para (b) e (c), fixe $\vb h$ e seja $\varphi(t) = f(\vb a + t\vb h)$, com $\varphi'(0) = 0$ e $\varphi''(t) = \vb h\T\vb Hf(\vb a + t\vb h)\vb h$, contínua (demonstração do @thm-mat-g06-taylor). Se $\vb h\T\vb Hf(\vb a)\vb h > 0$, a @prp-mat-g03-segunda-ordem diz que $\varphi$ tem mínimo local estrito em $0$: $f(\vb a + t\vb h) > f(\vb a)$ para $t \neq 0$ pequeno, e $\vb a$ não é máximo local. Se $\vb h\T\vb Hf(\vb a)\vb h < 0$, analogamente, $\vb a$ não é mínimo local. Com uma forma indefinida, as duas coisas acontecem, o que prova (b); e, se $\vb a$ é máximo local, nenhuma direção pode ter $\vb h\T\vb Hf(\vb a)\vb h > 0$, o que prova (c).
+:::
+
+Quando a hessiana é apenas semidefinida, o teste é inconclusivo: $x^4 + y^4$, $-(x^4 + y^4)$ e $x^4 - y^4$ têm hessiana nula na origem e são, respectivamente, mínimo, máximo e sela (@exr-mat-g07-inconclusivo).
+
+## Concavidade e ótimos globais {#sec-mat-g07-concavidade}
+
+As condições de segunda ordem são locais. Em economia, queremos ótimos **globais**, e a ferramenta é a concavidade — a versão em várias variáveis do @thm-mat-g03-concavidade.
+
+::: {#def-mat-g07-concava}
+## Função côncava em $\R^n$
+Seja $C \subseteq \R^n$ convexo. $f: C \to \R$ é **côncava** se $f(\lambda\vb x + (1 - \lambda)\vb y) \geq \lambda f(\vb x) + (1 - \lambda) f(\vb y)$ para todos $\vb x, \vb y \in C$ e $\lambda \in [0, 1]$; **estritamente côncava** se a desigualdade é estrita para $\vb x \neq \vb y$ e $\lambda \in (0, 1)$; e (estritamente) **convexa** se $-f$ é (estritamente) côncava.
+:::
+
+::: {#thm-mat-g07-concavidade}
+## Caracterizações da concavidade
+Seja $f$ diferenciável num aberto convexo $U$. Então $f$ é côncava se, e somente se,
+$$
+f(\vb y) \leq f(\vb x) + \nabla f(\vb x)\T(\vb y - \vb x) \qquad \text{para todos } \vb x, \vb y \in U.
+$$ {#eq-mat-g07-tangente}
+Se $f$ é de classe $C^2$, $f$ é côncava se, e somente se, $\vb Hf(\vb x)$ é negativa semidefinida para todo $\vb x \in U$; e, se $\vb Hf(\vb x)$ é negativa definida para todo $\vb x$, $f$ é estritamente côncava.
+:::
+
+::: {.proof}
+A concavidade é uma propriedade sobre segmentos: $f$ é côncava se, e somente se, para todos $\vb x, \vb y \in U$, a função $\varphi(t) \defeq f(\vb x + t(\vb y - \vb x))$ é côncava no intervalo aberto $I = \{t : \vb x + t(\vb y - \vb x) \in U\} \supseteq [0, 1]$. Pela regra da cadeia, $\varphi'(t) = \nabla f(\vb x_t)\T(\vb y - \vb x)$, com $\vb x_t = \vb x + t(\vb y - \vb x)$.
+
+Se $f$ é côncava, $\varphi$ é côncava, e o @thm-mat-g03-concavidade (b) com os pontos $0$ e $1$ dá $\varphi(1) \leq \varphi(0) + \varphi'(0)$, que é a @eq-mat-g07-tangente. Reciprocamente, se vale a @eq-mat-g07-tangente, aplicando-a aos pontos $\vb x_t$ e $\vb x_s$ obtemos $\varphi(s) \leq \varphi(t) + \varphi'(t)(s - t)$ para todos $s, t \in I$, e o mesmo teorema dá a concavidade de $\varphi$.
+
+No caso $C^2$, $\varphi''(t) = (\vb y - \vb x)\T\vb Hf(\vb x_t)(\vb y - \vb x)$. Se a hessiana é sempre negativa semidefinida, $\varphi'' \leq 0$ e cada $\varphi$ é côncava; se é negativa definida, $\varphi'' < 0$ para $\vb y \neq \vb x$, e $\varphi$ é estritamente côncava. Reciprocamente, se $f$ é côncava, dados $\vb x \in U$ e $\vb h$, tome $\vb y = \vb x + \varepsilon\vb h \in U$: $\varphi$ é côncava, logo $\varphi''(0) = \varepsilon^2 \vb h\T\vb Hf(\vb x)\vb h \leq 0$.
+:::
+
+::: {#cor-mat-g07-global}
+## Pontos críticos de funções côncavas
+Se $f$ é côncava e diferenciável num aberto convexo $U$ e $\nabla f(\vb x^*) = \vb 0$, então $\vb x^*$ é máximo **global** de $f$ em $U$. Se $f$ é estritamente côncava, o máximo é único.
+:::
+
+::: {.proof}
+Pela @eq-mat-g07-tangente com $\vb x = \vb x^*$, $f(\vb y) \leq f(\vb x^*)$ para todo $\vb y$. Se $\vb x^{**} \neq \vb x^*$ também fosse máximo, a concavidade estrita daria $f\big(\frac{\vb x^* + \vb x^{**}}{2}\big) > f(\vb x^*)$.
+:::
+
+::: {#exm-mat-g07-mqo}
+## Mínimos quadrados como otimização
+Dados $\vb y \in \R^N$ e $\vb X$, $N \times k$, o estimador de mínimos quadrados minimiza $S(\vb b) = \norm{\vb y - \vb X\vb b}^2 = \vb y\T\vb y - 2\vb b\T\vb X\T\vb y + \vb b\T\vb X\T\vb X\vb b$. Pelo @exr-mat-g06-carteira (com $\vb\Sigma = \vb X\T\vb X$), $\nabla S(\vb b) = -2\vb X\T\vb y + 2\vb X\T\vb X\vb b$ e $\vb HS = 2\vb X\T\vb X$, que é positiva semidefinida, pois $\vb h\T\vb X\T\vb X\vb h = \norm{\vb X\vb h}^2 \geq 0$. Assim $S$ é convexa, e todo ponto crítico — toda solução das **equações normais** $\vb X\T\vb X\vb b = \vb X\T\vb y$ — é mínimo global. Se as colunas de $\vb X$ são LI, $\norm{\vb X\vb h}^2 > 0$ para $\vb h \neq \vb 0$, a hessiana é positiva definida, $\vb X\T\vb X$ é invertível e o mínimo é único: $\hat{\vb b} = (\vb X\T\vb X)\inv\vb X\T\vb y$ (@sec-ecm-g02).
+:::
+
+## Restrições de igualdade: o método de Lagrange {#sec-mat-g07-lagrange}
+
+Considere o problema de maximizar $f(\vb x)$ sujeito a $g(\vb x) = c$. No ótimo, a curva de nível de $f$ deve **tangenciar** o conjunto das restrições: se cruzasse, seria possível mover-se ao longo da restrição para uma curva de nível mais alta. Como os gradientes são perpendiculares às curvas de nível (@prp-mat-g06-gradiente), tangência significa gradientes paralelos: $\nabla f = \lambda \nabla g$. Para transformar a intuição em teorema, precisamos saber que o conjunto $\{g = c\}$ é, localmente, uma curva — o que é garantido pela versão mais simples do teorema da função implícita.
+
+::: {#lem-mat-g07-implicita}
+## Função implícita no plano
+Seja $G$ de classe $C^1$ num aberto de $\R^2$, com $G(a, b) = 0$ e $G_y(a, b) \neq 0$. Existem intervalos abertos $I \ni a$ e $J \ni b$ e uma única função $\phi: I \to J$ tal que, para $(x, y) \in I \times J$, $G(x, y) = 0 \iff y = \phi(x)$. Além disso, $\phi$ é de classe $C^1$ e $\phi'(x) = -G_x(x, \phi(x))/G_y(x, \phi(x))$.
+:::
+
+::: {.proof}
+Suponha $G_y(a, b) > 0$ (senão, troque $G$ por $-G$). Por continuidade, existe um retângulo $R = [a - \delta, a + \delta] \times [b - \varepsilon, b + \varepsilon]$ contido no domínio, no qual $G_y > 0$; para cada $x$, a função $y \mapsto G(x, y)$ é estritamente crescente em $[b - \varepsilon, b + \varepsilon]$. Em particular, $G(a, b - \varepsilon) < 0 < G(a, b + \varepsilon)$, e, pela continuidade de $x \mapsto G(x, b \pm \varepsilon)$, existe $\delta' \leq \delta$ tal que $G(x, b - \varepsilon) < 0 < G(x, b + \varepsilon)$ para $\abs{x - a} < \delta'$. Sejam $I = (a - \delta', a + \delta')$ e $J = (b - \varepsilon, b + \varepsilon)$. Para cada $x \in I$, o teorema do valor intermediário e a monotonia dão um único $\phi(x) \in J$ com $G(x, \phi(x)) = 0$.
+
+**Continuidade.** Dados $x_0 \in I$ e $\eta > 0$ pequeno (com $[\phi(x_0) - \eta, \phi(x_0) + \eta] \subseteq J$), a monotonia dá $G(x_0, \phi(x_0) - \eta) < 0 < G(x_0, \phi(x_0) + \eta)$; por continuidade em $x$, esses sinais se mantêm para $x$ perto de $x_0$, e então $\phi(x) \in (\phi(x_0) - \eta, \phi(x_0) + \eta)$.
+
+**Derivada.** Para $x$ perto de $x_0$, o @thm-mat-g06-valor-medio, aplicado a $G$ no segmento entre $(x_0, \phi(x_0))$ e $(x, \phi(x))$ — contido em $R$, que é convexo —, dá um ponto $\vb c_x$ do segmento com $0 = G_x(\vb c_x)(x - x_0) + G_y(\vb c_x)(\phi(x) - \phi(x_0))$. Logo $\frac{\phi(x) - \phi(x_0)}{x - x_0} = -\frac{G_x(\vb c_x)}{G_y(\vb c_x)}$; quando $x \to x_0$, $\vb c_x \to (x_0, \phi(x_0))$ pela continuidade de $\phi$, e o quociente tende a $-G_x/G_y$ no ponto. Essa derivada é contínua, por ser composta de funções contínuas.
+:::
+
+::: {#thm-mat-g07-lagrange-2}
+## Lagrange com duas variáveis e uma restrição
+Sejam $f$ e $g$ de classe $C^1$ num aberto de $\R^2$, e $(a, b)$ um máximo (ou mínimo) local de $f$ restrita a $\{g = c\}$. Se $\nabla g(a, b) \neq \vb 0$, existe $\lambda \in \R$ com
+$$
+\nabla f(a, b) = \lambda\, \nabla g(a, b) .
+$$
+:::
+
+::: {.proof}
+Suponha $g_y(a, b) \neq 0$ (se $g_y(a, b) = 0$, então $g_x(a, b) \neq 0$ e trocamos os papéis de $x$ e $y$). Pelo @lem-mat-g07-implicita aplicado a $G = g - c$, perto de $(a, b)$ o conjunto $\{g = c\}$ é o gráfico de $\phi$, com $\phi(a) = b$. Então $h(x) \defeq f(x, \phi(x))$ tem extremo local no ponto interior $x = a$, e, pelo teorema de Fermat e pela regra da cadeia,
+$$
+0 = h'(a) = f_x + f_y\,\phi'(a) = f_x - f_y\,\frac{g_x}{g_y},
+$$
+com as derivadas calculadas em $(a, b)$. Com $\lambda \defeq f_y/g_y$, temos $f_y = \lambda g_y$ e $f_x = (f_y/g_y)\,g_x = \lambda g_x$.
+:::
+
+O teorema vale em qualquer dimensão, com qualquer número de restrições, desde que elas sejam "independentes" no ponto.
+
+::: {#thm-mat-g07-lagrange}
+## Teorema de Lagrange
+Sejam $f, g_1, \dots, g_m$ de classe $C^1$ num aberto $U \subseteq \R^n$, $m < n$, e $\vb x^*$ um máximo ou mínimo local de $f$ restrita a $\{\vb x : g_i(\vb x) = c_i,\ i = 1, \dots, m\}$. Se os gradientes $\nabla g_1(\vb x^*), \dots, \nabla g_m(\vb x^*)$ são linearmente independentes, existem $\lambda_1, \dots, \lambda_m$ com
+$$
+\nabla f(\vb x^*) = \sum_{i=1}^m \lambda_i \nabla g_i(\vb x^*) .
+$$
+:::
+
+A demonstração é a mesma do caso plano, trocando o @lem-mat-g07-implicita pelo teorema da função implícita em várias variáveis, que é demonstrado no @sec-mat-m04. Na prática, monta-se o **lagrangiano**
+$$
+\mathcal{L}(\vb x, \vb\lambda) \defeq f(\vb x) - \sum_{i=1}^m \lambda_i\big(g_i(\vb x) - c_i\big)
+$$
+e procuram-se seus pontos críticos: $\nabla_{\vb x}\mathcal L = \vb 0$ são as $n$ equações $\nabla f = \sum_i \lambda_i\nabla g_i$, e $\partial\mathcal L/\partial\lambda_i = 0$ devolve as $m$ restrições — $n + m$ equações para $n + m$ incógnitas.
+
+**Qualificação de restrições.** A hipótese de gradientes independentes não é um detalhe. Considere minimizar $f(x, y) = x$ sujeito a $g(x, y) = y^2 - x^3 = 0$. O conjunto viável é a curva $x = \abs{y}^{2/3} \geq 0$, e o mínimo é a origem. Mas $\nabla f = (1, 0)$ e $\nabla g(0, 0) = (-3x^2, 2y)\big|_{(0,0)} = (0, 0)$: nenhum $\lambda$ satisfaz $(1, 0) = \lambda(0, 0)$. O método de Lagrange "não vê" esse ótimo, que está num **bico** da curva, onde ela não é o gráfico de uma função diferenciável. Por isso, na lista de candidatos, devem entrar também os pontos viáveis em que a qualificação falha.
+
+As condições de Lagrange são **necessárias**; para decidir quais candidatos são ótimos, há dois caminhos: as condições de segunda ordem (@sec-mat-g07-orlada) ou argumentos globais — por exemplo, se $f$ é côncava e as restrições são lineares, todo ponto que satisfaz as condições de Lagrange é máximo global (@exr-mat-g07-concava-linear).
+
+## Interpretação dos multiplicadores {#sec-mat-g07-multiplicadores}
+
+::: {#thm-mat-g07-multiplicador}
+## O multiplicador como preço sombra
+Para $c$ num intervalo, seja $\vb x^*(c)$ uma solução de $\max f(\vb x)$ sujeito a $g(\vb x) = c$, com multiplicador $\lambda(c)$, e suponha $\vb x^*$ diferenciável em $c$. Então o **valor ótimo** $V(c) \defeq f(\vb x^*(c))$ satisfaz
+$$
+V'(c) = \lambda(c) .
+$$
+:::
+
+::: {.proof}
+Derivando a identidade $g(\vb x^*(c)) = c$ pela regra da cadeia, $\nabla g(\vb x^*)\T \frac{\dd\vb x^*}{\dd c} = 1$. Então $V'(c) = \nabla f(\vb x^*)\T\frac{\dd\vb x^*}{\dd c} = \lambda\,\nabla g(\vb x^*)\T\frac{\dd\vb x^*}{\dd c} = \lambda$.
+:::
+
+O multiplicador mede quanto o valor ótimo aumenta quando a restrição é relaxada em uma unidade: é o **preço sombra** do recurso escasso. No problema do consumidor, é a utilidade marginal da renda; na minimização de custos, o custo marginal; num problema de planejamento com restrição de recursos, o valor social de uma unidade adicional do recurso. Com várias restrições, $\partial V/\partial c_i = \lambda_i$ pelo mesmo argumento. A hipótese de diferenciabilidade de $\vb x^*(c)$ é garantida, em condições gerais, pelo teorema da função implícita, e a versão completa desse resultado é o **teorema do envelope** (@sec-mat-m04).
+
+## Condições de segunda ordem: a hessiana orlada {#sec-mat-g07-orlada}
+
+Com restrições, a hessiana de $f$ não é o objeto certo: só importam as direções **ao longo** da restrição, e a curvatura da própria restrição também conta. O objeto certo é a hessiana do lagrangiano, "orlada" pelos gradientes das restrições.
+
+::: {#thm-mat-g07-orlada}
+## Hessiana orlada com duas variáveis
+Sejam $f, g$ de classe $C^2$ perto de $(a, b)$, com $g(a, b) = c$, $\nabla g(a, b) \neq \vb 0$ e $\nabla f(a, b) = \lambda\nabla g(a, b)$. Seja $\mathcal L = f - \lambda(g - c)$ e
+$$
+\abs{\bar{\vb H}} \defeq \det\begin{pmatrix} 0 & g_x & g_y \\ g_x & \mathcal L_{xx} & \mathcal L_{xy} \\ g_y & \mathcal L_{xy} & \mathcal L_{yy} \end{pmatrix},
+$$
+calculado em $(a, b)$. Se $\abs{\bar{\vb H}} > 0$, $(a, b)$ é máximo local estrito de $f$ em $\{g = c\}$; se $\abs{\bar{\vb H}} < 0$, é mínimo local estrito.
+:::
+
+::: {.proof}
+Suponha $g_y(a, b) \neq 0$ e seja $\phi$ a função do @lem-mat-g07-implicita. Como $\phi' = -g_x/g_y$ é composta de funções de classe $C^1$, $\phi$ é de classe $C^2$. Ao longo da restrição, $g(x, \phi(x)) = c$, logo $h(x) \defeq f(x, \phi(x)) = \mathcal L(x, \phi(x))$. Derivando duas vezes,
+$$
+h' = \mathcal L_x + \mathcal L_y\,\phi', \qquad h'' = \mathcal L_{xx} + 2\mathcal L_{xy}\,\phi' + \mathcal L_{yy}\,(\phi')^2 + \mathcal L_y\,\phi'' .
+$$
+No ponto $(a, b)$, $\mathcal L_x = \mathcal L_y = 0$ (condições de Lagrange) e $\phi' = -g_x/g_y$, de modo que $h'(a) = 0$ e
+$$
+h''(a) = \frac{\mathcal L_{xx}\, g_y^2 - 2\mathcal L_{xy}\, g_x g_y + \mathcal L_{yy}\, g_x^2}{g_y^2} = -\frac{\abs{\bar{\vb H}}}{g_y^2},
+$$
+pois, expandindo o determinante pela primeira linha, $\abs{\bar{\vb H}} = -g_x(g_x\mathcal L_{yy} - \mathcal L_{xy}g_y) + g_y(g_x\mathcal L_{xy} - \mathcal L_{xx}g_y)$. Se $\abs{\bar{\vb H}} > 0$, $h''(a) < 0$ e, pela @prp-mat-g03-segunda-ordem, $h$ tem máximo local estrito em $a$; como, perto de $(a, b)$, os pontos da restrição são exatamente os $(x, \phi(x))$, $f$ tem máximo local estrito na restrição. O caso do mínimo é análogo.
+:::
+
+Em geral, com $n$ variáveis e $m$ restrições, a hessiana orlada é a matriz $(m + n) \times (m + n)$ com o bloco nulo $m \times m$, as derivadas das restrições na borda e a hessiana de $\mathcal L$ em $\vb x$ no bloco restante. Um ponto que satisfaz as condições de Lagrange é máximo local estrito se os últimos $n - m$ menores principais líderes alternam de sinal, sendo o de ordem $m + n$ (o determinante inteiro) com o sinal de $(-1)^n$; e é mínimo local estrito se todos esses menores têm o sinal de $(-1)^m$. Com $n = 2$ e $m = 1$, isso é o @thm-mat-g07-orlada. A demonstração do caso geral está em @simon1994; uma formulação equivalente, com a hessiana de $\mathcal L$ restrita ao espaço tangente às restrições, aparece no @sec-mat-m03.
+
+## Aplicações {#sec-mat-g07-aplicacoes}
+
+### O consumidor
+
+Um consumidor com utilidade $u(x, y) = a\log x + (1 - a)\log y$, $a \in (0, 1)$, renda $m$ e preços $p_x, p_y > 0$ resolve $\max u(x, y)$ sujeito a $p_x x + p_y y = m$, com $x, y > 0$. As condições de Lagrange são
+$$
+\frac{a}{x} = \lambda p_x, \qquad \frac{1 - a}{y} = \lambda p_y, \qquad p_x x + p_y y = m .
+$$
+Multiplicando a primeira por $x$, a segunda por $y$ e somando, $1 = \lambda m$, logo $\lambda = 1/m$ e
+$$
+x^* = \frac{a\,m}{p_x}, \qquad y^* = \frac{(1 - a)\,m}{p_y} .
+$$
+O consumidor gasta a fração $a$ da renda com o bem $x$, independentemente dos preços. Dividindo as duas primeiras condições, $\frac{u_x}{u_y} = \frac{p_x}{p_y}$: **a TMS iguala a razão de preços** — a curva de indiferença tangencia a reta orçamentária. A hessiana orlada vale $\abs{\bar{\vb H}} = p_x^2\frac{1 - a}{y^2} + p_y^2\frac{a}{x^2} > 0$ (com $\mathcal L_{xx} = -a/x^2$, $\mathcal L_{yy} = -(1 - a)/y^2$ e $\mathcal L_{xy} = 0$), confirmando o máximo. O máximo é, na verdade, global: substituindo $y = (m - p_x x)/p_y$, o problema vira a maximização de uma função estritamente côncava de $x$ em $(0, m/p_x)$, que tende a $-\infty$ nas extremidades. Por fim, a utilidade indireta é $V(m) = a\log\frac{am}{p_x} + (1 - a)\log\frac{(1 - a)m}{p_y}$, e $V'(m) = 1/m = \lambda$, como prevê o @thm-mat-g07-multiplicador: $\lambda$ é a utilidade marginal da renda.
+
+### A carteira de variância mínima
+
+Com $n$ ativos de retornos com matriz de covariâncias $\vb\Sigma$ (simétrica e positiva definida), a carteira de pesos $\vb w$ (com $\sum_i w_i = \vb 1\T\vb w = 1$) tem variância $\vb w\T\vb\Sigma\vb w$. Minimizando-a, com $\mathcal L = \vb w\T\vb\Sigma\vb w - \lambda(\vb 1\T\vb w - 1)$, a condição de primeira ordem é $2\vb\Sigma\vb w = \lambda\vb 1$ (@exr-mat-g06-carteira), isto é, $\vb w = \frac\lambda2\vb\Sigma\inv\vb 1$; impondo a restrição,
+$$
+\vb w^* = \frac{\vb\Sigma\inv\vb 1}{\vb 1\T\vb\Sigma\inv\vb 1}, \qquad \vb w^{*\top}\vb\Sigma\vb w^* = \frac{1}{\vb 1\T\vb\Sigma\inv\vb 1} .
+$$
+Esse ponto é mínimo **global**: toda carteira viável é $\vb w^* + \vb d$ com $\vb 1\T\vb d = 0$, e
+$$
+(\vb w^* + \vb d)\T\vb\Sigma(\vb w^* + \vb d) = \vb w^{*\top}\vb\Sigma\vb w^* + 2\vb d\T\vb\Sigma\vb w^* + \vb d\T\vb\Sigma\vb d = \vb w^{*\top}\vb\Sigma\vb w^* + \lambda\,\vb d\T\vb 1 + \vb d\T\vb\Sigma\vb d \geq \vb w^{*\top}\vb\Sigma\vb w^*,
+$$
+com igualdade só para $\vb d = \vb 0$. Acrescentando a restrição de retorno esperado $\vb\mu\T\vb w = \bar\mu$, obtém-se a **fronteira eficiente** de Markowitz (@sec-fin-m01).
+
+### A firma
+
+Uma firma com função de produção $F(K, L) = A K^{1/2} L^{1/2}$ minimiza o custo $wL + rK$ de produzir $q$. As condições de Lagrange, $w = \lambda F_L$ e $r = \lambda F_K$, implicam $\frac{w}{r} = \frac{F_L}{F_K} = \frac{K}{L}$: a **taxa marginal de substituição técnica** iguala a razão dos preços dos fatores. Daí $K = \frac wr L$, e $q = A\sqrt{KL} = A L\sqrt{w/r}$ dá $L^* = \frac{q}{A}\sqrt{r/w}$, $K^* = \frac qA\sqrt{w/r}$ e o **custo mínimo** $C(q) = wL^* + rK^* = \frac{2\sqrt{wr}}{A}\,q$. O multiplicador, obtido de $w = \lambda \frac A2\sqrt{K/L} = \lambda\frac A2\sqrt{w/r}$, é $\lambda = \frac{2\sqrt{wr}}{A} = C'(q)$: o preço sombra da restrição de produção é o **custo marginal**.
+
+## Pontes {#sec-mat-g07-pontes}
+
+- **Restrições de desigualdade e dualidade (@sec-mat-m03, @sec-mat-m09).** As condições de Karush–Kuhn–Tucker generalizam as de Lagrange; a concavidade e a convexidade dão suficiência e dualidade.
+- **Estática comparativa (@sec-mat-m04).** O teorema da função implícita em várias variáveis demonstra o @thm-mat-g07-lagrange e diz como as soluções mudam com os parâmetros; o teorema do envelope generaliza o @thm-mat-g07-multiplicador.
+- **Formas quadráticas (@sec-mat-m02).** Autovalores e o critério de Sylvester.
+- **Microeconomia (@sec-mic-g01, @sec-mic-g02, @sec-mic-m01).** Demandas marshallianas e hicksianas, funções custo, dualidade.
+- **Finanças (@sec-fin-m01).** Fronteira de média e variância.
+- **Econometria (@sec-ecm-g02, @sec-ecm-m05).** Mínimos quadrados e máxima verossimilhança são problemas de otimização; a hessiana da log-verossimilhança dá a variância assintótica.
+- **Métodos numéricos (@sec-cmp-m01).** Método de Newton e algoritmos de otimização com restrições.
+
+## Interativo {#sec-mat-g07-interativo}
+
+::: {.content-visible when-format="html"}
+**O problema do consumidor.** Utilidade $a\log x + (1 - a)\log y$. Ajuste preços, renda e o parâmetro $a$: a cesta ótima (ponto vinho) está onde a curva de indiferença mais alta (azul) tangencia a reta orçamentária (âmbar).
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof pxC = controle("preço de x", [0.5, 4], {valor: 1, passo: 0.1, casas: 1})
+viewof pyC = controle("preço de y", [0.5, 4], {valor: 2, passo: 0.1, casas: 1})
+viewof mC = controle("renda m", [2, 20], {valor: 10, passo: 0.5, casas: 1})
+viewof aC = controle("parâmetro a", [0.1, 0.9], {valor: 0.5, passo: 0.05, casas: 2})
+```
+
+```{ojs}
+//| echo: false
+md`Cesta ótima: x\\* = am/pₓ = **${xC.toFixed(2).replace(".", ",")}**, y\\* = (1 − a)m/p\\_y = **${yC.toFixed(2).replace(".", ",")}**. Multiplicador λ = 1/m = ${(1 / mC).toFixed(3).replace(".", ",")} (utilidade marginal da renda). TMS no ótimo = ${(aC / (1 - aC) * yC / xC).toFixed(2).replace(".", ",")} = pₓ/p\\_y = ${(pxC / pyC).toFixed(2).replace(".", ",")}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 520, grid: true, aspectRatio: 1,
+  x: {domain: [0, 20], label: "x"}, y: {domain: [0, 20], label: "y"},
+  marks: [
+    Plot.line(outrasCurvas, {x: "x", y: "y", z: "k", stroke: "#9AA5B1", clip: true}),
+    Plot.line(curvaOtima, {x: "x", y: "y", stroke: "#2F5D8A", strokeWidth: 2.5, clip: true}),
+    Plot.line([{x: 0, y: mC / pyC}, {x: mC / pxC, y: 0}], {x: "x", y: "y", stroke: "#B7791F", strokeWidth: 2}),
+    Plot.dot([{x: xC, y: yC}], {x: "x", y: "y", r: 6, fill: "#8C2F39"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+xC = aC * mC / pxC
+yC = (1 - aC) * mC / pyC
+uOtimo = aC * Math.log(xC) + (1 - aC) * Math.log(yC)
+curvaU = (u, k) => d3.range(0.05, 20.001, 0.05).map(x => ({x, y: Math.exp((u - aC * Math.log(x)) / (1 - aC)), k}))
+curvaOtima = curvaU(uOtimo, 0)
+outrasCurvas = [-0.8, -0.4, 0.4, 0.8].flatMap((d, i) => curvaU(uOtimo + d, i + 1))
+```
+:::
+
+**Classificando pontos críticos.** Para a forma quadrática $f(x, y) = \frac12(\alpha x^2 + 2\beta xy + \gamma y^2)$, a origem é ponto crítico e a hessiana é $\begin{pmatrix} \alpha & \beta \\ \beta & \gamma \end{pmatrix}$. As cores mostram os valores de $f$: com hessiana definida, as curvas de nível são elipses e a origem é mínimo ou máximo; com hessiana indefinida, são hipérboles e a origem é ponto de sela.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof alfaQ = controle("α", [-3, 3], {valor: 2, passo: 0.1, casas: 1})
+viewof betaQ = controle("β", [-3, 3], {valor: 0.5, passo: 0.1, casas: 1})
+viewof gamaQ = controle("γ", [-3, 3], {valor: 1, passo: 0.1, casas: 1})
+```
+
+```{ojs}
+//| echo: false
+md`det = αγ − β² = **${detQ.toFixed(2).replace(".", ",")}**. ${classeQ}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 480, aspectRatio: 1,
+  x: {domain: [-2, 2], label: "x"}, y: {domain: [-2, 2], label: "y"},
+  color: {type: "diverging", scheme: "RdBu", pivot: 0, legend: true, label: "f(x, y)"},
+  marks: [
+    Plot.contour({fill: (x, y) => 0.5 * (alfaQ * x * x + 2 * betaQ * x * y + gamaQ * y * y), x1: -2, y1: -2, x2: 2, y2: 2, thresholds: 16, stroke: "white", strokeOpacity: 0.6}),
+    Plot.dot([{x: 0, y: 0}], {x: "x", y: "y", r: 4, fill: "black"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+detQ = alfaQ * gamaQ - betaQ * betaQ
+classeQ = detQ > 1e-9 ? (alfaQ > 0 ? "Hessiana positiva definida: a origem é mínimo (global)." : "Hessiana negativa definida: a origem é máximo (global).")
+  : (detQ < -1e-9 ? "Hessiana indefinida: a origem é ponto de sela." : "Hessiana singular: o teste de segunda ordem é inconclusivo (há uma reta de pontos críticos ou um vale degenerado).")
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — o problema do consumidor e a classificação de pontos críticos de formas quadráticas — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-mat-g07-laboratorio}
+
+### O problema do consumidor, numericamente
+
+```{python}
+import numpy as np
+from scipy import optimize
+
+a, px, py, m = 0.3, 2.0, 1.0, 12.0
+utilidade = lambda v: -(a * np.log(v[0]) + (1 - a) * np.log(v[1]))      # minimizamos -u
+orcamento = {"type": "eq", "fun": lambda v: px * v[0] + py * v[1] - m}
+res = optimize.minimize(utilidade, x0=[1.0, 1.0], constraints=[orcamento],
+                        bounds=[(1e-6, None), (1e-6, None)], method="SLSQP", options={"ftol": 1e-12})
+print("numerico:", np.round(res.x, 6))
+print("analitico:", [a * m / px, (1 - a) * m / py])
+```
+
+### Método de Newton para pontos críticos
+
+O método de Newton resolve $\nabla f(\vb x) = \vb 0$ iterando $\vb x_{k+1} = \vb x_k - \vb Hf(\vb x_k)\inv\nabla f(\vb x_k)$ — a versão em várias variáveis do @exr-mat-g03-newton, obtida igualando a zero o gradiente da aproximação quadrática de Taylor. Perto de um ponto com hessiana invertível, a convergência é quadrática.
+
+```{python}
+# f(x, y) = x^4 + y^4 + x^2 + y^2 - xy + y: hessiana positiva definida em todo ponto,
+# logo f e estritamente convexa e tem um unico minimo global
+grad = lambda v: np.array([4 * v[0]**3 + 2 * v[0] - v[1], 4 * v[1]**3 + 2 * v[1] - v[0] + 1])
+hess = lambda v: np.array([[12 * v[0]**2 + 2, -1.0], [-1.0, 12 * v[1]**2 + 2]])
+x = np.array([1.0, 1.0])
+for k in range(8):
+    x = x - np.linalg.solve(hess(x), grad(x))
+    print(f"iteracao {k + 1}: x = ({x[0]: .12f}, {x[1]: .12f}), ||grad|| = {np.linalg.norm(grad(x)):.2e}")
+```
+
+Depois de algumas iterações, o número de casas corretas praticamente dobra a cada passo, até atingir a precisão da máquina.
+
+### A carteira de variância mínima
+
+Com uma matriz de covariâncias **ilustrativa** para três ativos (volatilidades anuais de 30%, 20% e 8%), comparamos a fórmula fechada com a otimização numérica.
+
+```{python}
+vol = np.array([0.30, 0.20, 0.08])
+corr = np.array([[1.0, 0.6, 0.1], [0.6, 1.0, 0.2], [0.1, 0.2, 1.0]])
+Sigma = np.outer(vol, vol) * corr
+um = np.ones(3)
+w = np.linalg.solve(Sigma, um)
+w = w / (um @ w)
+print("pesos (formula):", np.round(w, 4), " desvio-padrao:", round(float(np.sqrt(w @ Sigma @ w)), 4))
+res = optimize.minimize(lambda v: v @ Sigma @ v, x0=um / 3,
+                        constraints=[{"type": "eq", "fun": lambda v: v.sum() - 1}])
+print("pesos (numerico):", np.round(res.x, 4))
+```
+
+A carteira de mínima variância tem desvio-padrão menor que o do ativo menos arriscado isolado, graças à diversificação; ela pode envolver pesos negativos (vendas a descoberto), que só uma restrição de desigualdade impediria (@sec-mat-m03).
+
+## Exercícios resolvidos {#sec-mat-g07-exercicios}
+
+::: {#exr-mat-g07-classificar}
+Encontre e classifique os pontos críticos de $f(x, y) = x^3 - 3x + y^2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\nabla f = (3x^2 - 3,\ 2y) = \vb 0$ dá $x = \pm 1$, $y = 0$. A hessiana é $\diag(6x, 2)$. Em $(1, 0)$, é $\diag(6, 2)$, positiva definida: mínimo local estrito, com $f = -2$. Em $(-1, 0)$, é $\diag(-6, 2)$, indefinida: ponto de sela. O mínimo local não é global: $f(x, 0) = x^3 - 3x \to -\infty$ quando $x \to -\infty$. A função não é convexa — sua hessiana não é semidefinida para $x < 0$.
+:::
+
+::: {#exr-mat-g07-inconclusivo}
+Mostre que $x^4 + y^4$, $-(x^4 + y^4)$ e $x^4 - y^4$ têm a origem como ponto crítico com hessiana nula, e classifique-a em cada caso.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Todas as derivadas de primeira e segunda ordem envolvem $x^3$, $y^3$, $x^2$ ou $y^2$, e se anulam na origem. Diretamente: $x^4 + y^4 > 0$ fora da origem (mínimo global estrito); $-(x^4 + y^4) < 0$ (máximo global estrito); e $x^4 - y^4$ é positiva no eixo $x$ e negativa no eixo $y$ (sela). A hessiana nula é compatível com os três comportamentos: o teste de segunda ordem nada diz, e é preciso olhar para termos de ordem mais alta ou para a função diretamente.
+:::
+
+::: {#exr-mat-g07-produto}
+Maximize $xy$ sujeito a $x + y = c$, com $c > 0$, e verifique que $V'(c) = \lambda$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+As condições de Lagrange são $y = \lambda$, $x = \lambda$ e $x + y = c$; logo $x^* = y^* = c/2$ e $\lambda = c/2$. O gradiente da restrição, $(1, 1)$, nunca se anula. A hessiana orlada é $\det\begin{pmatrix} 0 & 1 & 1 \\ 1 & 0 & 1 \\ 1 & 1 & 0 \end{pmatrix} = 2 > 0$: máximo local estrito, e global, pois, substituindo $y = c - x$, $x(c - x)$ é uma parábola côncava. O valor ótimo é $V(c) = c^2/4$, com $V'(c) = c/2 = \lambda$. Entre todos os retângulos de perímetro fixo, o quadrado tem a maior área.
+:::
+
+::: {#exr-mat-g07-lucro}
+Uma firma competitiva com $F(K, L) = K^\alpha L^\beta$, $\alpha, \beta > 0$ e $\alpha + \beta < 1$, maximiza $\pi(K, L) = pF(K, L) - rK - wL$. Mostre que $\pi$ é estritamente côncava em $(0, \infty)^2$ e que o ponto crítico, se existe, é o máximo global único.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Os termos lineares não afetam a hessiana, que é $p$ vezes a de $F$: $F_{KK} = \alpha(\alpha - 1)F/K^2 < 0$, $F_{LL} = \beta(\beta - 1)F/L^2$ e $F_{KL} = \alpha\beta F/(KL)$. O determinante é $\frac{F^2}{K^2L^2}\big[\alpha\beta(\alpha - 1)(\beta - 1) - \alpha^2\beta^2\big] = \frac{F^2}{K^2L^2}\,\alpha\beta\,(1 - \alpha - \beta) > 0$. Pela @prp-mat-g07-definida-2x2, a hessiana é negativa definida em todo ponto; pelo @thm-mat-g07-concavidade, $\pi$ é estritamente côncava, e pelo @cor-mat-g07-global o ponto crítico — onde $pF_K = r$ e $pF_L = w$, isto é, onde o valor do produto marginal de cada fator iguala o seu preço — é o máximo global único. Com $\alpha + \beta \geq 1$, o determinante não é positivo e a análise falha: com retornos constantes ou crescentes, o lucro de uma firma competitiva é zero ou ilimitado.
+:::
+
+::: {#exr-mat-g07-cuspide}
+No exemplo de qualificação de restrições (minimizar $x$ sujeito a $y^2 = x^3$), mostre que a origem é o mínimo, que nenhum $\lambda$ satisfaz as condições de Lagrange nela, e que nenhum outro ponto as satisfaz.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Na restrição, $x^3 = y^2 \geq 0$, logo $x \geq 0$, com $x = 0$ só na origem: ela é o mínimo global. Lá, $\nabla g = (0, 0)$ e $\nabla f = (1, 0)$, e $(1, 0) = \lambda(0, 0)$ é impossível. Fora da origem, as condições $1 = -3\lambda x^2$ e $0 = 2\lambda y$ exigem $\lambda \neq 0$ e, portanto, $y = 0$; mas então $x^3 = 0$, isto é, a origem — contradição. O método de Lagrange, aplicado cegamente, não produz candidato algum; o ótimo está justamente no ponto em que a qualificação falha.
+:::
+
+::: {#exr-mat-g07-projecao}
+Encontre o ponto do hiperplano $\{\vb x : \vb a\T\vb x = c\}$ ($\vb a \neq \vb 0$) mais próximo de $\vb x_0$, e a distância de $\vb x_0$ ao hiperplano.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Minimizamos $\norm{\vb x - \vb x_0}^2$ sujeito a $\vb a\T\vb x = c$. A condição de Lagrange é $2(\vb x - \vb x_0) = \lambda\vb a$, isto é, $\vb x = \vb x_0 + \frac\lambda2\vb a$: o ponto mais próximo é obtido andando de $\vb x_0$ na direção perpendicular ao hiperplano. Impondo a restrição, $\frac\lambda2 = \frac{c - \vb a\T\vb x_0}{\norm{\vb a}^2}$, logo $\vb x^* = \vb x_0 + \frac{c - \vb a\T\vb x_0}{\norm{\vb a}^2}\vb a$ e a distância é $\norm{\vb x^* - \vb x_0} = \frac{\abs{c - \vb a\T\vb x_0}}{\norm{\vb a}}$. O objetivo é estritamente convexo e a restrição é linear, de modo que este é o mínimo global (@exr-mat-g07-concava-linear). É o caso mais simples de **projeção** sobre um conjunto convexo (@sec-mat-m08).
+:::
+
+::: {#exr-mat-g07-concava-linear}
+Mostre que, se $f$ é côncava e diferenciável num aberto convexo $U$ e as restrições são lineares, $\vb A\vb x = \vb c$, todo ponto viável $\vb x^*$ que satisfaz $\nabla f(\vb x^*) = \vb A\T\vb\lambda$ é máximo global de $f$ no conjunto viável.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $\vb y$ viável. Pela @eq-mat-g07-tangente, $f(\vb y) \leq f(\vb x^*) + \nabla f(\vb x^*)\T(\vb y - \vb x^*) = f(\vb x^*) + \vb\lambda\T\vb A(\vb y - \vb x^*)$, e $\vb A(\vb y - \vb x^*) = \vb c - \vb c = \vb 0$. Logo $f(\vb y) \leq f(\vb x^*)$. Com $\nabla f(\vb x^*) = \sum_i \lambda_i \nabla g_i$ e $g_i(\vb x) = \vb a_i\T\vb x$, essa é exatamente a condição de Lagrange; para objetivos côncavos e restrições lineares, ela é necessária e suficiente.
+:::
+
+::: {#exr-mat-g07-custo}
+Na minimização de custos da firma com $F = AK^{1/2}L^{1/2}$, verifique diretamente que $C(q)$ é linear em $q$ e explique por que isso decorre dos retornos constantes de escala.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pelo texto, $C(q) = \frac{2\sqrt{wr}}{A}q$. Com retornos constantes, se $(K^*, L^*)$ é a combinação de menor custo para produzir $q$, então $(tK^*, tL^*)$ produz $tq$ ao custo $t\,C(q)$; e não pode haver combinação mais barata para $tq$, pois, dividida por $t$, ela produziria $q$ a custo menor que $C(q)$. Logo $C(tq) = t\,C(q)$, e o custo médio e o marginal são constantes, iguais a $\lambda = 2\sqrt{wr}/A$.
+:::
+
+## Flashcards {#sec-mat-g07-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a condição de primeira ordem para um extremo interior?
+$\nabla f(\vb a) = \vb 0$: aplica-se o teorema de Fermat em cada direção coordenada.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como classificar um ponto crítico pela hessiana?
+Negativa definida: máximo local estrito; positiva definida: mínimo local estrito; indefinida: sela; semidefinida: inconclusivo.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando $\begin{pmatrix} a & b \\ b & c\end{pmatrix}$ é positiva ou negativa definida?
+Positiva: $a > 0$ e $ac - b^2 > 0$. Negativa: $a < 0$ e $ac - b^2 > 0$. Indefinida: $ac - b^2 < 0$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o critério de Sylvester?
+Positiva definida $\iff$ todos os menores principais líderes $D_k > 0$; negativa definida $\iff (-1)^k D_k > 0$ (sinais alternados, começando negativo).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como reconhecer uma função côncava de classe $C^2$, e por que isso importa?
+Hessiana negativa semidefinida em todo ponto. Para função côncava, todo ponto crítico é máximo global (único, se estritamente côncava).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que o estimador de MQO é um mínimo global?
+$S(\vb b) = \norm{\vb y - \vb X\vb b}^2$ é convexa (hessiana $2\vb X\T\vb X \succeq 0$); com colunas LI, estritamente convexa, e o mínimo $(\vb X\T\vb X)\inv\vb X\T\vb y$ é único.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema de Lagrange?
+Num ótimo local de $f$ sujeito a $g_i = c_i$, com $\nabla g_i$ LI, existe $\vb\lambda$ com $\nabla f = \sum_i \lambda_i\nabla g_i$: os gradientes são paralelos (curva de nível tangente à restrição).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema da função implícita no plano?
+Se $G(a, b) = 0$ e $G_y(a, b) \neq 0$, perto de $(a, b)$ o conjunto $\{G = 0\}$ é o gráfico de uma $\phi$ de classe $C^1$, com $\phi' = -G_x/G_y$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que a qualificação de restrições é necessária?
+Sem ela, o ótimo pode estar num "bico" da restrição e não satisfazer as condições de Lagrange (min $x$ sujeito a $y^2 = x^3$).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a interpretação do multiplicador de Lagrange?
+Preço sombra: $V'(c) = \lambda$, o ganho no valor ótimo por unidade de relaxamento da restrição (utilidade marginal da renda, custo marginal).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como a hessiana orlada classifica um candidato com 2 variáveis e 1 restrição?
+$\abs{\bar{\vb H}} > 0$: máximo local estrito na restrição; $\abs{\bar{\vb H}} < 0$: mínimo local estrito.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a demanda de um consumidor Cobb–Douglas $a\log x + (1-a)\log y$?
+$x^* = am/p_x$, $y^* = (1-a)m/p_y$: frações constantes da renda; $\lambda = 1/m$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a carteira de variância mínima?
+$\vb w^* = \vb\Sigma\inv\vb 1/(\vb 1\T\vb\Sigma\inv\vb 1)$, com variância $1/(\vb 1\T\vb\Sigma\inv\vb 1)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando as condições de Lagrange são também suficientes para um máximo global?
+Por exemplo, quando $f$ é côncava e as restrições são lineares.
+:::
+
+## Ficha-resumo {#sec-mat-g07-ficha}
+
+::: {.ficha-resumo}
+**Sem restrições.** Extremo interior $\Rightarrow \nabla f = \vb 0$. Num ponto crítico ($C^2$): $\vb Hf$ negativa definida $\Rightarrow$ máximo local estrito; positiva definida $\Rightarrow$ mínimo; indefinida $\Rightarrow$ sela; máximo $\Rightarrow$ $\vb Hf$ negativa semidefinida. $2 \times 2$: sinal de $a$ e de $ac - b^2$. Sylvester: menores principais líderes.
+
+**Concavidade.** $f$ côncava $\iff f(\vb y) \leq f(\vb x) + \nabla f(\vb x)\T(\vb y - \vb x) \iff \vb Hf \preceq 0$ (se $C^2$). Côncava e $\nabla f(\vb x^*) = \vb 0 \Rightarrow$ máximo global. MQO: $\vb X\T\vb X\vb b = \vb X\T\vb y$, mínimo global.
+
+**Lagrange.** $\max f$ s.a. $g_i = c_i$, $\nabla g_i$ LI $\Rightarrow \nabla f = \sum \lambda_i\nabla g_i$; $\mathcal L = f - \sum\lambda_i(g_i - c_i)$. Função implícita no plano: $G_y \neq 0 \Rightarrow y = \phi(x)$, $\phi' = -G_x/G_y$. Sem qualificação, o método pode falhar (cúspide).
+
+**Multiplicadores.** $V'(c) = \lambda$: preço sombra.
+
+**Hessiana orlada** ($n = 2$, $m = 1$): $\det\begin{pmatrix} 0 & g_x & g_y \\ g_x & \mathcal L_{xx} & \mathcal L_{xy} \\ g_y & \mathcal L_{xy} & \mathcal L_{yy}\end{pmatrix} > 0 \Rightarrow$ máximo; $< 0 \Rightarrow$ mínimo.
+
+**Aplicações.** Consumidor: TMS $= p_x/p_y$; Cobb–Douglas $x^* = am/p_x$, $\lambda = 1/m$. Firma: TMST $= w/r$, $\lambda = C'(q)$. Carteira: $\vb w^* = \vb\Sigma\inv\vb 1/\vb 1\T\vb\Sigma\inv\vb 1$. Côncava + restrições lineares: Lagrange é suficiente.
+:::
+
+## Notas bibliográficas {#sec-mat-g07-notas}
+
+@simon1994 é a referência mais completa para este capítulo no nível da graduação, com muitos exemplos econômicos, a demonstração do caso geral da hessiana orlada e a discussão detalhada da qualificação de restrições. @sundaram1996 trata os mesmos temas com mais rigor e é a ponte natural para o @sec-mat-m03; seus capítulos sobre otimização com restrições de igualdade discutem cuidadosamente quando as condições de Lagrange são necessárias e quando são suficientes. O critério de Sylvester é demonstrado no @sec-mat-m02.
