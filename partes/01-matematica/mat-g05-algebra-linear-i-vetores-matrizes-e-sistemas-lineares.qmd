@@ -10,13 +10,679 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-mat-g05-motivacao}
 
-1. Vetores, produto interno e norma em $\mathbb{R}^n$
-2. Matrizes e transformações lineares
-3. Eliminação gaussiana e posto
-4. Determinante e inversa
-5. Independência linear, base e dimensão
-6. Aplicação: modelo insumo-produto
+A álgebra linear é a linguagem em que a economia quantitativa é escrita. Ela aparece sempre que muitas grandezas se relacionam de forma linear — ou aproximadamente linear:
+
+- num **modelo insumo-produto**, a produção de cada setor serve de insumo aos outros, e a produção necessária para atender a uma demanda final é a solução de um sistema de equações lineares;
+- o estimador de **mínimos quadrados** com várias variáveis explicativas é $\hat{\vb\beta} = (\vb X\T \vb X)\inv \vb X\T \vb y$, e só existe se as colunas de $\vb X$ forem linearmente independentes;
+- num mercado com $S$ estados da natureza e $N$ ativos, os mercados são **completos** — todo fluxo de pagamentos pode ser replicado — exatamente quando a matriz de pagamentos tem posto $S$;
+- a **derivada** de uma função de várias variáveis é uma transformação linear, e a dinâmica de um sistema linear $\vb x_{t+1} = \vb A \vb x_t$ é dada pelas potências de uma matriz.
+
+Este capítulo desenvolve a álgebra linear "de linhas e colunas":
+
+1. vetores, produto interno, norma e a desigualdade de Cauchy–Schwarz;
+2. matrizes como representações de transformações lineares;
+3. sistemas lineares, eliminação gaussiana e posto;
+4. independência linear, bases e dimensão;
+5. inversa e determinante;
+6. o modelo insumo-produto de Leontief.
+
+Os autovalores, as decomposições e as formas quadráticas ficam para o @sec-mat-m02.
+
+## Vetores, produto interno e norma {#sec-mat-g05-vetores}
+
+Vetores são listas ordenadas de números reais, escritos como **colunas** e em negrito: $\vb x = (x_1, \dots, x_n)\T \in \R^n$. A soma e o produto por escalar são feitos coordenada a coordenada. Uma **combinação linear** de $\vb v_1, \dots, \vb v_k$ é um vetor da forma $c_1 \vb v_1 + \dots + c_k \vb v_k$, com $c_j \in \R$.
+
+::: {#def-mat-g05-produto-interno}
+## Produto interno e norma
+O **produto interno** de $\vb x, \vb y \in \R^n$ é $\vb x\T \vb y \defeq \sum_{i=1}^n x_i y_i$, e a **norma** (euclidiana) de $\vb x$ é $\norm{\vb x} \defeq \sqrt{\vb x\T \vb x}$. Dois vetores são **ortogonais** se $\vb x\T \vb y = 0$.
 :::
+
+O produto interno é simétrico, linear em cada argumento e $\vb x\T \vb x > 0$ para $\vb x \neq \vb 0$. Daí $\norm{c\vb x} = \abs{c}\,\norm{\vb x}$ e $\norm{\vb x + \vb y}^2 = \norm{\vb x}^2 + 2\vb x\T \vb y + \norm{\vb y}^2$; em particular, para vetores ortogonais vale o **teorema de Pitágoras**, $\norm{\vb x + \vb y}^2 = \norm{\vb x}^2 + \norm{\vb y}^2$.
+
+::: {#thm-mat-g05-cauchy-schwarz}
+## Desigualdade de Cauchy–Schwarz
+Para todos $\vb x, \vb y \in \R^n$, $\abs{\vb x\T \vb y} \leq \norm{\vb x}\,\norm{\vb y}$, com igualdade se, e somente se, um dos vetores é múltiplo do outro.
+:::
+
+::: {.proof}
+Se $\vb y = \vb 0$, os dois lados são nulos e $\vb y = 0 \cdot \vb x$. Se $\vb y \neq \vb 0$, para todo $t \in \R$,
+$$
+0 \leq \norm{\vb x - t\vb y}^2 = \norm{\vb x}^2 - 2t\,\vb x\T \vb y + t^2 \norm{\vb y}^2 .
+$$
+Com $t = \vb x\T \vb y/\norm{\vb y}^2$, que minimiza o lado direito, obtemos $0 \leq \norm{\vb x}^2 - (\vb x\T \vb y)^2/\norm{\vb y}^2$, que é a desigualdade. A igualdade vale se, e somente se, $\norm{\vb x - t\vb y} = 0$ para esse $t$, isto é, $\vb x = t \vb y$; e, se $\vb x = s\vb y$, a igualdade se verifica diretamente.
+:::
+
+::: {#cor-mat-g05-triangular}
+## Desigualdade triangular
+$\norm{\vb x + \vb y} \leq \norm{\vb x} + \norm{\vb y}$ para todos $\vb x, \vb y \in \R^n$.
+:::
+
+::: {.proof}
+$\norm{\vb x + \vb y}^2 = \norm{\vb x}^2 + 2\vb x\T \vb y + \norm{\vb y}^2 \leq \norm{\vb x}^2 + 2\norm{\vb x}\norm{\vb y} + \norm{\vb y}^2 = (\norm{\vb x} + \norm{\vb y})^2$.
+:::
+
+Por Cauchy–Schwarz, para vetores não nulos o número $\vb x\T \vb y/(\norm{\vb x}\norm{\vb y})$ está em $[-1, 1]$; ele é o **cosseno do ângulo** entre os vetores. Em estatística, o **coeficiente de correlação** amostral entre duas variáveis é exatamente o cosseno do ângulo entre os vetores de desvios em relação às médias, e Cauchy–Schwarz é a razão de ele estar entre $-1$ e $1$ (@exr-mat-g05-correlacao).
+
+## Matrizes e transformações lineares {#sec-mat-g05-matrizes}
+
+Uma matriz $m \times n$, $\vb A = (a_{ij})$, tem $m$ linhas e $n$ colunas; escrevemos $\vb a_j$ para a sua $j$-ésima coluna. Soma e produto por escalar são feitos entrada a entrada. A **transposta** $\vb A\T$ é a matriz $n \times m$ com entradas $(\vb A\T)_{ij} = a_{ji}$, e $\Id_n$ é a identidade $n \times n$.
+
+::: {#def-mat-g05-produto}
+## Produto de matrizes
+Se $\vb A$ é $m \times n$ e $\vb B$ é $n \times p$, o produto $\vb A\vb B$ é a matriz $m \times p$ com entradas $(\vb A\vb B)_{ij} \defeq \sum_{k=1}^n a_{ik} b_{kj}$. Em particular, para $\vb x \in \R^n$, $\vb A\vb x = \sum_{j=1}^n x_j \vb a_j$ é a combinação linear das colunas de $\vb A$ com pesos dados por $\vb x$.
+:::
+
+A definição parece arbitrária; a razão dela está na correspondência com as transformações lineares.
+
+::: {#def-mat-g05-linear}
+## Transformação linear
+$T: \R^n \to \R^m$ é **linear** se $T(\vb x + \vb y) = T(\vb x) + T(\vb y)$ e $T(c\vb x) = cT(\vb x)$ para todos $\vb x, \vb y \in \R^n$ e $c \in \R$.
+:::
+
+::: {#thm-mat-g05-matriz-linear}
+## Matrizes representam transformações lineares
+(a) Para cada transformação linear $T: \R^n \to \R^m$ existe uma única matriz $\vb A$, $m \times n$, com $T(\vb x) = \vb A\vb x$ para todo $\vb x$: suas colunas são $T(\vb e_1), \dots, T(\vb e_n)$, onde $\vb e_j$ é o $j$-ésimo vetor canônico.
+(b) Se $T(\vb x) = \vb A \vb x$ e $S(\vb y) = \vb B\vb y$, com $\vb A$ de tamanho $m \times n$ e $\vb B$ de tamanho $n \times p$, então $(T \circ S)(\vb y) = (\vb A\vb B)\vb y$.
+(c) O produto de matrizes é associativo: $(\vb A\vb B)\vb C = \vb A(\vb B\vb C)$.
+:::
+
+::: {.proof}
+Para (a), todo $\vb x$ se escreve $\vb x = \sum_j x_j \vb e_j$, e a linearidade dá $T(\vb x) = \sum_j x_j T(\vb e_j) = \vb A\vb x$, com $\vb A$ de colunas $T(\vb e_j)$. Se também $T(\vb x) = \vb A'\vb x$ para todo $\vb x$, então, com $\vb x = \vb e_j$, as $j$-ésimas colunas de $\vb A$ e $\vb A'$ coincidem.
+
+Para (b), $T(S(\vb y))$ tem $i$-ésima coordenada $\sum_k a_{ik} (\vb B\vb y)_k = \sum_k a_{ik} \sum_j b_{kj} y_j = \sum_j \big(\sum_k a_{ik} b_{kj}\big) y_j = \big((\vb A\vb B)\vb y\big)_i$.
+
+Para (c), por (b) as duas matrizes representam a mesma transformação, $T_{\vb A} \circ T_{\vb B} \circ T_{\vb C}$, pois a composição de funções é associativa; pela unicidade em (a), são iguais.
+:::
+
+O produto **não** é comutativo: com $\vb A = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}$ e $\vb B = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}$, $\vb A\vb B = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$ e $\vb B\vb A = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}$ — compor "projetar e girar" não é o mesmo que "girar e projetar". O produto é distributivo em relação à soma, $\Id_m \vb A = \vb A \Id_n = \vb A$, e, como $(\vb A\vb B)\T_{ij} = \sum_k a_{jk} b_{ki} = \sum_k (\vb B\T)_{ik} (\vb A\T)_{kj}$, vale $(\vb A\vb B)\T = \vb B\T \vb A\T$. Note também que $\vb x\T \vb y$ é o produto da matriz $1 \times n$ $\vb x\T$ pela matriz $n \times 1$ $\vb y$, coerente com a @def-mat-g05-produto-interno.
+
+## Sistemas lineares e eliminação gaussiana {#sec-mat-g05-eliminacao}
+
+Um sistema de $m$ equações lineares com $n$ incógnitas escreve-se $\vb A\vb x = \vb b$, com $\vb A$ de tamanho $m \times n$. Resolvê-lo é decidir se $\vb b$ é combinação linear das colunas de $\vb A$, e com quais pesos.
+
+::: {#def-mat-g05-operacoes}
+## Operações elementares e forma escalonada
+As **operações elementares** sobre as linhas de uma matriz são: (i) trocar duas linhas; (ii) multiplicar uma linha por uma constante não nula; (iii) somar a uma linha um múltiplo de outra. Uma matriz está em **forma escalonada** se as linhas nulas estão abaixo das não nulas e o primeiro elemento não nulo de cada linha — o **pivô** — está estritamente à direita do pivô da linha de cima. Está em **forma escalonada reduzida** se, além disso, cada pivô vale 1 e é a única entrada não nula da sua coluna.
+:::
+
+Cada operação elementar equivale a multiplicar a matriz, à esquerda, por uma **matriz elementar** — a matriz obtida aplicando a mesma operação a $\Id_m$ —, e cada uma delas tem inversa elementar: trocar de volta, dividir pela constante, subtrair o múltiplo. Logo, se $\vb E$ é elementar, $\vb A\vb x = \vb b \iff \vb E\vb A\vb x = \vb E\vb b$: **operações elementares sobre a matriz aumentada $[\vb A \mid \vb b]$ não alteram o conjunto de soluções.**
+
+::: {#thm-mat-g05-escalonamento}
+## Eliminação de Gauss–Jordan
+Toda matriz pode ser levada, por uma sequência finita de operações elementares, a uma forma escalonada reduzida.
+:::
+
+::: {.proof}
+Por indução no número de colunas. Se a primeira coluna é nula, aplicamos o argumento às demais colunas. Caso contrário, trocamos linhas para que a primeira tenha uma entrada não nula na primeira coluna, dividimos essa linha pela entrada, e subtraímos múltiplos dela das outras linhas para zerar o resto da primeira coluna. Aplicamos então a hipótese de indução à submatriz formada pelas linhas de baixo e pelas colunas restantes; as operações sobre essas linhas não alteram a primeira coluna (cujas entradas ali são nulas). Por fim, subtraímos de cada linha acima múltiplos das linhas de baixo para zerar as entradas acima dos pivôs, o que não destrói o escalonamento.
+:::
+
+::: {#def-mat-g05-posto}
+## Posto
+O **posto** de $\vb A$, $\posto \vb A$, é o número de pivôs de uma forma escalonada de $\vb A$.
+:::
+
+A definição faz sentido porque, como veremos no @thm-mat-g05-posto-dimensao, esse número não depende da forma escalonada escolhida. Como cada linha e cada coluna têm no máximo um pivô, $\posto \vb A \leq \min\{m, n\}$.
+
+::: {#thm-mat-g05-existencia-unicidade}
+## Existência e unicidade de soluções
+Seja $\vb A$ de tamanho $m \times n$ e $\vb b \in \R^m$.
+
+(a) $\vb A\vb x = \vb b$ tem solução se, e somente se, $\posto[\vb A \mid \vb b] = \posto \vb A$.
+(b) Se há solução, ela é única se, e somente se, $\posto \vb A = n$; caso contrário, há infinitas soluções, parametrizadas por $n - \posto \vb A$ variáveis livres.
+:::
+
+::: {.proof}
+Leve $[\vb A \mid \vb b]$ à forma escalonada reduzida $[\vb R \mid \vb c]$, que tem as mesmas soluções. Os pivôs de $\vb R$ são pivôs de $[\vb R \mid \vb c]$; a única possibilidade de esta ter um pivô a mais é na última coluna, numa linha da forma $(0, \dots, 0 \mid 1)$, que representa a equação $0 = 1$ — sem solução. Se não há tal linha, as equações não nulas dizem que cada **variável básica** (a de uma coluna com pivô) é igual a $c_i$ menos uma combinação das **variáveis livres** (as das colunas sem pivô). Atribuindo valores arbitrários às variáveis livres, obtemos todas as soluções, e cada escolha dá uma solução diferente. Há $n - \posto \vb A$ variáveis livres; a solução é única exatamente quando não há nenhuma.
+:::
+
+::: {#cor-mat-g05-homogeneo}
+## Mais incógnitas que equações
+Se $n > m$, o sistema homogêneo $\vb A\vb x = \vb 0$ tem solução não nula.
+:::
+
+::: {.proof}
+O sistema homogêneo sempre tem a solução $\vb 0$, e $\posto \vb A \leq m < n$; pelo @thm-mat-g05-existencia-unicidade (b), há infinitas soluções.
+:::
+
+## Independência linear, base e dimensão {#sec-mat-g05-base}
+
+::: {#def-mat-g05-subespaco}
+## Subespaço, independência e base
+Um **subespaço** de $\R^n$ é um conjunto $V \subseteq \R^n$ não vazio, fechado para somas e produtos por escalar. O conjunto de todas as combinações lineares de $\vb v_1, \dots, \vb v_k$ é um subespaço, o **espaço gerado** por eles. Os vetores $\vb v_1, \dots, \vb v_k$ são **linearmente independentes** (LI) se $c_1 \vb v_1 + \dots + c_k \vb v_k = \vb 0$ implica $c_1 = \dots = c_k = 0$, e **dependentes** caso contrário. Uma **base** de $V$ é uma lista LI que gera $V$.
+:::
+
+Pela @def-mat-g05-produto, as colunas de $\vb A$ são LI se, e somente se, $\vb A\vb x = \vb 0$ só tem a solução $\vb x = \vb 0$.
+
+::: {#lem-mat-g05-steinitz}
+## Lema da troca
+Se $V$ é gerado por $p$ vetores, então quaisquer $k > p$ vetores de $V$ são linearmente dependentes.
+:::
+
+::: {.proof}
+Sejam $V$ gerado por $\vb v_1, \dots, \vb v_p$ e $\vb w_1, \dots, \vb w_k \in V$, com $\vb w_j = \sum_{i=1}^p c_{ij} \vb v_i$. A matriz $\vb C = (c_{ij})$ é $p \times k$, com $k > p$; pelo @cor-mat-g05-homogeneo, existe $\vb y \neq \vb 0$ com $\vb C\vb y = \vb 0$. Então $\sum_j y_j \vb w_j = \sum_i \big(\sum_j c_{ij} y_j\big)\vb v_i = \vb 0$, uma combinação nula com coeficientes não todos nulos.
+:::
+
+::: {#thm-mat-g05-dimensao}
+## Dimensão
+Todo subespaço $V \subseteq \R^n$ tem uma base, e todas as suas bases têm o mesmo número de elementos, a **dimensão** de $V$, $\dim V \leq n$.
+:::
+
+::: {.proof}
+Se $V = \{\vb 0\}$, a lista vazia é base e $\dim V = 0$. Caso contrário, escolha $\vb v_1 \neq \vb 0$ em $V$ e, enquanto os vetores escolhidos não gerarem $V$, acrescente um vetor de $V$ fora do espaço gerado por eles; a lista continua LI (se $\vb v_{k+1}$ fosse combinação dos anteriores, estaria no espaço gerado). Como $\R^n$ é gerado pelos $n$ vetores canônicos, o @lem-mat-g05-steinitz impede listas LI com mais de $n$ elementos, e o processo para, produzindo uma base. Se $\vb v_1, \dots, \vb v_p$ e $\vb w_1, \dots, \vb w_k$ são bases, o lema, aplicado com uns gerando e outros LI, dá $k \leq p$ e $p \leq k$.
+:::
+
+Dois subespaços são associados a cada matriz: o **espaço coluna**, gerado pelas colunas de $\vb A$ — o conjunto dos $\vb b$ para os quais $\vb A\vb x = \vb b$ tem solução —, e o **espaço linha**, gerado pelas linhas.
+
+::: {#thm-mat-g05-posto-dimensao}
+## Posto, espaço linha e espaço coluna
+O número de pivôs de qualquer forma escalonada de $\vb A$ é igual à dimensão do espaço linha e à do espaço coluna de $\vb A$. Em particular, o posto está bem definido e $\posto \vb A = \posto \vb A\T$.
+:::
+
+::: {.proof}
+Operações elementares não alteram o espaço linha: as linhas novas são combinações das antigas, e vice-versa, porque as operações são invertíveis. Numa forma escalonada, as linhas não nulas são LI — numa combinação nula delas, o coeficiente da primeira linha é zero, porque só ela tem entrada não nula na coluna do seu pivô; depois o da segunda, e assim por diante. Logo a dimensão do espaço linha é o número de pivôs.
+
+Para as colunas, note que $\vb A\vb x = \vb 0 \iff \vb E\vb A\vb x = \vb 0$ para $\vb E$ invertível: as operações elementares preservam todas as relações lineares entre as colunas. Na forma escalonada reduzida $\vb R$, as colunas com pivô são vetores canônicos distintos $\vb e_1, \dots, \vb e_r$, e as demais têm zeros abaixo da linha $r$, sendo combinações delas. Logo as colunas de $\vb R$ com pivô formam uma base do espaço coluna de $\vb R$, e as colunas correspondentes de $\vb A$ — que satisfazem as mesmas relações lineares — formam uma base do espaço coluna de $\vb A$. Como esses números não dependem da forma escalonada escolhida, o posto está bem definido.
+:::
+
+::: {#cor-mat-g05-nucleo}
+## Teorema do núcleo e da imagem
+O **núcleo** $N(\vb A) \defeq \{\vb x : \vb A\vb x = \vb 0\}$ é um subespaço de $\R^n$, e $\dim N(\vb A) + \posto \vb A = n$.
+:::
+
+::: {.proof}
+Na forma escalonada reduzida, cada uma das $n - r$ variáveis livres, valendo 1 enquanto as outras livres valem 0, determina uma solução $\vb s_j$; pelo @thm-mat-g05-existencia-unicidade, toda solução é $\sum_j x_j \vb s_j$, somando sobre as variáveis livres $x_j$. Os $\vb s_j$ são LI, porque a coordenada correspondente à variável livre $j$ vale 1 em $\vb s_j$ e 0 nos demais. Logo formam uma base de $N(\vb A)$, que tem dimensão $n - r$.
+:::
+
+## A inversa {#sec-mat-g05-inversa}
+
+::: {#def-mat-g05-inversa}
+## Matriz inversa
+Uma matriz quadrada $\vb A$, $n \times n$, é **invertível** se existe $\vb B$ com $\vb A\vb B = \vb B\vb A = \Id_n$. Essa $\vb B$ é única — se $\vb B'$ também serve, $\vb B' = \vb B'(\vb A\vb B) = (\vb B'\vb A)\vb B = \vb B$ — e é denotada $\vb A\inv$.
+:::
+
+Se $\vb A$ e $\vb B$ são invertíveis, $(\vb A\vb B)\inv = \vb B\inv \vb A\inv$ (basta multiplicar) e $(\vb A\T)\inv = (\vb A\inv)\T$ (transpondo $\vb A\vb A\inv = \Id$).
+
+::: {#thm-mat-g05-inversa}
+## Caracterizações da invertibilidade
+Para $\vb A$, $n \times n$, são equivalentes:
+
+(a) $\vb A$ é invertível;
+(b) $\vb A\vb x = \vb 0$ só tem a solução $\vb x = \vb 0$ (as colunas são LI);
+(c) $\posto \vb A = n$;
+(d) $\vb A\vb x = \vb b$ tem solução única para todo $\vb b$;
+(e) as colunas de $\vb A$ formam uma base de $\R^n$;
+(f) existe $\vb B$ com $\vb B\vb A = \Id_n$;
+(g) existe $\vb C$ com $\vb A\vb C = \Id_n$.
+:::
+
+::: {.proof}
+Se vale (a), $\vb A\vb x = \vb 0$ implica $\vb x = \vb A\inv \vb A\vb x = \vb 0$: vale (b). Por (b) e pelo @thm-mat-g05-existencia-unicidade, não há variáveis livres, isto é, (c). Sob (c), $\posto[\vb A \mid \vb b]$ é no mínimo $n$ e no máximo $n$ (há $n$ linhas), logo igual a $\posto \vb A$, e o mesmo teorema dá (d). De (d) vem (e): as colunas geram $\R^n$ (existência) e são LI (unicidade com $\vb b = \vb 0$). Também de (d) vem (g): a $j$-ésima coluna de $\vb C$ é a solução de $\vb A\vb c_j = \vb e_j$. Se vale (g), todo $\vb b = \vb A(\vb C\vb b)$ está no espaço coluna, que é então $\R^n$, e (c) vale; e (e) implica (c) pela mesma razão. Sob (c), $\posto \vb A\T = n$ (@thm-mat-g05-posto-dimensao), e o que já foi provado, aplicado a $\vb A\T$, dá $\vb D$ com $\vb A\T \vb D = \Id$; transpondo, $\vb D\T \vb A = \Id$, que é (f). Se vale (f), $\vb A\vb x = \vb 0$ implica $\vb x = \vb B\vb A\vb x = \vb 0$, isto é, (b). Por fim, sob (c) valem (f) e (g), e $\vb B = \vb B(\vb A\vb C) = (\vb B\vb A)\vb C = \vb C$, que é (a).
+:::
+
+A equivalência entre (f) e (g) diz que, para matrizes quadradas, uma inversa de um lado é automaticamente inversa dos dois lados. Na prática, a inversa é calculada pela eliminação de **Gauss–Jordan**: escalonando $[\vb A \mid \Id_n]$ até $[\Id_n \mid \vb X]$, a sequência de operações corresponde a uma matriz $\vb E$ com $\vb E\vb A = \Id$ e $\vb E \Id = \vb X$, de modo que $\vb X = \vb E = \vb A\inv$. Se o escalonamento não chega a $\Id_n$, então $\posto \vb A < n$ e $\vb A$ não é invertível.
+
+## O determinante {#sec-mat-g05-determinante}
+
+O determinante associa a cada matriz quadrada um número que decide se ela é invertível e mede quanto a transformação $\vb x \mapsto \vb A\vb x$ dilata áreas e volumes. Uma **permutação** de $\{1, \dots, n\}$ é uma bijeção $\sigma$ desse conjunto; uma **inversão** de $\sigma$ é um par $i < j$ com $\sigma(i) > \sigma(j)$, e o **sinal** de $\sigma$ é $\operatorname{sgn}(\sigma) \defeq (-1)^{\text{número de inversões}}$.
+
+::: {#lem-mat-g05-sinal}
+## Sinal de permutações
+(a) Trocar os valores de $\sigma$ em duas posições troca o sinal.
+(b) $\operatorname{sgn}(\sigma\inv) = \operatorname{sgn}(\sigma)$.
+:::
+
+::: {.proof}
+Para (a), trocar os valores em duas posições **adjacentes** $i, i+1$ altera a ordem relativa apenas desse par, e o número de inversões muda em exatamente uma unidade. Trocar os valores nas posições $i < j$ equivale a $2(j - i) - 1$ trocas adjacentes (levar o valor da posição $i$ até a posição $j$ com $j - i$ trocas e trazer o outro de volta à posição $i$ com $j - i - 1$), um número ímpar. Para (b), o par $(i, j)$ é inversão de $\sigma$ se, e somente se, o par $(\sigma(j), \sigma(i))$ é inversão de $\sigma\inv$, e essa correspondência é bijetiva.
+:::
+
+::: {#def-mat-g05-determinante}
+## Determinante
+O **determinante** de $\vb A$, $n \times n$, é
+$$
+\det \vb A \defeq \sum_{\sigma} \operatorname{sgn}(\sigma)\, a_{1\sigma(1)}\, a_{2\sigma(2)} \cdots a_{n\sigma(n)},
+$$ {#eq-mat-g05-leibniz}
+somando sobre as $n!$ permutações de $\{1, \dots, n\}$.
+:::
+
+Para $n = 2$, $\det \begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc$. Se $\vb A$ é **triangular**, $\det \vb A$ é o produto da diagonal: toda permutação $\sigma \neq \text{id}$ tem algum $i$ com $\sigma(i) < i$ e outro com $\sigma(i) > i$, e o produto correspondente contém uma entrada fora da diagonal do lado nulo.
+
+::: {#prp-mat-g05-propriedades-det}
+## Propriedades do determinante
+(a) $\det \vb A\T = \det \vb A$.
+(b) $\det$ é linear em cada linha, mantidas as outras fixas.
+(c) Trocar duas linhas troca o sinal do determinante; se duas linhas são iguais, $\det \vb A = 0$.
+(d) Somar a uma linha um múltiplo de outra não altera o determinante.
+:::
+
+::: {.proof}
+Para (a), reindexando cada produto por $\tau = \sigma\inv$, $\prod_i a_{i\sigma(i)} = \prod_j a_{\tau(j) j}$, e o @lem-mat-g05-sinal (b) dá $\operatorname{sgn}\tau = \operatorname{sgn}\sigma$; a soma resultante é a @eq-mat-g05-leibniz para $\vb A\T$. Para (b), cada parcela da @eq-mat-g05-leibniz contém exatamente um fator de cada linha. Para (c), trocar as linhas $i$ e $j$ transforma a parcela de $\sigma$ na parcela da permutação com os valores das posições $i$ e $j$ trocados, de sinal oposto (@lem-mat-g05-sinal); se as linhas são iguais, a troca não altera a matriz, e $\det \vb A = -\det \vb A$. Para (d), por (b) o novo determinante é $\det \vb A$ mais $c$ vezes o determinante de uma matriz com duas linhas iguais, que é zero.
+:::
+
+Pelas propriedades (a), as afirmações sobre linhas valem também para colunas. Como as operações elementares multiplicam o determinante por $-1$, por $c \neq 0$ ou por $1$, escalonar uma matriz preserva a condição $\det \neq 0$; e, numa forma escalonada quadrada — que é triangular —, o determinante é o produto da diagonal, não nulo se, e somente se, há $n$ pivôs. Isso demonstra:
+
+::: {#thm-mat-g05-det-invertivel}
+## Determinante e invertibilidade
+$\vb A$ é invertível se, e somente se, $\det \vb A \neq 0$.
+:::
+
+::: {#thm-mat-g05-det-produto}
+## Determinante do produto
+$\det(\vb A\vb B) = \det \vb A \cdot \det \vb B$.
+:::
+
+::: {.proof}
+Se $\vb E$ é elementar, as propriedades (b)–(d) dizem que $\det(\vb E\vb M) = c_{\vb E} \det \vb M$ para toda $\vb M$, com $c_{\vb E} = -1$, $c$ ou $1$ conforme o tipo; tomando $\vb M = \Id$, $c_{\vb E} = \det \vb E$. Se $\vb A$ é invertível, a eliminação de Gauss–Jordan a escreve como produto de matrizes elementares, $\vb A = \vb E_1 \cdots \vb E_k$ (inversas das usadas no escalonamento), e, aplicando a regra repetidamente, $\det(\vb A\vb B) = \det \vb E_1 \cdots \det \vb E_k \det \vb B = \det \vb A \det \vb B$. Se $\vb A$ não é invertível, $\vb A\vb B$ também não é — se fosse, $\vb B(\vb A\vb B)\inv$ seria inversa à direita de $\vb A$, contra o @thm-mat-g05-inversa —, e os dois lados são nulos.
+:::
+
+Em particular, $\det(\vb A\inv) = 1/\det \vb A$. Para calcular determinantes à mão, usa-se a expansão em cofatores. Seja $\vb A_{ij}$ a matriz $(n-1) \times (n-1)$ obtida eliminando a linha $i$ e a coluna $j$ de $\vb A$.
+
+::: {#prp-mat-g05-laplace}
+## Expansão em cofatores (Laplace)
+Para cada linha $i$, $\det \vb A = \sum_{j=1}^n (-1)^{i+j} a_{ij} \det \vb A_{ij}$.
+:::
+
+::: {.proof}
+Pela linearidade na linha $i$, $\det \vb A = \sum_j a_{ij} \det \vb A^{(j)}$, onde $\vb A^{(j)}$ é $\vb A$ com a linha $i$ trocada por $\vb e_j\T$. Levando essa linha ao topo por $i - 1$ trocas de linhas adjacentes e a coluna $j$ à esquerda por $j - 1$ trocas de colunas adjacentes, obtemos uma matriz com primeira linha $\vb e_1\T$ e submatriz $\vb A_{ij}$ no canto, com determinante $(-1)^{i+j-2}\det \vb A^{(j)}$. Na @eq-mat-g05-leibniz dessa matriz, só sobrevivem as permutações com $\sigma(1) = 1$, e a soma restante é $\det \vb A_{ij}$, pois as permutações que fixam 1 têm as mesmas inversões que a sua restrição a $\{2, \dots, n\}$.
+:::
+
+::: {#prp-mat-g05-cramer}
+## Regra de Cramer e a matriz adjunta
+Se $\det \vb A \neq 0$, a solução de $\vb A\vb x = \vb b$ é $x_j = \det \vb A_j(\vb b)/\det \vb A$, onde $\vb A_j(\vb b)$ é $\vb A$ com a coluna $j$ trocada por $\vb b$. Em consequência, $(\vb A\inv)_{ji} = (-1)^{i+j} \det \vb A_{ij}/\det \vb A$.
+:::
+
+::: {.proof}
+Seja $\vb X_j$ a identidade com a coluna $j$ trocada por $\vb x$. Então $\vb A\vb X_j = \vb A_j(\vb b)$, pois $\vb A\vb e_k = \vb a_k$ e $\vb A\vb x = \vb b$. Expandindo $\det \vb X_j$ pela linha $j$ — que só tem a entrada $x_j$, na posição diagonal, além de zeros —, $\det \vb X_j = x_j$; pelo @thm-mat-g05-det-produto, $\det \vb A_j(\vb b) = \det \vb A \cdot x_j$. A coluna $i$ de $\vb A\inv$ resolve $\vb A\vb x = \vb e_i$, e, expandindo $\det \vb A_j(\vb e_i)$ pela coluna $j$, obtemos $(-1)^{i+j}\det \vb A_{ij}$.
+:::
+
+Para $n = 2$: $\begin{pmatrix} a & b \\ c & d \end{pmatrix}\inv = \dfrac{1}{ad - bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$. A regra de Cramer é útil em teoria — por exemplo, para obter derivadas de soluções de equilíbrio em estática comparativa (@sec-mat-m04) —, mas não para calcular: a eliminação custa da ordem de $n^3$ operações, contra $n!$ parcelas na @eq-mat-g05-leibniz. Geometricamente, $\abs{\det \vb A}$ é o fator pelo qual $\vb x \mapsto \vb A\vb x$ multiplica áreas (em $\R^2$) e volumes (em $\R^n$), e o sinal indica se a orientação é preservada; o interativo ilustra o caso $2 \times 2$.
+
+## Aplicação: o modelo insumo-produto {#sec-mat-g05-leontief}
+
+Uma economia tem $n$ setores. Produzir uma unidade (em reais) do bem $j$ exige $a_{ij} \geq 0$ unidades do bem $i$ como insumo; a matriz $\vb A = (a_{ij})$ é a **matriz de coeficientes técnicos**. Se $\vb x$ é o vetor de produção bruta e $\vb d$ o de demanda final (consumo, investimento, governo, exportações), o equilíbrio de cada mercado exige que a produção cubra o uso intermediário e o final:
+$$
+\vb x = \vb A\vb x + \vb d \iff (\Id - \vb A)\vb x = \vb d .
+$$ {#eq-mat-g05-leontief}
+
+A pergunta econômica é se, para toda demanda final $\vb d \geq \vb 0$, existe uma produção $\vb x \geq \vb 0$ que a atende. A condição natural é que cada setor seja **produtivo**: a soma da coluna $j$, $\sum_i a_{ij}$, é o valor dos insumos usados por real produzido pelo setor $j$, e deve ser menor que 1.
+
+::: {#thm-mat-g05-leontief}
+## Inversa de Leontief
+Se $\vb A \geq \vb 0$ (entrada a entrada) e toda coluna de $\vb A$ tem soma menor que 1, então $\Id - \vb A$ é invertível,
+$$
+(\Id - \vb A)\inv = \sum_{k=0}^\infty \vb A^k = \Id + \vb A + \vb A^2 + \cdots
+$$
+(com convergência entrada a entrada) e $(\Id - \vb A)\inv \geq \vb 0$. Em particular, $\vb x = (\Id - \vb A)\inv \vb d \geq \vb 0$ para todo $\vb d \geq \vb 0$.
+:::
+
+::: {.proof}
+Para uma matriz $\vb M$, seja $\norm{\vb M}_1 \defeq \max_j \sum_i \abs{m_{ij}}$ a maior soma de coluna em valor absoluto. Para matrizes $\vb M$, $\vb N$ de tamanhos compatíveis,
+$$
+\sum_i \Big\lvert \sum_k m_{ik} n_{kj} \Big\rvert \leq \sum_k \abs{n_{kj}} \sum_i \abs{m_{ik}} \leq \norm{\vb M}_1 \sum_k \abs{n_{kj}} \leq \norm{\vb M}_1 \norm{\vb N}_1,
+$$
+isto é, $\norm{\vb M\vb N}_1 \leq \norm{\vb M}_1 \norm{\vb N}_1$. Com $s \defeq \norm{\vb A}_1 < 1$, segue que $\norm{\vb A^k}_1 \leq s^k$, e cada entrada de $\vb A^k$ está entre $0$ e $s^k$. Pela comparação com a série geométrica, cada entrada de $\vb S_K \defeq \sum_{k=0}^K \vb A^k$ converge, digamos $\vb S_K \to \vb S \geq \vb 0$. Como $(\Id - \vb A)\vb S_K = \Id - \vb A^{K+1}$ (os termos se cancelam em sequência) e $\vb A^{K+1} \to \vb 0$, passando ao limite entrada a entrada obtemos $(\Id - \vb A)\vb S = \Id$. Pelo @thm-mat-g05-inversa, $\vb S = (\Id - \vb A)\inv$.
+:::
+
+A série tem uma leitura econômica direta. Para atender a $\vb d$, é preciso produzir $\vb d$; essa produção exige insumos $\vb A\vb d$, que por sua vez exigem $\vb A^2\vb d$, e assim por diante: $\vb x = \vb d + \vb A\vb d + \vb A^2\vb d + \cdots$ soma as **rodadas** de demanda indireta. A soma da coluna $j$ da **matriz de Leontief** $(\Id - \vb A)\inv$ é o **multiplicador de produção** do setor $j$: quanto a produção total da economia aumenta quando a demanda final pelo bem $j$ aumenta em um real.
+
+O IBGE publica matrizes insumo-produto para o Brasil com dezenas de setores. O exemplo abaixo usa uma matriz **ilustrativa** de três setores — agropecuária, indústria e serviços —, com coeficientes de ordem de grandeza plausível, para mostrar os cálculos.
+
+```{python}
+import numpy as np
+
+setores = ["agropecuaria", "industria", "servicos"]
+A = np.array([[0.10, 0.08, 0.01],      # insumos agropecuários por real produzido em cada setor
+              [0.20, 0.30, 0.10],      # insumos industriais
+              [0.10, 0.15, 0.25]])     # insumos de serviços
+print("somas das colunas (insumos por real produzido):", A.sum(axis=0))
+
+L = np.linalg.inv(np.eye(3) - A)
+print("\nmatriz de Leontief (I - A)^-1:")
+print(np.round(L, 3))
+print("\nmultiplicadores de producao:")
+for s, m in zip(setores, L.sum(axis=0)):
+    print(f"  {s:>13}: {m:.3f}")
+
+d = np.array([0.0, 1.0, 0.0])          # um real a mais de demanda final por bens industriais
+print("\nefeito de 1 real de demanda por bens industriais:", np.round(L @ d, 3))
+```
+
+Um real a mais de demanda final por bens industriais eleva a produção industrial em mais de um real (porque a própria indústria usa insumos industriais) e puxa a produção dos outros setores. No laboratório, verificamos que as somas parciais da série $\sum_k \vb A^k$ convergem para a matriz de Leontief.
+
+## Pontes {#sec-mat-g05-pontes}
+
+- **Cálculo em várias variáveis (@sec-mat-g06).** A derivada de $f: \R^n \to \R^m$ é uma transformação linear, representada pela matriz jacobiana; a regra da cadeia é o produto de matrizes do @thm-mat-g05-matriz-linear.
+- **Otimização (@sec-mat-g07).** Condições de primeira ordem são sistemas de equações; a carteira de variância mínima é obtida com a inversa da matriz de covariâncias.
+- **Dinâmica (@sec-mat-g08).** A solução de $\vb x_{t+1} = \vb A\vb x_t$ é $\vb A^t \vb x_0$, e sua estabilidade depende dos autovalores de $\vb A$ (@sec-mat-m02).
+- **Econometria (@sec-ecm-g02, @sec-ecm-m01).** O estimador de MQO resolve as equações normais $\vb X\T\vb X\vb b = \vb X\T\vb y$; ele é único exatamente quando $\posto \vb X$ é igual ao número de colunas — a hipótese de ausência de multicolinearidade perfeita.
+- **Probabilidade (@sec-est-g03, @sec-est-d01).** Matrizes de covariância; cadeias de Markov são governadas por potências de uma matriz de transição.
+- **Finanças (@sec-fin-m02).** Com uma matriz de pagamentos $S \times N$, os mercados são completos se, e somente se, ela tem posto $S$; os preços de estado resolvem um sistema linear.
+- **Análise (@sec-mat-m10).** Normas, produtos internos e operadores lineares em espaços de dimensão infinita.
+
+## Interativo {#sec-mat-g05-interativo}
+
+::: {.content-visible when-format="html"}
+**Uma matriz $2 \times 2$ como transformação do plano.** Os controles definem $\vb A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$. O quadrado unitário (cinza) é levado no paralelogramo (azul) gerado pelas colunas de $\vb A$; sua área é $\abs{\det \vb A}$. Quando $\det \vb A = 0$, o paralelogramo colapsa num segmento e a matriz não é invertível.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof ma = controle("a", [-2, 2], {valor: 1.5, passo: 0.1, casas: 1})
+viewof mb = controle("b", [-2, 2], {valor: 0.5, passo: 0.1, casas: 1})
+viewof mc = controle("c", [-2, 2], {valor: 0.3, passo: 0.1, casas: 1})
+viewof md = controle("d", [-2, 2], {valor: 1, passo: 0.1, casas: 1})
+```
+
+```{ojs}
+//| echo: false
+md`det A = ad − bc = **${detA.toFixed(2).replace(".", ",")}**. ${Math.abs(detA) < 1e-9 ? "A matriz é singular: as colunas são colineares e o plano é achatado numa reta." : (detA > 0 ? "A orientação é preservada." : "A orientação é invertida (o paralelogramo aparece \"espelhado\").")} Área do paralelogramo: ${Math.abs(detA).toFixed(2).replace(".", ",")}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 480, grid: true, aspectRatio: 1,
+  x: {domain: [-4, 4], label: "x₁"}, y: {domain: [-4, 4], label: "x₂"},
+  marks: [
+    Plot.ruleX([0]), Plot.ruleY([0]),
+    Plot.line([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]].map(([x, y]) => ({x, y})), {x: "x", y: "y", stroke: "#9AA5B1", fill: "#9AA5B1", fillOpacity: 0.3}),
+    Plot.line(paralelogramo, {x: "x", y: "y", stroke: "#2F5D8A", strokeWidth: 2, fill: "#2F5D8A", fillOpacity: 0.25}),
+    Plot.arrow([{x1: 0, y1: 0, x2: ma, y2: mc}, {x1: 0, y1: 0, x2: mb, y2: md}], {x1: "x1", y1: "y1", x2: "x2", y2: "y2", stroke: "#8C2F39", strokeWidth: 2})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+detA = ma * md - mb * mc
+paralelogramo = [[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]].map(([x, y]) => ({x: ma * x + mb * y, y: mc * x + md * y}))
+```
+:::
+
+**Rodadas de demanda no modelo de Leontief.** Uma economia de dois setores com coeficientes técnicos ajustáveis e demanda final $\vb d = (1, 1)\T$. O gráfico mostra a produção acumulada $\vb d + \vb A\vb d + \dots + \vb A^k\vb d$ de cada setor a cada rodada $k$; as linhas tracejadas, a solução $(\Id - \vb A)\inv\vb d$. Com somas de colunas maiores, a convergência fica mais lenta; quando a economia deixa de ser produtiva, a série diverge.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof l11 = controle("a₁₁", [0, 0.9], {valor: 0.2, passo: 0.05, casas: 2})
+viewof l12 = controle("a₁₂", [0, 0.9], {valor: 0.3, passo: 0.05, casas: 2})
+viewof l21 = controle("a₂₁", [0, 0.9], {valor: 0.4, passo: 0.05, casas: 2})
+viewof l22 = controle("a₂₂", [0, 0.9], {valor: 0.1, passo: 0.05, casas: 2})
+```
+
+```{ojs}
+//| echo: false
+md`Somas das colunas: ${(l11 + l21).toFixed(2).replace(".", ",")} e ${(l12 + l22).toFixed(2).replace(".", ",")}. ${produtiva ? `Produção de equilíbrio: x = (${solL[0].toFixed(2).replace(".", ",")}; ${solL[1].toFixed(2).replace(".", ",")}).` : "A economia não é produtiva: a série das rodadas diverge e não há produção não negativa que atenda à demanda."}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "rodada k"}, y: {label: "produção acumulada", domain: [0, 20]},
+  color: {legend: true},
+  marks: [
+    Plot.line(rodadas.flatMap(r => [{k: r.k, v: r.x1, setor: "setor 1"}, {k: r.k, v: r.x2, setor: "setor 2"}]), {x: "k", y: "v", stroke: "setor", clip: true}),
+    produtiva ? Plot.ruleY(solL, {stroke: "#9AA5B1", strokeDasharray: "4,3", clip: true}) : null
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+detL = (1 - l11) * (1 - l22) - l12 * l21
+produtiva = l11 < 1 && detL > 0
+solL = [((1 - l22) + l12) / detL, (l21 + (1 - l11)) / detL]
+rodadas = {
+  let termo = [1, 1], acum = [1, 1];
+  const out = [{k: 0, x1: 1, x2: 1}];
+  for (let k = 1; k <= 30; k++) {
+    termo = [l11 * termo[0] + l12 * termo[1], l21 * termo[0] + l22 * termo[1]];
+    acum = [acum[0] + termo[0], acum[1] + termo[1]];
+    out.push({k, x1: acum[0], x2: acum[1]});
+  }
+  return out;
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — uma matriz $2 \times 2$ como transformação do plano e as rodadas de demanda no modelo de Leontief — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-mat-g05-laboratorio}
+
+### Eliminação gaussiana do zero
+
+Implementamos a eliminação com **pivotamento parcial** — em cada coluna, usa-se como pivô a entrada de maior valor absoluto, o que controla os erros de arredondamento — e comparamos com `numpy.linalg.solve`.
+
+```{python}
+def resolver(A, b):
+    """Resolve Ax = b por eliminação gaussiana com pivotamento parcial."""
+    M = np.column_stack([A.astype(float), b.astype(float)])
+    n = len(b)
+    for j in range(n):
+        p = j + np.argmax(np.abs(M[j:, j]))       # linha do pivô
+        if abs(M[p, j]) < 1e-12:
+            raise ValueError("matriz singular")
+        M[[j, p]] = M[[p, j]]                     # troca de linhas
+        for i in range(j + 1, n):
+            M[i] -= (M[i, j] / M[j, j]) * M[j]    # zera abaixo do pivô
+    x = np.zeros(n)
+    for i in reversed(range(n)):                  # substituição para trás
+        x[i] = (M[i, -1] - M[i, i + 1:n] @ x[i + 1:]) / M[i, i]
+    return x
+
+rng = np.random.default_rng(1)
+A = rng.normal(size=(5, 5))
+b = rng.normal(size=5)
+x = resolver(A, b)
+print("solucao:", np.round(x, 4))
+print("diferenca para numpy.linalg.solve:", np.abs(x - np.linalg.solve(A, b)).max())
+```
+
+### O custo da fórmula de Leibniz
+
+A @eq-mat-g05-leibniz tem $n!$ parcelas, cada uma com $n$ fatores; a eliminação usa da ordem de $n^3/3$ multiplicações.
+
+```{python}
+import itertools, math, time
+
+def det_leibniz(A):
+    n = len(A)
+    total = 0.0
+    for perm in itertools.permutations(range(n)):
+        inversoes = sum(1 for i in range(n) for j in range(i + 1, n) if perm[i] > perm[j])
+        total += (-1) ** inversoes * math.prod(A[i, perm[i]] for i in range(n))
+    return total
+
+for n in [4, 6, 8]:
+    A = rng.normal(size=(n, n))
+    t0 = time.perf_counter(); d1 = det_leibniz(A); t1 = time.perf_counter()
+    d2 = np.linalg.det(A); t2 = time.perf_counter()
+    print(f"n = {n}: {math.factorial(n):>6} parcelas; Leibniz {t1 - t0:.4f} s, eliminacao {t2 - t1:.6f} s; "
+          f"diferenca {abs(d1 - d2):.1e}")
+```
+
+Para $n = 20$, a fórmula teria $20! \approx 2{,}4 \times 10^{18}$ parcelas — séculos de computação —, enquanto a eliminação resolve em microssegundos.
+
+### Posto, núcleo e multicolinearidade
+
+```{python}
+X = np.column_stack([np.ones(6), np.arange(6), 2 * np.arange(6) + 1])   # 3a coluna = 2*(2a) + 1a
+print("posto de X:", np.linalg.matrix_rank(X), "com", X.shape[1], "colunas")
+print("det(X'X):", np.linalg.det(X.T @ X))
+v = np.array([1.0, 2.0, -1.0])                    # combinação que anula as colunas
+print("X v =", X @ v, "-> v esta no nucleo de X")
+```
+
+Com uma coluna que é combinação das outras, $\vb X\T\vb X$ é singular e as equações normais do MQO têm infinitas soluções: os coeficientes não são identificados.
+
+### A série de Neumann na matriz insumo-produto
+
+```{python}
+A = np.array([[0.10, 0.08, 0.01], [0.20, 0.30, 0.10], [0.10, 0.15, 0.25]])
+L = np.linalg.inv(np.eye(3) - A)
+S, termo = np.eye(3), np.eye(3)
+for k in range(1, 31):
+    termo = termo @ A
+    S += termo
+    if k in (1, 2, 5, 10, 20, 30):
+        print(f"K = {k:>2}: maior erro de I + A + ... + A^K = {np.abs(S - L).max():.2e}")
+print("cota teorica ||A||_1^(K+1)/(1-||A||_1) com K = 30:", A.sum(axis=0).max() ** 31 / (1 - A.sum(axis=0).max()))
+```
+
+## Exercícios resolvidos {#sec-mat-g05-exercicios}
+
+::: {#exr-mat-g05-correlacao}
+Dados $(x_i, y_i)$, $i = 1, \dots, n$, com médias $\bar x$, $\bar y$, sejam $\vb u = (x_i - \bar x)_i$ e $\vb v = (y_i - \bar y)_i$. Mostre que a correlação amostral $r = \vb u\T \vb v/(\norm{\vb u}\norm{\vb v})$ satisfaz $\abs{r} \leq 1$, com $\abs{r} = 1$ se, e somente se, os pontos estão sobre uma reta (não vertical nem horizontal).
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela desigualdade de Cauchy–Schwarz, $\abs{\vb u\T\vb v} \leq \norm{\vb u}\norm{\vb v}$, isto é, $\abs{r} \leq 1$ (supondo $\vb u, \vb v \neq \vb 0$). A igualdade ocorre se, e somente se, $\vb v = c\vb u$ para algum $c \neq 0$, ou seja, $y_i - \bar y = c\,(x_i - \bar x)$ para todo $i$: os pontos estão sobre a reta de inclinação $c$ que passa por $(\bar x, \bar y)$. O sinal de $r$ é o de $c$.
+:::
+
+::: {#exr-mat-g05-sistema}
+Resolva por eliminação: $x + 2y + z = 4$, $2x + 5y + 3z = 9$, $x + 3y + 2z = 5$. Discuta o que muda se o termo independente da última equação for 6.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Subtraindo 2 vezes a primeira linha da segunda e a primeira da terceira: $y + z = 1$ e $y + z = 1$. Subtraindo a segunda da terceira, a última linha zera: $\posto \vb A = \posto[\vb A \mid \vb b] = 2 < 3$. Há uma variável livre, $z = t$, e as soluções são $y = 1 - t$, $x = 4 - 2(1 - t) - t = 2 + t$: a reta $(2, 1, 0) + t(1, -1, 1)$. Com termo independente 6, a terceira equação vira $y + z = 2$ após o primeiro passo, e a eliminação produz a linha $0 = 1$: $\posto[\vb A \mid \vb b] = 3 > 2 = \posto \vb A$, e o sistema não tem solução. As colunas de $\vb A$ são dependentes — a terceira é a segunda menos a primeira —, e o espaço coluna é um plano que contém o primeiro vetor $\vb b$, mas não o segundo.
+:::
+
+::: {#exr-mat-g05-parametro}
+Para que valores de $k$ a matriz $\vb A = \begin{pmatrix} 1 & k \\ k & 4 \end{pmatrix}$ é invertível? Calcule $\vb A\inv$ nesses casos.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\det \vb A = 4 - k^2$, que se anula em $k = \pm 2$; para $k \neq \pm 2$, $\vb A$ é invertível e $\vb A\inv = \frac{1}{4 - k^2}\begin{pmatrix} 4 & -k \\ -k & 1 \end{pmatrix}$. Para $k = 2$, a segunda linha é o dobro da primeira; para $k = -2$, é o oposto do dobro.
+:::
+
+::: {#exr-mat-g05-arrow}
+**Mercados completos.** Há dois estados da natureza amanhã. Um título livre de risco paga $(1, 1)$ e uma ação paga $(2, 0{,}5)$ (nos estados 1 e 2), e seus preços hoje são $0{,}95$ e $1{,}10$. (a) Mostre que os mercados são completos. (b) Encontre os **preços de estado** $q_1, q_2$ — os preços hoje de títulos que pagam 1 num só estado — compatíveis com esses preços. (c) Quanto deve custar uma opção que paga $(1, 0)$?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para (a), a matriz de pagamentos $\vb D = \begin{pmatrix} 1 & 1 \\ 2 & 0{,}5 \end{pmatrix}$ (ativos nas linhas, estados nas colunas) tem $\det \vb D = 0{,}5 - 2 = -1{,}5 \neq 0$, logo posto 2: qualquer vetor de pagamentos em $\R^2$ é combinação dos dois ativos. Para (b), o preço de cada ativo é o valor dos seus pagamentos aos preços de estado: $q_1 + q_2 = 0{,}95$ e $2q_1 + 0{,}5q_2 = 1{,}10$. Da primeira, $q_2 = 0{,}95 - q_1$; substituindo, $1{,}5q_1 = 1{,}10 - 0{,}475 = 0{,}625$, logo $q_1 \approx 0{,}417$ e $q_2 \approx 0{,}533$, ambos positivos (o que é exigido pela ausência de arbitragem, @sec-fin-m02). Para (c), a opção paga 1 no estado 1 e 0 no estado 2, e seu preço deve ser $q_1 \approx 0{,}417$; caso contrário, comprar a opção e vender a carteira que a replica — ou o inverso — seria uma arbitragem.
+:::
+
+::: {#exr-mat-g05-leontief-2}
+Para uma economia de dois setores, mostre que $(\Id - \vb A)\inv \geq \vb 0$ se $a_{ij} \geq 0$, $a_{11}, a_{22} < 1$ e $\det(\Id - \vb A) > 0$ (condição de Hawkins–Simon), e verifique que as somas de colunas menores que 1 implicam essa condição.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela fórmula da inversa $2 \times 2$, $(\Id - \vb A)\inv = \frac{1}{\Delta}\begin{pmatrix} 1 - a_{22} & a_{12} \\ a_{21} & 1 - a_{11} \end{pmatrix}$, com $\Delta = (1 - a_{11})(1 - a_{22}) - a_{12}a_{21}$. Se $\Delta > 0$ e $a_{11}, a_{22} < 1$, todas as entradas são não negativas. Se as somas de colunas são menores que 1, então $a_{21} < 1 - a_{11}$ e $a_{12} < 1 - a_{22}$, e, multiplicando (todos os termos são não negativos), $a_{12}a_{21} < (1 - a_{11})(1 - a_{22})$, isto é, $\Delta > 0$.
+:::
+
+::: {#exr-mat-g05-triangular-inversa}
+Mostre que, se $\vb A$ é triangular superior e invertível, $\vb A\inv$ também é triangular superior.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\det \vb A = \prod_i a_{ii} \neq 0$, logo todas as entradas diagonais são não nulas. A coluna $j$ de $\vb A\inv$ resolve $\vb A\vb x = \vb e_j$. Por substituição para trás, a última equação dá $x_n = 0$ se $j < n$; a penúltima, $x_{n-1} = 0$ se $j < n - 1$; e assim por diante: $x_i = 0$ para $i > j$. Logo a coluna $j$ tem zeros abaixo da posição $j$, e $\vb A\inv$ é triangular superior.
+:::
+
+::: {#exr-mat-g05-dimensao}
+Mostre que, se $\vb v_1, \dots, \vb v_n$ são $n$ vetores LI em $\R^n$, então formam uma base de $\R^n$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Se não gerassem $\R^n$, haveria $\vb w$ fora do espaço gerado, e $\vb v_1, \dots, \vb v_n, \vb w$ seriam $n + 1$ vetores LI (o argumento da demonstração do @thm-mat-g05-dimensao), contradizendo o @lem-mat-g05-steinitz, já que $\R^n$ é gerado por $n$ vetores. Equivalentemente: a matriz com essas colunas tem posto $n$ e é invertível (@thm-mat-g05-inversa).
+:::
+
+## Flashcards {#sec-mat-g05-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a desigualdade de Cauchy–Schwarz, e quando vale a igualdade?
+$\abs{\vb x\T\vb y} \leq \norm{\vb x}\norm{\vb y}$, com igualdade se, e somente se, um vetor é múltiplo do outro. Implica a desigualdade triangular e $\abs{r} \leq 1$ para correlações.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que o produto de matrizes é definido como é?
+Para que a matriz de $T \circ S$ seja o produto das matrizes de $T$ e $S$. A associatividade vem da associatividade da composição.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se lê $\vb A\vb x$ em termos das colunas de $\vb A$?
+É a combinação linear $\sum_j x_j \vb a_j$ das colunas, com pesos $x_j$. Resolver $\vb A\vb x = \vb b$ é escrever $\vb b$ como combinação das colunas.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando $\vb A\vb x = \vb b$ tem solução, e quando ela é única?
+Tem solução se, e somente se, $\posto[\vb A \mid \vb b] = \posto \vb A$; é única se, além disso, $\posto \vb A = n$ (número de incógnitas).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o lema da troca?
+Num subespaço gerado por $p$ vetores, quaisquer $k > p$ vetores são linearmente dependentes. Daí todas as bases têm o mesmo tamanho.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o posto, e por que posto linha = posto coluna?
+O número de pivôs de uma forma escalonada; é a dimensão do espaço linha e a do espaço coluna, porque operações elementares preservam o espaço linha e as relações lineares entre colunas.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema do núcleo e da imagem?
+$\dim N(\vb A) + \posto \vb A = n$: cada variável livre gera uma direção do núcleo.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Cite cinco condições equivalentes à invertibilidade de uma matriz quadrada.
+$\vb A\vb x = \vb 0 \Rightarrow \vb x = \vb 0$; $\posto \vb A = n$; $\vb A\vb x = \vb b$ tem solução única; colunas formam base; $\det \vb A \neq 0$; existe inversa de um dos lados.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como as operações elementares afetam o determinante?
+Trocar linhas troca o sinal; multiplicar uma linha por $c$ multiplica por $c$; somar múltiplo de outra linha não altera.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quanto vale $\det(\vb A\vb B)$, e o que significa $\abs{\det \vb A}$?
+$\det \vb A \det \vb B$. $\abs{\det \vb A}$ é o fator pelo qual $\vb x \mapsto \vb A\vb x$ multiplica áreas ou volumes; o sinal indica a orientação.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a inversa de uma matriz $2 \times 2$?
+$\begin{pmatrix} a & b \\ c & d \end{pmatrix}\inv = \frac{1}{ad - bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$, se $ad - bc \neq 0$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a regra de Cramer?
+$x_j = \det \vb A_j(\vb b)/\det \vb A$, onde $\vb A_j(\vb b)$ troca a coluna $j$ por $\vb b$. Útil em teoria (estática comparativa), cara em cálculo.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando a inversa de Leontief existe e é não negativa?
+Se $\vb A \geq \vb 0$ e as somas de colunas são menores que 1: então $(\Id - \vb A)\inv = \sum_k \vb A^k \geq \vb 0$ — a soma das rodadas de demanda indireta.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o multiplicador de produção de um setor?
+A soma da coluna correspondente da matriz de Leontief: o aumento da produção total quando a demanda final por aquele bem cresce um real.
+:::
+
+## Ficha-resumo {#sec-mat-g05-ficha}
+
+::: {.ficha-resumo}
+**Vetores.** $\vb x\T\vb y = \sum x_i y_i$, $\norm{\vb x} = \sqrt{\vb x\T\vb x}$. Cauchy–Schwarz $\abs{\vb x\T\vb y} \leq \norm{\vb x}\norm{\vb y}$ (igualdade $\iff$ colineares) $\Rightarrow$ triangular; cosseno do ângulo; correlação.
+
+**Matrizes.** $(\vb A\vb B)_{ij} = \sum_k a_{ik}b_{kj}$; $\vb A\vb x = \sum_j x_j\vb a_j$. Toda $T$ linear é $\vb x \mapsto \vb A\vb x$ (colunas $T(\vb e_j)$); composição = produto; associativo, não comutativo; $(\vb A\vb B)\T = \vb B\T\vb A\T$.
+
+**Sistemas.** Operações elementares preservam soluções. Gauss–Jordan leva a forma escalonada reduzida. Solução existe $\iff \posto[\vb A \mid \vb b] = \posto \vb A$; única $\iff \posto \vb A = n$; $n - \posto$ variáveis livres. $n > m \Rightarrow$ homogêneo tem solução não nula.
+
+**Base e dimensão.** Lema da troca: $k > p$ vetores num espaço gerado por $p$ são dependentes. Todas as bases têm o mesmo tamanho. Posto $=$ dim espaço linha $=$ dim espaço coluna; $\dim N(\vb A) + \posto \vb A = n$.
+
+**Inversa.** Invertível $\iff \vb A\vb x = \vb 0 \Rightarrow \vb x = \vb 0 \iff \posto = n \iff$ colunas base $\iff$ inversa de um lado $\iff \det \neq 0$. $(\vb A\vb B)\inv = \vb B\inv\vb A\inv$. Gauss–Jordan: $[\vb A \mid \Id] \to [\Id \mid \vb A\inv]$.
+
+**Determinante.** $\det \vb A = \sum_\sigma \operatorname{sgn}\sigma \prod_i a_{i\sigma(i)}$; triangular: produto da diagonal; $\det \vb A\T = \det \vb A$; multilinear e alternado nas linhas; $\det(\vb A\vb B) = \det\vb A\det\vb B$; Laplace; Cramer; $2 \times 2$: $ad - bc$.
+
+**Leontief.** $\vb x = \vb A\vb x + \vb d$; somas de colunas $< 1 \Rightarrow (\Id - \vb A)\inv = \sum_k \vb A^k \geq \vb 0$; multiplicadores $=$ somas de colunas da inversa.
+:::
+
+## Notas bibliográficas {#sec-mat-g05-notas}
+
+@strang2016 é a referência recomendada para a visão "por colunas" adotada aqui — espaço coluna, núcleo, eliminação como fatoração —, com ótima intuição geométrica; a demonstração do lema da troca e o tratamento do posto seguem o espírito do livro. @simon1994 dedica vários capítulos a sistemas lineares, matrizes e determinantes com exemplos econômicos, incluindo o modelo de Leontief e a estática comparativa por meio da regra de Cramer. A matriz insumo-produto usada no texto é ilustrativa; as matrizes oficiais do Brasil são publicadas pelo IBGE no Sistema de Contas Nacionais.
