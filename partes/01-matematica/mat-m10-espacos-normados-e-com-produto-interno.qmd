@@ -2,27 +2,898 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `MAT-M10`
+[Mestrado]{.nivel .nivel-M} · [rascunho]{.status} · `MAT-M10`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-mat-m01 (*Análise real em $\mathbb{R}^n$ e espaços métricos*); @sec-mat-g05 (*Álgebra linear I: vetores, matrizes e sistemas lineares*)
-:::
 
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Análise real em $\mathbb{R}^n$ e espaços métricos* (MAT-M01); @sec-mat-g05 (*Álgebra linear I: vetores, matrizes e sistemas lineares*)
-:::
-
-**Leituras principais:** @ok2007, @luenberger1969
+**Leituras principais:** @ok2007, @luenberger1969, @kreyszig1978
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-mat-m10-motivacao}
 
-1. Normas e produtos internos
-2. Cauchy–Schwarz e a geometria do produto interno
-3. Espaços de Banach e de Hilbert
-4. Equivalência de normas em dimensão finita
-5. Operadores lineares limitados
-6. Projeção ortogonal
+O @sec-mat-m01 tratou de conjuntos com uma distância e nada mais. Mas quase todos os espaços que aparecem em economia também têm estrutura **linear**: cestas e carteiras se somam e se multiplicam por escalares; fluxos de consumo, séries temporais, funções valor e variáveis aleatórias também. Quando a distância é compatível com essa estrutura — invariante por translações e proporcional à escala —, ela vem de uma **norma**, e a combinação das duas estruturas produz resultados que nenhuma delas dá sozinha.
+
+Quando a norma vem de um **produto interno**, ganha-se ainda a geometria euclidiana: ângulos, ortogonalidade e, acima de tudo, **projeções**. Mínimos quadrados, o melhor preditor linear, a esperança condicional, a decomposição de um retorno em parte explicada e resíduo: todos são a mesma operação — projetar ortogonalmente num subespaço — em espaços diferentes. E as aplicações lineares contínuas entre espaços normados, os **operadores**, descrevem desde a matriz de Leontief até o operador que leva dividendos futuros em preços de hoje.
+
+Em dimensão finita, tudo se comporta como em $\R^n$: todas as normas são equivalentes, fechados e limitados são compactos, toda aplicação linear é contínua. Em dimensão infinita — sequências, funções —, cada uma dessas afirmações falha, e é preciso saber onde. O capítulo desenvolve:
+
+1. espaços vetoriais e normas, com as desigualdades de Young, Hölder e Minkowski;
+2. produtos internos, Cauchy–Schwarz e a lei do paralelogramo;
+3. espaços de Banach e de Hilbert e séries absolutamente convergentes;
+4. a equivalência das normas em dimensão finita e o lema de Riesz;
+5. operadores lineares limitados, a norma de operador e a série de Neumann, com uma aplicação a preços de ativos;
+6. o teorema da projeção, o complemento ortogonal, Gram–Schmidt e mínimos quadrados.
+
+## Espaços vetoriais e normas {#sec-mat-m10-normas}
+
+Um **espaço vetorial** (real) é um conjunto $V$ com uma soma $x + y$ e um produto por escalar $\lambda x$, $\lambda \in \R$, que satisfazem as regras usuais: a soma é associativa e comutativa, tem elemento neutro $0$ e inversos $-x$; o produto por escalar é associativo, $1x = x$, e vale a distributividade nos dois sentidos. Além de $\R^n$, são espaços vetoriais, com as operações ponto a ponto:
+
+- o conjunto $\R^S$ de todas as funções $S \to \R$ e seus subespaços $B(S)$ (funções limitadas) e $C[a, b]$ (funções contínuas);
+- o espaço $\mathcal P$ dos polinômios e o espaço $c_{00}$ das sequências com apenas finitos termos não nulos.
+
+Os conceitos de combinação linear, subespaço, independência linear, base e dimensão do @sec-mat-g05 valem sem mudança — a demonstração do lema da troca (@lem-mat-g05-steinitz) só usa as operações de espaço vetorial. $V$ tem **dimensão finita** $n$ se tem uma base com $n$ elementos, e, nesse caso, $T: \R^n \to V$, $T(\vb a) = \sum_i a_i v_i$, é uma bijeção linear. Os monômios $1, t, t^2, \dots$ são linearmente independentes (um polinômio não nulo tem finitas raízes), de modo que $\mathcal P$, $C[a, b]$ e $B([a, b])$ têm **dimensão infinita**.
+
+::: {#def-mat-m10-norma}
+## Norma
+Uma **norma** num espaço vetorial $V$ é uma função $\norm{\cdot}: V \to \R$ tal que, para todos $x, y \in V$ e $\lambda \in \R$:
+
+- (N1) $\norm{x} \geq 0$, com $\norm{x} = 0$ se, e somente se, $x = 0$;
+- (N2) $\norm{\lambda x} = \abs{\lambda}\,\norm{x}$;
+- (N3) $\norm{x + y} \leq \norm{x} + \norm{y}$.
+
+O par $(V, \norm{\cdot})$ é um **espaço normado**, com a métrica $d(x, y) \defeq \norm{x - y}$.
 :::
+
+A métrica de uma norma é **invariante por translações**, $d(x + z, y + z) = d(x, y)$, e **homogênea**, $d(\lambda x, \lambda y) = \abs\lambda\, d(x, y)$. Por isso nem toda métrica num espaço vetorial vem de uma norma: a métrica discreta e a métrica limitada $\min\{d, 1\}$ não são homogêneas. Tudo o que o @sec-mat-m01 provou para espaços métricos vale para espaços normados.
+
+::: {#prp-mat-m10-operacoes}
+## As operações são contínuas
+Num espaço normado:
+
+(a) $\abs{\norm x - \norm y} \leq \norm{x - y}$; em particular, a norma é contínua;
+(b) se $x_n \to x$, $y_n \to y$ e $\lambda_n \to \lambda$ em $\R$, então $x_n + y_n \to x + y$ e $\lambda_n x_n \to \lambda x$;
+(c) a bola unitária fechada $B[0, 1]$ é **convexa** e **simétrica** ($x \in B[0, 1] \Rightarrow -x \in B[0, 1]$).
+:::
+
+::: {.proof}
+Para (a), use a @prp-mat-m01-triangular-inversa com $z = 0$. Para (b), $\norm{(x_n + y_n) - (x + y)} \leq \norm{x_n - x} + \norm{y_n - y}$ e $\norm{\lambda_n x_n - \lambda x} \leq \abs{\lambda_n}\,\norm{x_n - x} + \abs{\lambda_n - \lambda}\,\norm{x}$, e $(\lambda_n)$ é limitada. Para (c), se $\norm x, \norm y \leq 1$ e $t \in [0, 1]$, então $\norm{tx + (1 - t)y} \leq t\norm x + (1 - t)\norm y \leq 1$; a simetria vem de (N2).
+:::
+
+::: {#exm-mat-m10-normas}
+## Espaços normados
+(a) Em $\R^n$, para $1 \leq p < \infty$, $\norm{\vb x}_p \defeq \big(\sum_i \abs{x_i}^p\big)^{1/p}$, e $\norm{\vb x}_\infty \defeq \max_i \abs{x_i}$. Para $p = 1, 2, \infty$, são as normas das métricas $d_1, d_2, d_\infty$ do @exm-mat-m01-metricas; para os outros $p$, a desigualdade triangular é a de Minkowski (@thm-mat-m10-minkowski).
+(b) O espaço $\ell^p$ das sequências $x = (x_1, x_2, \dots)$ com $\sum_n \abs{x_n}^p < \infty$, com a norma $\norm{x}_p \defeq \big(\sum_n \abs{x_n}^p\big)^{1/p}$, $1 \leq p < \infty$; e $\ell^\infty = B(\N)$, com $\norm{x}_\infty \defeq \sup_n \abs{x_n}$.
+(c) $B(S)$ com a norma do supremo $\norm{f}_\infty \defeq \sup_{s} \abs{f(s)}$, e seu subespaço $C[a, b]$.
+(d) $C[a, b]$ também com $\norm{f}_1 \defeq \int_a^b \abs f$ e com $\norm{f}_2 \defeq \big(\int_a^b f^2\big)^{1/2}$. A positividade (N1) usa a continuidade, como no @exm-mat-m01-metricas (e); a desigualdade triangular de $\norm{\cdot}_2$ vem do produto interno (@cor-mat-m10-triangular).
+:::
+
+### As desigualdades de Young, Hölder e Minkowski {#sec-mat-m10-holder}
+
+Dois expoentes $p, q \in [1, \infty]$ são **conjugados** se $\frac1p + \frac1q = 1$ (com $1/\infty = 0$): $(2, 2)$, $(1, \infty)$, $(3, 3/2)$.
+
+::: {#lem-mat-m10-young}
+## Desigualdade de Young
+Se $a, b \geq 0$ e $p, q \in (1, \infty)$ são conjugados, então $ab \leq \dfrac{a^p}{p} + \dfrac{b^q}{q}$, com igualdade se, e somente se, $a^p = b^q$.
+:::
+
+::: {.proof}
+Se $a = 0$ ou $b = 0$, a desigualdade é imediata, e a igualdade vale exatamente quando ambos são nulos. Se $a, b > 0$, a concavidade estrita do logaritmo (@exm-mat-g03-concavas), com pesos $1/p$ e $1/q$, dá
+$$
+\log\Big(\frac{a^p}{p} + \frac{b^q}{q}\Big) \geq \frac1p \log a^p + \frac1q \log b^q = \log(ab),
+$$
+com igualdade se, e somente se, $a^p = b^q$. Como o logaritmo é crescente, o resultado segue.
+:::
+
+::: {#thm-mat-m10-holder}
+## Desigualdade de Hölder
+Se $p, q \in [1, \infty]$ são conjugados, então, para $\vb x, \vb y \in \R^n$,
+$$
+\sum_{i=1}^n \abs{x_i y_i} \leq \norm{\vb x}_p\, \norm{\vb y}_q .
+$$ {#eq-mat-m10-holder}
+O mesmo vale para sequências: se $x \in \ell^p$ e $y \in \ell^q$, a série $\sum_n x_n y_n$ converge absolutamente e $\sum_n \abs{x_n y_n} \leq \norm{x}_p\norm{y}_q$.
+:::
+
+::: {.proof}
+Para $p = 1$ e $q = \infty$, $\sum_i \abs{x_i}\abs{y_i} \leq \max_i \abs{y_i} \sum_i \abs{x_i}$. Para $1 < p < \infty$, se uma das normas é nula, um dos vetores é nulo e não há o que provar. Senão, aplique a desigualdade de Young a $a_i = \abs{x_i}/\norm{\vb x}_p$ e $b_i = \abs{y_i}/\norm{\vb y}_q$ e some em $i$:
+$$
+\frac{\sum_i \abs{x_i y_i}}{\norm{\vb x}_p\norm{\vb y}_q} = \sum_i a_i b_i \leq \frac1p\sum_i a_i^p + \frac1q\sum_i b_i^q = \frac1p + \frac1q = 1 .
+$$
+Para sequências, aplique o resultado aos $n$ primeiros termos — as somas parciais de $\sum \abs{x_n y_n}$ ficam limitadas por $\norm x_p\norm y_q$ — e faça $n \to \infty$.
+:::
+
+Com $p = q = 2$, a desigualdade de Hölder é a de Cauchy–Schwarz (@thm-mat-g05-cauchy-schwarz). A igualdade vale quando $\abs{y_i}^q$ é proporcional a $\abs{x_i}^p$, como o laboratório confere.
+
+::: {#thm-mat-m10-minkowski}
+## Desigualdade de Minkowski
+Para $1 \leq p \leq \infty$ e $\vb x, \vb y \in \R^n$, $\norm{\vb x + \vb y}_p \leq \norm{\vb x}_p + \norm{\vb y}_p$. Em consequência, $\ell^p$ é um espaço vetorial e $\norm\cdot_p$ é uma norma em $\R^n$ e em $\ell^p$.
+:::
+
+::: {.proof}
+Os casos $p = 1$ e $p = \infty$ seguem da desigualdade triangular em $\R$. Para $1 < p < \infty$, seja $S \defeq \sum_i \abs{x_i + y_i}^p$ e $q = p/(p - 1)$, de modo que $(p - 1)q = p$. Pela desigualdade triangular e por Hölder,
+$$
+S \leq \sum_i \abs{x_i}\,\abs{x_i + y_i}^{p-1} + \sum_i \abs{y_i}\,\abs{x_i + y_i}^{p-1} \leq \big(\norm{\vb x}_p + \norm{\vb y}_p\big) \Big(\sum_i \abs{x_i + y_i}^{(p-1)q}\Big)^{1/q} = \big(\norm{\vb x}_p + \norm{\vb y}_p\big) S^{1/q} .
+$$
+Se $S > 0$, dividindo por $S^{1/q}$, $S^{1 - 1/q} = S^{1/p} \leq \norm{\vb x}_p + \norm{\vb y}_p$. Para sequências $x, y \in \ell^p$, a desigualdade aplicada aos $n$ primeiros termos dá $\big(\sum_{i \leq n} \abs{x_i + y_i}^p\big)^{1/p} \leq \norm{x}_p + \norm{y}_p$ para todo $n$; logo $x + y \in \ell^p$, e vale a desigualdade. Como $\lambda x \in \ell^p$ com $\norm{\lambda x}_p = \abs\lambda\norm{x}_p$, $\ell^p$ é um subespaço de $\R^{\N}$ e $\norm\cdot_p$ é uma norma.
+:::
+
+Para $0 < p < 1$, a fórmula $\big(\sum_i\abs{x_i}^p\big)^{1/p}$ **não** define uma norma: $\norm{\vb e_1 + \vb e_2}_p = 2^{1/p} > 2 = \norm{\vb e_1}_p + \norm{\vb e_2}_p$, e a "bola unitária" deixa de ser convexa. O interativo mostra as bolas para $p$ variando de $1/2$ a $\infty$.
+
+## Produtos internos {#sec-mat-m10-produto-interno}
+
+::: {#def-mat-m10-produto-interno}
+## Produto interno
+Um **produto interno** num espaço vetorial $V$ é uma função $\inner{\cdot}{\cdot}: V \times V \to \R$ simétrica ($\inner xy = \inner yx$), linear em cada argumento ($\inner{\alpha x + \beta y}{z} = \alpha\inner xz + \beta\inner yz$) e positiva definida ($\inner xx > 0$ para $x \neq 0$). A norma associada é $\norm x \defeq \sqrt{\inner xx}$.
+:::
+
+::: {#exm-mat-m10-produtos-internos}
+## Produtos internos
+(a) Em $\R^n$, $\inner{\vb x}{\vb y} = \vb x\T\vb y$ e, mais geralmente, $\inner{\vb x}{\vb y} = \vb x\T\vb A\vb y$ com $\vb A$ simétrica e positiva definida (@def-mat-g07-definida).
+(b) Em $\ell^2$, $\inner xy = \sum_n x_n y_n$, série que converge absolutamente pela desigualdade de Hölder com $p = q = 2$.
+(c) Em $C[a, b]$, $\inner fg = \int_a^b f g$; a norma associada é $\norm\cdot_2$.
+(d) Para variáveis aleatórias com segundo momento finito, $\inner XY = \E[XY]$. Aqui a positividade exige identificar variáveis iguais com probabilidade 1, o que é feito com a teoria da medida (@sec-est-m01, @sec-mat-d04); a geometria deste capítulo se aplica integralmente, como mostra o @exr-mat-m10-hj.
+:::
+
+::: {#thm-mat-m10-cauchy-schwarz}
+## Desigualdade de Cauchy–Schwarz
+Num espaço com produto interno, $\abs{\inner xy} \leq \norm x\,\norm y$, com igualdade se, e somente se, $x$ e $y$ são linearmente dependentes.
+:::
+
+::: {.proof}
+Se $y = 0$, os dois lados são nulos. Se $y \neq 0$, para todo $t \in \R$,
+$$
+0 \leq \norm{x - ty}^2 = \norm x^2 - 2t\inner xy + t^2\norm y^2 .
+$$
+Com $t = \inner xy/\norm y^2$, obtém-se $0 \leq \norm x^2 - \inner xy^2/\norm y^2$, que é a desigualdade. Há igualdade se, e somente se, $\norm{x - ty} = 0$ para esse $t$, isto é, $x = ty$; e, se $x = sy$ para algum $s$, a igualdade é imediata.
+:::
+
+::: {#cor-mat-m10-triangular}
+## Consequências
+(a) $\norm x = \sqrt{\inner xx}$ é uma norma.
+(b) O produto interno é contínuo: se $x_n \to x$ e $y_n \to y$, então $\inner{x_n}{y_n} \to \inner xy$.
+:::
+
+::: {.proof}
+Para (a), só a desigualdade triangular não é imediata: $\norm{x + y}^2 = \norm x^2 + 2\inner xy + \norm y^2 \leq \norm x^2 + 2\norm x\norm y + \norm y^2 = (\norm x + \norm y)^2$. Para (b), $\abs{\inner{x_n}{y_n} - \inner xy} \leq \abs{\inner{x_n - x}{y_n}} + \abs{\inner{x}{y_n - y}} \leq \norm{x_n - x}\norm{y_n} + \norm x\norm{y_n - y} \to 0$.
+:::
+
+Pela desigualdade de Cauchy–Schwarz, $\inner xy/(\norm x\norm y) \in [-1, 1]$ para $x, y \neq 0$, e esse número é o cosseno do **ângulo** entre $x$ e $y$. Em $\R^n$, aplicado a vetores de desvios em relação à média, ele é o coeficiente de correlação (@exr-mat-g05-correlacao). Dois vetores são **ortogonais**, $x \perp y$, se $\inner xy = 0$, e então vale o **teorema de Pitágoras**: $\norm{x + y}^2 = \norm x^2 + \norm y^2$.
+
+::: {#prp-mat-m10-paralelogramo}
+## Lei do paralelogramo e polarização
+Se a norma vem de um produto interno, então, para todos $x, y$,
+$$
+\norm{x + y}^2 + \norm{x - y}^2 = 2\norm x^2 + 2\norm y^2 \qquad\text{e}\qquad \inner xy = \tfrac14\big(\norm{x + y}^2 - \norm{x - y}^2\big) .
+$$ {#eq-mat-m10-paralelogramo}
+:::
+
+::: {.proof}
+Expanda $\norm{x \pm y}^2 = \norm x^2 \pm 2\inner xy + \norm y^2$ e some ou subtraia as duas expressões.
+:::
+
+A lei do paralelogramo — a soma dos quadrados das diagonais é a soma dos quadrados dos lados — permite reconhecer normas que **não** vêm de produto interno. Em $\R^2$, com $\vb x = \vb e_1$ e $\vb y = \vb e_2$, o lado esquerdo vale $2 \cdot 2^{2/p}$ para a norma $\norm\cdot_p$ e $2$ para $\norm\cdot_\infty$, enquanto o direito vale $4$: só $p = 2$ satisfaz a lei. Em $C[0, 1]$ com a norma do supremo, $f = 1$ e $g(t) = t$ dão $\norm{f + g}_\infty^2 + \norm{f - g}_\infty^2 = 4 + 1 \neq 4$. A recíproca também vale — uma norma que satisfaz a lei do paralelogramo vem do produto interno dado pela polarização (teorema de Jordan e von Neumann) —, mas não a usaremos.
+
+## Espaços de Banach e de Hilbert {#sec-mat-m10-banach}
+
+::: {#def-mat-m10-banach}
+## Espaços de Banach e de Hilbert
+Um espaço normado completo é um **espaço de Banach**. Um espaço com produto interno completo na norma associada é um **espaço de Hilbert**.
+:::
+
+Uma série $\sum_n x_n$ num espaço normado **converge** se a sequência das somas parciais $s_n = x_1 + \dots + x_n$ converge, e **converge absolutamente** se $\sum_n \norm{x_n} < \infty$. Em $\R$, convergência absoluta implica convergência; em espaços normados, essa propriedade caracteriza a completude.
+
+::: {#thm-mat-m10-series}
+## Completude e séries
+Um espaço normado $X$ é de Banach se, e somente se, toda série absolutamente convergente em $X$ converge. Nesse caso, $\norm{\sum_n x_n} \leq \sum_n \norm{x_n}$.
+:::
+
+::: {.proof}
+Suponha $X$ completo e $\sum_n \norm{x_n} < \infty$. Para $m > n$, $\norm{s_m - s_n} \leq \sum_{k=n+1}^m \norm{x_k}$, que é pequeno para $n$ grande, pois é um pedaço da cauda de uma série real convergente. Logo $(s_n)$ é de Cauchy e converge. A desigualdade vale para as somas parciais e passa ao limite pela continuidade da norma.
+
+Reciprocamente, seja $(x_n)$ de Cauchy. Escolha $n_1 < n_2 < \cdots$ com $\norm{x_m - x_l} < 2^{-k}$ para $m, l \geq n_k$. A série $x_{n_1} + \sum_k (x_{n_{k+1}} - x_{n_k})$ converge absolutamente, pois seus termos têm norma menor que $2^{-k}$; por hipótese, converge. Suas somas parciais são $x_{n_{k+1}}$: a subsequência converge, e uma sequência de Cauchy com subsequência convergente converge (@prp-mat-m01-cauchy).
+:::
+
+::: {#thm-mat-m10-exemplos-banach}
+## Espaços de Banach e de Hilbert clássicos
+(a) $B(S)$ com a norma do supremo é um espaço de Banach; em particular, $\ell^\infty$ é.
+(b) Para $1 \leq p < \infty$, $\ell^p$ é um espaço de Banach; $\ell^2$ é um espaço de Hilbert.
+(c) Todo subespaço fechado de um espaço de Banach (ou de Hilbert) é de Banach (ou de Hilbert).
+:::
+
+::: {.proof}
+O item (a) é o @thm-mat-m01-completos (b), e (c) é o @thm-mat-m01-completos (c). Para (b), seja $(x^{(k)})_k$ de Cauchy em $\ell^p$. Como $\abs{x^{(k)}_n - x^{(l)}_n} \leq \norm{x^{(k)} - x^{(l)}}_p$, cada coordenada é de Cauchy em $\R$ e converge para algum $x_n$. Dado $\varepsilon > 0$, tome $K$ com $\norm{x^{(k)} - x^{(l)}}_p < \varepsilon$ para $k, l \geq K$. Para cada $N$, $\big(\sum_{n \leq N}\abs{x^{(k)}_n - x^{(l)}_n}^p\big)^{1/p} < \varepsilon$; fazendo $l \to \infty$ nessa soma finita, $\big(\sum_{n \leq N}\abs{x^{(k)}_n - x_n}^p\big)^{1/p} \leq \varepsilon$, e, fazendo $N \to \infty$, $\norm{x^{(k)} - x}_p \leq \varepsilon$ para $k \geq K$. Em particular, $x^{(k)} - x \in \ell^p$, e $x = x^{(k)} - (x^{(k)} - x) \in \ell^p$, pois $\ell^p$ é um espaço vetorial (@thm-mat-m10-minkowski). Logo $x^{(k)} \to x$ em $\ell^p$.
+:::
+
+::: {#exm-mat-m10-incompletos}
+## Espaços normados que não são completos
+(a) $c_{00}$ com $\norm\cdot_2$. As sequências $x^{(k)} = (1, \frac12, \dots, \frac1k, 0, 0, \dots)$ convergem em $\ell^2$ para $x = (1/n)_n$, porque $\norm{x^{(k)} - x}_2^2 = \sum_{n > k} 1/n^2 \to 0$ (@prp-mat-g02-p-serie). São, portanto, de Cauchy, mas $x \notin c_{00}$, e, pela unicidade do limite em $\ell^2$, elas não convergem em $c_{00}$.
+(b) $C[0, 1]$ com $\norm\cdot_1$. Seja $f_n$ igual a $0$ em $[0, \frac12]$, a $1$ em $[\frac12 + \frac1n, 1]$ e linear entre esses intervalos. Para $m \geq n$, $f_n$ e $f_m$ só diferem em $[\frac12, \frac12 + \frac1n]$, onde $\abs{f_n - f_m} \leq 1$; logo $\norm{f_n - f_m}_1 \leq 1/n$, e a sequência é de Cauchy. Se ela convergisse para uma $f$ contínua, então, para cada $c \in (\frac12, 1)$ e $n$ com $\frac12 + \frac1n < c$, $\int_c^1 \abs{f - 1} \leq \norm{f - f_n}_1 \to 0$, de modo que $f = 1$ em $[c, 1]$; e $\int_0^{1/2}\abs f \leq \norm{f - f_n}_1 \to 0$, de modo que $f = 0$ em $[0, \frac12]$. Uma tal $f$ é descontínua em $\frac12$ — contradição. O mesmo argumento vale para $\norm\cdot_2$: com $\inner fg = \int fg$, $C[0, 1]$ é um espaço com produto interno que **não** é de Hilbert. Seu completamento é o espaço $L^2$ (@sec-mat-d04).
+(c) Os polinômios em $[0, 1]$ com a norma do supremo. Os polinômios de Taylor $p_n(t) = \sum_{k \leq n} t^k/k!$ satisfazem $\abs{e^t - p_n(t)} \leq e/(n + 1)!$ em $[0, 1]$ (@thm-mat-g03-taylor), de modo que convergem em $C[0, 1]$ para $e^t$, que não é um polinômio (suas derivadas de ordem $n + 1$ não se anulam).
+:::
+
+## Dimensão finita: equivalência das normas {#sec-mat-m10-dimensao-finita}
+
+Duas normas $\norm\cdot$ e $\norm\cdot'$ em $V$ são **equivalentes** se existem $\alpha, \beta > 0$ com $\alpha\norm x \leq \norm x' \leq \beta\norm x$ para todo $x$ — isto é, se as métricas associadas são uniformemente equivalentes, com os mesmos abertos, as mesmas sequências convergentes e de Cauchy e os mesmos limitados (@prp-mat-m01-equivalentes).
+
+::: {#thm-mat-m10-equivalencia}
+## Equivalência das normas em dimensão finita
+Num espaço vetorial de dimensão finita, quaisquer duas normas são equivalentes.
+:::
+
+::: {.proof}
+Seja $v_1, \dots, v_n$ uma base e $T(\vb a) = \sum_i a_i v_i$. Se $N$ é uma norma em $V$, então $N_0(\vb a) \defeq N(T\vb a)$ é uma norma em $\R^n$ (a injetividade de $T$ garante (N1)). Como a equivalência é transitiva, basta mostrar que toda norma $N$ em $\R^n$ é equivalente a $\norm\cdot_2$. Pela desigualdade triangular e por Cauchy–Schwarz,
+$$
+N(\vb x) = N\Big(\sum_i x_i \vb e_i\Big) \leq \sum_i \abs{x_i}\,N(\vb e_i) \leq \beta\,\norm{\vb x}_2, \qquad \beta \defeq \Big(\sum_i N(\vb e_i)^2\Big)^{1/2} .
+$$
+Em particular, $\abs{N(\vb x) - N(\vb y)} \leq N(\vb x - \vb y) \leq \beta\norm{\vb x - \vb y}_2$, e $N$ é contínua em $(\R^n, \norm\cdot_2)$. A esfera $S = \{\vb x : \norm{\vb x}_2 = 1\}$ é fechada e limitada, logo compacta (@thm-mat-m01-heine-borel), e $N > 0$ em $S$; pelo teorema de Weierstrass (@thm-mat-m01-weierstrass), $N$ atinge em $S$ um mínimo $\alpha > 0$. Para $\vb x \neq \vb 0$, $N(\vb x) = \norm{\vb x}_2\, N(\vb x/\norm{\vb x}_2) \geq \alpha\norm{\vb x}_2$.
+:::
+
+::: {#cor-mat-m10-dimensao-finita}
+## Consequências
+Seja $X$ um espaço normado.
+
+(a) Se $X$ tem dimensão finita, $X$ é de Banach, e um subconjunto de $X$ é compacto se, e somente se, é fechado e limitado.
+(b) Todo subespaço de dimensão finita de $X$ é fechado em $X$.
+:::
+
+::: {.proof}
+Para (a), com a notação da demonstração anterior, $T$ é uma isometria de $(\R^n, N_0)$ sobre $(X, \norm\cdot)$, e $N_0$ é equivalente a $\norm\cdot_2$. Completude, compacidade, ser fechado e ser limitado se preservam por isometrias e por normas equivalentes; em $(\R^n, \norm\cdot_2)$, valem a completude (@thm-mat-m01-completos) e o teorema de Heine–Borel. Para (b), um subespaço de dimensão finita é completo por (a), e todo subespaço completo de um espaço métrico é fechado nele (@thm-mat-m01-completos).
+:::
+
+Em dimensão infinita, o @thm-mat-m10-equivalencia falha. Em $C[0, 1]$, $\norm f_1 \leq \norm f_\infty$, mas as "tendas" $g_n(t) = \max\{0, 1 - nt\}$ têm $\norm{g_n}_\infty = 1$ e $\norm{g_n}_1 = 1/(2n)$: nenhuma constante dá $\norm f_\infty \leq \beta\norm f_1$. As duas normas definem convergências diferentes — $g_n \to 0$ em $\norm\cdot_1$, mas não em $\norm\cdot_\infty$ —, e a escolha da norma passa a fazer parte do modelo. Também falha o teorema de Heine–Borel, como mostra o resultado a seguir.
+
+::: {#lem-mat-m10-riesz}
+## Lema de Riesz
+Sejam $X$ normado, $Y \subsetneq X$ um subespaço fechado próprio e $\theta \in (0, 1)$. Existe $x \in X$ com $\norm x = 1$ e $\norm{x - y} \geq \theta$ para todo $y \in Y$.
+:::
+
+::: {.proof}
+Tome $z \notin Y$. Como $Y$ é fechado, $\delta \defeq d(z, Y) > 0$ (@exm-mat-m01-continuas). Como $\delta/\theta > \delta$, existe $y_0 \in Y$ com $\norm{z - y_0} \leq \delta/\theta$. Seja $x \defeq (z - y_0)/\norm{z - y_0}$. Para $y \in Y$, o vetor $y_0 + \norm{z - y_0}\,y$ está em $Y$, de modo que
+$$
+\norm{x - y} = \frac{\norm{z - (y_0 + \norm{z - y_0}\,y)}}{\norm{z - y_0}} \geq \frac{\delta}{\norm{z - y_0}} \geq \theta .
+$$
+:::
+
+::: {#thm-mat-m10-bola-compacta}
+## A bola unitária é compacta só em dimensão finita
+A bola fechada $B[0, 1]$ de um espaço normado $X$ é compacta se, e somente se, $X$ tem dimensão finita.
+:::
+
+::: {.proof}
+Se a dimensão é finita, a bola é fechada e limitada, logo compacta pelo @cor-mat-m10-dimensao-finita. Se a dimensão é infinita, construímos indutivamente vetores unitários $x_1, x_2, \dots$ com $\norm{x_n - x_m} \geq 1/2$ para $n \neq m$. Dados $x_1, \dots, x_n$, o subespaço $Y_n$ gerado por eles tem dimensão finita, logo é fechado (@cor-mat-m10-dimensao-finita) e próprio; o lema de Riesz, com $\theta = 1/2$, dá $x_{n+1}$ unitário a distância pelo menos $1/2$ de $Y_n$, em particular de $x_1, \dots, x_n$. A sequência $(x_n)$ está na bola e não tem subsequência de Cauchy, logo a bola não é sequencialmente compacta (@thm-mat-m01-compacidade).
+:::
+
+Em $\ell^2$, nem é preciso o lema: os vetores $\vb e_n$ são unitários e $\norm{\vb e_n - \vb e_m}_2 = \sqrt 2$. Para a economia, a lição é que, com infinitos bens ou infinitos períodos, "fechado e limitado" não basta para aplicar o teorema de Weierstrass; a existência de ótimos e de equilíbrios exige outras ferramentas, como a caracterização dos compactos de $C[a, b]$ pelo teorema de Arzelà–Ascoli (@sec-mat-m07) ou compacidade em topologias mais fracas que a da norma.
+
+## Operadores lineares limitados {#sec-mat-m10-operadores}
+
+::: {#def-mat-m10-operador}
+## Operador limitado e norma de operador
+Uma aplicação linear $T: X \to Y$ entre espaços normados é **limitada** se existe $M$ com $\norm{Tx} \leq M\norm x$ para todo $x \in X$. A **norma de operador** de $T$ é
+$$
+\norm T \defeq \sup_{x \neq 0} \frac{\norm{Tx}}{\norm x} = \sup_{\norm x \leq 1} \norm{Tx} = \sup_{\norm x = 1}\norm{Tx} .
+$$ {#eq-mat-m10-norma-operador}
+$\mathcal L(X, Y)$ denota o conjunto dos operadores lineares limitados de $X$ em $Y$, e $\mathcal L(X) \defeq \mathcal L(X, X)$. Um operador com valores em $\R$ é um **funcional linear**.
+:::
+
+As três expressões da @eq-mat-m10-norma-operador coincidem porque $\norm{Tx}/\norm x = \norm{T(x/\norm x)}$: só a direção de $x$ importa. "Limitado" significa limitado na bola unitária, não em $X$ — um operador linear não nulo nunca é limitado em $X$ inteiro.
+
+::: {#thm-mat-m10-limitado}
+## Continuidade e limitação
+Para $T: X \to Y$ linear, são equivalentes: (a) $T$ é contínuo; (b) $T$ é contínuo em $0$; (c) $T$ é limitado. Nesse caso, $T$ é Lipschitz com constante $\norm T$.
+:::
+
+::: {.proof}
+De (a) para (b), não há o que provar. De (b) para (c): com $\varepsilon = 1$, existe $\delta > 0$ com $\norm{Tz} < 1$ sempre que $\norm z < \delta$. Para $x \neq 0$, $z = \frac{\delta}{2}\frac{x}{\norm x}$ tem $\norm z < \delta$, logo $\norm{Tx} = \frac{2\norm x}{\delta}\norm{Tz} < \frac2\delta\norm x$. De (c) para (a): $\norm{Tx - Ty} = \norm{T(x - y)} \leq \norm T\,\norm{x - y}$.
+:::
+
+::: {#prp-mat-m10-norma-operador}
+## Propriedades da norma de operador
+Sejam $X, Y, Z$ normados.
+
+(a) $\norm{Tx} \leq \norm T\,\norm x$, e $\norm T$ é a menor constante com essa propriedade.
+(b) $\norm{\cdot}$ é uma norma em $\mathcal L(X, Y)$.
+(c) Se $T \in \mathcal L(X, Y)$ e $S \in \mathcal L(Y, Z)$, então $\norm{ST} \leq \norm S\,\norm T$; em particular, $\norm{T^k} \leq \norm T^k$.
+(d) Se $Y$ é de Banach, $\mathcal L(X, Y)$ é de Banach.
+:::
+
+::: {.proof}
+O item (a) é a definição de supremo. Para (b), $\norm{(S + T)x} \leq \norm{Sx} + \norm{Tx} \leq (\norm S + \norm T)\norm x$, a homogeneidade é imediata e $\norm T = 0$ implica $Tx = 0$ para todo $x$. Para (c), $\norm{STx} \leq \norm S\,\norm{Tx} \leq \norm S\,\norm T\,\norm x$.
+
+Para (d), seja $(T_n)$ de Cauchy em $\mathcal L(X, Y)$. Para cada $x$, $\norm{T_n x - T_m x} \leq \norm{T_n - T_m}\norm x$, de modo que $(T_n x)$ é de Cauchy em $Y$ e converge para um vetor que chamamos $Tx$; $T$ é linear, porque limites preservam combinações lineares. Dado $\varepsilon > 0$, tome $N$ com $\norm{T_n - T_m} < \varepsilon$ para $m, n \geq N$; então $\norm{T_n x - T_m x} \leq \varepsilon\norm x$ e, fazendo $m \to \infty$, $\norm{T_n x - Tx} \leq \varepsilon\norm x$. Assim, $T_n - T$ é limitado com norma no máximo $\varepsilon$, $T = T_n - (T_n - T)$ é limitado e $T_n \to T$ em $\mathcal L(X, Y)$.
+:::
+
+::: {#cor-mat-m10-dimensao-finita-operadores}
+## Em dimensão finita, toda aplicação linear é contínua
+Se $X$ tem dimensão finita e $Y$ é normado, toda aplicação linear $T: X \to Y$ é limitada.
+:::
+
+::: {.proof}
+Com uma base $v_1, \dots, v_n$ de $X$ e $x = \sum_i a_i v_i$, a função $\norm{x}_* \defeq \sum_i \abs{a_i}$ é uma norma em $X$, e $\norm{Tx} \leq \sum_i\abs{a_i}\,\norm{Tv_i} \leq \big(\max_i\norm{Tv_i}\big)\norm x_*$. Pelo @thm-mat-m10-equivalencia, $\norm x_* \leq C\norm x$ para alguma constante $C$.
+:::
+
+::: {#exm-mat-m10-operadores}
+## Operadores
+(a) **Matrizes.** Uma matriz $\vb A$, $m \times n$, vista como operador de $(\R^n, \norm\cdot_\infty)$ em $(\R^m, \norm\cdot_\infty)$, tem norma igual à **maior soma absoluta de linha**, $\norm{\vb A}_\infty = \max_i \sum_j \abs{a_{ij}}$. De fato, $\abs{(\vb A\vb x)_i} \leq \sum_j \abs{a_{ij}}\,\abs{x_j} \leq \big(\sum_j\abs{a_{ij}}\big)\norm{\vb x}_\infty$; e, se a linha $i^*$ tem a maior soma, o vetor $x_j = \operatorname{sgn}(a_{i^*j})$ tem $\norm{\vb x}_\infty \leq 1$ e $(\vb A\vb x)_{i^*} = \sum_j \abs{a_{i^*j}}$. Com $\norm\cdot_1$ nos dois espaços, a norma é a maior soma absoluta de coluna (@exr-mat-m10-norma-1); com $\norm\cdot_2$, $\norm{\vb A}_2 \leq \norm{\vb A}_F$ (@lem-mat-g06-norma-matriz), e o valor exato é o maior valor singular (@sec-mat-m02).
+(b) **Matrizes estocásticas.** Se $\vb P$ tem entradas não negativas e linhas que somam 1 — uma matriz de transição de uma cadeia de Markov —, então $\norm{\vb P}_\infty = 1$, e $(\vb P\vb f)(s) = \sum_{s'} P_{ss'} f(s')$ é a esperança de $f$ no estado de amanhã, condicional ao estado $s$ de hoje.
+(c) **Integração.** Em $C[0, 1]$ com a norma do supremo, $(Vf)(t) \defeq \int_0^t f$ define $V \in \mathcal L(C[0, 1])$ (a continuidade de $Vf$ é o @thm-mat-g04-tfc1), com $\abs{(Vf)(t)} \leq t\norm f_\infty$; logo $\norm V \leq 1$, e $f = 1$ mostra que $\norm V = 1$.
+(d) **Derivação.** No espaço dos polinômios em $[0, 1]$ com a norma do supremo, $D p = p'$ é linear, mas **não** é limitado: $p_n(t) = t^n$ tem $\norm{p_n}_\infty = 1$ e $\norm{Dp_n}_\infty = n$. Assim, $t^n/n \to 0$ uniformemente, mas as derivadas $t^{n-1}$ não tendem a zero: derivar não é uma operação contínua na norma do supremo, o que explica por que a derivação numérica amplifica erros.
+(e) **A norma importa.** A avaliação $\phi(f) = f(0)$ é um funcional limitado em $(C[0, 1], \norm\cdot_\infty)$, com $\norm\phi = 1$, mas não em $(C[0, 1], \norm\cdot_1)$: as tendas $g_n$ têm $\norm{g_n}_1 = 1/(2n)$ e $g_n(0) = 1$.
+:::
+
+### A série de Neumann {#sec-mat-m10-neumann}
+
+::: {#thm-mat-m10-neumann}
+## Série de Neumann
+Sejam $X$ um espaço de Banach e $T \in \mathcal L(X)$ com $\norm T < 1$. Então $\Id - T$ é bijetivo, sua inversa é limitada e
+$$
+(\Id - T)^{-1} = \sum_{k=0}^\infty T^k, \qquad \norm{(\Id - T)^{-1}} \leq \frac{1}{1 - \norm T},
+$$ {#eq-mat-m10-neumann}
+com a série convergindo em $\mathcal L(X)$. Em particular, para cada $b \in X$, a equação $x = Tx + b$ tem uma única solução $x^* = \sum_{k \geq 0} T^k b$, e a iteração $x_{n+1} = Tx_n + b$ converge para $x^*$ a partir de qualquer $x_0$, com $\norm{x_n - x^*} \leq \norm T^n\norm{x_0 - x^*}$.
+:::
+
+::: {.proof}
+Pela @prp-mat-m10-norma-operador, $\norm{T^k} \leq \norm T^k$ e $\mathcal L(X)$ é de Banach. A série $\sum_k T^k$ converge absolutamente, logo converge para algum $S \in \mathcal L(X)$, com $\norm S \leq \sum_k \norm T^k = 1/(1 - \norm T)$ (@thm-mat-m10-series). As somas parciais $S_n = \sum_{k=0}^n T^k$ satisfazem
+$$
+(\Id - T)S_n = S_n(\Id - T) = \Id - T^{n+1} \to \Id ,
+$$
+pois $\norm{T^{n+1}} \leq \norm T^{n+1} \to 0$. Como $\norm{(\Id - T)(S_n - S)} \leq \norm{\Id - T}\,\norm{S_n - S} \to 0$, e analogamente à direita, $(\Id - T)S = S(\Id - T) = \Id$: $\Id - T$ é bijetivo com inversa $S$. Por fim, $x_n - x^* = T(x_{n-1} - x^*) = \dots = T^n(x_0 - x^*)$.
+:::
+
+O teorema generaliza a inversa de Leontief (@thm-mat-g05-leontief): a condição de que as colunas de $\vb A$ somem menos que 1 é exatamente $\norm{\vb A}_1 < 1$ (@exr-mat-m10-norma-1), e a não negatividade de $(\Id - \vb A)^{-1}$ vem de ela ser uma soma de matrizes não negativas. A iteração $x_{n+1} = Tx_n + b$ é a versão linear do teorema do ponto fixo de Banach (@sec-mat-m05). Um operador com $\norm T < 1$ é uma contração, e toda contração tem um ponto fixo único, que pode ser calculado por iteração. Pelo @exr-mat-m10-perturbacao, o mesmo argumento mostra que os operadores invertíveis formam um conjunto aberto.
+
+### Aplicação: o preço de um ativo numa cadeia de Markov {#sec-mat-m10-precos}
+
+Considere uma economia com estados $s \in \{1, \dots, S\}$ que seguem uma cadeia de Markov com matriz de transição $\vb P$, um ativo que paga dividendo $d(s)$ no estado $s$ e um investidor neutro ao risco com fator de desconto $\beta \in (0, 1)$. O preço do ativo no estado $s$ é o valor descontado do dividendo e do preço de amanhã:
+$$
+p(s) = \beta\sum_{s'} P_{ss'}\big[d(s') + p(s')\big], \qquad\text{isto é,}\qquad \vb p = \beta\vb P\vb d + \beta\vb P\vb p .
+$$ {#eq-mat-m10-precos}
+Com a norma do supremo em $\R^S$, $\norm{\beta\vb P}_\infty = \beta < 1$ (@exm-mat-m10-operadores). Pelo @thm-mat-m10-neumann, a equação tem solução única,
+$$
+\vb p = (\Id - \beta\vb P)^{-1}\beta\vb P\vb d = \sum_{k=1}^\infty \beta^k\vb P^k\vb d ,
+$$
+que é o valor presente dos dividendos esperados: $(\vb P^k\vb d)(s)$ é o dividendo esperado daqui a $k$ períodos, dado o estado de hoje. Além disso, $\norm{\vb p}_\infty \leq \frac{\beta}{1 - \beta}\norm{\vb d}_\infty$, e a iteração $\vb p_{n+1} = \beta\vb P(\vb d + \vb p_n)$, que é como se resolve o problema quando o espaço de estados é grande, converge geometricamente, à taxa $\beta$. Nada no argumento usa a finitude de $S$: num espaço de estados infinito, o mesmo operador age em $B(S)$, que é de Banach, com a mesma norma $\beta$. O laboratório resolve um exemplo com três estados; com aversão ao risco, o fator $\beta$ é substituído por um fator estocástico de desconto (@sec-fin-m03).
+
+## Projeção ortogonal {#sec-mat-m10-projecao}
+
+O resultado central da geometria dos espaços com produto interno é a existência do ponto mais próximo num conjunto convexo. Ele usa as duas estruturas: a convexidade e a lei do paralelogramo fazem uma sequência minimizante ser de Cauchy, e a completude garante o limite.
+
+::: {#thm-mat-m10-projecao}
+## Teorema da projeção
+Seja $H$ um espaço com produto interno e $C \subseteq H$ não vazio, convexo e completo — por exemplo, fechado num espaço de Hilbert, ou um subespaço de dimensão finita. Para cada $x \in H$, existe um único $c^* \in C$ com
+$$
+\norm{x - c^*} = d(x, C) = \inf_{c \in C}\norm{x - c} .
+$$
+Além disso, $c^* \in C$ é esse ponto se, e somente se,
+$$
+\inner{x - c^*}{c - c^*} \leq 0 \qquad\text{para todo } c \in C .
+$$ {#eq-mat-m10-variacional}
+:::
+
+::: {.proof}
+**Existência.** Seja $\delta = d(x, C)$ e $c_n \in C$ com $\norm{x - c_n} \to \delta$. A lei do paralelogramo, aplicada a $x - c_n$ e $x - c_m$, dá
+$$
+\norm{c_m - c_n}^2 = 2\norm{x - c_n}^2 + 2\norm{x - c_m}^2 - 4\,\Big\lVert x - \frac{c_n + c_m}{2}\Big\rVert^2 \leq 2\norm{x - c_n}^2 + 2\norm{x - c_m}^2 - 4\delta^2 ,
+$$
+porque $(c_n + c_m)/2 \in C$ pela convexidade. O lado direito tende a $2\delta^2 + 2\delta^2 - 4\delta^2 = 0$: $(c_n)$ é de Cauchy em $C$ e, como $C$ é completo, converge para algum $c^* \in C$, com $\norm{x - c^*} = \delta$ pela continuidade da norma.
+
+**Unicidade.** Se $c^*$ e $c'$ em $C$ atingem $\delta$, a mesma identidade, com $c_n = c^*$ e $c_m = c'$, dá $\norm{c^* - c'}^2 \leq 2\delta^2 + 2\delta^2 - 4\delta^2 = 0$.
+
+**Caracterização.** Seja $c^*$ o ponto mais próximo e $c \in C$. Para $t \in (0, 1]$, $c^* + t(c - c^*) \in C$, logo
+$$
+\norm{x - c^*}^2 \leq \norm{x - c^* - t(c - c^*)}^2 = \norm{x - c^*}^2 - 2t\inner{x - c^*}{c - c^*} + t^2\norm{c - c^*}^2 .
+$$
+Dividindo por $t$ e fazendo $t \to 0$, obtém-se a @eq-mat-m10-variacional. Reciprocamente, se $c^* \in C$ satisfaz a @eq-mat-m10-variacional, então, para todo $c \in C$, $\norm{x - c}^2 = \norm{x - c^*}^2 - 2\inner{x - c^*}{c - c^*} + \norm{c - c^*}^2 \geq \norm{x - c^*}^2$.
+:::
+
+Geometricamente, a @eq-mat-m10-variacional diz que o ângulo entre $x - c^*$ e qualquer direção que aponte de $c^*$ para dentro de $C$ é obtuso. Em $\R^n$ com a norma $\norm\cdot_\infty$, que não satisfaz a lei do paralelogramo, o ponto mais próximo pode não ser único (@exr-mat-m10-unicidade). O ponto $c^*$ é a **projeção** de $x$ sobre $C$, denotada $P_C x$; o @exr-mat-m10-nao-expansiva mostra que $P_C$ é Lipschitz com constante 1.
+
+::: {#cor-mat-m10-subespaco}
+## Projeção sobre um subespaço
+Seja $M$ um subespaço completo de $H$ (fechado num espaço de Hilbert, ou de dimensão finita) e $P = P_M$. Então:
+
+(a) $Px$ é o único $m \in M$ com $x - m \perp M$, isto é, $\inner{x - m}{z} = 0$ para todo $z \in M$;
+(b) $P$ é linear, $P^2 = P$ e $\inner{Px}{y} = \inner{x}{Py}$ para todos $x, y$;
+(c) $\norm x^2 = \norm{Px}^2 + \norm{x - Px}^2$; em particular, $\norm P \leq 1$, com igualdade se $M \neq \{0\}$.
+:::
+
+::: {.proof}
+Para (a), num subespaço, $c - Px$ percorre todo $M$ quando $c$ percorre $M$, e a @eq-mat-m10-variacional, aplicada a $z$ e a $-z$, vira $\inner{x - Px}{z} = 0$ para todo $z \in M$. Reciprocamente, se $m \in M$ e $x - m \perp M$, a @eq-mat-m10-variacional vale com igualdade, e $m = Px$. Para (b), se $x - Px \perp M$ e $y - Py \perp M$, então $(\alpha x + \beta y) - (\alpha Px + \beta Py) \perp M$, com $\alpha Px + \beta Py \in M$; por (a), $P(\alpha x + \beta y) = \alpha Px + \beta Py$. Se $m \in M$, $Pm = m$, de modo que $P^2 = P$. E $\inner{Px}{y} = \inner{Px}{Py} + \inner{Px}{y - Py} = \inner{Px}{Py}$, expressão simétrica em $x$ e $y$. Para (c), aplique Pitágoras a $x = Px + (x - Px)$; se $M \neq \{0\}$, $\norm{Pm} = \norm m$ para $m \in M$.
+:::
+
+O **complemento ortogonal** de $M$ é $M^\perp \defeq \{y \in H : \inner yz = 0 \text{ para todo } z \in M\}$. É um subespaço fechado, como interseção dos núcleos dos funcionais contínuos $y \mapsto \inner yz$ (@thm-mat-m01-continuidade).
+
+::: {#cor-mat-m10-complemento}
+## Decomposição ortogonal
+Se $H$ é de Hilbert e $M$ é um subespaço fechado, todo $x \in H$ se escreve de modo único como $x = m + m'$, com $m \in M$ e $m' \in M^\perp$ — a saber, $m = P_M x$ —, e $(M^\perp)^\perp = M$.
+:::
+
+::: {.proof}
+A decomposição $x = Px + (x - Px)$ existe pelo @cor-mat-m10-subespaco. Se $m + m' = n + n'$, então $m - n = n' - m' \in M \cap M^\perp$, e todo $v$ nessa interseção satisfaz $\inner vv = 0$, isto é, $v = 0$. Claramente $M \subseteq (M^\perp)^\perp$. Se $x \in (M^\perp)^\perp$, então $x - Px \in M^\perp$, e também $x - Px \in (M^\perp)^\perp$, pois $x$ e $Px \in M$ estão nesse subespaço. Logo $x - Px \in M^\perp \cap (M^\perp)^\perp = \{0\}$, e $x = Px \in M$.
+:::
+
+### Bases ortonormais e Gram–Schmidt {#sec-mat-m10-gram-schmidt}
+
+Uma família $e_1, e_2, \dots$ é **ortonormal** se $\inner{e_i}{e_j} = 1$ para $i = j$ e $0$ para $i \neq j$.
+
+::: {#prp-mat-m10-ortonormal}
+## Projeção com uma base ortonormal
+Se $e_1, \dots, e_n$ é ortonormal e $M$ é o subespaço gerado por eles, então
+$$
+P_M x = \sum_{i=1}^n \inner{x}{e_i}\, e_i \qquad\text{e}\qquad \sum_{i=1}^n \inner{x}{e_i}^2 = \norm{P_Mx}^2 \leq \norm x^2 .
+$$
+Para uma sequência ortonormal infinita, vale a **desigualdade de Bessel**: $\sum_{i=1}^\infty \inner{x}{e_i}^2 \leq \norm x^2$.
+:::
+
+::: {.proof}
+O vetor $m = \sum_i \inner{x}{e_i}e_i$ está em $M$ e $\inner{x - m}{e_j} = \inner{x}{e_j} - \inner{x}{e_j} = 0$ para cada $j$, logo $x - m \perp M$, e $m = P_M x$ pelo @cor-mat-m10-subespaco (o subespaço $M$ tem dimensão finita, logo é completo). Por Pitágoras, $\norm m^2 = \sum_i \inner{x}{e_i}^2$, e $\norm m \leq \norm x$. Para a sequência infinita, as somas parciais são limitadas por $\norm x^2$.
+:::
+
+::: {#thm-mat-m10-gram-schmidt}
+## Ortonormalização de Gram–Schmidt
+Sejam $x_1, x_2, \dots$ linearmente independentes. Defina recursivamente
+$$
+u_k \defeq x_k - \sum_{i < k}\inner{x_k}{e_i}\,e_i, \qquad e_k \defeq \frac{u_k}{\norm{u_k}} .
+$$
+Então $e_1, e_2, \dots$ é ortonormal e, para cada $k$, gera o mesmo subespaço que $x_1, \dots, x_k$.
+:::
+
+::: {.proof}
+Por indução em $k$. Suponha $e_1, \dots, e_{k-1}$ ortonormais, gerando o mesmo subespaço $M_{k-1}$ que $x_1, \dots, x_{k-1}$. Pela @prp-mat-m10-ortonormal, $u_k = x_k - P_{M_{k-1}}x_k$ é ortogonal a $M_{k-1}$, e $u_k \neq 0$, pois $x_k \notin M_{k-1}$ por independência. Logo $e_k$ é unitário e ortogonal a $e_1, \dots, e_{k-1}$. Como $e_k \in \operatorname{span}\{x_1, \dots, x_k\}$ e $x_k = u_k + P_{M_{k-1}}x_k \in \operatorname{span}\{e_1, \dots, e_k\}$, os dois conjuntos geram o mesmo subespaço.
+:::
+
+Em $\R^n$, aplicado às colunas de uma matriz, o processo produz a decomposição $\vb X = \vb Q\vb R$, com $\vb Q$ de colunas ortonormais e $\vb R$ triangular superior (@sec-mat-m02). Em $C[-1, 1]$ com $\inner fg = \int_{-1}^1 fg$, aplicado a $1, t, t^2, \dots$, produz múltiplos dos **polinômios de Legendre**, e a projeção sobre os primeiros $k + 1$ deles é o polinômio de grau $k$ que melhor aproxima $f$ no sentido de $\int (f - p)^2$ (@exr-mat-m10-gram-schmidt e interativo).
+
+### Mínimos quadrados como projeção {#sec-mat-m10-mqo}
+
+Em $\R^n$ com $\inner{\vb x}{\vb y} = \vb x\T\vb y$, seja $\vb X$ uma matriz $n \times k$ e $M = \{\vb X\vb b : \vb b \in \R^k\}$ o espaço coluna, de dimensão finita. O problema de mínimos quadrados, $\min_{\vb b}\norm{\vb y - \vb X\vb b}^2$, é o de encontrar o ponto de $M$ mais próximo de $\vb y$. Pelo teorema da projeção:
+
+- a solução $\hat{\vb y} = P_M\vb y$ **sempre existe** e é única como vetor de valores ajustados, tenha $\vb X$ posto completo ou não — o que completa a discussão do @exr-mat-m01-mqo;
+- ela é caracterizada pela ortogonalidade do resíduo a cada coluna de $\vb X$: $\vb X\T(\vb y - \vb X\hat{\vb b}) = \vb 0$, as **equações normais**; com posto coluna completo, $\hat{\vb b} = (\vb X\T\vb X)^{-1}\vb X\T\vb y$ e $P_M = \vb X(\vb X\T\vb X)^{-1}\vb X\T$, simétrica e idempotente, como manda o @cor-mat-m10-subespaco;
+- por Pitágoras, $\norm{\vb y}^2 = \norm{\hat{\vb y}}^2 + \norm{\vb y - \hat{\vb y}}^2$; com uma constante entre os regressores, a mesma identidade para os desvios em relação à média é a decomposição $\SQT = \SQE + \SQR$ (@sec-ecm-g01), e $R^2$ é o quadrado do cosseno do ângulo entre $\vb y$ e $\hat{\vb y}$ centrados.
+
+No espaço das variáveis aleatórias com segundo momento finito e $\inner XY = \E[XY]$, a projeção de $Y$ sobre o subespaço gerado por $1$ e $X$ é o **melhor preditor linear** $\alpha + \beta X$, com $\beta = \Cov(X, Y)/\Var(X)$; a projeção sobre o subespaço fechado de todas as funções de $X$ com segundo momento finito é a **esperança condicional** $\E[Y \mid X]$ (@sec-est-m02).
+
+## Pontes {#sec-mat-m10-pontes}
+
+- **Sequências de funções e programação dinâmica (@sec-mat-m07, @sec-mat-d02).** $C_b(S)$ é fechado em $B(S)$, portanto de Banach; o operador de Bellman é uma contração nesse espaço, e a função valor é seu ponto fixo, calculado por iteração como na série de Neumann.
+- **Álgebra linear II (@sec-mat-m02).** A norma $\norm{\vb A}_2$ é o maior valor singular; Gram–Schmidt é a decomposição QR; matrizes de projeção são simétricas e idempotentes.
+- **Convexidade e separação (@sec-mat-m08).** O teorema da projeção sobre convexos fechados é o primeiro passo dos teoremas de separação e de Farkas.
+- **Espaços de funções (@sec-mat-d04).** Os espaços $L^p$, completamentos de $C[a, b]$; o dual de um espaço de Hilbert e o teorema de representação de Riesz; operadores adjuntos.
+- **Econometria (@sec-ecm-g01, @sec-ecm-m01).** MQO como projeção; o teorema de Frisch–Waugh–Lovell é uma projeção em duas etapas.
+- **Probabilidade (@sec-est-m02).** A esperança condicional como projeção ortogonal em $L^2$.
+- **Finanças (@sec-fin-m02, @sec-fin-m03).** Preços como funcionais lineares, o fator estocástico de desconto e a fronteira de Hansen–Jagannathan (@exr-mat-m10-hj).
+- **Insumo-produto (@sec-mat-g05-leontief).** A inversa de Leontief é uma série de Neumann.
+
+## Interativo {#sec-mat-m10-interativo}
+
+::: {.content-visible when-format="html"}
+**Bolas unitárias de $\norm\cdot_p$.** A região azul é $\{\vb x \in \R^2 : \norm{\vb x}_p \leq 1\}$; os contornos tracejados são as bolas de $p = 1$, $2$ e $\infty$. As bolas crescem com $p$ — para $p \geq 1$, todas estão entre o losango e o quadrado — e, para $p < 1$, deixam de ser convexas: a fórmula não define uma norma. O texto confere a lei do paralelogramo com $\vb e_1$ e $\vb e_2$, que só vale para $p = 2$.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof pBola = controle("p", [0.5, 8], {valor: 1.5, passo: 0.05, casas: 2})
+viewof infBola = alternador("usar p = ∞", {valor: false})
+```
+
+```{ojs}
+//| echo: false
+md`${textoBola}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 480, aspectRatio: 1, grid: true,
+  x: {domain: [-1.3, 1.3], label: "x₁"}, y: {domain: [-1.3, 1.3], label: "x₂"},
+  marks: [
+    Plot.line(bolaP(infBola ? Infinity : pBola), {x: "x", y: "y", fill: "#2F5D8A", fillOpacity: 0.25, stroke: "#2F5D8A", strokeWidth: 2}),
+    ...[1, 2, Infinity].map(q => Plot.line(bolaP(q), {x: "x", y: "y", stroke: "#9AA5B1", strokeDasharray: "4,3"})),
+    Plot.dot([{x: 1, y: 0}, {x: 0, y: 1}], {x: "x", y: "y", r: 4, fill: "#8C2F39"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+bolaP = p => p === Infinity
+  ? [[1, 1], [-1, 1], [-1, -1], [1, -1], [1, 1]].map(([x, y]) => ({x, y}))
+  : d3.range(0, 2 * Math.PI + 0.001, Math.PI / 360).map(t => ({
+      x: Math.sign(Math.cos(t)) * Math.pow(Math.abs(Math.cos(t)), 2 / p),
+      y: Math.sign(Math.sin(t)) * Math.pow(Math.abs(Math.sin(t)), 2 / p)}))
+fmtB = (v, c = 3) => v.toFixed(c).replace(".", ",")
+textoBola = {
+  if (infBola) return "p = ∞: ‖e₁ + e₂‖ = ‖e₁ − e₂‖ = 1, e ‖e₁ + e₂‖² + ‖e₁ − e₂‖² = 2, diferente de 2‖e₁‖² + 2‖e₂‖² = 4. Expoente conjugado: q = 1."
+  const s = Math.pow(2, 1 / pBola)
+  const lado = 2 * s * s
+  const conj = pBola > 1.0001 ? `Expoente conjugado: q = ${fmtB(pBola / (pBola - 1), 2)}.` : (pBola > 0.9999 ? "Expoente conjugado: q = ∞." : "")
+  const aviso = pBola < 0.9999 ? ` Como p < 1, ‖e₁ + e₂‖ = ${fmtB(s)} > 2 = ‖e₁‖ + ‖e₂‖: a desigualdade triangular falha e a bola não é convexa.` : ""
+  return `‖e₁ + e₂‖ = 2^(1/p) = ${fmtB(s)}; ‖e₁ + e₂‖² + ‖e₁ − e₂‖² = ${fmtB(lado)}, contra 2‖e₁‖² + 2‖e₂‖² = 4 (igual só para p = 2). ${conj}${aviso}`
+}
+```
+:::
+
+**Projeção sobre polinômios.** O polinômio vinho é a projeção de $f$ sobre os polinômios de grau no máximo $k$ em $C[-1, 1]$ com $\inner fg = \int_{-1}^1 fg$, calculada com os polinômios de Legendre. Aumentar $k$ nunca aumenta o erro quadrático — os subespaços estão encaixados —, mas o erro máximo pode não ir a zero: no degrau, a projeção oscila perto do salto. Para $e^t$ e para a função de Runge, compare com o polinômio de Taylor de mesmo grau em torno de zero (âmbar), que é ótimo perto da origem e pode ser péssimo longe dela.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof funcL = seletor("função f", funcoesL.map(f => f.nome), {valor: funcoesL[0].nome})
+viewof grauL = controle("grau k", [0, 14], {valor: 3, passo: 1, casas: 0})
+viewof taylorL = alternador("mostrar o polinômio de Taylor em 0", {valor: false})
+```
+
+```{ojs}
+//| echo: false
+md`Erro quadrático (∫(f − p)²)^(1/2) = **${erroL2.toFixed(4).replace(".", ",")}**; erro máximo = **${erroSupL.toFixed(4).replace(".", ",")}**.${fL.taylor ? "" : " Esta função não tem polinômio de Taylor em 0."}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 340, grid: true,
+  x: {domain: [-1, 1], label: "t"}, y: {domain: fL.dominio, label: null},
+  marks: [
+    Plot.line(gradeL.map((t, i) => ({t, v: valoresL[i]})), {x: "t", y: "v", stroke: "#2F5D8A", strokeWidth: 2, clip: true}),
+    Plot.line(gradeL.map((t, i) => ({t, v: projL[i]})), {x: "t", y: "v", stroke: "#8C2F39", strokeWidth: 2, clip: true}),
+    ...(taylorL && fL.taylor ? [Plot.line(gradeL.map(t => ({t, v: fL.taylor(grauL, t)})), {x: "t", y: "v", stroke: "#B7791F", strokeDasharray: "5,3", clip: true})] : [])
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+NL = 2000
+gradeL = d3.range(NL + 1).map(i => -1 + 2 * i / NL)
+pesosL = gradeL.map((_, i) => (i === 0 || i === NL ? 1 : (i % 2 === 1 ? 4 : 2)) * (2 / NL) / 3)
+legendreL = (k, t) => {
+  if (k === 0) return 1
+  let p0 = 1, p1 = t
+  for (let n = 1; n < k; n++) { const p2 = ((2 * n + 1) * t * p1 - n * p0) / (n + 1); p0 = p1; p1 = p2 }
+  return p1
+}
+fatL = n => d3.range(1, n + 1).reduce((a, b) => a * b, 1)
+funcoesL = [
+  {nome: "f(t) = exp(t)", f: t => Math.exp(t), dominio: [0, 3],
+   taylor: (k, t) => d3.sum(d3.range(k + 1), j => Math.pow(t, j) / fatL(j))},
+  {nome: "f(t) = |t|", f: t => Math.abs(t), dominio: [-0.2, 1.2]},
+  {nome: "f(t) = degrau (sinal de t)", f: t => Math.sign(t), dominio: [-1.5, 1.5]},
+  {nome: "f(t) = 1/(1 + 25t²) (Runge)", f: t => 1 / (1 + 25 * t * t), dominio: [-0.5, 1.5],
+   taylor: (k, t) => d3.sum(d3.range(Math.floor(k / 2) + 1), j => Math.pow(-25 * t * t, j))}
+]
+fL = funcoesL.find(f => f.nome === funcL)
+valoresL = gradeL.map(fL.f)
+polL = d3.range(grauL + 1).map(n => gradeL.map(t => legendreL(n, t)))
+coefsL = polL.map((P, n) => (2 * n + 1) / 2 * d3.sum(gradeL, (_, i) => pesosL[i] * valoresL[i] * P[i]))
+projL = gradeL.map((_, i) => d3.sum(coefsL, (c, n) => c * polL[n][i]))
+erroL2 = Math.sqrt(d3.sum(gradeL, (_, i) => pesosL[i] * (valoresL[i] - projL[i]) ** 2))
+erroSupL = d3.max(gradeL, (_, i) => Math.abs(valoresL[i] - projL[i]))
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — bolas unitárias de $\norm\cdot_p$ e a projeção de funções sobre polinômios — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-mat-m10-laboratorio}
+
+### Hölder, Minkowski e o caso $p < 1$
+
+```{python}
+import numpy as np
+
+rng = np.random.default_rng(2)
+
+def norma_p(x, p):
+    if p == np.inf:
+        return np.abs(x).max()
+    return (np.abs(x) ** p).sum() ** (1 / p)
+
+violacoes = 0
+for _ in range(10_000):
+    x, y = rng.normal(size=6), rng.normal(size=6)
+    p = rng.uniform(1.01, 6)
+    q = p / (p - 1)
+    lado = norma_p(x, p) * norma_p(y, q)
+    violacoes += np.abs(x * y).sum() > lado + 1e-12
+    soma = norma_p(x, p) + norma_p(y, p)
+    violacoes += norma_p(x + y, p) > soma + 1e-12
+print("violacoes de Holder ou Minkowski em 10.000 sorteios:", violacoes)
+
+p = 3.0
+q = p / (p - 1)
+x = rng.normal(size=6)
+y = np.sign(x) * np.abs(x) ** (p - 1)   # |y_i|^q proporc. a |x_i|^p
+print(f"caso de igualdade: soma |x y| = {np.abs(x * y).sum():.6f}, "
+      f"||x||_p ||y||_q = {norma_p(x, p) * norma_p(y, q):.6f}")
+
+e1, e2 = np.eye(2)
+for p in [0.5, 1, 2, np.inf]:
+    print(f"p = {p}: ||e1 + e2||_p = {norma_p(e1 + e2, p):.3f}"
+          "   (||e1||_p + ||e2||_p = 2)")
+```
+
+### Normas não equivalentes em $C[0, 1]$
+
+As tendas $g_n(t) = \max\{0, 1 - nt\}$ têm norma do supremo $1$, mas $\norm{g_n}_1 = 1/(2n)$ e $\norm{g_n}_2 = 1/\sqrt{3n}$: convergem para zero em média, mas não uniformemente.
+
+```{python}
+t = np.linspace(0, 1, 400_001)
+for n in [1, 10, 100, 1000]:
+    g = np.maximum(0, 1 - n * t)
+    n1 = np.trapezoid(g, t)
+    n2 = np.sqrt(np.trapezoid(g ** 2, t))
+    print(f"n = {n:>4}: sup = {g.max():.3f}   norma 1 = {n1:.6f}"
+          f"   norma 2 = {n2:.5f}")
+```
+
+### Normas de operador
+
+A fórmula das somas de linha dá $\norm{\vb A}_\infty$, e a das somas de coluna dá $\norm{\vb A}_1$; comparamos com a função `norm` do NumPy e com uma busca nos vértices do cubo $[-1, 1]^n$, onde o supremo da @eq-mat-m10-norma-operador é atingido para $\norm\cdot_\infty$. Para $\norm\cdot_2$, o valor exato fica abaixo da cota de Frobenius.
+
+```{python}
+from itertools import product
+
+A = rng.normal(size=(4, 3))
+vertices = np.array(list(product([-1, 1], repeat=3)))
+linhas = np.abs(A).sum(axis=1).max()
+colunas = np.abs(A).sum(axis=0).max()
+print(f"||A||_inf: linhas = {linhas:.4f}, "
+      f"numpy = {np.linalg.norm(A, np.inf):.4f}, "
+      f"vertices = {np.abs(vertices @ A.T).max():.4f}")
+print(f"||A||_1:   colunas = {colunas:.4f}, "
+      f"numpy = {np.linalg.norm(A, 1):.4f}")
+print(f"||A||_2 = {np.linalg.norm(A, 2):.4f} <= "
+      f"Frobenius = {np.linalg.norm(A, 'fro'):.4f}")
+```
+
+### Preço de um ativo numa cadeia de Markov
+
+Três estados — recessão, normal, expansão — com matriz de transição, dividendos e $\beta$ **ilustrativos**. Resolvemos a @eq-mat-m10-precos de três formas: pelo sistema linear, pela série de Neumann truncada e pela iteração $\vb p_{n+1} = \beta\vb P(\vb d + \vb p_n)$ a partir de $\vb p_0 = \vb 0$. O erro da iteração é $(\beta\vb P)^n\vb p^*$, com norma no máximo $\beta^n\norm{\vb p^*}_\infty$.
+
+```{python}
+P = np.array([[0.60, 0.35, 0.05],
+              [0.10, 0.80, 0.10],
+              [0.05, 0.35, 0.60]])
+d = np.array([0.8, 1.0, 1.2])
+beta = 0.96
+I = np.eye(3)
+bP = beta * P
+
+p_sistema = np.linalg.solve(I - bP, bP @ d)
+p_serie = sum(np.linalg.matrix_power(bP, k) @ d for k in range(1, 2000))
+print("||beta P||_inf =", np.abs(bP).sum(axis=1).max())
+print("preco (sistema):", np.round(p_sistema, 4))
+print("preco (serie):  ", np.round(p_serie, 4))
+print("razao preco/dividendo:", np.round(p_sistema / d, 2))
+print("dividendo constante:", round(beta / (1 - beta), 2))
+
+p = np.zeros(3)
+for n in range(1, 201):
+    p = bP @ (d + p)
+    if n in (10, 50, 100, 200):
+        erro = np.abs(p - p_sistema).max()
+        cota = beta ** n * np.abs(p_sistema).max()
+        print(f"iteracao {n:>3}: erro = {erro:.2e}   cota = {cota:.2e}")
+```
+
+A razão preço/dividendo é maior na recessão: o dividendo de hoje é baixo, mas a cadeia tende a sair desse estado, e o preço incorpora a recuperação esperada.
+
+### Gram–Schmidt, projeção e mínimos quadrados
+
+Ortonormalizamos as colunas de uma matriz de regressores e conferimos as propriedades do @cor-mat-m10-subespaco: a projeção calculada com a base ortonormal coincide com $\vb X(\vb X\T\vb X)^{-1}\vb X\T\vb y$, a matriz de projeção é simétrica e idempotente, o resíduo é ortogonal às colunas e vale Pitágoras. Por fim, conferimos o resultado do @exr-mat-m10-gram-schmidt.
+
+```{python}
+from scipy.integrate import quad
+
+def gram_schmidt(X):
+    Q = np.zeros(X.shape)
+    for k in range(X.shape[1]):
+        u = X[:, k].astype(float)
+        for i in range(k):
+            u = u - (Q[:, i] @ u) * Q[:, i]
+        Q[:, k] = u / np.linalg.norm(u)
+    return Q
+
+n = 200
+z1, z2 = rng.normal(size=n), rng.normal(size=n)
+X = np.column_stack([np.ones(n), z1, z2])
+y = X @ np.array([2.0, 1.0, -0.5]) + rng.normal(size=n)
+Q = gram_schmidt(X)
+y_hat = Q @ (Q.T @ y)                   # soma de <y, e_i> e_i
+Pm = X @ np.linalg.solve(X.T @ X, X.T)
+e = y - y_hat
+print("Q'Q = I:", np.allclose(Q.T @ Q, np.eye(3)))
+print("igual a X (X'X)^-1 X' y:", np.allclose(y_hat, Pm @ y))
+print("P simetrica:", np.allclose(Pm, Pm.T),
+      " idempotente:", np.allclose(Pm @ Pm, Pm))
+print("max |X'e| =", f"{np.abs(X.T @ e).max():.1e}")
+print(f"Pitagoras: ||y||^2 = {y @ y:.4f}, "
+      f"||y_hat||^2 + ||e||^2 = {y_hat @ y_hat + e @ e:.4f}")
+
+p2 = lambda s: 3 / 16 + 15 / 16 * s ** 2
+erro, _ = quad(lambda s: (abs(s) - p2(s)) ** 2, -1, 1, points=[0])
+print(f"melhor quadratica para |t|: erro = {erro:.6f}"
+      f"  (1/96 = {1 / 96:.6f})")
+```
+
+## Exercícios resolvidos {#sec-mat-m10-exercicios}
+
+::: {#exr-mat-m10-bola-fechada}
+Mostre que, num espaço normado $X \neq \{0\}$, o fecho da bola aberta $B(x, r)$ é a bola fechada $B[x, r]$. Compare com o @exm-mat-m01-interior (c).
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$B[x, r]$ é fechada e contém $B(x, r)$, logo $\overline{B(x, r)} \subseteq B[x, r]$ (@prp-mat-m01-interior-fecho). Seja $\norm{y - x} = r$ e $y_n \defeq x + (1 - \frac1n)(y - x)$. Então $\norm{y_n - x} = (1 - \frac1n)r < r$, de modo que $y_n \in B(x, r)$, e $\norm{y_n - y} = r/n \to 0$; logo $y \in \overline{B(x, r)}$. O argumento usa a estrutura linear — o segmento de $x$ a $y$ —, que a métrica discreta não tem: lá, $B(x, 1) = \{x\}$ é fechada e diferente de $B[x, 1] = X$.
+:::
+
+::: {#exr-mat-m10-unicidade}
+Em $\R^2$ com a norma $\norm\cdot_\infty$, encontre todos os pontos do eixo horizontal $M = \{(t, 0) : t \in \R\}$ mais próximos de $\vb x = (0, 1)$. Por que isso não contradiz o teorema da projeção?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\norm{(0, 1) - (t, 0)}_\infty = \max\{\abs t, 1\}$, cujo mínimo, $1$, é atingido por **todo** $t \in [-1, 1]$: há infinitos pontos mais próximos. O teorema da projeção exige uma norma vinda de produto interno; a unicidade vem da lei do paralelogramo, que $\norm\cdot_\infty$ não satisfaz. Com $\norm\cdot_2$, o único ponto mais próximo é $(0, 0)$, e $\vb x - (0, 0) = (0, 1)$ é ortogonal a $M$. Geometricamente: a bola de $\norm\cdot_\infty$ tem lados retos, que podem encostar num subespaço ao longo de um segmento; a bola euclidiana é estritamente convexa e encosta num único ponto.
+:::
+
+::: {#exr-mat-m10-c00}
+Mostre que $c_{00}$ é denso em $\ell^p$ para $1 \leq p < \infty$, mas não em $\ell^\infty$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Dado $x \in \ell^p$, a truncação $x^{(N)} = (x_1, \dots, x_N, 0, \dots) \in c_{00}$ satisfaz $\norm{x - x^{(N)}}_p^p = \sum_{n > N}\abs{x_n}^p \to 0$, porque é a cauda de uma série convergente. Em $\ell^\infty$, a sequência $x = (1, 1, 1, \dots)$ está a distância pelo menos $1$ de todo $y \in c_{00}$: se $y_n = 0$ para $n > N$, então $\abs{x_{N+1} - y_{N+1}} = 1$. O fecho de $c_{00}$ em $\ell^\infty$ é o espaço $c_0$ das sequências que tendem a zero. A diferença tem consequência econômica: em $\ell^\infty$, um fluxo de consumo constante não pode ser aproximado por fluxos que se anulam a partir de alguma data, e funcionais lineares contínuos em $\ell^\infty$ podem dar peso ao "infinito" — um tema dos espaços duais (@sec-mat-d04).
+:::
+
+::: {#exr-mat-m10-norma-1}
+Mostre que, com $\norm\cdot_1$ em $\R^n$ e em $\R^m$, a norma de operador de $\vb A$ é a maior soma absoluta de coluna. Deduza o teorema de Leontief (@thm-mat-g05-leontief) da série de Neumann.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Com $\vb a_j$ a coluna $j$, $\norm{\vb A\vb x}_1 = \norm{\sum_j x_j\vb a_j}_1 \leq \sum_j \abs{x_j}\,\norm{\vb a_j}_1 \leq \big(\max_j\norm{\vb a_j}_1\big)\norm{\vb x}_1$, e a cota é atingida em $\vb x = \vb e_{j^*}$, com $j^*$ a coluna de maior soma. Se $\vb A \geq \vb 0$ e toda coluna soma menos que 1, então $\norm{\vb A}_1 < 1$, e, pelo @thm-mat-m10-neumann em $(\R^n, \norm\cdot_1)$, $\Id - \vb A$ é invertível com $(\Id - \vb A)^{-1} = \sum_k \vb A^k$. Cada $\vb A^k$ é não negativa, e a série converge em norma, logo entrada a entrada (toda entrada é limitada pela norma); portanto, $(\Id - \vb A)^{-1} \geq \vb 0$.
+:::
+
+::: {#exr-mat-m10-hj}
+Sejam $m$ um fator estocástico de desconto e $R^e$ um retorno em excesso, com $\E[mR^e] = 0$ e segundos momentos finitos. Use a desigualdade de Cauchy–Schwarz para provar a **cota de Hansen–Jagannathan**: $\dfrac{\abs{\E[R^e]}}{\sigma(R^e)} \leq \dfrac{\sigma(m)}{\E[m]}$, supondo $\E[m] > 0$ e $\sigma(R^e) > 0$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$0 = \E[mR^e] = \E[m]\E[R^e] + \Cov(m, R^e)$. Com $\inner XY = \E[XY]$ aplicado às variáveis centradas $m - \E m$ e $R^e - \E R^e$, a desigualdade de Cauchy–Schwarz (cuja demonstração só usa a bilinearidade e $\inner XX \geq 0$) dá $\abs{\Cov(m, R^e)} \leq \sigma(m)\,\sigma(R^e)$. Logo $\E[m]\,\abs{\E[R^e]} \leq \sigma(m)\,\sigma(R^e)$, que é a cota. À esquerda está o índice de Sharpe do ativo: nenhum ativo pode ter índice de Sharpe maior que a volatilidade relativa do fator de desconto. Como os índices de Sharpe observados das ações são altos, a cota exige fatores de desconto muito voláteis — uma forma de enunciar o enigma do prêmio das ações (@sec-fin-m03).
+:::
+
+::: {#exr-mat-m10-nao-expansiva}
+Seja $C$ um subconjunto não vazio, convexo e fechado de um espaço de Hilbert. Mostre que $\norm{P_C x - P_C y} \leq \norm{x - y}$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela @eq-mat-m10-variacional, com $c = P_C y$ na condição de $P_C x$ e $c = P_C x$ na de $P_C y$: $\inner{x - P_Cx}{P_Cy - P_Cx} \leq 0$ e $\inner{y - P_Cy}{P_Cx - P_Cy} \leq 0$. Somando, $\inner{(x - y) - (P_Cx - P_Cy)}{P_Cy - P_Cx} \leq 0$, isto é, $\norm{P_Cx - P_Cy}^2 \leq \inner{x - y}{P_Cx - P_Cy} \leq \norm{x - y}\,\norm{P_Cx - P_Cy}$, por Cauchy–Schwarz. Dividindo (se $P_Cx \neq P_Cy$), obtém-se o resultado. A projeção é, portanto, contínua — o que é usado em algoritmos de otimização com restrições, como o gradiente projetado.
+:::
+
+::: {#exr-mat-m10-gram-schmidt}
+Em $C[-1, 1]$ com $\inner fg = \int_{-1}^1 fg$, aplique Gram–Schmidt a $1, t, t^2$ e encontre o polinômio de grau no máximo 2 que melhor aproxima $\abs t$, bem como o erro $\int_{-1}^1 (\abs t - p)^2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\norm 1^2 = 2$, logo $e_0 = 1/\sqrt 2$. Como $\inner t1 = 0$ e $\norm t^2 = 2/3$, $e_1 = \sqrt{3/2}\,t$. Para $t^2$: $\inner{t^2}{e_1} = 0$ e $\inner{t^2}{e_0}e_0 = \frac12\int t^2 = \frac13$, de modo que $u_2 = t^2 - \frac13$, com $\norm{u_2}^2 = \int(t^4 - \frac23 t^2 + \frac19) = \frac25 - \frac49 + \frac29 = \frac{8}{45}$, e $e_2 = \sqrt{45/8}\,(t^2 - \frac13)$. Para $f = \abs t$: $\inner f{e_0}e_0 = \frac12\int\abs t = \frac12$; $\inner f{e_1} = 0$ ($f$ é par); $\inner f{e_2}e_2 = \frac{45}{8}\big(2\int_0^1 (t^3 - \tfrac t3)\big)(t^2 - \tfrac13) = \frac{45}{8}\cdot\frac16\,(t^2 - \tfrac13) = \frac{15}{16}(t^2 - \tfrac13)$. Logo $p(t) = \frac{3}{16} + \frac{15}{16}t^2$. Pela @prp-mat-m10-ortonormal e por Pitágoras, o erro é $\norm f^2 - \sum_i\inner f{e_i}^2 = \frac23 - \big(\frac12 + \frac{45}{8}\cdot\frac{1}{36}\big) = \frac23 - \frac{21}{32} = \frac{1}{96}$. O laboratório confere o valor, e o interativo mostra a aproximação para graus maiores.
+:::
+
+::: {#exr-mat-m10-perturbacao}
+Sejam $X$ de Banach, $A \in \mathcal L(X)$ invertível com inversa limitada e $B \in \mathcal L(X)$ com $\norm{B - A} < 1/\norm{A^{-1}}$. Mostre que $B$ é invertível, com inversa limitada. Interprete.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Escreva $B = A - (A - B) = A\big(\Id - A^{-1}(A - B)\big)$. Como $\norm{A^{-1}(A - B)} \leq \norm{A^{-1}}\,\norm{A - B} < 1$, o @thm-mat-m10-neumann garante que $\Id - A^{-1}(A - B)$ é invertível com inversa limitada, e $B^{-1} = \big(\Id - A^{-1}(A - B)\big)^{-1}A^{-1}$. Assim, o conjunto dos operadores invertíveis é **aberto** em $\mathcal L(X)$: invertibilidade sobrevive a perturbações pequenas. Em economia, isso significa que um sistema de equações lineares com solução única — um equilíbrio, um modelo identificado — continua a tê-la quando os coeficientes mudam pouco; e o tamanho da perturbação tolerada é inversamente proporcional a $\norm{A^{-1}}$, que mede quão perto $A$ está de ser singular.
+:::
+
+::: {#exr-mat-m10-precos}
+No modelo da @eq-mat-m10-precos, mostre que (a) se o dividendo é constante, $\vb d = \bar d\,\vb 1$, então $\vb p = \frac{\beta}{1 - \beta}\bar d\,\vb 1$; e (b) se $\vb d \leq \vb d'$ coordenada a coordenada, então $\vb p \leq \vb p'$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para (a), como as linhas de $\vb P$ somam 1, $\vb P\vb 1 = \vb 1$ e $\vb P^k\vb 1 = \vb 1$; logo $\vb p = \sum_{k \geq 1}\beta^k\bar d\,\vb 1 = \frac{\beta}{1 - \beta}\bar d\,\vb 1$, a fórmula de Gordon sem crescimento (@exr-mat-g08-gordon). Para (b), $\vb p' - \vb p = \sum_{k \geq 1}\beta^k\vb P^k(\vb d' - \vb d)$, soma de vetores não negativos, porque $\vb P^k$ tem entradas não negativas. O operador de preços é **monótono**: dividendos maiores em todos os estados implicam preços maiores em todos os estados — a mesma propriedade que, junto com o desconto, define as condições de Blackwell para o operador de Bellman (@sec-mat-m07).
+:::
+
+## Flashcards {#sec-mat-m10-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são os axiomas de uma norma, e que propriedades tem a métrica que ela induz?
+$\norm x \geq 0$ com igualdade só em $0$; $\norm{\lambda x} = \abs\lambda\norm x$; $\norm{x + y} \leq \norm x + \norm y$. A métrica $\norm{x - y}$ é invariante por translação e homogênea.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que dizem as desigualdades de Young, Hölder e Minkowski?
+Young: $ab \leq a^p/p + b^q/q$. Hölder: $\sum\abs{x_iy_i} \leq \norm x_p\norm y_q$, com $1/p + 1/q = 1$. Minkowski: $\norm{x + y}_p \leq \norm x_p + \norm y_p$ para $p \geq 1$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que $\big(\sum\abs{x_i}^p\big)^{1/p}$ não é norma para $p < 1$?
+Porque $\norm{\vb e_1 + \vb e_2}_p = 2^{1/p} > 2$: a desigualdade triangular falha e a bola não é convexa.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se prova Cauchy–Schwarz num espaço com produto interno, e quando há igualdade?
+Expandindo $0 \leq \norm{x - ty}^2$ e escolhendo $t = \inner xy/\norm y^2$. Igualdade se, e somente se, $x$ e $y$ são linearmente dependentes.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como saber se uma norma vem de um produto interno?
+Pela lei do paralelogramo, $\norm{x + y}^2 + \norm{x - y}^2 = 2\norm x^2 + 2\norm y^2$. Entre as normas $\norm\cdot_p$, só $p = 2$ a satisfaz; o produto interno é recuperado pela polarização.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como a completude de um espaço normado se relaciona com séries?
+O espaço é de Banach se, e somente se, toda série absolutamente convergente converge.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Dê exemplos de espaços de Banach e de espaços normados incompletos.
+Banach: $\R^n$, $\ell^p$, $\ell^\infty$, $B(S)$, $C[a, b]$ com o supremo. Incompletos: $c_{00}$ com $\norm\cdot_2$, $C[0, 1]$ com $\norm\cdot_1$ ou $\norm\cdot_2$, polinômios com o supremo.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que vale em dimensão finita e falha em dimensão infinita?
+Todas as normas são equivalentes; o espaço é completo; fechado e limitado é compacto; toda aplicação linear é contínua. Em $C[0, 1]$, $\norm\cdot_1$ e $\norm\cdot_\infty$ não são equivalentes.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando a bola unitária fechada de um espaço normado é compacta?
+Só em dimensão finita (lema de Riesz). Em $\ell^2$, os $\vb e_n$ estão a distância $\sqrt 2$ uns dos outros.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Para um operador linear, o que é equivalente a ser contínuo, e qual é a norma de operador?
+Contínuo $\iff$ contínuo em 0 $\iff$ limitado ($\norm{Tx} \leq M\norm x$). $\norm T = \sup_{\norm x = 1}\norm{Tx}$, e $\norm{ST} \leq \norm S\norm T$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quanto valem as normas $\norm{\vb A}_\infty$ e $\norm{\vb A}_1$ de uma matriz?
+$\norm{\vb A}_\infty$ é a maior soma absoluta de linha; $\norm{\vb A}_1$, a maior soma absoluta de coluna. Uma matriz estocástica tem $\norm{\vb P}_\infty = 1$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Dê um operador linear que não é limitado.
+A derivação nos polinômios com a norma do supremo: $\norm{t^n}_\infty = 1$ e $\norm{nt^{n-1}}_\infty = n$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a série de Neumann?
+Se $X$ é de Banach e $\norm T < 1$, então $(\Id - T)^{-1} = \sum_k T^k$, com norma até $1/(1 - \norm T)$; $x = Tx + b$ tem solução única, obtida por iteração.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o preço de um ativo numa cadeia de Markov com investidor neutro ao risco?
+$\vb p = \beta\vb P(\vb d + \vb p)$, logo $\vb p = \sum_{k \geq 1}\beta^k\vb P^k\vb d$: série de Neumann, pois $\norm{\beta\vb P}_\infty = \beta < 1$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema da projeção?
+Num espaço com produto interno, todo convexo completo $C$ tem um único ponto $c^*$ mais próximo de $x$, caracterizado por $\inner{x - c^*}{c - c^*} \leq 0$ para todo $c \in C$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Que propriedades tem a projeção sobre um subespaço, e o que isso diz sobre MQO?
+$x - Px \perp M$; $P$ é linear, idempotente, simétrica, com $\norm P \leq 1$, e $\norm x^2 = \norm{Px}^2 + \norm{x - Px}^2$. Em MQO, a ortogonalidade são as equações normais $\vb X\T(\vb y - \vb X\hat{\vb b}) = \vb 0$.
+:::
+
+## Ficha-resumo {#sec-mat-m10-ficha}
+
+::: {.ficha-resumo}
+**Norma.** $\norm x \geq 0$ ($= 0$ só em $0$), $\norm{\lambda x} = \abs\lambda\norm x$, triangular; métrica invariante e homogênea. Operações contínuas; bola convexa e simétrica. $\norm\cdot_p$: Young $\Rightarrow$ Hölder ($\sum\abs{x_iy_i} \leq \norm x_p\norm y_q$) $\Rightarrow$ Minkowski. $p < 1$ não é norma.
+
+**Produto interno.** Simétrico, bilinear, positivo. Cauchy–Schwarz (igualdade $\iff$ dependência); ângulo, ortogonalidade, Pitágoras. Paralelogramo: $\norm{x + y}^2 + \norm{x - y}^2 = 2\norm x^2 + 2\norm y^2$; polarização.
+
+**Banach e Hilbert.** Completos. Banach $\iff$ séries absolutamente convergentes convergem. $B(S)$, $\ell^p$ ($\ell^2$ Hilbert); fechados de Banach. Incompletos: $c_{00}$, $(C[0,1], \norm\cdot_1)$, polinômios.
+
+**Dimensão finita.** Normas equivalentes (Weierstrass na esfera); completo; compacto $\iff$ fechado e limitado; subespaços finitos são fechados; lineares são contínuas. Dimensão infinita: $\norm\cdot_1 \not\sim \norm\cdot_\infty$ em $C[0,1]$; Riesz: bola compacta $\iff$ dimensão finita.
+
+**Operadores.** Contínuo $\iff$ limitado; $\norm T = \sup_{\norm x = 1}\norm{Tx}$; $\norm{ST} \leq \norm S\norm T$; $\mathcal L(X, Y)$ Banach se $Y$ é. $\norm{\vb A}_\infty$ = linhas, $\norm{\vb A}_1$ = colunas. Derivação não é limitada.
+
+**Neumann.** $\norm T < 1$ $\Rightarrow$ $(\Id - T)^{-1} = \sum T^k$, $\norm{\cdot} \leq 1/(1 - \norm T)$; iteração converge à taxa $\norm T$. Leontief; preços $\vb p = \sum_{k \geq 1}\beta^k\vb P^k\vb d$; invertíveis formam um aberto.
+
+**Projeção.** $C$ convexo completo: ponto mais próximo único, $\inner{x - c^*}{c - c^*} \leq 0$; não expansiva. Subespaço: $x - Px \perp M$, $P$ linear, idempotente, simétrica, $\norm P \leq 1$; $H = M \oplus M^\perp$. Base ortonormal: $Px = \sum\inner x{e_i}e_i$, Bessel; Gram–Schmidt. MQO: equações normais, Pitágoras = $\SQT = \SQE + \SQR$.
+:::
+
+## Notas bibliográficas {#sec-mat-m10-notas}
+
+@kreyszig1978 é a introdução mais acessível à análise funcional: espaços normados e de Banach, completude de $\ell^p$, o lema de Riesz, operadores limitados e espaços de Hilbert, com muitos exemplos e exercícios; é a leitura natural para aprofundar cada seção deste capítulo. @luenberger1969 organiza a otimização em torno da geometria dos espaços vetoriais, com o teorema da projeção como princípio unificador e aplicações a mínimos quadrados e estimação. @ok2007 trata espaços normados com aplicações econômicas e prepara a teoria de dualidade. Para a contração em $B(S)$ e suas aplicações à programação dinâmica, veja @stokey1989 e o @sec-mat-m07.
