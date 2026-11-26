@@ -2,6 +2,51 @@
 
 Registro curto de cada sessão: o que foi feito, decisões e pendências. Entradas mais recentes no topo.
 
+## 26/11/2026 — EST-G01 a EST-G06 (graduação de Probabilidade e Estatística)
+
+**Feito** (seis capítulos, status rascunho, com referências padrão: DeGroot & Schervish, Casella & Berger e Bussab & Morettin)
+
+- **EST-G01** *Probabilidade: axiomas, condicionamento e Bayes*:
+  - axiomas de Kolmogorov e consequências, inclusão–exclusão por indução, continuidade da probabilidade;
+  - contagem (Mega-Sena, aniversários, encontros $\to 1/e$), probabilidade condicional, regra do produto, probabilidade total;
+  - Bayes e forma de razão de chances (sinal de recessão), independência dois a dois × mútua, independência condicional, ensaios repetidos;
+  - aplicação: persistência das quedas do PIB (série 22109). Interativos: grade de frequências de Bayes e problema do aniversário.
+- **EST-G02** *Variáveis aleatórias e distribuições*:
+  - propriedades da função de distribuição, casos discreto, contínuo e misto, função quantil e VaR;
+  - Bernoulli, binomial, geométrica (falta de memória), Poisson como limite da binomial, hipergeométrica;
+  - uniforme, exponencial, normal, gama ($\Gamma(1/2) = \sqrt\pi$), log-normal, Pareto; teorema da transformação e transformada integral de probabilidade;
+  - aplicação: distribuição da inflação mensal (IPCA, série 433) e contagens anuais pela binomial. Interativos: binomial × Poisson e método da inversa.
+- **EST-G03** *Esperança, momentos e distribuições conjuntas*:
+  - esperança, LOTUS, fórmula da cauda, momentos, FGM, Jensen (equivalente certo);
+  - conjuntas, marginais e condicionais; covariância, variância da soma, correlação em $[-1, 1]$, diversificação;
+  - esperança condicional, esperanças iteradas, variância total, melhor preditor; normal multivariada por combinações lineares e condicional normal;
+  - aplicação: pares consecutivos do IPCA, esperança condicional por faixas contra a melhor previsão linear. Interativos: normal bivariada e Jensen.
+- **EST-G04** *Amostragem e teoremas-limite*:
+  - Markov, Chebyshev, LGN fraca, continuidade em probabilidade, consistência da variância amostral;
+  - TCL demonstrado pela FGM, de Moivre–Laplace, Slutsky, estatística $t$ assintótica, método delta (lema de Carathéodory);
+  - $\chi^2$, $t$ (densidade derivada) e $F$; teorema das amostras normais;
+  - aplicação: reamostragem do IPCA para ver o TCL agir numa população assimétrica. Interativos: LGN (inclusive Pareto $\alpha = 1{,}5$ e Cauchy) e TCL.
+- **EST-G05** *Estimação pontual e intervalar*:
+  - viés, EQM, consistência; escore, informação de Fisher, Cramér–Rao demonstrado;
+  - momentos e máxima verossimilhança (exemplos, invariância, normalidade assintótica);
+  - intervalos: normal exato, Wald, Wilson, diferença de médias, baseado no EMV;
+  - aplicação: inflação média em 2004–2008, 2010–2014 e 2017–2019, com erro padrão corrigido por AR(1). Interativos: cobertura de intervalos e verossimilhança.
+- **EST-G06** *Testes de hipóteses*:
+  - erros, tamanho, poder do teste $z$ e tamanho amostral; valor-p uniforme sob $H_0$ e más interpretações;
+  - Neyman–Pearson demonstrado, teste UMP unilateral, razão de verossimilhança e Wilks (mencionado);
+  - médias, proporções, variância combinada, Welch, pareado; dualidade testes–intervalos; testes múltiplos e Bonferroni;
+  - aplicação: IPCA de 2017–2018 contra a meta de 4,5% e comparação entre períodos. Interativos: poder e histograma de valores-p.
+- Cada capítulo tem laboratório, 8 exercícios resolvidos e 13–14 flashcards (81 cartões no total).
+- Resultados admitidos (enunciados, com referência): unicidade da FGM (escalar e vetorial), continuidade de Lévy via FGM, Slutsky, LOTUS geral, troca de integrais (Tonelli), derivação sob o sinal de integral, LGN de Khinchin, mudança de variáveis multivariada (densidade da normal), normalidade assintótica do EMV, Wilks. Todos voltam com prova nos EST-M01 a EST-M05.
+- As aplicações foram testadas na sandbox com séries sintéticas no formato do SGS (a API do BCB não é acessível daqui); os resumos em texto são gerados a partir dos dados, sem números fixos no texto.
+
+**Pendências**
+
+- [ ] David conferir no site as seis aplicações com dados reais (PIB 22109 e IPCA 433), em especial as frases geradas a partir dos dados.
+- [ ] David revisar EST-G01 a EST-G06 (nível das provas, escolha dos resultados admitidos).
+- [ ] Pendências anteriores continuam: revisar MAT-M01 e MAT-M10; conferir as aplicações do IPCA do MAT-G03 e MAT-G08; informar a fonte dos sumários.
+- [ ] Próximos capítulos naturais: ECM-G02 *Regressão linear múltipla*, que agora tem toda a base de graduação, ou EST-M01 *Probabilidade com teoria da medida*, que paga as admissões acima.
+
 ## 24/11/2026 — MAT-M01 e MAT-M10
 
 **Feito** (dois capítulos, status rascunho, com referências padrão e duas novas: Lima, *Espaços Métricos*, e Kreyszig)
