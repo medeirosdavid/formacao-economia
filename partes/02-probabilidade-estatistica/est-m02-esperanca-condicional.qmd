@@ -274,20 +274,20 @@ $$
 Fora de $B$, $0 \leq g < 1$, e quando $n \to \infty$ os integrandos crescem para $1$ e para $h = g/(1 - g)$, respectivamente. Pelo @thm-est-m01-tcm e porque $\mu(B) = \nu(B) = 0$, $\nu(A) = \int_Ah\,\dd\mu$ (com $h = 0$ em $B$). No caso $\sigma$-finito, particione $\Omega$ em conjuntos $\Omega_k$ de medida finita para $\mu$ e $\nu$, aplique o caso finito em cada um e some as densidades.
 :::
 
-Se $\Prob$ e $\mathbb Q$ são probabilidades com $\mathbb Q \ll \Prob$ e $L = \dd\mathbb Q/\dd\Prob$, a @eq-est-m01-mudanca-medida dá $\E_{\mathbb Q}[Y] = \E_\Prob[YL]$. A versão condicional é a **fórmula de Bayes abstrata**.
+Se $\Prob$ e $\mathbb Q$ são probabilidades com $\mathbb Q \ll \Prob$ e $L = \dd\mathbb Q/\dd\Prob$, a @eq-est-m01-mudanca-medida dá $\E_{\mathbb Q}[Y] = \E_{\Prob}[YL]$. A versão condicional é a **fórmula de Bayes abstrata**.
 
 ::: {#prp-est-m02-bayes-abstrata}
 ## Fórmula de Bayes abstrata
 Se $\mathbb Q \ll \Prob$, $L = \dd\mathbb Q/\dd\Prob$ e $Y$ é $\mathbb Q$-integrável, então, $\mathbb Q$-quase certamente,
 $$
-\E_{\mathbb Q}[Y \mid \mathcal G] = \frac{\E_\Prob[YL \mid \mathcal G]}{\E_\Prob[L \mid \mathcal G]} .
+\E_{\mathbb Q}[Y \mid \mathcal G] = \frac{\E_{\Prob}[YL \mid \mathcal G]}{\E_{\Prob}[L \mid \mathcal G]} .
 $$
 :::
 
 ::: {.proof}
-O conjunto $\{\E_\Prob[L \mid \mathcal G] = 0\}$ é $\mathcal G$-mensurável e tem $\mathbb Q$-probabilidade $\E_\Prob[L\mathbf 1\{\E_\Prob[L \mid \mathcal G] = 0\}] = \E_\Prob[\E_\Prob[L \mid \mathcal G]\mathbf 1\{\E_\Prob[L \mid \mathcal G] = 0\}] = 0$; fora dele, o quociente $V$ do lado direito está bem definido e é $\mathcal G$-mensurável. Para $G \in \mathcal G$, usando a mudança de medida, a torre e o item (e) do @thm-est-m02-propriedades,
+O conjunto $\{\E_{\Prob}[L \mid \mathcal G] = 0\}$ é $\mathcal G$-mensurável e tem $\mathbb Q$-probabilidade $\E_{\Prob}[L\mathbf 1\{\E_{\Prob}[L \mid \mathcal G] = 0\}] = \E_{\Prob}[\E_{\Prob}[L \mid \mathcal G]\mathbf 1\{\E_{\Prob}[L \mid \mathcal G] = 0\}] = 0$; fora dele, o quociente $V$ do lado direito está bem definido e é $\mathcal G$-mensurável. Para $G \in \mathcal G$, usando a mudança de medida, a torre e o item (e) do @thm-est-m02-propriedades,
 $$
-\E_{\mathbb Q}[V\mathbf 1_G] = \E_\Prob[LV\mathbf 1_G] = \E_\Prob\big[\E_\Prob[L \mid \mathcal G]\,V\mathbf 1_G\big] = \E_\Prob\big[\E_\Prob[YL \mid \mathcal G]\mathbf 1_G\big] = \E_\Prob[YL\mathbf 1_G] = \E_{\mathbb Q}[Y\mathbf 1_G] .
+\E_{\mathbb Q}[V\mathbf 1_G] = \E_{\Prob}[LV\mathbf 1_G] = \E_{\Prob}\big[\E_{\Prob}[L \mid \mathcal G]\,V\mathbf 1_G\big] = \E_{\Prob}\big[\E_{\Prob}[YL \mid \mathcal G]\mathbf 1_G\big] = \E_{\Prob}[YL\mathbf 1_G] = \E_{\mathbb Q}[Y\mathbf 1_G] .
 $$
 :::
 
@@ -718,9 +718,9 @@ Seja $Z \sim \Normal(0, 1)$ sob $\Prob$ e defina $\mathbb Q$ por $\dd\mathbb Q/\
 :::
 
 ::: {.callout-tip collapse="true" title="Solução"}
-$L > 0$ e $\E_\Prob[L] = e^{-\theta^2/2}\E[e^{\theta Z}] = e^{-\theta^2/2}e^{\theta^2/2} = 1$, logo $\mathbb Q(\Omega) = 1$. Pela mudança de medida, a função geradora de $Z$ sob $\mathbb Q$ é
+$L > 0$ e $\E_{\Prob}[L] = e^{-\theta^2/2}\E[e^{\theta Z}] = e^{-\theta^2/2}e^{\theta^2/2} = 1$, logo $\mathbb Q(\Omega) = 1$. Pela mudança de medida, a função geradora de $Z$ sob $\mathbb Q$ é
 $$
-\E_{\mathbb Q}[e^{tZ}] = \E_\Prob[e^{(t + \theta)Z - \theta^2/2}] = e^{(t + \theta)^2/2 - \theta^2/2} = e^{\theta t + t^2/2},
+\E_{\mathbb Q}[e^{tZ}] = \E_{\Prob}[e^{(t + \theta)Z - \theta^2/2}] = e^{(t + \theta)^2/2 - \theta^2/2} = e^{\theta t + t^2/2},
 $$
 a da $\Normal(\theta, 1)$; pela unicidade da função geradora (@sec-est-m03), $Z \sim \Normal(\theta, 1)$ sob $\mathbb Q$. Mudar a medida desloca a média sem mudar a variância: é a versão de um período do teorema de Girsanov, que no @sec-fin-d02 transforma o retorno esperado de uma ação na taxa livre de risco.
 :::
@@ -787,7 +787,7 @@ Com $\rho = \mu + \nu$, $f \mapsto \int f\,\dd\nu$ é contínuo em $L^2(\rho)$; 
 
 ::: {.callout-note .flashcard collapse="true"}
 ## O que diz a fórmula de Bayes abstrata?
-Se $L = \dd\mathbb Q/\dd\Prob$: $\E_{\mathbb Q}[Y \mid \mathcal G] = \E_\Prob[YL \mid \mathcal G]/\E_\Prob[L \mid \mathcal G]$.
+Se $L = \dd\mathbb Q/\dd\Prob$: $\E_{\mathbb Q}[Y \mid \mathcal G] = \E_{\Prob}[YL \mid \mathcal G]/\E_{\Prob}[L \mid \mathcal G]$.
 :::
 
 ::: {.callout-note .flashcard collapse="true"}

@@ -268,7 +268,7 @@ Escreve-se também $\int f(\omega)\,\mu(\dd\omega)$ e $\int_A f\,\dd\mu = \int f
 
 Em (i), o valor não depende da representação de $\varphi$: escrevendo duas representações sobre a partição comum gerada pelos conjuntos envolvidos, as duas somas coincidem; pelo mesmo argumento, a integral de funções simples é linear e monótona. Em (ii), a monotonicidade é imediata: se $0 \leq f \leq g$, toda simples abaixo de $f$ está abaixo de $g$, logo $\int f \leq \int g$.
 
-Dois exemplos mostram o alcance da definição. Com a medida de contagem em $\N$, $\int f\,\dd\# = \sum_n f(n)$: séries são integrais. Com uma distribuição discreta $\mu = \sum_k p_k\delta_{x_k}$, $\int g\,\dd\mu = \sum_k g(x_k)\,p_k$. E a função de Dirichlet $\mathbf 1_{\Q}$, que não é integrável à Riemann em $[0, 1]$ (@sec-mat-g04), é uma função simples com $\int_{[0,1]} \mathbf 1_\Q\,\dd\lambda = \lambda(\Q \cap [0, 1]) = 0$.
+Dois exemplos mostram o alcance da definição. Com a medida de contagem em $\N$, $\int f\,\dd\# = \sum_n f(n)$: séries são integrais. Com uma distribuição discreta $\mu = \sum_k p_k\delta_{x_k}$, $\int g\,\dd\mu = \sum_k g(x_k)\,p_k$. E a função de Dirichlet $\mathbf 1_{\Q}$, que não é integrável à Riemann em $[0, 1]$ (@sec-mat-g04), é uma função simples com $\int_{[0,1]} \mathbf 1_{\Q}\,\dd\lambda = \lambda(\Q \cap [0, 1]) = 0$.
 
 ## Os teoremas de convergência {#sec-est-m01-convergencia}
 
@@ -1039,7 +1039,7 @@ Não tem átomos (F contínua) nem densidade: está concentrada no conjunto de C
 
 **Produto.** $\mu \otimes \nu(E) = \int\nu(E_x)\,\mu(\dd x)$. Tonelli ($f \geq 0$), Fubini ($\int\abs f < \infty$). Cauda: $\E X = \int_0^\infty\Prob(X > t)\,\dd t$. Independência = lei conjunta produto. Dígitos binários de $U$ iid $\Rightarrow$ sequências iid quaisquer; Kolmogorov (admitido).
 
-**Radon–Nikodym.** $\nu \ll \mu \Rightarrow \nu(A) = \int_A\frac{\dd\nu}{\dd\mu}\dd\mu$ (prova no EST-M02). Cadeia; $\E_{\mathbb Q}Y = \E_\Prob[YL]$. Cantor: sem átomos, sem densidade. Decomposição de Lebesgue: discreta + absolutamente contínua + singular.
+**Radon–Nikodym.** $\nu \ll \mu \Rightarrow \nu(A) = \int_A\frac{\dd\nu}{\dd\mu}\dd\mu$ (prova no EST-M02). Cadeia; $\E_{\mathbb Q}Y = \E_{\Prob}[YL]$. Cantor: sem átomos, sem densidade. Decomposição de Lebesgue: discreta + absolutamente contínua + singular.
 :::
 
 ## Notas bibliográficas {#sec-est-m01-notas}

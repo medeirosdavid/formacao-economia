@@ -596,7 +596,7 @@ if disponivel:
                color=graficos.PALETA["azul"])
     ax[0].axvline(mqo[1], color=graficos.PALETA["vinho"], ls="--",
                   label="MQO")
-    ax[0].set_xlabel("ρ (persistência)")
+    ax[0].set_xlabel("$\\rho$ (persistência)")
     ax[0].set_ylabel("densidade a posteriori")
     ax[0].legend(frameon=False)
     ax[1].hist(anual, bins=60, density=True, alpha=0.7,
