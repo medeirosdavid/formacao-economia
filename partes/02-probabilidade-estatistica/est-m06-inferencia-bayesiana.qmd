@@ -10,17 +10,793 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-m06-motivacao}
 
-1. Priori, verossimilhança e posteriori
-2. Famílias conjugadas e preditiva a posteriori
-3. Estimadores de Bayes, risco e admissibilidade
-4. Intervalos de credibilidade e HPD
-5. Prioris de Jeffreys
-6. Fator de Bayes e o paradoxo de Lindley
-7. Bernstein–von Mises
-8. Encolhimento e o estimador de James–Stein
-9. Metropolis–Hastings e Gibbs
-10. Aplicação: a persistência da inflação num AR(1) bayesiano
+Nos capítulos anteriores, o parâmetro $\theta$ é uma constante desconhecida, e as probabilidades descrevem a variabilidade dos **dados** em amostras repetidas: um intervalo de confiança de 95% é um procedimento que acerta em 95% das amostras, e não diz nada sobre a probabilidade de $\theta$ estar no intervalo calculado com os dados que se tem. A inferência bayesiana trata o que é desconhecido como aleatório. O parâmetro recebe uma distribuição **a priori**, que resume o que se sabe antes dos dados; os dados atualizam essa distribuição pelo teorema de Bayes (@thm-est-g01-bayes); e o resultado, a distribuição **a posteriori**, responde diretamente às perguntas que se fazem na prática: qual a probabilidade de a inflação de longo prazo estar acima da meta? Qual o valor mais provável da elasticidade? Qual o melhor palpite, dado o custo de errar?
+
+Três razões tornaram o enfoque central em economia. Primeiro, ele é a teoria da decisão sob incerteza aplicada à própria estatística: o estimador de Bayes minimiza a perda esperada, e todo estimador admissível é, em certo sentido, bayesiano. Segundo, ele incorpora informação externa de forma explícita — estudos anteriores, restrições teóricas, a experiência de outros países —, o que é indispensável em modelos com muitos parâmetros e poucos dados, como os VARs e os modelos DSGE (@sec-ecm-d04, @sec-ecm-d05). Terceiro, os métodos de simulação de Monte Carlo via cadeias de Markov (MCMC) permitem calcular a posteriori em modelos em que a verossimilhança é complicada demais para a maximização.
+
+O capítulo desenvolve:
+
+1. o modelo bayesiano e o teorema de Bayes para densidades;
+2. famílias conjugadas e a distribuição preditiva;
+3. teoria da decisão: estimadores de Bayes, admissibilidade e minimax;
+4. intervalos de credibilidade e regiões de maior densidade;
+5. prioris não informativas e de Jeffreys;
+6. comparação de modelos: o fator de Bayes e o paradoxo de Lindley;
+7. o comportamento em grandes amostras (Bernstein–von Mises);
+8. encolhimento e o estimador de James–Stein;
+9. simulação da posteriori: Metropolis–Hastings e Gibbs.
+
+## Priori, verossimilhança e posteriori {#sec-est-m06-bayes}
+
+::: {#def-est-m06-modelo}
+## Modelo bayesiano
+Um **modelo bayesiano** é formado por um modelo estatístico com densidades $p_\theta(x)$ em relação a uma medida $\mu$, conjuntamente mensuráveis em $(\theta, x)$, e por uma **distribuição a priori** $\Pi$ para $\theta$, com densidade $\pi$ em relação a uma medida $\nu$ em $\Theta$. A **distribuição marginal** (ou preditiva a priori) dos dados tem densidade $m(x) = \int p_\theta(x)\,\pi(\theta)\,\nu(\dd\theta)$. A **distribuição a posteriori** é a distribuição condicional de $\theta$ dado $X = x$.
 :::
+
+::: {#thm-est-m06-bayes}
+## Teorema de Bayes para densidades
+Se $0 < m(x) < \infty$, a distribuição a posteriori tem densidade, em relação a $\nu$,
+$$
+\pi(\theta \mid x) = \frac{p_\theta(x)\,\pi(\theta)}{m(x)} \propto p_\theta(x)\,\pi(\theta) .
+$$
+Em palavras: a posteriori é proporcional à verossimilhança vezes a priori.
+:::
+
+::: {.proof}
+O par $(\theta, X)$ tem densidade $p_\theta(x)\pi(\theta)$ em relação a $\nu \otimes \mu$, e $X$ tem densidade $m$ (Tonelli). Seja $\kappa(x, B) = \int_B\pi(\theta \mid x)\,\nu(\dd\theta)$, uma probabilidade em $B$ para cada $x$. Para borelianos $A$ e $B$, pelo Tonelli,
+$$
+P(X \in A,\ \theta \in B) = \int_A\int_Bp_\theta(x)\pi(\theta)\,\nu(\dd\theta)\,\mu(\dd x) = \int_A\kappa(x, B)\,m(x)\,\mu(\dd x) = \E\big[\mathbf 1_A(X)\,\kappa(X, B)\big],
+$$
+isto é, $\kappa(X, B)$ é uma versão de $P(\theta \in B \mid X)$, para todo $B$: $\kappa$ é uma distribuição condicional regular (@def-est-m02-regular).
+:::
+
+A constante $m(x)$ não depende de $\theta$, e em geral não é preciso calculá-la: basta reconhecer a forma da posteriori, ou simulá-la por métodos que só usam razões de densidades (@sec-est-m06-mcmc). Com uma amostra iid, a verossimilhança é um produto, e a atualização pode ser feita de uma vez ou observação a observação — a posteriori de hoje é a priori de amanhã, com o mesmo resultado final. Um bayesiano e um estatístico clássico usam a mesma verossimilhança; a diferença está no que fazem com ela. Pelo @thm-est-m04-fatoracao, a verossimilhança depende dos dados apenas por uma estatística suficiente, e a posteriori também.
+
+## Famílias conjugadas {#sec-est-m06-conjugadas}
+
+Uma família de prioris é **conjugada** a um modelo se a posteriori pertence à mesma família. Com conjugação, a atualização se resume a uma regra para os hiperparâmetros.
+
+::: {#prp-est-m06-beta-binomial}
+## Beta–binomial
+Se $p \sim$ Beta$(a, b)$ e $X \mid p \sim$ Bin$(n, p)$, então $p \mid X = x \sim$ Beta$(a + x,\ b + n - x)$, com média
+$$
+\E[p \mid x] = \frac{a + x}{a + b + n} = w\,\frac{a}{a + b} + (1 - w)\,\frac xn, \qquad w = \frac{a + b}{a + b + n} .
+$$
+A probabilidade preditiva de sucesso na próxima tentativa é $P(X_{n+1} = 1 \mid x) = \E[p \mid x]$.
+:::
+
+::: {.proof}
+Pelo @thm-est-m06-bayes, $\pi(p \mid x) \propto p^x(1 - p)^{n-x}\cdot p^{a-1}(1 - p)^{b-1} = p^{a + x - 1}(1 - p)^{b + n - x - 1}$, o núcleo da Beta$(a + x, b + n - x)$. A preditiva: $P(X_{n+1} = 1 \mid x) = \E[P(X_{n+1} = 1 \mid p, x) \mid x] = \E[p \mid x]$, pela torre e pela independência condicional das tentativas dado $p$.
+:::
+
+A média a posteriori é uma média ponderada da média a priori e da proporção amostral, com pesos proporcionais a $a + b$ e $n$: a priori vale tanto quanto $a + b$ observações "fictícias". Com a priori uniforme ($a = b = 1$), a preditiva é $(x + 1)/(n + 2)$, a **regra de sucessão** de Laplace.
+
+::: {#prp-est-m06-normal}
+## Normal–normal com variância conhecida
+Se $X_1, \dots, X_n \mid \theta$ são iid $\Normal(\theta, \sigma^2)$, com $\sigma^2$ conhecido, e $\theta \sim \Normal(m, \tau^2)$, então $\theta \mid \vb x \sim \Normal(m_n, \tau_n^2)$, com
+$$
+\frac{1}{\tau_n^2} = \frac{1}{\tau^2} + \frac{n}{\sigma^2}, \qquad m_n = \tau_n^2\Big(\frac{m}{\tau^2} + \frac{n\bar x}{\sigma^2}\Big) .
+$$
+A preditiva de uma nova observação é $X_{n+1} \mid \vb x \sim \Normal(m_n, \sigma^2 + \tau_n^2)$.
+:::
+
+::: {.proof}
+O expoente de verossimilhança vezes priori, como função de $\theta$, é
+$$
+-\frac{(\theta - m)^2}{2\tau^2} - \frac{\sum_i(x_i - \theta)^2}{2\sigma^2} = -\frac12\Big[\Big(\frac{1}{\tau^2} + \frac{n}{\sigma^2}\Big)\theta^2 - 2\theta\Big(\frac{m}{\tau^2} + \frac{n\bar x}{\sigma^2}\Big)\Big] + \text{const.},
+$$
+e completar o quadrado dá o núcleo de $\Normal(m_n, \tau_n^2)$. Para a preditiva, $X_{n+1} = \theta + \varepsilon$ com $\varepsilon \sim \Normal(0, \sigma^2)$ independente de $\theta$ e de $\vb x$; dado $\vb x$, é a soma de normais independentes.
+:::
+
+As **precisões** (inversos das variâncias) se somam, e a média a posteriori pondera a média a priori e a média amostral pelas precisões respectivas — a mesma fórmula da extração de sinal (@exr-est-m02-sinal) e do filtro de Kalman (@sec-ecm-d03). Quando $\tau^2 \to \infty$ (priori difusa), a posteriori se aproxima de $\Normal(\bar x, \sigma^2/n)$: o intervalo de credibilidade coincide com o de confiança.
+
+Em geral, se a verossimilhança é de uma família exponencial, $\prod_ip_\eta(x_i) \propto \exp(\eta\T\sum_iT(x_i) - nA(\eta))$, a família de prioris $\pi(\eta) \propto \exp(\eta\T\vb t_0 - n_0A(\eta))$ é conjugada: a posteriori tem hiperparâmetros $\vb t_0 + \sum_iT(x_i)$ e $n_0 + n$. A priori se comporta como $n_0$ observações com soma de estatísticas suficientes $\vb t_0$. A gama é conjugada à Poisson (@exr-est-m02-poisson-gama) e à precisão da normal; a normal–gama, ao par média e precisão; a normal–Wishart, aos VARs.
+
+## Teoria da decisão {#sec-est-m06-decisao}
+
+Um problema de decisão estatística tem um espaço de ações $\mathcal A$ e uma **função perda** $L(\theta, a) \geq 0$. Uma **regra de decisão** $\delta$ escolhe uma ação $\delta(x)$ para cada dado; seu **risco** é $R(\theta, \delta) = \E_\theta[L(\theta, \delta(X))]$. Na estimação, $\mathcal A = \Theta$ e a perda quadrática $L = (\theta - a)^2$ dá o erro quadrático médio como risco. O risco é uma função de $\theta$, e raramente uma regra é melhor que outra para todo $\theta$; é preciso um critério para resumir a função risco. O bayesiano a pondera pela priori, obtendo o **risco de Bayes** $r(\pi, \delta) = \int R(\theta, \delta)\,\pi(\theta)\,\nu(\dd\theta)$.
+
+::: {#thm-est-m06-estimador-bayes}
+## O estimador de Bayes minimiza a perda esperada a posteriori
+Seja $\rho(x, a) = \int L(\theta, a)\,\pi(\theta \mid x)\,\nu(\dd\theta)$ a perda esperada a posteriori da ação $a$. Se $\delta^*(x)$ minimiza $\rho(x, \cdot)$ para quase todo $x$ (segundo $m$), então $\delta^*$ minimiza o risco de Bayes: $r(\pi, \delta^*) \leq r(\pi, \delta)$ para toda regra $\delta$.
+:::
+
+::: {.proof}
+Pelo Tonelli (a perda é não negativa) e pelo @thm-est-m06-bayes,
+$$
+r(\pi, \delta) = \int\!\!\int L(\theta, \delta(x))\,p_\theta(x)\pi(\theta)\,\mu(\dd x)\,\nu(\dd\theta) = \int\rho(x, \delta(x))\,m(x)\,\mu(\dd x) \geq \int\rho(x, \delta^*(x))\,m(x)\,\mu(\dd x) = r(\pi, \delta^*) .
+$$
+:::
+
+O teorema transforma um problema sobre funções (escolher $\delta$) num problema pontual (escolher a melhor ação para os dados observados). A forma do estimador depende da perda:
+
+- **perda quadrática:** a média a posteriori, $\E[\theta \mid x]$ — é a projeção do @sec-est-m02, que minimiza o erro quadrático entre as funções dos dados;
+- **perda absoluta**, $\abs{\theta - a}$: a mediana a posteriori. Pela fórmula da cauda (@exr-est-m01-cauda-geral), $\E[\abs{\theta - a} \mid x] = \int_{-\infty}^aP(\theta \leq t \mid x)\,\dd t + \int_a^\infty P(\theta > t \mid x)\,\dd t$, uma função convexa de $a$ com derivada $P(\theta \leq a \mid x) - P(\theta > a \mid x)$, que muda de sinal na mediana;
+- **perda quantílica**, $(\theta - a)(\tau - \mathbf 1\{\theta < a\})$: o quantil $\tau$ da posteriori (@exr-est-m06-quantil) — útil quando errar para cima e para baixo tem custos diferentes, como numa autoridade monetária mais avessa a inflação alta do que a inflação baixa;
+- **perda 0–1** com uma janela pequena em torno de $\theta$: no limite, a moda a posteriori — o estimador de **máximo a posteriori** (MAP).
+
+::: {#prp-est-m06-vies}
+## Estimadores de Bayes são viesados
+Sob perda quadrática, se $\delta$ é o estimador de Bayes para uma priori própria e é não viesado, então $r(\pi, \delta) = 0$ — o problema é trivial.
+:::
+
+::: {.proof}
+Calcule $\E[\delta(X)\theta]$, na distribuição conjunta, de duas formas. Condicionando a $\theta$ e usando a ausência de viés, $\E[\theta\,\E[\delta(X) \mid \theta]] = \E[\theta^2]$. Condicionando a $X$ e usando $\delta = \E[\theta \mid X]$, $\E[\delta(X)\,\E[\theta \mid X]] = \E[\delta(X)^2]$. Então $r(\pi, \delta) = \E[(\delta - \theta)^2] = \E\delta^2 - 2\E[\delta\theta] + \E\theta^2 = \E\delta^2 - \E\delta^2 - \E\theta^2 + \E\theta^2 = 0$.
+:::
+
+O encolhimento em direção à média a priori é justamente o viés que reduz a variância. Na normal, $\bar X$ não é estimador de Bayes para nenhuma priori própria; é limite de estimadores de Bayes quando $\tau^2 \to \infty$.
+
+### Admissibilidade e minimax
+
+Uma regra $\delta$ é **inadmissível** se existe $\delta'$ com $R(\theta, \delta') \leq R(\theta, \delta)$ para todo $\theta$, com desigualdade estrita para algum. Uma regra é **minimax** se minimiza $\sup_\theta R(\theta, \delta)$ — o critério do pior caso.
+
+::: {#thm-est-m06-admissibilidade}
+## Estimadores de Bayes, admissibilidade e minimax
+(a) Se $\delta_\pi$ é o **único** estimador de Bayes para $\pi$ (a menos de conjuntos de probabilidade zero sob $m$) e $r(\pi, \delta_\pi) < \infty$, então $\delta_\pi$ é admissível.
+(b) Se $\delta_\pi$ é estimador de Bayes e o seu risco $R(\theta, \delta_\pi)$ é constante em $\theta$, então $\delta_\pi$ é minimax.
+:::
+
+::: {.proof}
+Para (a), se $\delta'$ dominasse $\delta_\pi$, integrando os riscos contra a priori teríamos $r(\pi, \delta') \leq r(\pi, \delta_\pi)$, logo $\delta'$ também seria de Bayes e, pela unicidade, igual a $\delta_\pi$ — e então os riscos seriam iguais, contra a desigualdade estrita. Para (b), para qualquer $\delta$, $\sup_\theta R(\theta, \delta) \geq r(\pi, \delta) \geq r(\pi, \delta_\pi) = \sup_\theta R(\theta, \delta_\pi)$, pois a média de uma constante é a própria constante.
+:::
+
+Na binomial, a priori Beta$(\sqrt n/2, \sqrt n/2)$ produz um estimador de Bayes com risco constante, que é, portanto, minimax — e diferente de $X/n$ (@exr-est-m06-minimax). Um resultado profundo, o **teorema da classe completa** de Wald, diz que, sob condições gerais, toda regra admissível é de Bayes ou limite de regras de Bayes: o estatístico que não quer usar regras dominadas acaba, implicitamente, usando alguma priori.
+
+## Intervalos de credibilidade {#sec-est-m06-credibilidade}
+
+Um **conjunto de credibilidade** de nível $1 - \alpha$ é um conjunto $C(x) \subseteq \Theta$ com $\Pi(\theta \in C(x) \mid x) \geq 1 - \alpha$. Ao contrário do intervalo de confiança, a afirmação "$\theta$ está em $C(x)$ com probabilidade 95%" vale **para os dados observados**. As duas escolhas usuais são o intervalo de **caudas iguais**, entre os quantis $\alpha/2$ e $1 - \alpha/2$ da posteriori, e a região de **maior densidade a posteriori** (HPD), $C = \{\theta : \pi(\theta \mid x) \geq k\}$, com $k$ tal que a probabilidade seja $1 - \alpha$.
+
+::: {#prp-est-m06-hpd}
+## A região HPD é a menor
+Seja $\Theta \subseteq \R^k$, com $\nu$ a medida de Lebesgue, e $C = \{\theta : \pi(\theta \mid x) \geq k\}$ com $\Pi(C \mid x) = 1 - \alpha$ e $k > 0$. Todo $C'$ com $\Pi(C' \mid x) \geq 1 - \alpha$ tem $\lambda(C') \geq \lambda(C)$.
+:::
+
+::: {.proof}
+Em $C \setminus C'$, a densidade é pelo menos $k$; em $C' \setminus C$, é menor que $k$. Como $\Pi(C') \geq \Pi(C)$, $\Pi(C' \setminus C) \geq \Pi(C \setminus C')$, e
+$$
+k\,\lambda(C' \setminus C) \geq \Pi(C' \setminus C \mid x) \geq \Pi(C \setminus C' \mid x) \geq k\,\lambda(C \setminus C') .
+$$
+Somando $\lambda(C \cap C')$ aos dois lados (divididos por $k$), $\lambda(C') \geq \lambda(C)$.
+:::
+
+O argumento é o do lema de Neyman–Pearson, com a densidade a posteriori no lugar da razão de verossimilhança. Para posterioris unimodais e simétricas, HPD e caudas iguais coincidem; para posterioris assimétricas — de variâncias, de probabilidades perto de 0 ou 1 —, a HPD é mais curta. Uma desvantagem é que a HPD não é invariante a reparametrizações, enquanto o intervalo de caudas iguais é.
+
+## Prioris não informativas e de Jeffreys {#sec-est-m06-jeffreys}
+
+Quando não há informação a priori relevante, procura-se uma priori que "deixe os dados falarem". A uniforme é a candidata natural, mas depende da parametrização: uniforme em $\sigma$ não é uniforme em $\sigma^2$ nem em $\log\sigma$. Jeffreys propôs uma regra invariante.
+
+::: {#def-est-m06-jeffreys}
+## Priori de Jeffreys
+Num modelo regular com informação de Fisher $\vb I(\theta)$, a **priori de Jeffreys** é $\pi_J(\theta) \propto \sqrt{\det\vb I(\theta)}$.
+:::
+
+::: {#prp-est-m06-jeffreys}
+## Invariância da priori de Jeffreys
+Se $\phi = g(\theta)$ é uma reparametrização (difeomorfismo) e $\pi_J^\theta$, $\pi_J^\phi$ são as prioris de Jeffreys nas duas parametrizações, então $\pi_J^\phi$ é a densidade de $g(\theta)$ quando $\theta$ tem densidade $\pi_J^\theta$.
+:::
+
+::: {.proof}
+O escore em $\phi$ é $\vb s_\phi = \vb J\T\vb s_\theta$, com $\vb J = \partial\theta/\partial\phi\T$, logo $\vb I_\phi = \vb J\T\vb I_\theta\vb J$ e $\sqrt{\det\vb I_\phi} = \sqrt{\det\vb I_\theta}\,\abs{\det\vb J}$. É exatamente a regra de mudança de variáveis para densidades (@thm-est-m01-linear e sua versão não linear).
+:::
+
+Para a Bernoulli, $I(p) = 1/(p(1 - p))$ e $\pi_J$ é a Beta$(1/2, 1/2)$; para a Poisson, $\pi_J(\lambda) \propto \lambda^{-1/2}$; para a locação de uma normal, a uniforme em $\R$; para a escala, $\pi_J(\sigma) \propto 1/\sigma$, uniforme em $\log\sigma$. As duas últimas são **impróprias** — não integram a 1 —, o que é aceitável desde que a posteriori seja própria. Com priori uniforme para $\mu$ e $1/\sigma$ para $\sigma$ na normal, a posteriori de $\mu$ é uma $t$ de Student com $n - 1$ graus de liberdade centrada em $\bar x$, e o intervalo de credibilidade coincide com o intervalo $t$ (@exr-est-m06-impropria). Prioris impróprias exigem cuidado: a posteriori pode ser imprópria, e o fator de Bayes deixa de estar definido (a constante arbitrária da priori não se cancela).
+
+## Comparação de modelos: o fator de Bayes {#sec-est-m06-fator-bayes}
+
+Para comparar dois modelos $M_0$ e $M_1$, com prioris $\pi_j$ para os respectivos parâmetros, as **verossimilhanças marginais** $m_j(x) = \int p_{\theta}^{(j)}(x)\,\pi_j(\theta)\,\dd\theta$ medem quão bem cada modelo, com toda a sua incerteza paramétrica, previu os dados. O **fator de Bayes** é
+$$
+B_{10}(x) = \frac{m_1(x)}{m_0(x)}, \qquad\text{e}\qquad \frac{P(M_1 \mid x)}{P(M_0 \mid x)} = B_{10}(x)\cdot\frac{P(M_1)}{P(M_0)},
+$$
+pelo teorema de Bayes aplicado ao índice do modelo (@cor-est-g01-chances): as chances a posteriori são as chances a priori vezes o fator de Bayes. A verossimilhança marginal penaliza automaticamente a complexidade: um modelo com muitos parâmetros espalha a sua priori por muitas configurações e dá pouca probabilidade a cada conjunto de dados — a **navalha de Occam bayesiana**. Pela aproximação de Laplace (que admitimos), $\log m_j(x) \approx L_n(\hat\theta_j) - \frac{k_j}{2}\log n$, com $k_j$ o número de parâmetros, de modo que $2\log B_{10}$ é aproximadamente a diferença dos **critérios de informação bayesianos** (BIC).
+
+::: {#exm-est-m06-lindley}
+## O paradoxo de Lindley
+Seja $\bar X \mid \theta \sim \Normal(\theta, \sigma^2/n)$, $H_0 : \theta = 0$ e, sob $H_1$, $\theta \sim \Normal(0, \tau^2)$. Sob cada modelo, $\bar X$ é normal com média zero e variâncias $s_0^2 = \sigma^2/n$ e $s_1^2 = \sigma^2/n + \tau^2$; com $z = \sqrt n\bar x/\sigma$, a estatística do teste $z$,
+$$
+B_{01} = \frac{\phi(\bar x/s_0)/s_0}{\phi(\bar x/s_1)/s_1} = \sqrt{1 + \frac{n\tau^2}{\sigma^2}}\,\exp\Big(-\frac{z^2}{2}\cdot\frac{n\tau^2}{\sigma^2 + n\tau^2}\Big) .
+$$
+Fixe $z = 1{,}96$ — valor-p de 5%, "significativo". Quando $n \to \infty$, o expoente tende a $-z^2/2$, mas o fator $\sqrt{1 + n\tau^2/\sigma^2}$ cresce sem limite: $B_{01} \to \infty$, e o bayesiano passa a favorecer $H_0$ com força crescente, exatamente nos dados que levam o teste clássico a rejeitá-la.
+:::
+
+O paradoxo não é um erro de nenhum dos lados: o teste clássico com nível fixo rejeita desvios de tamanho $\sigma\cdot 1{,}96/\sqrt n$, cada vez menores, enquanto a alternativa bayesiana espalha a probabilidade por valores de $\theta$ da ordem de $\tau$; um desvio minúsculo é mais compatível com $\theta = 0$ do que com um $\theta$ típico de $H_1$. A lição prática é dupla: valores-p em amostras muito grandes devem ser lidos com o tamanho do efeito ao lado, e fatores de Bayes dependem crucialmente da priori sob a alternativa (@exr-est-m06-lindley).
+
+## Grandes amostras: Bernstein–von Mises {#sec-est-m06-bvm}
+
+O que acontece com a posteriori quando $n$ cresce? Em modelos regulares, ela se concentra em torno do valor verdadeiro e fica aproximadamente normal, com a variância do EMV.
+
+::: {#thm-est-m06-bvm}
+## Bernstein–von Mises (admitido)
+Sob as condições do @thm-est-m04-normalidade, se a priori tem densidade contínua e positiva em $\theta_0$, então, sob $P_{\theta_0}$,
+$$
+\sup_B\Big|\Pi\big(\theta \in B \mid X_1, \dots, X_n\big) - \Normal\big(\hat\theta_n,\ \vb I(\theta_0)^{-1}/n\big)(B)\Big| \pto 0 .
+$$
+:::
+
+A demonstração está em @vandervaart1998 [cap. 10]. As consequências são importantes: em grandes amostras, a priori deixa de importar (desde que dê massa positiva a uma vizinhança do valor verdadeiro), a média a posteriori se comporta como o EMV, e os intervalos de credibilidade são, assintoticamente, intervalos de confiança — as duas escolas concordam. O teorema falha em modelos não regulares (parâmetros na fronteira, suporte dependente do parâmetro), em modelos com parâmetros fracamente identificados — como muitos modelos DSGE, em que a priori continua importando em qualquer amostra (@sec-ecm-d05) — e em dimensão infinita.
+
+## Encolhimento e o estimador de James–Stein {#sec-est-m06-james-stein}
+
+Considere $p$ médias desconhecidas, $\vb X \sim \Normal_p(\vb\theta, \Id)$ — por exemplo, os desempenhos médios de $p$ escolas, ou as taxas de inadimplência de $p$ regiões — com perda $\norm{\vb\delta - \vb\theta}^2$. O EMV $\vb X$ tem risco $p$ para todo $\vb\theta$. Stein descobriu que, para $p \geq 3$, ele é inadmissível.
+
+::: {#thm-est-m06-james-stein}
+## James–Stein
+Para $p \geq 3$, o estimador $\vb\delta_{JS}(\vb X) = \Big(1 - \dfrac{p - 2}{\norm{\vb X}^2}\Big)\vb X$ tem risco
+$$
+R(\vb\theta, \vb\delta_{JS}) = p - (p - 2)^2\,\E_{\vb\theta}\Big[\frac{1}{\norm{\vb X}^2}\Big] < p \qquad\text{para todo } \vb\theta .
+$$
+:::
+
+::: {.proof}
+*Lema de Stein.* Se $Z \sim \Normal(\theta, 1)$ e $g$ é absolutamente contínua com $\E\abs{g'(Z)} < \infty$, então $\E[(Z - \theta)g(Z)] = \E[g'(Z)]$: integrando por partes, com $\phi'(u) = -u\phi(u)$, $\int(z - \theta)\phi(z - \theta)g(z)\,\dd z = -\int\phi'(z - \theta)g(z)\,\dd z = \int\phi(z - \theta)g'(z)\,\dd z$. Aplicando coordenada a coordenada (com as demais fixas, pelo Fubini), para $\vb g : \R^p \to \R^p$ suave o bastante, $\E[(\vb X - \vb\theta)\T\vb g(\vb X)] = \E[\sum_i\partial g_i/\partial x_i(\vb X)]$.
+
+*Risco.* Escreva $\vb\delta_{JS} = \vb X - \vb g(\vb X)$, com $\vb g(\vb x) = (p - 2)\vb x/\norm{\vb x}^2$. Então
+$$
+R = \E\norm{\vb X - \vb\theta}^2 - 2\E[(\vb X - \vb\theta)\T\vb g(\vb X)] + \E\norm{\vb g(\vb X)}^2 .
+$$
+O primeiro termo é $p$. Como $\sum_i\frac{\partial}{\partial x_i}\frac{x_i}{\norm{\vb x}^2} = \frac{p}{\norm{\vb x}^2} - \frac{2\sum_ix_i^2}{\norm{\vb x}^4} = \frac{p - 2}{\norm{\vb x}^2}$, o lema de Stein dá o segundo termo, $-2(p - 2)^2\E[1/\norm{\vb X}^2]$; o terceiro é $(p - 2)^2\E[1/\norm{\vb X}^2]$. Somando, obtém-se a fórmula. A singularidade de $\vb g$ na origem é integrável para $p \geq 3$ (porque $\int_{\norm{\vb x} \leq 1}\norm{\vb x}^{-2}\,\dd\vb x < \infty$ em dimensão $p \geq 3$), o que justifica o lema e garante $\E[1/\norm{\vb X}^2] < \infty$.
+:::
+
+A explicação é bayesiana empírica. Se $\vb\theta \sim \Normal_p(\vb 0, \tau^2\Id)$, a média a posteriori é $(1 - \frac{1}{1 + \tau^2})\vb X$ (@prp-est-m06-normal). Marginalmente, $\vb X \sim \Normal_p(\vb 0, (1 + \tau^2)\Id)$, e como $\E[1/\chi^2_p] = 1/(p - 2)$, $(p - 2)/\norm{\vb X}^2$ é um estimador não viesado do fator de encolhimento $1/(1 + \tau^2)$. James–Stein é o estimador de Bayes com o hiperparâmetro estimado dos próprios dados. Encolher para a média geral, $\bar X\vb 1 + (1 - \frac{p - 3}{\norm{\vb X - \bar X\vb 1}^2})(\vb X - \bar X\vb 1)$, domina o EMV para $p \geq 4$. A mesma ideia — tomar emprestada força entre unidades parecidas — está nos **modelos hierárquicos** e nas estimativas de efeitos de professores, hospitais e municípios, na regressão *ridge* (@sec-ecm-d08) e nas prioris de Minnesota dos VARs bayesianos (@sec-ecm-d04). O fenômeno de Stein mostra também os limites do critério da ausência de viés: o ENVVM de cada coordenada é $X_i$, e mesmo assim o vetor $\vb X$ é dominado.
+
+## Simulação da posteriori: MCMC {#sec-est-m06-mcmc}
+
+Fora dos casos conjugados, a posteriori $\pi(\theta \mid x) \propto p_\theta(x)\pi(\theta)$ é conhecida apenas a menos da constante $m(x)$, uma integral em dimensão possivelmente alta. Os métodos de **Monte Carlo via cadeias de Markov** constroem uma cadeia cujas iterações, em equilíbrio, são distribuídas segundo a posteriori; médias ao longo da cadeia aproximam esperanças a posteriori.
+
+Uma **cadeia de Markov** com **núcleo de transição** $K(\theta, \dd\theta')$ — a distribuição do próximo estado dado o atual — tem distribuição **estacionária** $\pi$ se $\int\pi(\dd\theta)K(\theta, A) = \pi(A)$ para todo $A$: começando em $\pi$, a cadeia permanece em $\pi$. Uma condição suficiente simples é o **balanço detalhado**:
+$$
+\pi(\dd\theta)\,K(\theta, \dd\theta') = \pi(\dd\theta')\,K(\theta', \dd\theta) \qquad\text{como medidas em } \Theta \times \Theta .
+$$ {#eq-est-m06-balanco}
+Integrando em $\theta \in \Theta$ e $\theta' \in A$, o lado esquerdo dá $\int\pi(\dd\theta)K(\theta, A)$ e o direito, $\int_A\pi(\dd\theta')K(\theta', \Theta) = \pi(A)$.
+
+::: {#thm-est-m06-metropolis}
+## Metropolis–Hastings
+Seja $\pi$ uma densidade em $\Theta$, conhecida a menos de uma constante, e $q(\theta, \theta')$ uma densidade de proposta. Partindo de $\theta$, proponha $\theta' \sim q(\theta, \cdot)$ e aceite-o com probabilidade
+$$
+\alpha(\theta, \theta') = \min\Big(1,\ \frac{\pi(\theta')\,q(\theta', \theta)}{\pi(\theta)\,q(\theta, \theta')}\Big);
+$$
+se rejeitado, permaneça em $\theta$. A cadeia resultante satisfaz o balanço detalhado em relação a $\pi$; em particular, $\pi$ é estacionária.
+:::
+
+::: {.proof}
+O núcleo é $K(\theta, \dd\theta') = q(\theta, \theta')\alpha(\theta, \theta')\,\dd\theta' + r(\theta)\delta_\theta(\dd\theta')$, com $r(\theta) = 1 - \int q(\theta, \theta')\alpha(\theta, \theta')\,\dd\theta'$ a probabilidade de rejeição. A parte de rejeição vive na diagonal $\{\theta = \theta'\}$, onde o balanço detalhado é trivial. Fora dela,
+$$
+\pi(\theta)q(\theta, \theta')\alpha(\theta, \theta') = \min\big(\pi(\theta)q(\theta, \theta'),\ \pi(\theta')q(\theta', \theta)\big),
+$$
+uma expressão simétrica em $(\theta, \theta')$.
+:::
+
+O algoritmo usa apenas a razão $\pi(\theta')/\pi(\theta)$, em que a constante desconhecida $m(x)$ se cancela. Com proposta simétrica — um passeio aleatório $\theta' = \theta + \varepsilon$ —, a razão das propostas desaparece. O **amostrador de Gibbs** atualiza um bloco de parâmetros de cada vez, sorteando-o da sua distribuição condicional completa dados os demais e os dados; é o caso de Metropolis–Hastings com essa proposta, em que a razão de aceitação vale exatamente 1 (porque $\pi(\theta')/\pi(\theta) = \pi(\theta_j' \mid \theta_{-j})/\pi(\theta_j \mid \theta_{-j})$, que se cancela com a razão das propostas). Gibbs é natural em modelos em que as condicionais são conjugadas, como na aplicação deste capítulo.
+
+A estacionariedade não basta: é preciso que a cadeia **convirja** para $\pi$ a partir de qualquer ponto e que as médias ao longo dela convirjam para as esperanças. O **teorema ergódico** para cadeias de Markov garante isso para cadeias irredutíveis e aperiódicas com distribuição estacionária $\pi$: $\frac1N\sum_{t \leq N}g(\theta_t) \to \int g\,\dd\pi$ quase certamente; admitimos o resultado, tema do @sec-est-d01. Na prática, descartam-se as primeiras iterações (*burn-in*), verifica-se a mistura com gráficos de trajetória e várias cadeias, e mede-se a precisão pelo **tamanho efetivo da amostra**, $N/(1 + 2\sum_k\rho_k)$, que desconta a autocorrelação $\rho_k$ entre iterações. O interativo da @sec-est-m06-interativo mostra o dilema da escolha da proposta: passos pequenos são quase sempre aceitos, mas exploram devagar; passos grandes exploram rápido, mas são quase sempre rejeitados.
+
+## Pontes {#sec-est-m06-pontes}
+
+- **Econometria bayesiana (@sec-ecm-d04).** Regressão e VARs bayesianos, prioris de Minnesota, amostradores de Gibbs para modelos lineares, seleção de variáveis.
+- **Modelos DSGE (@sec-ecm-d05).** Estimação por Metropolis–Hastings com o filtro de Kalman para a verossimilhança; prioris para parâmetros fracamente identificados.
+- **Espaço de estados (@sec-ecm-d03).** O filtro de Kalman é a atualização normal–normal aplicada recursivamente.
+- **Aprendizado e expectativas (@sec-mac-d09).** Agentes que aprendem por Bayes; extração de sinal; informação imperfeita.
+- **Escolha sob incerteza (@sec-mic-m02).** A teoria da decisão deste capítulo, com utilidades no lugar de perdas, e os fundamentos subjetivos da probabilidade (Savage).
+- **Alta dimensão (@sec-ecm-d08).** *Ridge* e *lasso* como estimadores de MAP com prioris normal e de Laplace; encolhimento.
+
+## Interativo {#sec-est-m06-interativo}
+
+::: {.content-visible when-format="html"}
+**Atualização beta–binomial.** A priori Beta$(a, b)$ (cinza), a verossimilhança normalizada de $x$ sucessos em $n$ tentativas (âmbar) e a posteriori Beta$(a + x, b + n - x)$ (azul), com o intervalo de credibilidade de 95% de caudas iguais (faixa). Uma priori forte (a e b grandes) resiste aos dados; com $n$ grande, a posteriori se aproxima da verossimilhança, qualquer que seja a priori.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof aM06 = controle("a (priori)", [0.5, 30], {valor: 2, passo: 0.5, casas: 1})
+viewof bM06 = controle("b (priori)", [0.5, 30], {valor: 2, passo: 0.5, casas: 1})
+viewof nM06 = controle("n (tentativas)", [0, 200], {valor: 20, passo: 1, casas: 0})
+viewof fracM06 = controle("fração de sucessos observada", [0, 1], {valor: 0.75, passo: 0.01, casas: 2})
+```
+
+```{ojs}
+//| echo: false
+md`x = ${xM06} sucessos em ${nM06}. Média a priori ${fmtM06(aM06 / (aM06 + bM06), 3)}; ${nM06 > 0 ? "EMV " + fmtM06(xM06 / nM06, 3) + "; " : ""}média a posteriori **${fmtM06((aM06 + xM06) / (aM06 + bM06 + nM06), 3)}** (peso da priori ${fmtM06((aM06 + bM06) / (aM06 + bM06 + nM06), 2)}). Intervalo de credibilidade de 95%: [${fmtM06(icM06[0], 3)}; ${fmtM06(icM06[1], 3)}].`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "p", domain: [0, 1]}, y: {label: "densidade"},
+  marks: [
+    Plot.areaY(curvasM06.filter(d => d.p >= icM06[0] && d.p <= icM06[1]), {x: "p", y: "post", fill: "#2F5D8A", fillOpacity: 0.18}),
+    Plot.line(curvasM06, {x: "p", y: "prior", stroke: "#9AA5B1", strokeWidth: 2}),
+    ...(nM06 > 0 ? [Plot.line(curvasM06, {x: "p", y: "veross", stroke: "#B7791F", strokeWidth: 2, strokeDasharray: "5,3"})] : []),
+    Plot.line(curvasM06, {x: "p", y: "post", stroke: "#2F5D8A", strokeWidth: 2.5})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtM06 = (v, c) => v.toFixed(c).replace(".", ",")
+xM06 = Math.round(fracM06 * nM06)
+gradeM06 = d3.range(1, 2000).map(i => i / 2000)
+densBetaM06 = (a, b) => {
+  const lg = gradeM06.map(p => (a - 1) * Math.log(p) + (b - 1) * Math.log(1 - p))
+  const mx = d3.max(lg), v = lg.map(l => Math.exp(l - mx)), s = d3.sum(v) / 2000
+  return v.map(x => x / s)
+}
+curvasM06 = {
+  const pr = densBetaM06(aM06, bM06), po = densBetaM06(aM06 + xM06, bM06 + nM06 - xM06), ve = densBetaM06(xM06 + 1, nM06 - xM06 + 1)
+  return gradeM06.map((p, i) => ({p, prior: pr[i], post: po[i], veross: ve[i]}))
+}
+icM06 = {
+  let acc = 0, lo = 0, hi = 1, achouLo = false
+  for (const d of curvasM06) {
+    acc += d.post / 2000
+    if (!achouLo && acc >= 0.025) { lo = d.p; achouLo = true }
+    if (acc >= 0.975) { hi = d.p; break }
+  }
+  return [lo, hi]
+}
+```
+:::
+
+**Metropolis com passeio aleatório.** O alvo é uma mistura de duas normais, com 30% da massa à esquerda. Com passos pequenos, quase toda proposta é aceita, mas a cadeia demora a atravessar o vale e fica presa num dos modos; com passos enormes, quase tudo é rejeitado. A trajetória mostra as primeiras 1500 iterações; o histograma, todas, contra a densidade alvo.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof logPassoM06 = controle("passo da proposta (escala log₁₀)", [-1.5, 1.5], {valor: 0, passo: 0.05, casas: 2})
+viewof iterM06 = controle("iterações", [1000, 40000], {valor: 10000, passo: 1000, casas: 0})
+viewof sementeM06 = controle("semente", [1, 50], {valor: 1, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Passo ${fmtM06(10 ** logPassoM06, 3)}. Taxa de aceitação: **${fmtM06(mhM06.aceitos / iterM06, 3)}**. Fração do tempo no modo da esquerda (θ < 0): **${fmtM06(mhM06.esquerda, 3)}** (alvo: 0,300). Tamanho efetivo aproximado da amostra: ${Math.round(mhM06.ess)} de ${iterM06}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 200, grid: true,
+  x: {label: "iteração"}, y: {label: "θ", domain: [-5, 6]},
+  marks: [Plot.line(mhM06.cadeia.slice(0, 1500).map((v, t) => ({t, v})), {x: "t", y: "v", stroke: "#2F5D8A", strokeWidth: 0.8})]
+})
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 240, grid: true,
+  x: {label: "θ", domain: [-5, 6]}, y: {label: "densidade"},
+  marks: [
+    Plot.rectY(binsMHM06, {x1: "x1", x2: "x2", y: "y", fill: "#2F5D8A", fillOpacity: 0.5}),
+    Plot.line(d3.range(-5, 6.001, 0.02).map(x => ({x, y: alvoM06(x)})), {x: "x", y: "y", stroke: "#8C2F39", strokeWidth: 2})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+geradorM06 = semente => () => {
+  semente |= 0; semente = semente + 0x6D2B79F5 | 0
+  let t = Math.imul(semente ^ semente >>> 15, 1 | semente)
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+  return ((t ^ t >>> 14) >>> 0) / 4294967296
+}
+alvoM06 = x => 0.3 * Math.exp(-((x + 2) ** 2) / (2 * 0.36)) / Math.sqrt(2 * Math.PI * 0.36) + 0.7 * Math.exp(-((x - 2) ** 2) / 2) / Math.sqrt(2 * Math.PI)
+mhM06 = {
+  const r = geradorM06(sementeM06 * 31337), passo = 10 ** logPassoM06, cadeia = new Float64Array(iterM06)
+  let th = 2, aceitos = 0
+  for (let t = 0; t < iterM06; t++) {
+    const u1 = Math.max(1e-12, r()), u2 = r()
+    const prop = th + passo * Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2)
+    if (r() < alvoM06(prop) / alvoM06(th)) { th = prop; aceitos++ }
+    cadeia[t] = th
+  }
+  const m = d3.mean(cadeia), v = d3.variance(cadeia) || 1e-12
+  let soma = 0
+  for (let k = 1; k < Math.min(1000, iterM06 / 2); k++) {
+    let c = 0
+    for (let t = 0; t < iterM06 - k; t++) c += (cadeia[t] - m) * (cadeia[t + k] - m)
+    const rho = c / ((iterM06 - k) * v)
+    if (rho < 0.05) break
+    soma += rho
+  }
+  return {cadeia: Array.from(cadeia), aceitos, esquerda: d3.mean(cadeia, x => (x < 0 ? 1 : 0)), ess: iterM06 / (1 + 2 * soma)}
+}
+binsMHM06 = {
+  const k = 60, lo = -5, w = 11 / k, cont = new Array(k).fill(0)
+  for (const v of mhM06.cadeia) { const j = Math.floor((v - lo) / w); if (j >= 0 && j < k) cont[j]++ }
+  return cont.map((c, j) => ({x1: lo + j * w, x2: lo + (j + 1) * w, y: c / (mhM06.cadeia.length * w)}))
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — a atualização beta–binomial e o algoritmo de Metropolis numa distribuição bimodal — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-m06-laboratorio}
+
+### Atualização sequencial e em lote
+
+Na normal–normal, atualizar observação a observação dá a mesma posteriori que atualizar com a amostra inteira.
+
+```{python}
+import numpy as np
+from scipy import stats, optimize
+
+rng = np.random.default_rng(6)
+sigma, m, tau = 2.0, 0.0, 1.0
+x = rng.normal(1.5, sigma, size=50)
+mm, tt = m, tau
+for xi in x:
+    prec = 1 / tt ** 2 + 1 / sigma ** 2
+    mm = (mm / tt ** 2 + xi / sigma ** 2) / prec
+    tt = prec ** -0.5
+prec_lote = 1 / tau ** 2 + len(x) / sigma ** 2
+m_lote = (m / tau ** 2 + x.sum() / sigma ** 2) / prec_lote
+print(f"sequencial: media {mm:.5f}, dp {tt:.5f}")
+print(f"em lote:    media {m_lote:.5f}, dp {prec_lote ** -0.5:.5f}")
+```
+
+### Perdas diferentes, estimadores diferentes, e a região HPD
+
+Para uma posteriori assimétrica — uma gama —, a média, a mediana e a moda diferem, e a região HPD é mais curta que o intervalo de caudas iguais.
+
+```{python}
+post = stats.gamma(a=3, scale=0.5)
+
+def bayes(perda):
+    risco = lambda a: post.expect(lambda t: perda(t, a))
+    return optimize.minimize_scalar(risco, bounds=(0, 6),
+                                    method="bounded").x
+
+a_quad = bayes(lambda t, a: (t - a) ** 2)
+a_abs = bayes(lambda t, a: abs(t - a))
+print(f"media   {post.mean():.3f}; minimo da perda quadratica "
+      f"{a_quad:.3f}")
+print(f"mediana {post.median():.3f}; minimo da perda absoluta   "
+      f"{a_abs:.3f}")
+print(f"moda    {(3 - 1) * 0.5:.3f}")
+
+caudas = post.ppf([0.025, 0.975])
+def comprimento(lo):
+    return post.ppf(post.cdf(lo) + 0.95) - lo
+lo = optimize.minimize_scalar(comprimento, bounds=(0, caudas[0]),
+                              method="bounded").x
+hpd = (lo, lo + comprimento(lo))
+print(f"caudas iguais [{caudas[0]:.3f}, {caudas[1]:.3f}], "
+      f"comprimento {caudas[1] - caudas[0]:.3f}")
+print(f"HPD           [{hpd[0]:.3f}, {hpd[1]:.3f}], "
+      f"comprimento {hpd[1] - hpd[0]:.3f}")
+```
+
+### O paradoxo de Lindley em números
+
+Com $z = 1{,}96$ fixo (valor-p de 5%) e $\tau = \sigma$, o fator de Bayes a favor de $H_0$ cresce com $n$.
+
+```{python}
+z = 1.96
+for n in [10, 100, 1000, 10_000, 100_000]:
+    r = n  # n tau^2 / sigma^2 com tau = sigma
+    B01 = np.sqrt(1 + r) * np.exp(-z ** 2 / 2 * r / (1 + r))
+    print(f"n = {n:>6}: B01 = {B01:7.2f}; "
+          f"P(H0 | x) com chances 1:1 = {B01 / (1 + B01):.3f}")
+```
+
+### O risco de James–Stein
+
+Com $p = 10$, o risco do EMV é 10 para todo $\vb\theta$; o de James–Stein é muito menor perto da origem e se aproxima de 10 longe dela, sem nunca ultrapassá-lo.
+
+```{python}
+p, R = 10, 50_000
+for norma in [0, 1, 2, 4, 8, 16]:
+    theta = np.zeros(p)
+    theta[0] = norma
+    X = theta + rng.standard_normal((R, p))
+    fator = 1 - (p - 2) / np.sum(X ** 2, axis=1)
+    js = fator[:, None] * X
+    risco_js = np.mean(np.sum((js - theta) ** 2, axis=1))
+    risco_emv = np.mean(np.sum((X - theta) ** 2, axis=1))
+    print(f"||theta|| = {norma:>2}: risco EMV {risco_emv:.2f}, "
+          f"James-Stein {risco_js:.2f}")
+```
+
+### Gibbs para média e precisão de uma normal
+
+Com prioris independentes $\mu \sim \Normal(m_0, 1/s_0)$ e precisão $h \sim$ Gama$(a_0, d_0)$, as condicionais completas são conjugadas: $\mu \mid h, \vb y$ é normal (@prp-est-m06-normal) e $h \mid \mu, \vb y \sim$ Gama$(a_0 + n/2,\ d_0 + \frac12\sum(y_i - \mu)^2)$. Medimos a autocorrelação da cadeia e o tamanho efetivo da amostra.
+
+```{python}
+y = rng.normal(3.0, 1.5, size=40)
+n, m0, s0, a0, d0 = len(y), 0.0, 0.01, 1.0, 1.0
+mu, h, cadeia = 0.0, 1.0, []
+for it in range(20_000):
+    prec = s0 + n * h
+    mu = rng.normal((s0 * m0 + h * y.sum()) / prec, prec ** -0.5)
+    h = rng.gamma(a0 + n / 2, 1 / (d0 + np.sum((y - mu) ** 2) / 2))
+    if it >= 2000:
+        cadeia.append((mu, 1 / np.sqrt(h)))
+C = np.array(cadeia)
+
+def tamanho_efetivo(v, kmax=200):
+    v = v - v.mean()
+    rho = [np.dot(v[:-k], v[k:]) / np.dot(v, v) for k in range(1, kmax)]
+    soma = 0.0
+    for r in rho:
+        if r < 0.05:
+            break
+        soma += r
+    return len(v) / (1 + 2 * soma)
+
+for j, nome in enumerate(["mu", "sigma"]):
+    q = np.percentile(C[:, j], [5, 50, 95])
+    ess = tamanho_efetivo(C[:, j])
+    print(f"{nome:<5} mediana {q[1]:.3f}, intervalo 90% "
+          f"[{q[0]:.3f}, {q[2]:.3f}]")
+    print(f"      tamanho efetivo {ess:.0f} de {len(C)}")
+```
+
+## Aplicação: a persistência da inflação num AR(1) bayesiano {#sec-est-m06-aplicacao}
+
+Quão persistente é a inflação mensal brasileira, e qual é a média de longo prazo que a sua dinâmica recente implica? Estimamos o modelo $\pi_t = c + \rho\,\pi_{t-1} + \varepsilon_t$, com $\varepsilon_t \sim \Normal(0, 1/h)$, por um amostrador de Gibbs com prioris independentes: $(c, \rho) \sim \Normal(\vb 0, \Id)$, truncada na região estacionária $\abs\rho < 1$, e $h \sim$ Gama$(2;\ 0{,}05)$, pouco informativa. As condicionais completas são a normal da regressão bayesiana, $\vb\beta \mid h \sim \Normal(\vb b_n, \vb B_n)$ com $\vb B_n = (\Id + h\vb X\T\vb X)^{-1}$ e $\vb b_n = \vb B_nh\vb X\T\vb y$ (a versão multivariada da @prp-est-m06-normal), e a gama para $h$. A vantagem da simulação aparece nas funções não lineares dos parâmetros: a **meia-vida** de um choque, $\log 0{,}5/\log\rho$, e a **média de longo prazo** $c/(1 - \rho)$, cujas posterioris se obtêm transformando cada sorteio — sem método delta.
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import Markdown
+from formacao import dados, graficos
+
+graficos.estilo()
+try:
+    ipca = dados.sgs("ipca", inicio="2000-01-01")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+if disponivel:
+    yy = ipca.to_numpy()
+    Y = yy[1:]
+    X = np.column_stack([np.ones(len(Y)), yy[:-1]])
+    T = len(Y)
+    a0, d0 = 2.0, 0.05
+    XtX, Xty = X.T @ X, X.T @ Y
+    h, sorteios = 1 / np.var(Y), []
+    for it in range(7000):
+        Bn = np.linalg.inv(np.eye(2) + h * XtX)
+        bn = Bn @ (h * Xty)
+        beta = rng.multivariate_normal(bn, Bn)
+        while abs(beta[1]) >= 1:
+            beta = rng.multivariate_normal(bn, Bn)
+        e = Y - X @ beta
+        h = rng.gamma(a0 + T / 2, 1 / (d0 + e @ e / 2))
+        if it >= 1000:
+            sorteios.append(beta)
+    S = np.array(sorteios)
+    c, rho = S[:, 0], S[:, 1]
+    media_lp = c / (1 - rho)
+    anual = 100 * ((1 + media_lp / 100) ** 12 - 1)
+    meia_vida = np.log(0.5) / np.log(np.clip(rho, 1e-6, None))
+    mqo = np.linalg.lstsq(X, Y, rcond=None)[0]
+    q = lambda v: np.percentile(v, [5, 50, 95])
+    print(f"{T} meses; MQO: c = {mqo[0]:.3f}, rho = {mqo[1]:.3f}")
+    for nome, v in [("rho", rho), ("meia-vida (meses)", meia_vida),
+                    ("media de longo prazo (% a.a.)", anual)]:
+        a, b_, cc = q(v)
+        print(f"{nome:<30} mediana {b_:.2f}  90%: [{a:.2f}, {cc:.2f}]")
+    p3 = np.mean(anual > 3.0)
+    print(f"P(media de longo prazo > 3% a.a. | dados) = {p3:.2f}")
+
+    fig, ax = plt.subplots(1, 2, figsize=(9.5, 3.3))
+    ax[0].hist(rho, bins=60, density=True, alpha=0.7,
+               color=graficos.PALETA["azul"])
+    ax[0].axvline(mqo[1], color=graficos.PALETA["vinho"], ls="--",
+                  label="MQO")
+    ax[0].set_xlabel("ρ (persistência)")
+    ax[0].set_ylabel("densidade a posteriori")
+    ax[0].legend(frameon=False)
+    ax[1].hist(anual, bins=60, density=True, alpha=0.7,
+               color=graficos.PALETA["verde"])
+    ax[1].axvline(3.0, color=graficos.PALETA["ardosia"], ls=":",
+                  label="meta atual (3% a.a.)")
+    ax[1].set_xlabel("média de longo prazo (% ao ano)")
+    ax[1].legend(frameon=False)
+    graficos.fonte(ax[0], "IBGE (IPCA), via SGS/BCB, série 433.")
+    plt.tight_layout()
+    plt.show()
+
+    br = lambda v, d=2: f"{v:.{d}f}".replace(".", ",")
+    r5, r50, r95 = q(rho)
+    m5, m50, m95 = q(meia_vida)
+    a5, a50, a95 = q(anual)
+    resumo = (f"A mediana a posteriori de $\\rho$ é {br(r50)}, com "
+              f"intervalo de credibilidade de 90% "
+              f"[{br(r5)}; {br(r95)}], praticamente igual à estimativa "
+              f"de mínimos quadrados ({br(mqo[1])}): com {T} "
+              "observações e uma priori pouco informativa, os dados "
+              "dominam, como prevê o teorema de Bernstein–von Mises. "
+              f"Um choque perde metade do efeito em cerca de "
+              f"{br(m50, 1)} meses (90%: {br(m5, 1)} a {br(m95, 1)}). "
+              "A média de longo prazo implícita no período é de "
+              f"{br(a50, 1)}% ao ano (90%: {br(a5, 1)}% a "
+              f"{br(a95, 1)}%), e a probabilidade a posteriori de "
+              f"estar acima de 3% é {br(p3)}.")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+O exercício mostra a vantagem prática do enfoque: perguntas sobre funções não lineares dos parâmetros — meias-vidas, médias de longo prazo, probabilidades de eventos — têm respostas diretas a partir dos sorteios. Também mostra os seus limites. A média de longo prazo de um período que atravessa vários regimes de política monetária e metas diferentes é uma síntese de dados heterogêneos, e a priori de estacionariedade ($\abs\rho < 1$) é uma escolha com consequências: num modelo com raiz unitária, a média de longo prazo nem existiria. Modelos com mudança de regime, parâmetros variando no tempo e sazonalidade, estimados por MCMC, são o próximo passo (@sec-ecm-d04, @sec-ecm-d10).
+
+## Exercícios resolvidos {#sec-est-m06-exercicios}
+
+::: {#exr-est-m06-poisson-gama}
+Com $X_1, \dots, X_n \mid \lambda$ iid Poisson$(\lambda)$ e $\lambda \sim$ Gama$(\alpha, \beta)$ (taxa $\beta$), encontre a posteriori e a distribuição preditiva de $X_{n+1}$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\pi(\lambda \mid \vb x) \propto e^{-n\lambda}\lambda^{\sum x_i}\cdot\lambda^{\alpha-1}e^{-\beta\lambda}$, logo $\lambda \mid \vb x \sim$ Gama$(\alpha + \sum x_i,\ \beta + n)$, com média $\frac{\alpha + \sum x_i}{\beta + n}$ — média ponderada de $\alpha/\beta$ e $\bar x$. A preditiva é
+$$
+P(X_{n+1} = k \mid \vb x) = \int\frac{e^{-\lambda}\lambda^k}{k!}\frac{\beta_n^{\alpha_n}\lambda^{\alpha_n-1}e^{-\beta_n\lambda}}{\Gamma(\alpha_n)}\,\dd\lambda = \frac{\Gamma(\alpha_n + k)}{k!\,\Gamma(\alpha_n)}\Big(\frac{\beta_n}{\beta_n + 1}\Big)^{\alpha_n}\Big(\frac{1}{\beta_n + 1}\Big)^k,
+$$
+com $\alpha_n = \alpha + \sum x_i$ e $\beta_n = \beta + n$: uma binomial negativa, com variância maior que a média — a incerteza sobre $\lambda$ se soma à variabilidade Poisson (@sec-est-m02-laboratorio).
+:::
+
+::: {#exr-est-m06-quantil}
+Mostre que, sob a perda $L(\theta, a) = (\theta - a)(\tau - \mathbf 1\{\theta < a\})$, com $\tau \in (0, 1)$, o estimador de Bayes é o quantil $\tau$ da posteriori.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A perda vale $\tau(\theta - a)$ se $\theta \geq a$ e $(1 - \tau)(a - \theta)$ se $\theta < a$: errar para baixo custa $\tau$ por unidade, para cima, $1 - \tau$. Pela fórmula da cauda, como no caso da perda absoluta, $\rho(a) = \tau\int_a^\infty P(\theta > t \mid x)\,\dd t + (1 - \tau)\int_{-\infty}^aP(\theta \leq t \mid x)\,\dd t$, convexa, com derivada $-\tau P(\theta > a \mid x) + (1 - \tau)P(\theta \leq a \mid x) = P(\theta \leq a \mid x) - \tau$. O mínimo está onde a função de distribuição a posteriori cruza $\tau$. Com $\tau = 0{,}5$, é a mediana. É também a perda das regressões quantílicas e da avaliação de previsões de valor em risco.
+:::
+
+::: {#exr-est-m06-minimax}
+Com $X \sim$ Bin$(n, p)$ e perda quadrática, mostre que o estimador de Bayes para a priori Beta$(\sqrt n/2, \sqrt n/2)$ tem risco constante e é, portanto, minimax. Compare o seu risco máximo com o de $X/n$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Com $a = b = \sqrt n/2$, o estimador é $\delta = \frac{X + \sqrt n/2}{n + \sqrt n}$. Seu viés é $\frac{np + \sqrt n/2}{n + \sqrt n} - p = \frac{\sqrt n(1/2 - p)}{n + \sqrt n}$ e sua variância, $\frac{np(1 - p)}{(n + \sqrt n)^2}$. O risco é
+$$
+\frac{np(1 - p) + n(1/2 - p)^2}{(n + \sqrt n)^2} = \frac{n/4}{(n + \sqrt n)^2} = \frac{1}{4(1 + \sqrt n)^2},
+$$
+constante em $p$, porque $p(1 - p) + (1/2 - p)^2 = 1/4$. Pelo @thm-est-m06-admissibilidade (b), é minimax. O risco de $X/n$ é $p(1 - p)/n$, com máximo $1/(4n)$, maior que $1/(4(1 + \sqrt n)^2)$. Mas $X/n$ é melhor perto de $p = 0$ e $p = 1$: o critério minimax protege contra o pior caso, $p = 1/2$, à custa dos demais.
+:::
+
+::: {#exr-est-m06-jeffreys}
+Calcule a priori de Jeffreys para a Bernoulli e para a Poisson e as posterioris correspondentes após $x$ sucessos em $n$ tentativas e após observar a soma $s$ de $n$ contagens.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Bernoulli: $\log p_\theta(x) = x\log p + (1 - x)\log(1 - p)$, $I(p) = \frac{1}{p(1 - p)}$, $\pi_J \propto p^{-1/2}(1 - p)^{-1/2}$, a Beta$(1/2, 1/2)$; a posteriori é Beta$(x + 1/2,\ n - x + 1/2)$, e o intervalo de caudas iguais (o "intervalo de Jeffreys") tem boa cobertura frequentista. Poisson: $I(\lambda) = 1/\lambda$, $\pi_J \propto \lambda^{-1/2}$, imprópria; a posteriori é Gama$(s + 1/2,\ n)$, própria para todo $s \geq 0$.
+:::
+
+::: {#exr-est-m06-impropria}
+Na $\Normal(\mu, \sigma^2)$ com priori imprópria $\pi(\mu, \sigma) \propto 1/\sigma$, mostre que $\sqrt n(\mu - \bar x)/s \mid \vb x \sim t_{n-1}$, de modo que o intervalo de credibilidade de caudas iguais para $\mu$ coincide com o intervalo $t$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A posteriori conjunta é proporcional a $\sigma^{-(n+1)}\exp\big(-\frac{(n - 1)s^2 + n(\mu - \bar x)^2}{2\sigma^2}\big)$, pela @eq-est-g04-soma-quadrados. Integrando em $\sigma$ (substituindo $u = 1/\sigma^2$, a integral é uma gama), obtém-se $\pi(\mu \mid \vb x) \propto [(n - 1)s^2 + n(\mu - \bar x)^2]^{-n/2} \propto \big[1 + \frac{t^2}{n - 1}\big]^{-n/2}$ com $t = \sqrt n(\mu - \bar x)/s$ — o núcleo da $t_{n-1}$ (@thm-est-g04-densidade-t). As interpretações diferem — probabilidade sobre $\mu$ dados os dados, contra cobertura em amostras repetidas —, mas os números coincidem: um caso em que a priori "não informativa" reproduz a resposta clássica exatamente.
+:::
+
+::: {#exr-est-m06-lindley}
+No @exm-est-m06-lindley, com $\tau = \sigma$ e $z = 1{,}96$, calcule $B_{01}$ para $n = 100$ e $n = 10\,000$. Para que valor de $\tau$ o fator de Bayes com $n = 100$ é mais favorável a $H_1$?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Com $r = n\tau^2/\sigma^2$, $B_{01} = \sqrt{1 + r}\,e^{-1{,}921\,r/(1 + r)}$. Para $n = 100$, $r = 100$: $B_{01} = 10{,}05 \times e^{-1{,}902} \approx 1{,}50$ — uma leve preferência por $H_0$, apesar do valor-p de 5%. Para $n = 10\,000$: $B_{01} \approx 100 \times e^{-1{,}921} \approx 14{,}7$. Minimizando $\frac12\log(1 + r) - 1{,}921\,\frac{r}{1 + r}$ em $r$: a derivada $\frac{1}{2(1 + r)} - \frac{1{,}921}{(1 + r)^2}$ se anula em $1 + r = 3{,}84 = z^2$, isto é, $r = z^2 - 1 \approx 2{,}84$, com $B_{01} = z\,e^{-(z^2 - 1)/2} \approx 0{,}47$. Mesmo com a priori mais favorável possível, as chances a favor de $H_1$ não passam de cerca de 2 para 1 — muito menos do que "valor-p de 5%" sugere a muitos leitores.
+:::
+
+::: {#exr-est-m06-moeda}
+Uma moeda dá 60 caras em 100 lançamentos. Calcule o valor-p bilateral do teste de $p = 1/2$ e o fator de Bayes de $H_0 : p = 1/2$ contra $H_1 : p \sim U(0, 1)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela aproximação normal, $z = (60 - 50)/5 = 2$, com valor-p de cerca de $0{,}046$ (o exato, binomial, é $0{,}057$). Sob $H_1$, $m_1(x) = \int_0^1\binom{100}{60}p^{60}(1 - p)^{40}\,\dd p = \frac{1}{101}$ (a integral de uma beta), e $m_0(x) = \binom{100}{60}2^{-100} \approx 0{,}0108$. Logo $B_{01} = 101 \times 0{,}0108 \approx 1{,}10$: os dados são praticamente neutros entre as duas hipóteses. A discrepância com o valor-p é o paradoxo de Lindley em pequena escala: a alternativa uniforme dá muito peso a valores de $p$ longe de $0{,}6$.
+:::
+
+::: {#exr-est-m06-consistencia}
+Na beta–binomial, mostre que, se os dados vêm de $p_0$, a média a posteriori converge para $p_0$ quase certamente e a variância a posteriori, multiplicada por $n$, converge para $p_0(1 - p_0)$ — a inversa da informação de Fisher, como prevê o teorema de Bernstein–von Mises.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A média a posteriori é $\frac{a + X_n}{a + b + n}$, com $X_n/n \to p_0$ q.c. pela lei forte; logo converge para $p_0$. A variância da Beta$(a_n, b_n)$ é $\frac{a_nb_n}{(a_n + b_n)^2(a_n + b_n + 1)}$, com $a_n = a + X_n \approx np_0$ e $b_n \approx n(1 - p_0)$; multiplicada por $n$, tende a $\frac{p_0(1 - p_0)n^3}{n^2\cdot n} = p_0(1 - p_0) = I(p_0)^{-1}$. A priori deixa de importar: dois analistas com prioris diferentes (e positivas perto de $p_0$) acabam concordando.
+:::
+
+## Flashcards {#sec-est-m06-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a relação entre priori, verossimilhança e posteriori?
+$\pi(\theta \mid x) \propto p_\theta(x)\,\pi(\theta)$; a constante é $m(x) = \int p_\theta(x)\pi(\theta)\,\dd\theta$. A posteriori é a distribuição condicional regular de $\theta$ dado $X$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a posteriori na beta–binomial e como interpretar a priori?
+Beta$(a + x, b + n - x)$; média $= w\frac{a}{a+b} + (1 - w)\frac xn$ com $w = \frac{a+b}{a+b+n}$: a priori vale $a + b$ observações. Uniforme: Laplace $(x + 1)/(n + 2)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a posteriori na normal–normal com variância conhecida?
+Precisões somam: $1/\tau_n^2 = 1/\tau^2 + n/\sigma^2$; média $m_n = \tau_n^2(m/\tau^2 + n\bar x/\sigma^2)$. Preditiva: $\Normal(m_n, \sigma^2 + \tau_n^2)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que o estimador de Bayes minimiza a perda esperada a posteriori?
+Por Tonelli, $r(\pi, \delta) = \int\rho(x, \delta(x))\,m(x)\,\dd x$; minimizar ponto a ponto minimiza a integral. Quadrática: média; absoluta: mediana; quantílica: quantil; 0–1: moda.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que estimadores de Bayes (perda quadrática) são viesados?
+Se fosse não viesado e de Bayes, $\E[\delta\theta] = \E\theta^2 = \E\delta^2$ e o risco de Bayes seria $0$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como os estimadores de Bayes se relacionam com admissibilidade e minimax?
+Bayes único com risco de Bayes finito é admissível. Bayes com risco constante é minimax (binomial: Beta$(\sqrt n/2, \sqrt n/2)$). Classe completa: admissíveis são Bayes ou limites.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é a região HPD e por que é a menor?
+$\{\theta : \pi(\theta \mid x) \geq k\}$ com probabilidade $1 - \alpha$. Argumento de Neyman–Pearson: fora dela a densidade é menor que $k$, então qualquer outro conjunto com a mesma probabilidade é mais longo.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é a priori de Jeffreys e por que é invariante?
+$\pi_J \propto \sqrt{\det\vb I(\theta)}$. Como $\vb I_\phi = \vb J\T\vb I_\theta\vb J$, $\sqrt{\det\vb I}$ se transforma como uma densidade. Bernoulli: Beta$(1/2, 1/2)$; escala: $1/\sigma$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o fator de Bayes?
+$B_{10} = m_1(x)/m_0(x)$, razão das verossimilhanças marginais; chances a posteriori = $B_{10}\times$ chances a priori. Penaliza a complexidade; $2\log B \approx$ diferença de BIC.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o paradoxo de Lindley?
+Com $z$ fixo (valor-p 5%) e $n \to \infty$, $B_{01} = \sqrt{1 + n\tau^2/\sigma^2}\,e^{-\frac{z^2}2\frac{n\tau^2}{\sigma^2 + n\tau^2}} \to \infty$: o bayesiano favorece $H_0$ quando o teste clássico a rejeita.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz Bernstein–von Mises, e quando falha?
+Em modelos regulares, a posteriori se aproxima de $\Normal(\hat\theta, \vb I^{-1}/n)$ em variação total: a priori deixa de importar e credibilidade $\approx$ confiança. Falha em modelos não regulares, fracamente identificados ou de dimensão infinita.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema de James–Stein, e qual a intuição?
+Para $p \geq 3$, $(1 - \frac{p-2}{\norm{\vb X}^2})\vb X$ tem risco $p - (p-2)^2\E[1/\norm{\vb X}^2] < p$: o EMV é inadmissível. Bayes empírico: estima o fator de encolhimento $1/(1 + \tau^2)$ pelos dados.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que Metropolis–Hastings funciona?
+A aceitação $\min(1, \frac{\pi(\theta')q(\theta', \theta)}{\pi(\theta)q(\theta, \theta')})$ impõe balanço detalhado, logo $\pi$ é estacionária; só usa razões de $\pi$, e a constante $m(x)$ se cancela. Gibbs: MH com as condicionais completas e aceitação 1.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o dilema na escolha do passo do Metropolis com passeio aleatório?
+Passos pequenos: aceitação alta, exploração lenta, alta autocorrelação. Passos grandes: muitas rejeições. Mede-se pela autocorrelação e pelo tamanho efetivo $N/(1 + 2\sum\rho_k)$.
+:::
+
+## Ficha-resumo {#sec-est-m06-ficha}
+
+::: {.ficha-resumo}
+**Bayes.** $\pi(\theta \mid x) = p_\theta(x)\pi(\theta)/m(x)$, $m(x) = \int p_\theta(x)\pi(\theta)\,\dd\theta$ (distribuição condicional regular). Depende dos dados por estatísticas suficientes; atualização sequencial = em lote.
+
+**Conjugadas.** Beta–binomial: Beta$(a + x, b + n - x)$, peso da priori $(a+b)/(a+b+n)$, Laplace $(x+1)/(n+2)$. Normal–normal: precisões somam, média ponderada; preditiva $\Normal(m_n, \sigma^2 + \tau_n^2)$. Gama–Poisson (binomial negativa). Exponenciais: priori $\propto e^{\eta\T\vb t_0 - n_0A(\eta)}$.
+
+**Decisão.** Perda, risco $R(\theta, \delta)$, risco de Bayes; estimador de Bayes minimiza a perda a posteriori (Tonelli). Quadrática $\to$ média; absoluta $\to$ mediana; quantílica $\to$ quantil; 0–1 $\to$ moda (MAP). Bayes não viesado $\Rightarrow$ risco 0. Único $\Rightarrow$ admissível; risco constante $\Rightarrow$ minimax.
+
+**Intervalos e prioris.** Credibilidade: probabilidade sobre $\theta$ dados os dados. HPD = menor região. Jeffreys $\sqrt{\det\vb I}$, invariante; Beta$(\frac12, \frac12)$, $\lambda^{-1/2}$, plana, $1/\sigma$; impróprias exigem posteriori própria; $1/\sigma$ na normal reproduz o intervalo $t$.
+
+**Modelos.** $B_{10} = m_1/m_0$; chances a posteriori $= B_{10}\times$ a priori; Occam; BIC. Lindley: $z$ fixo, $n \to \infty$, $B_{01} \to \infty$. Bernstein–von Mises: posteriori $\approx \Normal(\hat\theta, \vb I^{-1}/n)$.
+
+**Encolhimento.** James–Stein: $(1 - \frac{p-2}{\norm{\vb X}^2})\vb X$, risco $p - (p-2)^2\E\norm{\vb X}^{-2}$ (lema de Stein $\E[(Z - \theta)g(Z)] = \E g'(Z)$); Bayes empírico; hierárquicos.
+
+**MCMC.** Balanço detalhado $\Rightarrow$ estacionária. MH: aceitar com $\min(1, \frac{\pi(\theta')q(\theta',\theta)}{\pi(\theta)q(\theta,\theta')})$. Gibbs: condicionais completas. Ergodicidade (admitida); *burn-in*, trajetórias, tamanho efetivo.
+:::
+
+## Notas bibliográficas {#sec-est-m06-notas}
+
+@gelman2013 é a referência para a prática da inferência bayesiana: modelos conjugados, modelos hierárquicos, verificação de modelos, MCMC e diagnósticos de convergência, com ênfase em aplicações. @robert2007 desenvolve os fundamentos decisórios — perdas, risco, admissibilidade, minimax, o teorema da classe completa, prioris de Jeffreys e de referência, fatores de Bayes e o paradoxo de Lindley — com rigor. @koop2003 apresenta a econometria bayesiana a partir da regressão, com o amostrador de Gibbs para o modelo linear usado na aplicação, e prepara o @sec-ecm-d04. O teorema de Bernstein–von Mises está demonstrado em @vandervaart1998 [cap. 10], e o fenômeno de Stein, com a interpretação bayesiana empírica de Efron e Morris, em @lehmann1998 [cap. 5].
