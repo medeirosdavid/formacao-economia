@@ -2,15 +2,9 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `EST-G03`
+[Graduação]{.nivel .nivel-G} · [rascunho]{.status} · `EST-G03`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-est-g02 (*Variáveis aleatórias e distribuições*); @sec-mat-g06 (*Cálculo em várias variáveis*)
-:::
-
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Variáveis aleatórias e distribuições* (EST-G02); @sec-mat-g06 (*Cálculo em várias variáveis*)
-:::
 
 **Leituras principais:** @degroot2012, @casella2002
 :::
@@ -20,9 +14,11 @@
 Roteiro planejado:
 
 1. Esperança e variância
-2. Desigualdade de Jensen
-3. Distribuições conjuntas, marginais e condicionais
-4. Covariância e correlação
-5. Esperança condicional (versão elementar)
-6. Normal multivariada
+2. Momentos e função geradora de momentos
+3. Desigualdade de Jensen
+4. Distribuições conjuntas, marginais e condicionais
+5. Covariância, correlação e diversificação
+6. Esperança condicional (versão elementar) e melhor preditor
+7. Normal multivariada
+8. Aplicação: a inflação de amanhã dada a de hoje
 :::

@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Valor do dinheiro no tempo* (FIN-G01); *Esperança, momentos e distribuições conjuntas* (EST-G03)
+**Pré-requisitos:** *Valor do dinheiro no tempo* (FIN-G01); @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*)
 :::
 
 **Leituras principais:** @bodie2021, @markowitz1952

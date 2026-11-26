@@ -4,13 +4,7 @@
 ::: {.cabecalho-capitulo}
 [Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `EST-M01`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*); @sec-mat-m01 (*Análise real em $\mathbb{R}^n$ e espaços métricos*)
-:::
-
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Esperança, momentos e distribuições conjuntas* (EST-G03); @sec-mat-m01 (*Análise real em $\mathbb{R}^n$ e espaços métricos*)
-:::
 
 **Leituras principais:** @billingsley1995, @durrett2019
 :::

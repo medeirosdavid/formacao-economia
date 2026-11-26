@@ -11,13 +11,13 @@ Legenda de status: ○ planejado · ◔ rascunho · ◑ em revisão · ● compl
 | Parte | Capítulos | G | M | D | Escritos | Completos |
 |:--|--:|--:|--:|--:|--:|--:|
 | Matemática | 22 | 8 | 10 | 4 | 10 | 0 |
-| Probabilidade e Estatística | 16 | 6 | 6 | 4 | 0 | 0 |
+| Probabilidade e Estatística | 16 | 6 | 6 | 4 | 6 | 0 |
 | Computação | 11 | 3 | 4 | 4 | 0 | 0 |
 | Microfundamentos | 12 | 5 | 6 | 1 | 0 | 0 |
 | Econometria | 30 | 9 | 11 | 10 | 1 | 0 |
 | Macroeconomia | 33 | 10 | 13 | 10 | 0 | 0 |
 | Finanças | 24 | 8 | 9 | 7 | 0 | 0 |
-| **Total** | **148** | 49 | 59 | 40 | 11 | 0 |
+| **Total** | **148** | 49 | 59 | 40 | 17 | 0 |
 
 ## Trilhas de leitura
 
@@ -32,11 +32,11 @@ Matemática, probabilidade e computação até o nível de mestrado — o mínim
 5. ◔ [Álgebra linear I: vetores, matrizes e sistemas lineares](partes/01-matematica/mat-g05-algebra-linear-i-vetores-matrizes-e-sistemas-lineares.qmd) `MAT-G05`
 6. ◔ [Cálculo em várias variáveis](partes/01-matematica/mat-g06-calculo-em-varias-variaveis.qmd) `MAT-G06`
 7. ◔ [Otimização: sem restrições e com restrições de igualdade](partes/01-matematica/mat-g07-otimizacao-sem-restricoes-e-com-restricoes-de-igualdade.qmd) `MAT-G07`
-8. ○ [Probabilidade: axiomas, condicionamento e Bayes](partes/02-probabilidade-estatistica/est-g01-probabilidade-axiomas-condicionamento-e-bayes.qmd) `EST-G01`
-9. ○ [Variáveis aleatórias e distribuições](partes/02-probabilidade-estatistica/est-g02-variaveis-aleatorias-e-distribuicoes.qmd) `EST-G02`
-10. ○ [Esperança, momentos e distribuições conjuntas](partes/02-probabilidade-estatistica/est-g03-esperanca-momentos-e-distribuicoes-conjuntas.qmd) `EST-G03`
-11. ○ [Estimação pontual e intervalar](partes/02-probabilidade-estatistica/est-g05-estimacao-pontual-e-intervalar.qmd) `EST-G05`
-12. ○ [Testes de hipóteses](partes/02-probabilidade-estatistica/est-g06-testes-de-hipoteses.qmd) `EST-G06`
+8. ◔ [Probabilidade: axiomas, condicionamento e Bayes](partes/02-probabilidade-estatistica/est-g01-probabilidade-axiomas-condicionamento-e-bayes.qmd) `EST-G01`
+9. ◔ [Variáveis aleatórias e distribuições](partes/02-probabilidade-estatistica/est-g02-variaveis-aleatorias-e-distribuicoes.qmd) `EST-G02`
+10. ◔ [Esperança, momentos e distribuições conjuntas](partes/02-probabilidade-estatistica/est-g03-esperanca-momentos-e-distribuicoes-conjuntas.qmd) `EST-G03`
+11. ◔ [Estimação pontual e intervalar](partes/02-probabilidade-estatistica/est-g05-estimacao-pontual-e-intervalar.qmd) `EST-G05`
+12. ◔ [Testes de hipóteses](partes/02-probabilidade-estatistica/est-g06-testes-de-hipoteses.qmd) `EST-G06`
 13. ○ [Python para economistas](partes/03-computacao/cmp-g01-python-para-economistas.qmd) `CMP-G01`
 14. ○ [Dados: pandas, APIs públicas brasileiras e visualização](partes/03-computacao/cmp-g02-dados-pandas-apis-publicas-brasileiras-e-visualizacao.qmd) `CMP-G02`
 15. ◔ [Análise real em $\mathbb{R}^n$ e espaços métricos](partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd) `MAT-M01`
@@ -141,12 +141,12 @@ Da probabilidade elementar à teoria da medida, inferência estatística e proce
 
 | Código | Nível | Capítulo | Pré-requisitos | Status |
 |:--|:--|:--|:--|:--|
-| EST-G01 | G | [Probabilidade: axiomas, condicionamento e Bayes](partes/02-probabilidade-estatistica/est-g01-probabilidade-axiomas-condicionamento-e-bayes.qmd) | MAT-G01 | ○ planejado |
-| EST-G02 | G | [Variáveis aleatórias e distribuições](partes/02-probabilidade-estatistica/est-g02-variaveis-aleatorias-e-distribuicoes.qmd) | EST-G01, MAT-G04 | ○ planejado |
-| EST-G03 | G | [Esperança, momentos e distribuições conjuntas](partes/02-probabilidade-estatistica/est-g03-esperanca-momentos-e-distribuicoes-conjuntas.qmd) | EST-G02, MAT-G06 | ○ planejado |
-| EST-G04 | G | [Amostragem e teoremas-limite](partes/02-probabilidade-estatistica/est-g04-amostragem-e-teoremas-limite.qmd) | EST-G03 | ○ planejado |
-| EST-G05 | G | [Estimação pontual e intervalar](partes/02-probabilidade-estatistica/est-g05-estimacao-pontual-e-intervalar.qmd) | EST-G04 | ○ planejado |
-| EST-G06 | G | [Testes de hipóteses](partes/02-probabilidade-estatistica/est-g06-testes-de-hipoteses.qmd) | EST-G05 | ○ planejado |
+| EST-G01 | G | [Probabilidade: axiomas, condicionamento e Bayes](partes/02-probabilidade-estatistica/est-g01-probabilidade-axiomas-condicionamento-e-bayes.qmd) | MAT-G01 | ◔ rascunho |
+| EST-G02 | G | [Variáveis aleatórias e distribuições](partes/02-probabilidade-estatistica/est-g02-variaveis-aleatorias-e-distribuicoes.qmd) | EST-G01, MAT-G04 | ◔ rascunho |
+| EST-G03 | G | [Esperança, momentos e distribuições conjuntas](partes/02-probabilidade-estatistica/est-g03-esperanca-momentos-e-distribuicoes-conjuntas.qmd) | EST-G02, MAT-G06 | ◔ rascunho |
+| EST-G04 | G | [Amostragem e teoremas-limite](partes/02-probabilidade-estatistica/est-g04-amostragem-e-teoremas-limite.qmd) | EST-G03 | ◔ rascunho |
+| EST-G05 | G | [Estimação pontual e intervalar](partes/02-probabilidade-estatistica/est-g05-estimacao-pontual-e-intervalar.qmd) | EST-G04 | ◔ rascunho |
+| EST-G06 | G | [Testes de hipóteses](partes/02-probabilidade-estatistica/est-g06-testes-de-hipoteses.qmd) | EST-G05 | ◔ rascunho |
 | EST-M01 | M | [Probabilidade com teoria da medida](partes/02-probabilidade-estatistica/est-m01-probabilidade-com-teoria-da-medida.qmd) | EST-G03, MAT-M01 | ○ planejado |
 | EST-M02 | M | [Esperança condicional](partes/02-probabilidade-estatistica/est-m02-esperanca-condicional.qmd) | EST-M01 | ○ planejado |
 | EST-M03 | M | [Modos de convergência e teoremas-limite](partes/02-probabilidade-estatistica/est-m03-modos-de-convergencia-e-teoremas-limite.qmd) | EST-M01 | ○ planejado |

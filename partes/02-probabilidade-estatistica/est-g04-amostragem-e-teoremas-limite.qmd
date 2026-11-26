@@ -2,15 +2,9 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `EST-G04`
+[Graduação]{.nivel .nivel-G} · [rascunho]{.status} · `EST-G04`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*)
-:::
-
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Esperança, momentos e distribuições conjuntas* (EST-G03)
-:::
 
 **Leituras principais:** @degroot2012, @casella2002
 :::
@@ -23,5 +17,8 @@ Roteiro planejado:
 2. Desigualdades de Markov e Chebyshev
 3. Lei dos grandes números
 4. Teorema central do limite
-5. Distribuições qui-quadrado, t e F
+5. Lema de Slutsky e aproximações
+6. Distribuições qui-quadrado, t e F
+7. Amostras normais: média e variância amostrais
+8. Aplicação: o teorema central do limite com a inflação brasileira
 :::

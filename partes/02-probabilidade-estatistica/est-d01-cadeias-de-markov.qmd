@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Esperança, momentos e distribuições conjuntas* (EST-G03); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02)
+**Pré-requisitos:** @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*); *Álgebra linear II: autovalores, decomposições e formas quadráticas* (MAT-M02)
 :::
 
 **Leituras principais:** @ljungqvist2018, @durrett2019

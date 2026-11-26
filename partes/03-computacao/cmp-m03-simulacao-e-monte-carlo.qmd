@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Python para economistas* (CMP-G01); *Amostragem e teoremas-limite* (EST-G04)
+**Pré-requisitos:** *Python para economistas* (CMP-G01); @sec-est-g04 (*Amostragem e teoremas-limite*)
 :::
 
 **Leituras principais:** @judd1998, @quantecon

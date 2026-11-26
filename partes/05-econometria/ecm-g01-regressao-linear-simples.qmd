@@ -4,13 +4,7 @@
 ::: {.cabecalho-capitulo}
 [Graduação]{.nivel .nivel-G} · [rascunho]{.status} · `ECM-G01`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*); @sec-est-g05 (*Estimação pontual e intervalar*)
-:::
-
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Esperança, momentos e distribuições conjuntas* (EST-G03); *Estimação pontual e intervalar* (EST-G05)
-:::
 
 **Leituras principais:** @wooldridge2019, @stock2019, @hansen2022
 :::

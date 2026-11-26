@@ -134,38 +134,38 @@
  "EST-G01": {
   "titulo": "Probabilidade: axiomas, condicionamento e Bayes",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-G02": {
   "titulo": "Variáveis aleatórias e distribuições",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-G03": {
   "titulo": "Esperança, momentos e distribuições conjuntas",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-G04": {
   "titulo": "Amostragem e teoremas-limite",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-G05": {
   "titulo": "Estimação pontual e intervalar",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-G06": {
   "titulo": "Testes de hipóteses",
   "nivel": "G",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-M01": {
   "titulo": "Probabilidade com teoria da medida",

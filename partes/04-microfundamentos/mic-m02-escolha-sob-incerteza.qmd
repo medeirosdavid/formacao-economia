@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Teoria do consumidor* (MIC-M01); *Esperança, momentos e distribuições conjuntas* (EST-G03)
+**Pré-requisitos:** *Teoria do consumidor* (MIC-M01); @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*)
 :::
 
 **Leituras principais:** @mwg1995, @gollier2001

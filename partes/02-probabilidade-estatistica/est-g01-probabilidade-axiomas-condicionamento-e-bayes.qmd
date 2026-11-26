@@ -2,7 +2,7 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Graduação]{.nivel .nivel-G} · [planejado]{.status} · `EST-G01`
+[Graduação]{.nivel .nivel-G} · [rascunho]{.status} · `EST-G01`
 
 **Pré-requisitos:** @sec-mat-g01 (*Lógica, conjuntos e métodos de demonstração*)
 
@@ -10,12 +10,680 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-g01-motivacao}
 
-1. Espaço amostral e eventos
-2. Axiomas de Kolmogorov
-3. Probabilidade condicional
-4. Independência
-5. Teorema de Bayes
+Quase toda decisão econômica é tomada sob incerteza. Uma família decide quanto poupar sem saber a renda do ano que vem; um banco concede crédito sem saber quem vai pagar; o Banco Central fixa os juros sem saber como a inflação vai reagir; um investidor compra uma ação sem saber o preço de amanhã. A **probabilidade** é a linguagem com que a teoria econômica, a econometria e as finanças descrevem essa incerteza — e com que se raciocina corretamente sobre ela.
+
+Raciocinar corretamente não é trivial. Se um indicador que costuma anteceder recessões acaba de disparar, qual é a chance de uma recessão? A resposta depende não só da qualidade do indicador, mas de quão comuns as recessões são — e a intuição costuma ignorar esse segundo fator. Se o PIB caiu neste trimestre, a chance de cair no próximo é maior do que a de um trimestre qualquer? Essas perguntas pedem as duas ideias centrais do capítulo: **probabilidade condicional**, que formaliza o aprendizado a partir de informação, e **independência**, que formaliza a ausência de informação.
+
+O capítulo constrói a teoria a partir de três axiomas:
+
+1. espaço amostral, eventos e os axiomas de Kolmogorov, com suas consequências e a continuidade da probabilidade;
+2. espaços equiprováveis e técnicas de contagem;
+3. probabilidade condicional, regra da multiplicação e probabilidade total;
+4. o teorema de Bayes e sua forma em razão de chances;
+5. independência de eventos e de ensaios repetidos.
+
+## Espaço amostral e eventos {#sec-est-g01-eventos}
+
+Um **experimento aleatório** é qualquer procedimento cujo resultado não se conhece de antemão: lançar um dado, observar o crescimento do PIB no próximo trimestre, sortear um domicílio para uma pesquisa.
+
+::: {#def-est-g01-espaco-amostral}
+## Espaço amostral e eventos
+O **espaço amostral** $\Omega$ é o conjunto de todos os resultados possíveis de um experimento; seus elementos $\omega$ são os **resultados**. Um **evento** é um subconjunto $A \subseteq \Omega$; dizemos que $A$ **ocorre** quando o resultado observado pertence a $A$.
 :::
+
+::: {#exm-est-g01-espacos}
+## Espaços amostrais
+(a) Lançamento de uma moeda: $\Omega = \{\text{cara}, \text{coroa}\}$. Lançamento de dois dados: $\Omega = \{1, \dots, 6\}^2$, com 36 resultados; o evento "a soma é 7" é $\{(1, 6), (2, 5), \dots, (6, 1)\}$.
+(b) O sinal do crescimento do PIB nos próximos dois trimestres: $\Omega = \{(+, +), (+, -), (-, +), (-, -)\}$; a "recessão técnica" (duas quedas seguidas) é o evento $\{(-, -)\}$.
+(c) O número de tentativas até o primeiro sucesso — por exemplo, de meses até um desempregado encontrar emprego: $\Omega = \N$, um conjunto infinito enumerável.
+(d) O retorno de uma ação amanhã: $\Omega = [-1, \infty)$ (o preço não fica negativo), um conjunto não enumerável.
+:::
+
+As operações com eventos são as operações com conjuntos (@sec-mat-g01): $A \cup B$ ocorre quando ocorre $A$ **ou** $B$; $A \cap B$, quando ocorrem **ambos**; o **complementar** $A^c = \Omega \setminus A$, quando $A$ **não** ocorre; $A \setminus B = A \cap B^c$, quando ocorre $A$ mas não $B$. Dois eventos são **disjuntos** (ou mutuamente exclusivos) se $A \cap B = \emptyset$, e uma família de eventos disjuntos dois a dois cuja união é $\Omega$ é uma **partição** de $\Omega$. As leis de De Morgan (@prp-mat-g01-de-morgan), $(\bigcup_i A_i)^c = \bigcap_i A_i^c$ e $(\bigcap_i A_i)^c = \bigcup_i A_i^c$, serão usadas o tempo todo.
+
+Nem sempre é possível — ou desejável — atribuir probabilidade a **todos** os subconjuntos de $\Omega$. Os eventos formam uma família com três propriedades de fechamento.
+
+::: {#def-est-g01-sigma-algebra}
+## Família de eventos ($\sigma$-álgebra)
+Uma família $\mathcal F$ de subconjuntos de $\Omega$ é uma **$\sigma$-álgebra** se:
+
+- (S1) $\Omega \in \mathcal F$;
+- (S2) se $A \in \mathcal F$, então $A^c \in \mathcal F$;
+- (S3) se $A_1, A_2, \dots \in \mathcal F$, então $\bigcup_{n} A_n \in \mathcal F$.
+:::
+
+Por De Morgan, uma $\sigma$-álgebra também é fechada para interseções enumeráveis, e, completando sequências finitas com $\emptyset = \Omega^c$, para uniões e interseções finitas. Quando $\Omega$ é finito ou enumerável, tomamos $\mathcal F$ como a família de **todos** os subconjuntos, e a questão desaparece. Quando $\Omega = \R$, não existe uma probabilidade "uniforme" definida em todos os subconjuntos de $[0, 1]$; usa-se a menor $\sigma$-álgebra que contém os intervalos, a dos **borelianos**. Esse ponto técnico é tratado no @sec-est-m01 e não afeta nada do que segue: todo conjunto que aparecerá aqui é um evento.
+
+## Os axiomas de Kolmogorov {#sec-est-g01-axiomas}
+
+::: {#def-est-g01-probabilidade}
+## Probabilidade
+Uma **probabilidade** em $(\Omega, \mathcal F)$ é uma função $\Prob: \mathcal F \to \R$ tal que:
+
+- (P1) $\Prob(A) \geq 0$ para todo evento $A$;
+- (P2) $\Prob(\Omega) = 1$;
+- (P3) se $A_1, A_2, \dots$ são eventos disjuntos dois a dois, então $\Prob\big(\bigcup_n A_n\big) = \sum_n \Prob(A_n)$ (aditividade enumerável).
+
+O terno $(\Omega, \mathcal F, \Prob)$ é um **espaço de probabilidade**.
+:::
+
+Os axiomas não dizem *o que* é probabilidade — uma frequência de longo prazo, um grau de crença, uma convenção de apreçamento —, só *como* ela se comporta. As três leituras satisfazem os axiomas: a frequentista será justificada pela lei dos grandes números (@sec-est-g04), a subjetiva é a base da inferência bayesiana (@sec-est-m06) e da teoria da escolha sob incerteza (@sec-mic-m02), e as "probabilidades neutras ao risco" das finanças são preços normalizados (@sec-fin-m02).
+
+::: {#thm-est-g01-consequencias}
+## Consequências dos axiomas
+Para eventos $A$, $B$, $A_1, A_2, \dots$:
+
+(a) $\Prob(\emptyset) = 0$;
+(b) se $A_1, \dots, A_n$ são disjuntos dois a dois, $\Prob(A_1 \cup \dots \cup A_n) = \sum_{i=1}^n \Prob(A_i)$;
+(c) $\Prob(A^c) = 1 - \Prob(A)$;
+(d) se $A \subseteq B$, então $\Prob(B \setminus A) = \Prob(B) - \Prob(A)$ e $\Prob(A) \leq \Prob(B)$;
+(e) $0 \leq \Prob(A) \leq 1$;
+(f) $\Prob(A \cup B) = \Prob(A) + \Prob(B) - \Prob(A \cap B)$;
+(g) $\Prob\big(\bigcup_n A_n\big) \leq \sum_n \Prob(A_n)$ (desigualdade de Boole).
+:::
+
+::: {.proof}
+Para (a), aplique (P3) a $A_1 = \Omega$ e $A_n = \emptyset$ para $n \geq 2$: $1 = 1 + \sum_{n \geq 2}\Prob(\emptyset)$, e uma série de termos iguais e não negativos só soma zero se os termos são nulos. Para (b), complete a sequência com $A_n = \emptyset$ para $n > n_0$ e use (P3) e (a). Para (c), $A$ e $A^c$ são disjuntos com união $\Omega$, e (b) e (P2) dão $\Prob(A) + \Prob(A^c) = 1$. Para (d), $B = A \cup (B \setminus A)$ é uma união disjunta, logo $\Prob(B) = \Prob(A) + \Prob(B \setminus A)$, e o último termo é não negativo. O item (e) segue de (P1) e de (d) com $B = \Omega$. Para (f), $A \cup B = A \cup \big(B \setminus (A \cap B)\big)$ é uma união disjunta, e, por (d), $\Prob(B \setminus (A \cap B)) = \Prob(B) - \Prob(A \cap B)$. Para (g), "disjuntifique" a sequência: $B_1 = A_1$ e $B_n = A_n \setminus (A_1 \cup \dots \cup A_{n-1})$. Os $B_n$ são disjuntos, têm a mesma união que os $A_n$ e satisfazem $B_n \subseteq A_n$; por (P3) e (d), $\Prob(\bigcup_n A_n) = \sum_n \Prob(B_n) \leq \sum_n \Prob(A_n)$.
+:::
+
+A fórmula (f) generaliza-se a qualquer número finito de eventos.
+
+::: {#thm-est-g01-inclusao-exclusao}
+## Inclusão–exclusão
+Para eventos $A_1, \dots, A_n$,
+$$
+\Prob\Big(\bigcup_{i=1}^n A_i\Big) = \sum_{k=1}^n (-1)^{k+1} \sum_{i_1 < \dots < i_k} \Prob(A_{i_1} \cap \dots \cap A_{i_k}) .
+$$ {#eq-est-g01-inclusao-exclusao}
+:::
+
+::: {.proof}
+Por indução em $n$; o caso $n = 1$ é imediato e o caso $n = 2$ é o item (f). Suponha a fórmula válida para $n$ eventos e seja $U = A_1 \cup \dots \cup A_n$. Por (f),
+$$
+\Prob(U \cup A_{n+1}) = \Prob(U) + \Prob(A_{n+1}) - \Prob\Big(\bigcup_{i=1}^n (A_i \cap A_{n+1})\Big) .
+$$
+Aplique a hipótese de indução a $\Prob(U)$ e à última probabilidade, uma união de $n$ eventos. O primeiro termo produz as interseções que **não** envolvem $A_{n+1}$, com o sinal correto. O último produz, para cada $k$, as interseções de $k$ eventos entre $A_1, \dots, A_n$, cada uma intersectada com $A_{n+1}$ — isto é, as interseções de $k + 1$ eventos que envolvem $A_{n+1}$ — com sinal $-(-1)^{k+1} = (-1)^{(k+1)+1}$, o correto. O termo $\Prob(A_{n+1})$ completa as interseções de um único evento.
+:::
+
+A aditividade enumerável é o que permite passar ao limite.
+
+::: {#thm-est-g01-continuidade}
+## Continuidade da probabilidade
+(a) Se $A_1 \subseteq A_2 \subseteq \cdots$, então $\Prob\big(\bigcup_n A_n\big) = \lim_n \Prob(A_n)$.
+(b) Se $A_1 \supseteq A_2 \supseteq \cdots$, então $\Prob\big(\bigcap_n A_n\big) = \lim_n \Prob(A_n)$.
+:::
+
+::: {.proof}
+Para (a), sejam $B_1 = A_1$ e $B_n = A_n \setminus A_{n-1}$. Os $B_n$ são disjuntos, $B_1 \cup \dots \cup B_n = A_n$ e $\bigcup_n B_n = \bigcup_n A_n$. Por (P3), $\Prob(\bigcup_n A_n) = \sum_n \Prob(B_n) = \lim_n \sum_{k \leq n}\Prob(B_k) = \lim_n \Prob(A_n)$. Para (b), os complementares $A_n^c$ crescem, e, por De Morgan, $\bigcap_n A_n = (\bigcup_n A_n^c)^c$; por (a) e pelo item (c) do @thm-est-g01-consequencias, $\Prob(\bigcap_n A_n) = 1 - \lim_n \Prob(A_n^c) = \lim_n \Prob(A_n)$.
+:::
+
+As sequências monótonas são limites (@thm-mat-g02-monotona) e o teorema diz que $\Prob$ comuta com esses limites. É o resultado que dará as propriedades das funções de distribuição no @sec-est-g02.
+
+## Espaços equiprováveis e contagem {#sec-est-g01-contagem}
+
+Se $\Omega$ é finito e todos os resultados são igualmente prováveis, a única probabilidade compatível com os axiomas é
+$$
+\Prob(A) = \frac{\abs{A}}{\abs{\Omega}} ,
+$$ {#eq-est-g01-classica}
+em que $\abs A$ é o número de elementos de $A$: por (b) do @thm-est-g01-consequencias, cada resultado tem probabilidade $1/\abs\Omega$, e a probabilidade de $A$ é a soma das probabilidades de seus resultados. Calcular probabilidades vira, então, contar.
+
+::: {#prp-est-g01-contagem}
+## Princípios de contagem
+(a) Se uma escolha é feita em $k$ etapas, com $n_1$ opções na primeira, $n_2$ na segunda (para cada escolha da primeira), e assim por diante, há $n_1 n_2 \cdots n_k$ escolhas possíveis.
+(b) Há $n(n-1)\cdots(n - k + 1) = \frac{n!}{(n-k)!}$ sequências ordenadas de $k$ elementos distintos de um conjunto com $n$ elementos; em particular, $n!$ ordenações dos $n$ elementos.
+(c) Há $\binom nk \defeq \frac{n!}{k!\,(n-k)!}$ subconjuntos de $k$ elementos de um conjunto com $n$ elementos.
+(d) (Binômio de Newton) Para $a, b \in \R$, $(a + b)^n = \sum_{k=0}^n \binom nk a^k b^{n-k}$.
+:::
+
+::: {.proof}
+O item (a) é a cardinalidade de um produto cartesiano, por indução em $k$. Para (b), aplique (a): há $n$ opções para o primeiro elemento, $n - 1$ para o segundo, e assim por diante. Para (c), cada subconjunto de $k$ elementos pode ser ordenado de $k!$ maneiras, e cada sequência ordenada de $k$ elementos distintos surge de exatamente um subconjunto; logo, o número de subconjuntos vezes $k!$ é $n!/(n - k)!$. Para (d), ao expandir o produto de $n$ fatores $(a + b)$, cada termo escolhe $a$ em alguns fatores e $b$ nos outros; o termo $a^k b^{n-k}$ aparece uma vez para cada escolha dos $k$ fatores que contribuem com $a$, isto é, $\binom nk$ vezes.
+:::
+
+::: {#exm-est-g01-mega-sena}
+## A Mega-Sena
+Na Mega-Sena, sorteiam-se 6 dezenas entre 60, e a aposta simples escolhe 6. Os resultados possíveis são os subconjuntos de 6 elementos de $\{1, \dots, 60\}$, todos igualmente prováveis, em número de
+$$
+\binom{60}{6} = \frac{60 \cdot 59 \cdot 58 \cdot 57 \cdot 56 \cdot 55}{6!} = 50\,063\,860 .
+$$
+A probabilidade de acertar a sena com uma aposta simples é, portanto, $1/50\,063\,860$. A de acertar exatamente 5 das 6 dezenas (a quina) exige escolher 5 das 6 dezenas sorteadas e 1 das 54 restantes: $\binom 65 \binom{54}{1}/\binom{60}{6} = 324/50\,063\,860$, cerca de 1 em 154 mil (@exr-est-g01-loteria).
+:::
+
+::: {#exm-est-g01-aniversario}
+## O problema do aniversário
+Num grupo de $n$ pessoas, com aniversários independentes e uniformes nos 365 dias (ignorando anos bissextos), os resultados são as sequências de $n$ datas, $365^n$ ao todo. As sequências **sem** repetição são $365 \cdot 364 \cdots (365 - n + 1)$, de modo que
+$$
+\Prob(\text{há aniversário em comum}) = 1 - \prod_{k=0}^{n-1}\Big(1 - \frac{k}{365}\Big) .
+$$
+Com $n = 23$, a probabilidade já passa de 1/2; com $n = 50$, passa de 97%. A intuição falha porque conta pares com uma pessoa fixa, mas há $\binom n2$ pares — 253 com 23 pessoas (@exr-est-g01-aniversario e interativo).
+:::
+
+::: {#exm-est-g01-encontros}
+## O problema dos encontros
+Um funcionário distraído põe $n$ cartas em $n$ envelopes ao acaso (todas as $n!$ ordenações igualmente prováveis). Qual é a probabilidade de nenhuma carta ir para o envelope certo? Seja $A_i$ o evento "a carta $i$ vai para o envelope $i$". Fixados $k$ índices, as ordenações que acertam todos eles são as $(n - k)!$ ordenações das demais cartas, e há $\binom nk$ escolhas de índices; o termo $k$ da @eq-est-g01-inclusao-exclusao vale $\binom nk (n - k)!/n! = 1/k!$. Logo
+$$
+\Prob(\text{nenhum acerto}) = 1 - \sum_{k=1}^n \frac{(-1)^{k+1}}{k!} = \sum_{k=0}^n \frac{(-1)^k}{k!} \;\longrightarrow\; e^{-1} \approx 0{,}368 ,
+$$
+pela série de $e^x$ em $x = -1$ (@exm-mat-g03-series-taylor). A resposta praticamente não depende de $n$ a partir de $n = 5$ ou 6.
+:::
+
+## Probabilidade condicional {#sec-est-g01-condicional}
+
+Saber que um evento $B$ ocorreu muda as probabilidades: os resultados fora de $B$ ficam excluídos, e os de dentro de $B$ mantêm suas probabilidades **relativas**.
+
+::: {#def-est-g01-condicional}
+## Probabilidade condicional
+Se $\Prob(B) > 0$, a **probabilidade condicional** de $A$ dado $B$ é
+$$
+\Prob(A \mid B) \defeq \frac{\Prob(A \cap B)}{\Prob(B)} .
+$$
+:::
+
+Na leitura frequentista, $\Prob(A \mid B)$ é a fração das vezes em que $A$ ocorre **entre** as vezes em que $B$ ocorre. Por exemplo, ao lançar dois dados, $\Prob(\text{soma} = 7) = 6/36$, mas $\Prob(\text{soma} = 7 \mid \text{primeiro dado} = 6) = (1/36)/(6/36) = 1/6$, e $\Prob(\text{soma} = 7 \mid \text{soma par}) = 0$.
+
+::: {#prp-est-g01-condicional-probabilidade}
+## A probabilidade condicional é uma probabilidade
+Se $\Prob(B) > 0$, a função $A \mapsto \Prob(A \mid B)$ satisfaz os axiomas (P1)–(P3). Em particular, todas as consequências do @thm-est-g01-consequencias valem para ela.
+:::
+
+::: {.proof}
+(P1) é imediato e $\Prob(\Omega \mid B) = \Prob(B)/\Prob(B) = 1$. Se os $A_n$ são disjuntos, os $A_n \cap B$ também são, e $(\bigcup_n A_n) \cap B = \bigcup_n (A_n \cap B)$; por (P3) para $\Prob$, $\Prob(\bigcup_n A_n \mid B) = \sum_n \Prob(A_n \cap B)/\Prob(B) = \sum_n \Prob(A_n \mid B)$.
+:::
+
+::: {#prp-est-g01-multiplicacao}
+## Regra da multiplicação
+Se $\Prob(A_1 \cap \dots \cap A_{n-1}) > 0$, então
+$$
+\Prob(A_1 \cap \dots \cap A_n) = \Prob(A_1)\,\Prob(A_2 \mid A_1)\,\Prob(A_3 \mid A_1 \cap A_2) \cdots \Prob(A_n \mid A_1 \cap \dots \cap A_{n-1}) .
+$$
+:::
+
+::: {.proof}
+Todos os eventos condicionantes contêm $A_1 \cap \dots \cap A_{n-1}$ e têm, portanto, probabilidade positiva. Substituindo cada probabilidade condicional por sua definição, o produto é telescópico: o numerador de cada fator cancela o denominador do seguinte, e sobra $\Prob(A_1 \cap \dots \cap A_n)$.
+:::
+
+A regra descreve experimentos em etapas. A probabilidade de tirar dois ases seguidos de um baralho de 52 cartas, sem reposição, é $\frac{4}{52} \cdot \frac{3}{51} = \frac{1}{221}$.
+
+::: {#thm-est-g01-probabilidade-total}
+## Probabilidade total
+Seja $B_1, B_2, \dots$ uma partição (finita ou enumerável) de $\Omega$ em eventos com $\Prob(B_i) > 0$. Para todo evento $A$,
+$$
+\Prob(A) = \sum_i \Prob(A \mid B_i)\,\Prob(B_i) .
+$$ {#eq-est-g01-total}
+:::
+
+::: {.proof}
+$A = \bigcup_i (A \cap B_i)$ é uma união disjunta; por (P3), $\Prob(A) = \sum_i \Prob(A \cap B_i) = \sum_i \Prob(A \mid B_i)\Prob(B_i)$.
+:::
+
+A @eq-est-g01-total calcula uma probabilidade "por casos": a inadimplência de uma carteira de crédito é a média das inadimplências de cada classe de risco, ponderada pela participação das classes (@exr-est-g01-credito).
+
+## O teorema de Bayes {#sec-est-g01-bayes}
+
+::: {#thm-est-g01-bayes}
+## Teorema de Bayes
+Seja $B_1, B_2, \dots$ uma partição de $\Omega$ com $\Prob(B_i) > 0$, e $A$ um evento com $\Prob(A) > 0$. Então
+$$
+\Prob(B_j \mid A) = \frac{\Prob(A \mid B_j)\,\Prob(B_j)}{\sum_i \Prob(A \mid B_i)\,\Prob(B_i)} .
+$$ {#eq-est-g01-bayes}
+:::
+
+::: {.proof}
+Pela definição, $\Prob(B_j \mid A) = \Prob(A \cap B_j)/\Prob(A) = \Prob(A \mid B_j)\Prob(B_j)/\Prob(A)$, e o denominador é dado pela probabilidade total.
+:::
+
+O teorema inverte o condicionamento: dos dados $\Prob(A \mid B_j)$ — quão provável é a evidência $A$ em cada estado $B_j$, a **verossimilhança** — e das probabilidades **a priori** $\Prob(B_j)$, ele obtém as probabilidades **a posteriori** $\Prob(B_j \mid A)$. Com dois estados, $B$ e $B^c$, ele fica mais transparente em termos de **chances** (*odds*), $O(B) \defeq \Prob(B)/\Prob(B^c)$.
+
+::: {#cor-est-g01-chances}
+## Bayes em razão de chances
+Se $\Prob(A \mid B^c) > 0$, então
+$$
+\underbrace{\frac{\Prob(B \mid A)}{\Prob(B^c \mid A)}}_{\text{chances a posteriori}} = \underbrace{\frac{\Prob(A \mid B)}{\Prob(A \mid B^c)}}_{\text{razão de verossimilhança}} \times \underbrace{\frac{\Prob(B)}{\Prob(B^c)}}_{\text{chances a priori}} .
+$$ {#eq-est-g01-chances}
+:::
+
+::: {.proof}
+Divida a @eq-est-g01-bayes para $B$ pela mesma equação para $B^c$: os denominadores se cancelam.
+:::
+
+::: {#exm-est-g01-recessao}
+## Um sinal de recessão
+Suponha (com números ilustrativos) que uma recessão comece nos próximos quatro trimestres com probabilidade $\Prob(R) = 0{,}15$, e que um indicador antecedente — uma inversão da curva de juros, digamos — dispare em 80% dos casos que antecedem recessões e em 10% dos demais: $\Prob(S \mid R) = 0{,}8$ e $\Prob(S \mid R^c) = 0{,}1$. Se o indicador disparou,
+$$
+\Prob(R \mid S) = \frac{0{,}8 \times 0{,}15}{0{,}8 \times 0{,}15 + 0{,}1 \times 0{,}85} = \frac{0{,}120}{0{,}205} \approx 0{,}59 .
+$$
+Em chances: a razão de verossimilhança é $0{,}8/0{,}1 = 8$, as chances a priori são $0{,}15/0{,}85 \approx 0{,}18$, e as chances a posteriori são $8 \times 0{,}18 \approx 1{,}41$, isto é, uma probabilidade de $1{,}41/2{,}41 \approx 0{,}59$. Um indicador "que acerta 80% das vezes" deixa uma chance de 41% de alarme falso — e, se as recessões fossem mais raras, com $\Prob(R) = 0{,}03$, a probabilidade a posteriori cairia para cerca de 20%. Ignorar a probabilidade a priori é a **falácia da taxa de base**; o interativo mostra o efeito com frequências.
+:::
+
+A forma em chances torna o aprendizado sequencial simples: cada nova evidência multiplica as chances pela sua razão de verossimilhança, desde que as evidências sejam condicionalmente independentes dado o estado (@exr-est-g01-dois-sinais). Esse é o princípio da inferência bayesiana (@sec-est-m06) e dos modelos de aprendizado em macroeconomia (@sec-mac-d09).
+
+## Independência {#sec-est-g01-independencia}
+
+::: {#def-est-g01-independencia}
+## Eventos independentes
+Dois eventos $A$ e $B$ são **independentes** se $\Prob(A \cap B) = \Prob(A)\Prob(B)$. Uma família de eventos $\{A_i\}_{i \in I}$ é **(mutuamente) independente** se, para todo subconjunto finito $\{i_1, \dots, i_k\} \subseteq I$,
+$$
+\Prob(A_{i_1} \cap \dots \cap A_{i_k}) = \Prob(A_{i_1}) \cdots \Prob(A_{i_k}) .
+$$
+:::
+
+Se $\Prob(B) > 0$, $A$ e $B$ são independentes se, e somente se, $\Prob(A \mid B) = \Prob(A)$: saber que $B$ ocorreu não altera a probabilidade de $A$. A definição pelo produto é preferível porque é simétrica e vale também quando $\Prob(B) = 0$.
+
+::: {#prp-est-g01-complementos}
+## Independência e complementares
+Se $A$ e $B$ são independentes, também o são $A$ e $B^c$, $A^c$ e $B$, e $A^c$ e $B^c$.
+:::
+
+::: {.proof}
+Pelo item (d) do @thm-est-g01-consequencias, $\Prob(A \cap B^c) = \Prob(A) - \Prob(A \cap B) = \Prob(A) - \Prob(A)\Prob(B) = \Prob(A)\Prob(B^c)$. Trocando os papéis, $A^c$ e $B$ são independentes; aplicando o resultado ao par $(A^c, B)$, $A^c$ e $B^c$ também.
+:::
+
+Três observações evitam confusões comuns.
+
+- **Independência não é disjunção.** Se $A$ e $B$ são disjuntos e ambos têm probabilidade positiva, então $\Prob(A \cap B) = 0 < \Prob(A)\Prob(B)$: são fortemente dependentes, pois a ocorrência de um exclui o outro.
+- **Independência dois a dois não implica independência mútua.** Lance duas moedas honestas e sejam $A$ = "cara na primeira", $B$ = "cara na segunda" e $C$ = "as duas moedas coincidem". Cada evento tem probabilidade $1/2$ e cada interseção de dois deles tem probabilidade $1/4$; mas $\Prob(A \cap B \cap C) = \Prob(A \cap B) = 1/4 \neq 1/8$.
+- **Independência condicional não implica independência.** Dois indicadores antecedentes podem ser independentes **dado** o estado da economia e, ainda assim, dependentes: ambos tendem a disparar antes de recessões, e o disparo de um torna o outro mais provável (@exr-est-g01-dois-sinais).
+
+::: {#exm-est-g01-ensaios}
+## Ensaios independentes
+Considere ensaios repetidos e independentes, cada um com probabilidade $p \in (0, 1)$ de "sucesso" — pagamentos de uma carteira de créditos não correlacionados, lançamentos de uma moeda, meses de procura de emprego com chance constante de contratação. Uma sequência específica de $n$ ensaios com $k$ sucessos tem probabilidade $p^k (1 - p)^{n-k}$, pela independência; e a probabilidade de ao menos um sucesso em $n$ ensaios é $1 - (1 - p)^n$, pelo complementar. Seja $C_n$ o evento "nenhum sucesso nos $n$ primeiros ensaios". Os $C_n$ decrescem, e, pela continuidade (@thm-est-g01-continuidade),
+$$
+\Prob(\text{nenhum sucesso, jamais}) = \Prob\Big(\bigcap_n C_n\Big) = \lim_n (1 - p)^n = 0 .
+$$
+Com probabilidade 1, o sucesso acaba ocorrendo — por menor que seja $p$. (Que exista um espaço de probabilidade com infinitos ensaios independentes é um teorema da teoria da medida; veja o @sec-est-m01.)
+:::
+
+A **falácia do jogador** — "depois de cinco caras seguidas, coroa está para sair" — é a crença de que ensaios independentes têm memória. Com uma moeda honesta, $\Prob(\text{coroa no sexto} \mid \text{cinco caras}) = 1/2$. Em dados econômicos, a independência é a exceção, não a regra: quedas do PIB tendem a vir em sequência, como mostra a aplicação deste capítulo.
+
+## Pontes {#sec-est-g01-pontes}
+
+- **Variáveis aleatórias (@sec-est-g02).** Uma variável aleatória traduz eventos em números; a função de distribuição herda suas propriedades da continuidade da probabilidade.
+- **Lei dos grandes números (@sec-est-g04).** Justifica a leitura de $\Prob(A)$ como frequência de longo prazo em ensaios independentes.
+- **Teoria da medida (@sec-est-m01).** $\sigma$-álgebras, borelianos e a construção de espaços com infinitos ensaios independentes.
+- **Inferência bayesiana (@sec-est-m06).** O teorema de Bayes aplicado a parâmetros desconhecidos.
+- **Escolha sob incerteza (@sec-mic-m02).** Probabilidades subjetivas e utilidade esperada.
+- **Preços de estado (@sec-fin-m02).** Os resultados $\omega$ são os "estados da natureza", e os títulos de Arrow pagam 1 num único estado.
+- **Cadeias de Markov (@sec-est-d01).** Probabilidades condicionais de transição entre estados, como "queda" e "alta" do PIB.
+
+## Interativo {#sec-est-g01-interativo}
+
+::: {.content-visible when-format="html"}
+**Bayes com frequências.** Cada quadrado representa um de 1000 anos hipotéticos. Os vinho são anos que antecedem uma recessão (com frequência dada pela probabilidade a priori); os âmbar são alarmes falsos. Entre os anos em que o sinal disparou (quadrados escuros), a fração vinho é a probabilidade a posteriori. Reduza a probabilidade a priori e veja os alarmes falsos dominarem.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof priori = controle("P(R): probabilidade a priori de recessão", [0.01, 0.5], {valor: 0.15, passo: 0.01, casas: 2})
+viewof sensib = controle("P(S | R): o sinal dispara antes de recessões", [0.05, 1], {valor: 0.8, passo: 0.01, casas: 2})
+viewof alarme = controle("P(S | não R): alarme falso", [0, 0.5], {valor: 0.1, passo: 0.01, casas: 2})
+```
+
+```{ojs}
+//| echo: false
+md`Pela fórmula de Bayes, **P(R | S) = ${fmtG01(posteriori, 3)}**. Nos 1000 anos: ${contagem.RS} recessões sinalizadas, ${contagem.RnS} recessões sem sinal, ${contagem.nRS} alarmes falsos e ${contagem.nRnS} anos tranquilos sem sinal; entre os ${contagem.RS + contagem.nRS} anos com sinal, ${contagem.RS} antecederam recessões. Razão de verossimilhança: ${alarme > 0 ? fmtG01(sensib / alarme, 1) : "infinita"}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 280, axis: null, padding: 0.08,
+  x: {domain: d3.range(50)}, y: {domain: d3.range(20)},
+  color: {domain: ["recessão, com sinal", "recessão, sem sinal", "alarme falso", "sem recessão, sem sinal"],
+          range: ["#8C2F39", "#D9A5AC", "#B7791F", "#E3E7EB"], legend: true},
+  marks: [Plot.cell(anos, {x: "x", y: "y", fill: "tipo", inset: 0.5})]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtG01 = (v, c) => v.toFixed(c).replace(".", ",")
+posteriori = sensib * priori / (sensib * priori + alarme * (1 - priori))
+contagem = {
+  const R = Math.round(1000 * priori)
+  const RS = Math.round(R * sensib), nRS = Math.round((1000 - R) * alarme)
+  return {RS, RnS: R - RS, nRS, nRnS: 1000 - R - nRS}
+}
+anos = {
+  const tipos = [...Array(contagem.RS).fill("recessão, com sinal"), ...Array(contagem.RnS).fill("recessão, sem sinal"),
+                 ...Array(contagem.nRS).fill("alarme falso"), ...Array(contagem.nRnS).fill("sem recessão, sem sinal")]
+  return tipos.map((tipo, i) => ({tipo, x: Math.floor(i / 20), y: i % 20}))
+}
+```
+:::
+
+**O problema do aniversário.** A curva é a probabilidade exata de pelo menos um aniversário em comum num grupo de $n$ pessoas; o ponto marca o $n$ escolhido. O texto compara a fórmula exata, a aproximação $1 - e^{-n(n-1)/730}$ do @exr-est-g01-aniversario e a frequência observada em 2000 grupos simulados.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof nAniv = controle("número de pessoas n", [2, 80], {valor: 23, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Com n = ${nAniv}: probabilidade exata **${fmtG01(probAniv(nAniv), 4)}**; aproximação ${fmtG01(1 - Math.exp(-nAniv * (nAniv - 1) / 730), 4)}; frequência em 2000 grupos simulados ${fmtG01(simAniv, 4)}. Há ${nAniv * (nAniv - 1) / 2} pares de pessoas.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 260, grid: true,
+  x: {label: "n", domain: [0, 80]}, y: {label: "P(aniversário em comum)", domain: [0, 1]},
+  marks: [
+    Plot.line(d3.range(1, 81).map(n => ({n, p: probAniv(n)})), {x: "n", y: "p", stroke: "#2F5D8A", strokeWidth: 2}),
+    Plot.ruleY([0.5], {stroke: "#9AA5B1", strokeDasharray: "4,3"}),
+    Plot.dot([{n: nAniv, p: probAniv(nAniv)}], {x: "n", y: "p", r: 5, fill: "#8C2F39"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+probAniv = n => 1 - d3.range(n).reduce((a, k) => a * (1 - k / 365), 1)
+geradorG01 = semente => () => {
+  semente |= 0; semente = semente + 0x6D2B79F5 | 0
+  let t = Math.imul(semente ^ semente >>> 15, 1 | semente)
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+  return ((t ^ t >>> 14) >>> 0) / 4294967296
+}
+simAniv = {
+  const u = geradorG01(1000 + nAniv)
+  let coincide = 0
+  for (let g = 0; g < 2000; g++) {
+    const vistos = new Set()
+    let rep = false
+    for (let i = 0; i < nAniv; i++) {
+      const dia = Math.floor(365 * u())
+      if (vistos.has(dia)) { rep = true; break }
+      vistos.add(dia)
+    }
+    if (rep) coincide++
+  }
+  return coincide / 2000
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — o teorema de Bayes com frequências e o problema do aniversário — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-g01-laboratorio}
+
+### Frequências e probabilidades
+
+Simulamos lançamentos de dois dados e acompanhamos a frequência relativa do evento "soma igual a 7", cuja probabilidade é $6/36$. A frequência se aproxima da probabilidade à medida que o número de lançamentos cresce — o que a lei dos grandes números (@sec-est-g04) vai demonstrar.
+
+```{python}
+import numpy as np
+from math import comb, factorial, e
+from fractions import Fraction
+from itertools import product
+
+rng = np.random.default_rng(1)
+dados = rng.integers(1, 7, size=(100_000, 2))
+sete = dados.sum(axis=1) == 7
+for n in [10, 100, 1_000, 10_000, 100_000]:
+    print(f"n = {n:>7}: frequencia de soma 7 = {sete[:n].mean():.4f}"
+          f"   (probabilidade = {1 / 6:.4f})")
+```
+
+### Contagem: a Mega-Sena e os encontros
+
+```{python}
+total = comb(60, 6)
+for acertos, nome in [(6, "sena"), (5, "quina"), (4, "quadra")]:
+    casos = comb(6, acertos) * comb(54, 6 - acertos)
+    print(f"{nome:>6}: {casos:>7} casos, 1 em {total / casos:,.0f}")
+
+perm = np.array([rng.permutation(10) for _ in range(100_000)])
+sem_acerto = (perm != np.arange(10)).all(axis=1).mean()
+exata = sum((-1) ** k / factorial(k) for k in range(11))
+print(f"encontros, n = 10: simulada = {sem_acerto:.4f}, "
+      f"exata = {exata:.4f}, 1/e = {1 / e:.4f}")
+```
+
+### O problema de Monty Hall
+
+Num programa de auditório, o prêmio está atrás de uma de três portas. O participante escolhe uma; o apresentador, que sabe onde está o prêmio, abre outra porta, sem prêmio; o participante pode trocar. A simulação confirma a resposta do @exr-est-g01-monty-hall: trocar ganha com probabilidade $2/3$.
+
+```{python}
+n = 100_000
+premio = rng.integers(0, 3, n)
+escolha = rng.integers(0, 3, n)
+ganha_ficando = (escolha == premio).mean()
+print(f"ficar: {ganha_ficando:.4f}   trocar: {1 - ganha_ficando:.4f}")
+```
+
+Trocar ganha exatamente quando a primeira escolha estava errada: como o apresentador sempre abre uma porta vazia, a porta que sobra é a do prêmio.
+
+### Independência dois a dois sem independência mútua
+
+Enumeramos o espaço amostral de duas moedas e calculamos as probabilidades com frações exatas.
+
+```{python}
+omega = list(product("KC", repeat=2))           # K = cara, C = coroa
+P = lambda ev: Fraction(sum(1 for w in omega if ev(w)), len(omega))
+A = lambda w: w[0] == "K"
+B = lambda w: w[1] == "K"
+C = lambda w: w[0] == w[1]
+pares = [("A", "B", A, B), ("A", "C", A, C), ("B", "C", B, C)]
+for n1, n2, f, g in pares:
+    print(f"P({n1} e {n2}) = {P(lambda w: f(w) and g(w))}, "
+          f"P({n1}) P({n2}) = {P(f) * P(g)}")
+print(f"P(A, B e C) = {P(lambda w: A(w) and B(w) and C(w))}, "
+      f"P(A) P(B) P(C) = {P(A) * P(B) * P(C)}")
+```
+
+## Aplicação: a persistência das quedas do PIB {#sec-est-g01-aplicacao}
+
+Se o PIB caiu neste trimestre, a chance de cair no próximo é a mesma de um trimestre qualquer? Se as quedas fossem independentes ao longo do tempo, $\Prob(Q_{t+1} \mid Q_t)$ — a probabilidade de queda no trimestre seguinte, dado que houve queda neste — seria igual à probabilidade incondicional $\Prob(Q)$. Estimamos essas probabilidades pelas frequências observadas no PIB trimestral com ajuste sazonal (série 22109 do SGS).
+
+```{python}
+import pandas as pd
+from IPython.display import Markdown
+from formacao import dados
+
+try:
+    pib = dados.sgs("pib_dessaz")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+if disponivel:
+    g = pib.pct_change().dropna()
+    q = (g < 0).to_numpy()
+    hoje, amanha = q[:-1], q[1:]
+    p_q = q.mean()
+    p_q_q = amanha[hoje].mean()
+    p_q_nq = amanha[~hoje].mean()
+    p_dupla = (hoje & amanha).mean()
+    print(f"amostra: {g.index[0]:%Y-%m} a {g.index[-1]:%Y-%m}"
+          f" ({len(g)} trimestres)")
+    print(f"P(queda)                   = {p_q:.3f}")
+    print(f"P(queda | queda anterior)  = {p_q_q:.3f}"
+          f"   ({hoje.sum()} casos)")
+    print(f"P(queda | alta anterior)   = {p_q_nq:.3f}"
+          f"   ({(~hoje).sum()} casos)")
+    print(f"P(duas quedas seguidas)    = {p_dupla:.3f}   "
+          f"(sob independencia: {p_q ** 2:.3f})")
+```
+
+```{python}
+if disponivel:
+    br = lambda v: f"{100 * v:.0f}%"
+    resumo = (f"Na amostra, o PIB caiu em {br(p_q)} dos trimestres. "
+              f"Depois de uma queda, a frequência de nova queda foi de "
+              f"{br(p_q_q)}; depois de uma alta, de {br(p_q_nq)}. Duas "
+              f"quedas seguidas ocorreram em {br(p_dupla)} dos pares "
+              f"de "
+              f"trimestres consecutivos, contra {br(p_q ** 2)} se as "
+              "quedas fossem independentes.")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+Se a probabilidade condicional de queda depois de uma queda é bem maior que a incondicional, as quedas não são independentes: recessões duram mais de um trimestre. Duas ressalvas. Primeiro, frequências em pouco mais de uma centena de trimestres — e em poucas dezenas de quedas — são **estimativas** das probabilidades, sujeitas a erro amostral; quantificar esse erro é o tema do @sec-est-g05. Segundo, o modelo implícito, em que a probabilidade de queda depende apenas do que aconteceu no trimestre anterior, é uma **cadeia de Markov** com dois estados, estudada no @sec-est-d01; os modelos de mudança de regime em séries temporais (@sec-ecm-d10) generalizam essa ideia.
+
+## Exercícios resolvidos {#sec-est-g01-exercicios}
+
+::: {#exr-est-g01-bonferroni}
+Mostre a **desigualdade de Bonferroni**: $\Prob(A_1 \cap \dots \cap A_n) \geq 1 - \sum_{i=1}^n \Prob(A_i^c)$. Se cada um de 5 intervalos de confiança contém o parâmetro correspondente com probabilidade 0,99, o que se pode dizer da probabilidade de todos acertarem ao mesmo tempo?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Por De Morgan e pela desigualdade de Boole, $\Prob\big((\bigcap_i A_i)^c\big) = \Prob\big(\bigcup_i A_i^c\big) \leq \sum_i \Prob(A_i^c)$; tomando o complementar, obtém-se a desigualdade. Com $\Prob(A_i^c) = 0{,}01$ para cada um dos 5 intervalos, todos acertam com probabilidade de pelo menos $1 - 5 \times 0{,}01 = 0{,}95$ — **qualquer** que seja a dependência entre eles. É a base da correção de Bonferroni para testes múltiplos (@sec-est-g06).
+:::
+
+::: {#exr-est-g01-monty-hall}
+No problema de Monty Hall (laboratório), o participante escolhe a porta 1 e o apresentador abre a porta 3. Use o teorema de Bayes para calcular a probabilidade de o prêmio estar na porta 2, supondo que, quando o prêmio está na porta 1, o apresentador sorteia entre as portas 2 e 3.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $D_i$ o evento "o prêmio está na porta $i$", com $\Prob(D_i) = 1/3$, e $A$ o evento "o apresentador abre a porta 3". Então $\Prob(A \mid D_1) = 1/2$ (sorteio), $\Prob(A \mid D_2) = 1$ (a única porta que ele pode abrir) e $\Prob(A \mid D_3) = 0$. Pela @eq-est-g01-bayes,
+$$
+\Prob(D_2 \mid A) = \frac{1 \cdot \frac13}{\frac12 \cdot \frac13 + 1 \cdot \frac13 + 0 \cdot \frac13} = \frac{1/3}{1/2} = \frac23 .
+$$
+Trocar dobra a probabilidade de ganhar. A ação do apresentador é informativa porque ele **não pode** abrir a porta do prêmio: abrir a porta 3 é duas vezes mais provável quando o prêmio está na 2 do que quando está na 1.
+:::
+
+::: {#exr-est-g01-aniversario}
+Usando $1 - x \leq e^{-x}$ (@exr-mat-g03-exp), mostre que a probabilidade de não haver aniversário em comum num grupo de $n$ pessoas é no máximo $e^{-n(n-1)/730}$, e conclua que, com 23 pessoas, a probabilidade de coincidência é de pelo menos 1/2.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pelo @exm-est-g01-aniversario, $\prod_{k=0}^{n-1}(1 - k/365) \leq \prod_{k=0}^{n-1} e^{-k/365} = \exp\big(-\frac{1}{365}\sum_{k=0}^{n-1} k\big) = e^{-n(n-1)/730}$. Com $n = 23$, $n(n - 1)/730 = 253/365 \approx 0{,}6932$, maior que $\log 2 \approx 0{,}6931$; logo a probabilidade de não haver coincidência é no máximo $e^{-\log 2} = 1/2$. O expoente é o número de pares, $\binom n2$, dividido por 365: cada par coincide com probabilidade $1/365$, e a aproximação trata os pares como se fossem independentes.
+:::
+
+::: {#exr-est-g01-loteria}
+Calcule a probabilidade de acertar a quadra (exatamente 4 dezenas) na Mega-Sena com uma aposta simples. Uma aposta com 7 dezenas equivale a quantas apostas simples, e qual é a sua probabilidade de acertar a sena?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+É preciso escolher 4 das 6 dezenas sorteadas e 2 das 54 não sorteadas: $\binom64\binom{54}{2} = 15 \times 1431 = 21\,465$ casos, e a probabilidade é $21\,465/50\,063\,860$, cerca de 1 em 2332. Uma aposta com 7 dezenas contém $\binom76 = 7$ combinações de 6 dezenas, que são resultados distintos (e, portanto, eventos disjuntos): a probabilidade de acertar a sena é $7/50\,063\,860$, sete vezes a da aposta simples. A distribuição do número de acertos é a hipergeométrica (@sec-est-g02).
+:::
+
+::: {#exr-est-g01-complementos}
+Mostre que, se $\Prob(A) \in \{0, 1\}$, então $A$ é independente de qualquer evento $B$. Em particular, um evento de probabilidade 0 ou 1 é independente de si mesmo, e esses são os únicos eventos com essa propriedade.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Se $\Prob(A) = 0$, então $0 \leq \Prob(A \cap B) \leq \Prob(A) = 0 = \Prob(A)\Prob(B)$. Se $\Prob(A) = 1$, então $\Prob(A^c) = 0$, e $A^c$ é independente de $B$ pelo caso anterior; pela @prp-est-g01-complementos, $A$ também é. Se $A$ é independente de si mesmo, $\Prob(A) = \Prob(A \cap A) = \Prob(A)^2$, e as únicas soluções de $x = x^2$ são 0 e 1.
+:::
+
+::: {#exr-est-g01-dois-sinais}
+No @exm-est-g01-recessao, suponha um segundo indicador $S_2$, com as mesmas probabilidades do primeiro e **condicionalmente independente** dele, dado o estado: $\Prob(S_1 \cap S_2 \mid R) = \Prob(S_1 \mid R)\Prob(S_2 \mid R)$, e o mesmo dado $R^c$. (a) Calcule $\Prob(R \mid S_1 \cap S_2)$. (b) Mostre que $S_1$ e $S_2$ não são independentes.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para (a), em chances: a razão de verossimilhança do par de sinais é $\frac{0{,}8^2}{0{,}1^2} = 64$, pela independência condicional, e as chances a posteriori são $64 \times 0{,}15/0{,}85 \approx 11{,}3$, isto é, $\Prob(R \mid S_1 \cap S_2) \approx 11{,}3/12{,}3 \approx 0{,}92$. Para (b), pela probabilidade total, $\Prob(S_i) = 0{,}8 \times 0{,}15 + 0{,}1 \times 0{,}85 = 0{,}205$, enquanto $\Prob(S_1 \cap S_2) = 0{,}64 \times 0{,}15 + 0{,}01 \times 0{,}85 = 0{,}1045$, muito maior que $0{,}205^2 \approx 0{,}042$. Os sinais são dependentes porque ambos respondem ao estado da economia; condicionalmente ao estado, não carregam informação um sobre o outro.
+:::
+
+::: {#exr-est-g01-credito}
+Um banco classifica os tomadores em três classes de risco, A, B e C, que representam 50%, 30% e 20% da carteira, com probabilidades de inadimplência de 1%, 4% e 10%. Qual é a taxa de inadimplência da carteira? Dado que um tomador ficou inadimplente, qual é a probabilidade de ele ser da classe C?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela probabilidade total, $\Prob(I) = 0{,}01 \times 0{,}5 + 0{,}04 \times 0{,}3 + 0{,}10 \times 0{,}2 = 0{,}005 + 0{,}012 + 0{,}020 = 0{,}037$. Por Bayes, $\Prob(C \mid I) = 0{,}020/0{,}037 \approx 0{,}54$: a classe C tem 20% dos tomadores, mas responde por mais da metade das inadimplências. As participações $0{,}005/0{,}037$, $0{,}012/0{,}037$ e $0{,}020/0{,}037$ somam 1 — a probabilidade condicional é uma probabilidade.
+:::
+
+::: {#exr-est-g01-tentativas}
+Uma empresa faz ensaios independentes de uma tecnologia que funciona, em cada ensaio, com probabilidade $p = 0{,}01$. Quantos ensaios são necessários para que a probabilidade de pelo menos um sucesso seja de pelo menos 95%?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Precisamos de $1 - 0{,}99^n \geq 0{,}95$, isto é, $0{,}99^n \leq 0{,}05$, ou $n \geq \log 0{,}05/\log 0{,}99 \approx 298{,}1$. São necessários 299 ensaios. Pela aproximação $\log(1 - p) \approx -p$, $n \approx -\log 0{,}05/p \approx 3/p$: para garantir 95% de chance de ao menos um sucesso, são necessários cerca de três vezes o número "esperado" de ensaios por sucesso, $1/p$.
+:::
+
+## Flashcards {#sec-est-g01-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são os três axiomas de Kolmogorov?
+$\Prob(A) \geq 0$; $\Prob(\Omega) = 1$; aditividade enumerável: $\Prob(\bigcup A_n) = \sum \Prob(A_n)$ para eventos disjuntos dois a dois.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são as fórmulas para $\Prob(A^c)$ e $\Prob(A \cup B)$?
+$\Prob(A^c) = 1 - \Prob(A)$ e $\Prob(A \cup B) = \Prob(A) + \Prob(B) - \Prob(A \cap B)$; em geral, inclusão–exclusão.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a continuidade da probabilidade?
+Para eventos crescentes, $\Prob(\bigcup A_n) = \lim \Prob(A_n)$; para decrescentes, $\Prob(\bigcap A_n) = \lim \Prob(A_n)$. Decorre da aditividade enumerável.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quantos subconjuntos de $k$ elementos tem um conjunto de $n$ elementos?
+$\binom nk = \frac{n!}{k!(n-k)!}$. Na Mega-Sena, $\binom{60}{6} = 50\,063\,860$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a probabilidade de nenhum acerto no problema dos encontros?
+$\sum_{k=0}^n (-1)^k/k!$, que tende a $1/e \approx 0{,}368$ (inclusão–exclusão).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se define $\Prob(A \mid B)$, e o que ela é como função de $A$?
+$\Prob(A \cap B)/\Prob(B)$, para $\Prob(B) > 0$. Como função de $A$, é uma probabilidade.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a regra da probabilidade total?
+Se $\{B_i\}$ é uma partição, $\Prob(A) = \sum_i \Prob(A \mid B_i)\Prob(B_i)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o teorema de Bayes?
+$\Prob(B_j \mid A) = \Prob(A \mid B_j)\Prob(B_j)/\sum_i \Prob(A \mid B_i)\Prob(B_i)$: a posteriori é proporcional à verossimilhança vezes a priori.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como fica Bayes em razão de chances?
+Chances a posteriori = razão de verossimilhança $\times$ chances a priori: $\frac{\Prob(B \mid A)}{\Prob(B^c \mid A)} = \frac{\Prob(A \mid B)}{\Prob(A \mid B^c)}\cdot\frac{\Prob(B)}{\Prob(B^c)}$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é a falácia da taxa de base?
+Ignorar a probabilidade a priori. Um sinal com 80% de acerto e 10% de alarme falso, para um evento de probabilidade 3%, dá probabilidade a posteriori de só cerca de 20%.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando dois eventos são independentes? E uma família?
+$\Prob(A \cap B) = \Prob(A)\Prob(B)$. Uma família é independente se a fórmula do produto vale para toda subfamília finita — independência dois a dois não basta.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Eventos disjuntos são independentes?
+Não, se ambos têm probabilidade positiva: $\Prob(A \cap B) = 0 < \Prob(A)\Prob(B)$. A ocorrência de um exclui o outro.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Em ensaios independentes com probabilidade $p > 0$, qual é a probabilidade de nunca haver sucesso?
+Zero: $\Prob(\text{nenhum sucesso em } n) = (1 - p)^n \to 0$, e a continuidade da probabilidade passa ao limite.
+:::
+
+## Ficha-resumo {#sec-est-g01-ficha}
+
+::: {.ficha-resumo}
+**Espaço de probabilidade.** $(\Omega, \mathcal F, \Prob)$: resultados, eventos ($\sigma$-álgebra: contém $\Omega$, fechada por complementar e uniões enumeráveis) e probabilidade: $\Prob \geq 0$, $\Prob(\Omega) = 1$, aditividade enumerável.
+
+**Consequências.** $\Prob(\emptyset) = 0$; $\Prob(A^c) = 1 - \Prob(A)$; $A \subseteq B \Rightarrow \Prob(A) \leq \Prob(B)$; $\Prob(A \cup B) = \Prob(A) + \Prob(B) - \Prob(A \cap B)$; inclusão–exclusão; Boole: $\Prob(\bigcup A_n) \leq \sum \Prob(A_n)$; Bonferroni: $\Prob(\bigcap A_i) \geq 1 - \sum\Prob(A_i^c)$. Continuidade para sequências monótonas.
+
+**Contagem.** Equiprovável: $\Prob(A) = \abs A/\abs\Omega$. Produto $n_1\cdots n_k$; arranjos $n!/(n-k)!$; combinações $\binom nk$; binômio de Newton. Mega-Sena $1/\binom{60}{6}$; aniversário ($n = 23$); encontros ($\to 1/e$).
+
+**Condicional.** $\Prob(A \mid B) = \Prob(A \cap B)/\Prob(B)$ é uma probabilidade. Multiplicação: $\Prob(\bigcap A_i) = \Prob(A_1)\Prob(A_2 \mid A_1)\cdots$. Total: $\Prob(A) = \sum\Prob(A \mid B_i)\Prob(B_i)$.
+
+**Bayes.** $\Prob(B_j \mid A) \propto \Prob(A \mid B_j)\Prob(B_j)$. Chances: posteriori = razão de verossimilhança $\times$ priori. Sinais condicionalmente independentes multiplicam as razões. Falácia da taxa de base.
+
+**Independência.** $\Prob(A \cap B) = \Prob(A)\Prob(B)$; preservada por complementares; mútua $\neq$ dois a dois; disjuntos não são independentes; independência condicional $\not\Rightarrow$ independência. Ensaios independentes: $p^k(1 - p)^{n-k}$; ao menos um sucesso: $1 - (1 - p)^n$.
+:::
+
+## Notas bibliográficas {#sec-est-g01-notas}
+
+@degroot2012 desenvolve o material deste capítulo — axiomas, contagem, probabilidade condicional, Bayes e independência — com muitos exemplos e exercícios, e é a leitura principal; o mesmo livro acompanha os próximos capítulos desta parte. @bussab2017 é o texto brasileiro clássico de estatística básica, com ênfase em aplicações e interpretação. A axiomatização é de Kolmogorov, em 1933; @casella2002 retoma este material de forma mais concisa, como preparação para a inferência estatística, e é o texto de referência dos capítulos sobre estimação e testes.

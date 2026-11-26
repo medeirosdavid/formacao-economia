@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Regressão linear múltipla* (ECM-G02); *Testes de hipóteses* (EST-G06)
+**Pré-requisitos:** *Regressão linear múltipla* (ECM-G02); @sec-est-g06 (*Testes de hipóteses*)
 :::
 
 **Leituras principais:** @wooldridge2019, @stock2019

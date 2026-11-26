@@ -7,12 +7,12 @@ Da probabilidade elementar à teoria da medida, inferência estatística e proce
 ::: {.content-visible when-format="html"}
 | Código | Nível | Capítulo | Status |
 |:--|:--|:--|:--|
-| EST-G01 | G | [Probabilidade: axiomas, condicionamento e Bayes](est-g01-probabilidade-axiomas-condicionamento-e-bayes.qmd) | ○ planejado |
-| EST-G02 | G | [Variáveis aleatórias e distribuições](est-g02-variaveis-aleatorias-e-distribuicoes.qmd) | ○ planejado |
-| EST-G03 | G | [Esperança, momentos e distribuições conjuntas](est-g03-esperanca-momentos-e-distribuicoes-conjuntas.qmd) | ○ planejado |
-| EST-G04 | G | [Amostragem e teoremas-limite](est-g04-amostragem-e-teoremas-limite.qmd) | ○ planejado |
-| EST-G05 | G | [Estimação pontual e intervalar](est-g05-estimacao-pontual-e-intervalar.qmd) | ○ planejado |
-| EST-G06 | G | [Testes de hipóteses](est-g06-testes-de-hipoteses.qmd) | ○ planejado |
+| EST-G01 | G | [Probabilidade: axiomas, condicionamento e Bayes](est-g01-probabilidade-axiomas-condicionamento-e-bayes.qmd) | ◔ rascunho |
+| EST-G02 | G | [Variáveis aleatórias e distribuições](est-g02-variaveis-aleatorias-e-distribuicoes.qmd) | ◔ rascunho |
+| EST-G03 | G | [Esperança, momentos e distribuições conjuntas](est-g03-esperanca-momentos-e-distribuicoes-conjuntas.qmd) | ◔ rascunho |
+| EST-G04 | G | [Amostragem e teoremas-limite](est-g04-amostragem-e-teoremas-limite.qmd) | ◔ rascunho |
+| EST-G05 | G | [Estimação pontual e intervalar](est-g05-estimacao-pontual-e-intervalar.qmd) | ◔ rascunho |
+| EST-G06 | G | [Testes de hipóteses](est-g06-testes-de-hipoteses.qmd) | ◔ rascunho |
 | EST-M01 | M | [Probabilidade com teoria da medida](est-m01-probabilidade-com-teoria-da-medida.qmd) | ○ planejado |
 | EST-M02 | M | [Esperança condicional](est-m02-esperanca-condicional.qmd) | ○ planejado |
 | EST-M03 | M | [Modos de convergência e teoremas-limite](est-m03-modos-de-convergencia-e-teoremas-limite.qmd) | ○ planejado |

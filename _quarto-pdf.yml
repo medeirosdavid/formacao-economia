@@ -15,6 +15,14 @@ book:
     - partes/01-matematica/mat-g08-equacoes-em-diferencas-e-equacoes-diferenciais-lineares.qmd
     - partes/01-matematica/mat-m01-analise-real-em-r-n-e-espacos-metricos.qmd
     - partes/01-matematica/mat-m10-espacos-normados-e-com-produto-interno.qmd
+  - part: partes/02-probabilidade-estatistica/index.qmd
+    chapters:
+    - partes/02-probabilidade-estatistica/est-g01-probabilidade-axiomas-condicionamento-e-bayes.qmd
+    - partes/02-probabilidade-estatistica/est-g02-variaveis-aleatorias-e-distribuicoes.qmd
+    - partes/02-probabilidade-estatistica/est-g03-esperanca-momentos-e-distribuicoes-conjuntas.qmd
+    - partes/02-probabilidade-estatistica/est-g04-amostragem-e-teoremas-limite.qmd
+    - partes/02-probabilidade-estatistica/est-g05-estimacao-pontual-e-intervalar.qmd
+    - partes/02-probabilidade-estatistica/est-g06-testes-de-hipoteses.qmd
   - part: partes/05-econometria/index.qmd
     chapters:
     - partes/05-econometria/ecm-g01-regressao-linear-simples.qmd

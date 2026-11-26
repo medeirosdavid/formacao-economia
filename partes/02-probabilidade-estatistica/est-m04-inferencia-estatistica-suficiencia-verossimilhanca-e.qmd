@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Estimação pontual e intervalar* (EST-G05); *Modos de convergência e teoremas-limite* (EST-M03)
+**Pré-requisitos:** @sec-est-g05 (*Estimação pontual e intervalar*); *Modos de convergência e teoremas-limite* (EST-M03)
 :::
 
 **Leituras principais:** @casella2002

@@ -215,37 +215,43 @@ partes:
         nivel: G
         prereq: [MAT-G01]
         leituras: [degroot2012, bussab2017]
-        topicos: ["Espaço amostral e eventos", "Axiomas de Kolmogorov", "Probabilidade condicional", "Independência", "Teorema de Bayes"]
+        status: rascunho
+        topicos: ["Espaço amostral e eventos", "Axiomas de Kolmogorov e consequências", "Continuidade da probabilidade", "Espaços equiprováveis e contagem", "Probabilidade condicional e probabilidade total", "Teorema de Bayes e razão de chances", "Independência", "Aplicação: persistência das quedas do PIB"]
       - id: EST-G02
         titulo: "Variáveis aleatórias e distribuições"
         nivel: G
         prereq: [EST-G01, MAT-G04]
         leituras: [degroot2012, casella2002]
-        topicos: ["Variáveis discretas e contínuas", "Funções de distribuição e densidade", "Distribuições usuais", "Transformações de variáveis"]
+        status: rascunho
+        topicos: ["Variáveis aleatórias e funções de distribuição", "Variáveis discretas e contínuas", "Quantis e valor em risco", "Distribuições discretas usuais", "Distribuições contínuas usuais", "Transformações de variáveis e transformação integral de probabilidade", "Aplicação: a distribuição da inflação mensal"]
       - id: EST-G03
         titulo: "Esperança, momentos e distribuições conjuntas"
         nivel: G
         prereq: [EST-G02, MAT-G06]
         leituras: [degroot2012, casella2002]
-        topicos: ["Esperança e variância", "Desigualdade de Jensen", "Distribuições conjuntas, marginais e condicionais", "Covariância e correlação", "Esperança condicional (versão elementar)", "Normal multivariada"]
+        status: rascunho
+        topicos: ["Esperança e variância", "Momentos e função geradora de momentos", "Desigualdade de Jensen", "Distribuições conjuntas, marginais e condicionais", "Covariância, correlação e diversificação", "Esperança condicional (versão elementar) e melhor preditor", "Normal multivariada", "Aplicação: a inflação de amanhã dada a de hoje"]
       - id: EST-G04
         titulo: "Amostragem e teoremas-limite"
         nivel: G
         prereq: [EST-G03]
         leituras: [degroot2012, casella2002]
-        topicos: ["Amostra aleatória e estatísticas", "Desigualdades de Markov e Chebyshev", "Lei dos grandes números", "Teorema central do limite", "Distribuições qui-quadrado, t e F"]
+        status: rascunho
+        topicos: ["Amostra aleatória e estatísticas", "Desigualdades de Markov e Chebyshev", "Lei dos grandes números", "Teorema central do limite", "Lema de Slutsky e aproximações", "Distribuições qui-quadrado, t e F", "Amostras normais: média e variância amostrais", "Aplicação: o teorema central do limite com a inflação brasileira"]
       - id: EST-G05
         titulo: "Estimação pontual e intervalar"
         nivel: G
         prereq: [EST-G04]
         leituras: [casella2002, bussab2017]
-        topicos: ["Estimadores e suas propriedades", "Método dos momentos", "Máxima verossimilhança (introdução)", "Intervalos de confiança"]
+        status: rascunho
+        topicos: ["Estimadores: viés, variância e erro quadrático médio", "Consistência", "Informação de Fisher e cota de Cramér–Rao", "Método dos momentos", "Máxima verossimilhança (introdução)", "Intervalos de confiança", "Aplicação: a inflação média em diferentes períodos"]
       - id: EST-G06
         titulo: "Testes de hipóteses"
         nivel: G
         prereq: [EST-G05]
         leituras: [casella2002, bussab2017]
-        topicos: ["Hipóteses, erros e poder", "Valor-p", "Testes para médias e proporções", "Relação entre testes e intervalos"]
+        status: rascunho
+        topicos: ["Hipóteses, erros e poder", "Valor-p", "Lema de Neyman–Pearson", "Testes para médias e proporções", "Relação entre testes e intervalos", "Testes múltiplos", "Aplicação: a inflação e a meta"]
       - id: EST-M01
         titulo: "Probabilidade com teoria da medida"
         nivel: M
