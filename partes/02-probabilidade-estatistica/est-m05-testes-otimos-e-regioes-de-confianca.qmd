@@ -10,15 +10,718 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-m05-motivacao}
 
-1. Testes aleatorizados e o lema de Neyman–Pearson
-2. Razão de verossimilhança monótona e Karlin–Rubin
-3. Testes não viesados
-4. Razão de verossimilhança, Wald e escore
-5. Teorema de Wilks e poder local
-6. Regiões de confiança por inversão de testes
-7. Testes múltiplos: Holm e Benjamini–Hochberg
-8. Aplicação: a persistência das quedas do PIB pela trindade de testes
+O @sec-est-g06 construiu testes de hipóteses a partir de estatísticas razoáveis — médias padronizadas, a razão $t$ — e mostrou, pelo lema de Neyman–Pearson, que a razão de verossimilhança é o teste mais poderoso entre duas hipóteses simples. Este capítulo pergunta quando existem testes **ótimos** para hipóteses compostas, o que fazer quando não existem, e como construir testes e regiões de confiança em modelos gerais, com grandes amostras.
+
+As respostas organizam a prática da econometria. Em modelos de um parâmetro com razão de verossimilhança monótona — quase todas as famílias exponenciais —, os testes unilaterais usuais são uniformemente mais poderosos (Karlin–Rubin). Para alternativas bilaterais, não há teste uniformemente mais poderoso, e o critério passa a ser a ausência de viés. Em modelos gerais, três testes assintoticamente equivalentes — razão de verossimilhança, Wald e escore (ou multiplicador de Lagrange) — têm distribuição limite qui-quadrado sob a hipótese nula (teorema de Wilks), e são a base de quase todo teste de especificação. Invertendo testes, obtêm-se regiões de confiança, ótimas quando os testes o são. E, quando se testam muitas hipóteses ao mesmo tempo, é preciso controlar a probabilidade de algum falso positivo (Holm) ou a proporção esperada de falsas descobertas (Benjamini–Hochberg).
+
+O capítulo desenvolve:
+
+1. testes aleatorizados e o lema de Neyman–Pearson completo;
+2. razão de verossimilhança monótona e o teorema de Karlin–Rubin;
+3. testes bilaterais e não viesados;
+4. a trindade de testes e o teorema de Wilks, com hipóteses nulas simples e compostas;
+5. regiões de confiança por inversão de testes e sua otimalidade;
+6. testes múltiplos: Holm e Benjamini–Hochberg.
+
+## Testes aleatorizados e o lema de Neyman–Pearson {#sec-est-m05-neyman-pearson}
+
+::: {#def-est-m05-teste}
+## Teste, tamanho e poder
+Um **teste** é uma função mensurável $\phi : \mathcal X \to [0, 1]$: observados os dados $x$, rejeita-se $H_0$ com probabilidade $\phi(x)$. A **função poder** é $\beta_\phi(\theta) = \E_\theta[\phi(X)]$. Para $H_0 : \theta \in \Theta_0$ contra $H_1 : \theta \in \Theta_1$, o teste tem **nível** $\alpha$ se $\sup_{\theta \in \Theta_0}\beta_\phi(\theta) \leq \alpha$, e esse supremo é o seu **tamanho**. Um teste de nível $\alpha$ é **uniformemente mais poderoso** (UMP) se $\beta_\phi(\theta) \geq \beta_{\phi'}(\theta)$ para todo $\theta \in \Theta_1$ e todo teste $\phi'$ de nível $\alpha$.
 :::
+
+Os testes do @sec-est-g06 são indicadoras $\phi = \mathbf 1_R$ de uma região de rejeição. Admitir valores intermediários — sortear, na fronteira, se a hipótese será rejeitada — parece artificial, mas resolve um problema real: com dados discretos, nem todo tamanho $\alpha$ é atingível por regiões de rejeição, e a aleatorização torna o conjunto dos testes convexo, o que simplifica a teoria. Na prática, usam-se testes conservadores ou o valor-p; a aleatorização é uma ferramenta teórica.
+
+::: {#thm-est-m05-neyman-pearson}
+## Lema de Neyman–Pearson
+Sejam $H_0 : X \sim p_0$ e $H_1 : X \sim p_1$ (densidades em relação a $\mu$) e, para $k \geq 0$ e $\gamma \in [0, 1]$,
+$$
+\phi(x) = \begin{cases} 1, & p_1(x) > kp_0(x), \\ \gamma, & p_1(x) = kp_0(x), \\ 0, & p_1(x) < kp_0(x). \end{cases}
+$$ {#eq-est-m05-np}
+
+(a) **Existência:** para todo $\alpha \in (0, 1)$, existem $k$ e $\gamma$ com $\E_0[\phi] = \alpha$.
+(b) **Suficiência:** um teste da forma (@eq-est-m05-np), com qualquer valor em $[0, 1]$ no conjunto $\{p_1 = kp_0\}$, é o mais poderoso entre os testes de nível $\E_0[\phi]$.
+(c) **Necessidade:** se $\phi'$ é o mais poderoso de nível $\alpha$, então $\phi' = \phi$ $\mu$-q.t.p. no conjunto $\{p_1 \neq kp_0\}$, para $\phi$ como em (a); e $\E_0[\phi'] = \alpha$, a menos que $\E_1[\phi'] = 1$.
+:::
+
+::: {.proof}
+Para (a), seja $L = p_1(X)/p_0(X)$, bem definida $P_0$-q.c. e com valores em $[0, \infty)$, e $G(c) = P_0(L > c)$, não crescente e contínua à direita, com $G(c^-) = P_0(L \geq c)$. Seja $k = \inf\{c \geq 0 : G(c) \leq \alpha\}$. Pela continuidade à direita, $G(k) \leq \alpha$; e $G(c) > \alpha$ para $c < k$, logo $G(k^-) \geq \alpha$. Se $G(k^-) = G(k)$, tome $\gamma = 0$; caso contrário, $\gamma = (\alpha - G(k))/(G(k^-) - G(k)) \in [0, 1]$. Então $\E_0[\phi] = G(k) + \gamma P_0(L = k) = \alpha$, pois $P_0(L = k) = G(k^-) - G(k)$.
+
+Para (b), seja $\phi'$ um teste com $\E_0[\phi'] \leq \E_0[\phi]$. Em todo ponto, $(\phi - \phi')(p_1 - kp_0) \geq 0$: onde $p_1 > kp_0$, $\phi = 1 \geq \phi'$; onde $p_1 < kp_0$, $\phi = 0 \leq \phi'$. Integrando,
+$$
+\E_1[\phi] - \E_1[\phi'] \geq k\big(\E_0[\phi] - \E_0[\phi']\big) \geq 0 .
+$$
+Para (c), se $\phi'$ é o mais poderoso de nível $\alpha$, então $\E_1[\phi'] = \E_1[\phi]$ e $\int(\phi - \phi')(p_1 - kp_0)\,\dd\mu = -k(\alpha - \E_0[\phi']) \leq 0$. Mas o integrando é não negativo; logo a integral é zero, o integrando se anula $\mu$-q.t.p. — isto é, $\phi' = \phi$ onde $p_1 \neq kp_0$ — e $k(\alpha - \E_0[\phi']) = 0$. Se $k > 0$, $\E_0[\phi'] = \alpha$; se $k = 0$, $\phi = 1$ em $\{p_1 > 0\}$ e o poder é 1.
+:::
+
+O lema diz que a única estatística relevante para escolher entre duas distribuições é a **razão de verossimilhança** $p_1/p_0$ — a derivada de Radon–Nikodym de $P_1$ em relação a $P_0$ (@sec-est-m01) —, e que o teste ótimo rejeita quando ela é grande. A demonstração de (b) é um argumento de "mochila": dado um orçamento $\alpha$ de probabilidade sob $H_0$, o melhor é gastá-lo nos pontos de maior retorno $p_1/p_0$ por unidade gasta.
+
+## Razão de verossimilhança monótona e Karlin–Rubin {#sec-est-m05-karlin-rubin}
+
+Em geral, o teste de Neyman–Pearson depende da alternativa $p_1$. Quando não depende, ele é uniformemente mais poderoso.
+
+::: {#def-est-m05-rvm}
+## Razão de verossimilhança monótona
+Uma família $\{p_\theta : \theta \in \Theta \subseteq \R\}$ tem **razão de verossimilhança monótona** (RVM) numa estatística $T(x)$ se, para todos $\theta_1 < \theta_2$, a razão $p_{\theta_2}(x)/p_{\theta_1}(x)$ é uma função não decrescente de $T(x)$ no conjunto em que as duas densidades não se anulam simultaneamente.
+:::
+
+Uma família exponencial de um parâmetro, $p_\theta(x) = h(x)\exp(\eta(\theta)T(x) - A(\theta))$, com $\eta$ crescente, tem RVM em $T$: a razão é $\exp\big((\eta(\theta_2) - \eta(\theta_1))T(x) - A(\theta_2) + A(\theta_1)\big)$. Isso cobre as amostras Bernoulli, Poisson, exponenciais, normais com variância conhecida (em $\sum x_i$) e normais com média conhecida (em $\sum(x_i - \mu)^2$). A uniforme em $(0, \theta)$ tem RVM em $\max_ix_i$.
+
+::: {#thm-est-m05-karlin-rubin}
+## Karlin–Rubin
+Suponha que a família tenha RVM em $T$ e considere $H_0 : \theta \leq \theta_0$ contra $H_1 : \theta > \theta_0$. O teste
+$$
+\phi(x) = \mathbf 1\{T(x) > c\} + \gamma\,\mathbf 1\{T(x) = c\}, \qquad\text{com } c, \gamma \text{ tais que } \E_{\theta_0}[\phi] = \alpha,
+$$
+é UMP de nível $\alpha$, e a sua função poder é não decrescente em $\theta$.
+:::
+
+::: {.proof}
+A existência de $c$ e $\gamma$ é o argumento do @thm-est-m05-neyman-pearson (a), com $T$ no lugar de $L$.
+
+*Para quaisquer $\theta' < \theta''$, $\phi$ é um teste de Neyman–Pearson de $\theta'$ contra $\theta''$.* Escreva $p_{\theta''}/p_{\theta'} = g(T)$, com $g$ não decrescente, e $k = g(c)$. Se $g(T) > k$, então $T > c$ (pois $T \leq c$ daria $g(T) \leq g(c)$), e $\phi = 1$; se $g(T) < k$, então $T < c$ e $\phi = 0$. No conjunto $\{g(T) = k\}$, $\phi$ toma valores em $[0, 1]$, o que o @thm-est-m05-neyman-pearson (b) permite.
+
+*O poder é não decrescente.* Para $\theta' < \theta''$, o teste constante $\phi' \equiv \beta_\phi(\theta')$ tem o mesmo nível que $\phi$ sob $\theta'$ e poder $\beta_\phi(\theta')$; pelo passo anterior, $\beta_\phi(\theta'') \geq \beta_\phi(\theta')$. Em particular, $\sup_{\theta \leq \theta_0}\beta_\phi(\theta) = \beta_\phi(\theta_0) = \alpha$: o teste tem nível $\alpha$.
+
+*Otimalidade.* Seja $\phi'$ de nível $\alpha$ para $H_0$; em particular, $\E_{\theta_0}[\phi'] \leq \alpha$. Para cada $\theta_1 > \theta_0$, $\phi$ é o teste de Neyman–Pearson de $\theta_0$ contra $\theta_1$ com tamanho $\alpha$, logo $\beta_\phi(\theta_1) \geq \beta_{\phi'}(\theta_1)$.
+:::
+
+O teste $z$ unilateral do @sec-est-g06 e o teste de uma proporção com a binomial (aleatorizado na fronteira) são, assim, UMP. Para $H_0 : \theta \geq \theta_0$ contra $\theta < \theta_0$, basta trocar o sinal de $T$.
+
+### Alternativas bilaterais e testes não viesados
+
+Para $H_0 : \theta = \theta_0$ contra $H_1 : \theta \neq \theta_0$ não há, em geral, teste UMP. Na $\Normal(\theta, 1)$, pela parte (c) do lema de Neyman–Pearson, o teste mais poderoso contra qualquer $\theta_1 > \theta_0$ é, a menos de conjuntos nulos, o que rejeita para $\bar X$ grande, e contra qualquer $\theta_1 < \theta_0$, o que rejeita para $\bar X$ pequeno. Um teste UMP teria de coincidir com os dois, o que é impossível. O teste unilateral à direita, ótimo contra $\theta > \theta_0$, é péssimo contra $\theta < \theta_0$: o seu poder lá é **menor que $\alpha$**.
+
+::: {#def-est-m05-nao-viesado}
+## Teste não viesado
+Um teste de nível $\alpha$ é **não viesado** se $\beta_\phi(\theta) \geq \alpha$ para todo $\theta \in \Theta_1$: rejeita com probabilidade pelo menos $\alpha$ quando $H_0$ é falsa. É **UMP não viesado** (UMPNV) se é UMP na classe dos testes não viesados de nível $\alpha$.
+:::
+
+O teste $z$ bilateral, que rejeita quando $\abs Z > z_{\alpha/2}$ com $Z = \sqrt n(\bar X - \theta_0)$, é não viesado. Seu poder em $\theta = \theta_0 + \delta$ é $\beta(\delta) = \Phi(-z_{\alpha/2} - \sqrt n\delta) + \Phi(-z_{\alpha/2} + \sqrt n\delta)$ (@eq-est-g06-poder), com $\beta'(\delta) = \sqrt n\,[\phi(-z_{\alpha/2} + \sqrt n\delta) - \phi(-z_{\alpha/2} - \sqrt n\delta)]$. Para $\delta > 0$, $\abs{-z_{\alpha/2} + \sqrt n\delta} \leq z_{\alpha/2} + \sqrt n\delta$, logo $\beta'(\delta) \geq 0$; por simetria, $\beta$ é mínima em $\delta = 0$, onde vale $\alpha$. Mais geralmente, em famílias exponenciais de um parâmetro, o teste bilateral com dois pontos de corte escolhidos para ter tamanho $\alpha$ e derivada da função poder nula em $\theta_0$ é UMPNV, e o teste $t$ bilateral é UMPNV para a média de uma normal com variância desconhecida; admitimos esses resultados, demonstrados em @lehmann2005 [cap. 4 e 5].
+
+## A trindade de testes {#sec-est-m05-trindade}
+
+Fora das famílias exponenciais de um parâmetro, testes exatamente ótimos são raros. A teoria assintótica, porém, oferece três testes gerais, todos baseados na verossimilhança e equivalentes em grandes amostras.
+
+Sejam $X_1, \dots, X_n$ iid com densidade $p_\theta$, $\theta \in \Theta \subseteq \R^k$, $L_n(\theta) = \sum_i\log p_\theta(X_i)$ a log-verossimilhança, $\hat\theta$ o EMV, $\vb S_n(\theta) = \nabla L_n(\theta)$ o escore total e $\vb I(\theta)$ a informação de Fisher por observação (@sec-est-m04).
+
+::: {#def-est-m05-trindade}
+## Razão de verossimilhança, Wald e escore
+Para $H_0 : \theta = \theta_0$:
+
+- **Razão de verossimilhança:** $\Lambda_n = 2\big[L_n(\hat\theta) - L_n(\theta_0)\big]$ — a perda de ajuste ao impor $H_0$.
+- **Wald:** $W_n = n(\hat\theta - \theta_0)\T\hat{\vb I}(\hat\theta - \theta_0)$, com $\hat{\vb I}$ um estimador consistente de $\vb I(\theta_0)$ — a distância do EMV à hipótese, em unidades do seu erro padrão.
+- **Escore** (ou **multiplicador de Lagrange**): $R_n = \frac1n\vb S_n(\theta_0)\T\vb I(\theta_0)^{-1}\vb S_n(\theta_0)$ — o tamanho do escore no ponto da hipótese, onde deveria ter média zero.
+:::
+
+O teste de Wald só precisa do modelo irrestrito; o do escore, só do restrito; a razão de verossimilhança, dos dois. A figura do interativo da @sec-est-m05-interativo mostra a geometria: numa dimensão, $\Lambda_n$ é a diferença vertical entre a log-verossimilhança no máximo e na hipótese; $W_n$ usa a distância horizontal e a curvatura no máximo; $R_n$, a inclinação na hipótese e a curvatura esperada lá.
+
+::: {#thm-est-m05-wilks}
+## Wilks: distribuição assintótica da trindade
+Sob as condições do @thm-est-m04-normalidade e sob $H_0 : \theta = \theta_0$,
+$$
+\Lambda_n,\ W_n,\ R_n \dto \chi^2_k, \qquad\text{e}\qquad \Lambda_n - R_n \pto 0,\quad W_n - R_n \pto 0 .
+$$
+:::
+
+::: {.proof}
+Seja $\vb Z_n = n^{-1/2}\vb S_n(\theta_0) \dto \vb Z \sim \Normal(\vb 0, \vb I)$, com $\vb I = \vb I(\theta_0)$. A demonstração do @thm-est-m04-normalidade dá $\sqrt n(\hat\theta - \theta_0) = \vb I^{-1}\vb Z_n + o_p(1)$.
+
+*Escore.* $R_n = \vb Z_n\T\vb I^{-1}\vb Z_n \dto \vb Z\T\vb I^{-1}\vb Z$ pelo mapeamento contínuo, e $\vb I^{-1/2}\vb Z \sim \Normal(\vb 0, \Id_k)$, logo $\vb Z\T\vb I^{-1}\vb Z$ é a soma dos quadrados de $k$ normais padrão independentes: $\chi^2_k$.
+
+*Wald.* $W_n = [\vb I^{-1}\vb Z_n + o_p(1)]\T(\vb I + o_p(1))[\vb I^{-1}\vb Z_n + o_p(1)] = \vb Z_n\T\vb I^{-1}\vb Z_n + o_p(1) = R_n + o_p(1)$, pelas regras de $O_p$ e $o_p$ (@def-est-m03-op), já que $\vb Z_n = O_p(1)$.
+
+*Razão de verossimilhança.* Com probabilidade tendendo a 1, $\vb S_n(\hat\theta) = \vb 0$ e o segmento entre $\hat\theta$ e $\theta_0$ está na vizinhança do teorema; a fórmula de Taylor com resto integral dá
+$$
+L_n(\theta_0) = L_n(\hat\theta) + (\theta_0 - \hat\theta)\T\Big[\int_0^1(1 - u)\,\nabla^2L_n\big(\hat\theta + u(\theta_0 - \hat\theta)\big)\,\dd u\Big](\theta_0 - \hat\theta) .
+$$
+Pelo mesmo argumento usado para $\bar{\vb H}_n$ no @thm-est-m04-normalidade, o colchete dividido por $n$ converge em probabilidade para $-\vb I\int_0^1(1 - u)\,\dd u = -\vb I/2$. Logo $\Lambda_n = n(\hat\theta - \theta_0)\T(\vb I + o_p(1))(\hat\theta - \theta_0) = W_n + o_p(1)$.
+:::
+
+Esse é o teorema anunciado no @sec-est-g05 e no @sec-est-g06. A versão mais usada envolve hipóteses **compostas**: o parâmetro se divide em $\theta = (\vb\psi, \vb\lambda)$, com $\vb\psi \in \R^r$ de interesse e $\vb\lambda$ de perturbação, e $H_0 : \vb\psi = \vb\psi_0$. Seja $\tilde\theta = (\vb\psi_0, \tilde{\vb\lambda})$ o EMV restrito.
+
+::: {#thm-est-m05-wilks-composta}
+## Wilks com parâmetros de perturbação
+Sob $H_0 : \vb\psi = \vb\psi_0$ e as condições do @thm-est-m04-normalidade, aplicadas ao modelo completo e ao modelo restrito,
+$$
+\Lambda_n = 2\big[L_n(\hat\theta) - L_n(\tilde\theta)\big] \dto \chi^2_r .
+$$
+O mesmo vale para a estatística de Wald $n(\hat{\vb\psi} - \vb\psi_0)\T\big[(\hat{\vb I}^{-1})_{\psi\psi}\big]^{-1}(\hat{\vb\psi} - \vb\psi_0)$ e para a do escore calculada em $\tilde\theta$, e as três diferem por $o_p(1)$.
+:::
+
+::: {.proof}
+Seja $\theta_0 = (\vb\psi_0, \vb\lambda_0)$ o valor verdadeiro e particione $\vb Z_n = (\vb Z_{n,\psi}, \vb Z_{n,\lambda})$ e $\vb I$ em blocos. A demonstração do @thm-est-m05-wilks mostra que $2[L_n(\hat\theta) - L_n(\theta_0)] = \vb Z_n\T\vb I^{-1}\vb Z_n + o_p(1)$. O modelo restrito, com parâmetro $\vb\lambda$ e informação $\vb I_{\lambda\lambda}$, satisfaz as mesmas condições, e o mesmo argumento dá $2[L_n(\tilde\theta) - L_n(\theta_0)] = \vb Z_{n,\lambda}\T\vb I_{\lambda\lambda}^{-1}\vb Z_{n,\lambda} + o_p(1)$. Subtraindo, $\Lambda_n = \vb Z_n\T\vb I^{-1}\vb Z_n - \vb Z_{n,\lambda}\T\vb I_{\lambda\lambda}^{-1}\vb Z_{n,\lambda} + o_p(1)$. Pela fórmula da inversa por blocos, com $\vb V = \vb Z_\psi - \vb I_{\psi\lambda}\vb I_{\lambda\lambda}^{-1}\vb Z_\lambda$ e o complemento de Schur $\vb I_{\psi\psi\cdot\lambda} = \vb I_{\psi\psi} - \vb I_{\psi\lambda}\vb I_{\lambda\lambda}^{-1}\vb I_{\lambda\psi}$,
+$$
+\vb Z\T\vb I^{-1}\vb Z = \vb Z_\lambda\T\vb I_{\lambda\lambda}^{-1}\vb Z_\lambda + \vb V\T\vb I_{\psi\psi\cdot\lambda}^{-1}\vb V .
+$$
+No limite, $\vb V$ é normal com média zero e covariância $\vb I_{\psi\psi} - 2\vb I_{\psi\lambda}\vb I_{\lambda\lambda}^{-1}\vb I_{\lambda\psi} + \vb I_{\psi\lambda}\vb I_{\lambda\lambda}^{-1}\vb I_{\lambda\lambda}\vb I_{\lambda\lambda}^{-1}\vb I_{\lambda\psi} = \vb I_{\psi\psi\cdot\lambda}$, de modo que $\vb V\T\vb I_{\psi\psi\cdot\lambda}^{-1}\vb V \sim \chi^2_r$; pelo mapeamento contínuo, $\Lambda_n \dto \chi^2_r$. Para Wald, note que $(\vb I^{-1})_{\psi\psi} = \vb I_{\psi\psi\cdot\lambda}^{-1}$ e que $\sqrt n(\hat{\vb\psi} - \vb\psi_0) = (\vb I^{-1}\vb Z_n)_\psi + o_p(1) = \vb I_{\psi\psi\cdot\lambda}^{-1}\vb V_n + o_p(1)$, de modo que $W_n = \vb V_n\T\vb I_{\psi\psi\cdot\lambda}^{-1}\vb V_n + o_p(1)$; o escore é análogo.
+:::
+
+Cada restrição imposta custa, em média, um grau de liberdade: é a regra prática por trás dos testes de restrições em regressões, dos testes de especificação e dos critérios de informação. Os três testes coincidem assintoticamente sob $H_0$, mas não em amostras finitas, e não são igualmente convenientes. O de Wald **não é invariante** a reparametrizações: testar $\theta = 1$ ou $\log\theta = 0$ dá estatísticas diferentes (@exr-est-m05-wald-invariancia), enquanto a razão de verossimilhança e o escore são invariantes. O do escore é o preferido quando o modelo restrito é fácil de estimar e o irrestrito, difícil — como nos testes de autocorrelação, de heterocedasticidade e de variáveis omitidas em econometria (@sec-ecm-m05).
+
+**Poder local.** Sob alternativas que se aproximam da nula à taxa $n^{-1/2}$, $\theta_n = \theta_0 + \vb h/\sqrt n$, as três estatísticas convergem para uma **qui-quadrado não central** $\chi^2_k(\vb h\T\vb I\vb h)$, com parâmetro de não centralidade $\vb h\T\vb I\vb h$. A intuição está no teste de Wald: $\sqrt n(\hat\theta - \theta_0) = \sqrt n(\hat\theta - \theta_n) + \vb h \approx \Normal(\vb h, \vb I^{-1})$. A demonstração rigorosa usa o terceiro lema de Le Cam, que admitimos (@vandervaart1998 [cap. 14 e 16]). O resultado dá cálculos de poder e de tamanho de amostra: com $k = 1$, poder de 80% a 5% exige não centralidade $(1{,}96 + 0{,}84)^2 \approx 7{,}85$, isto é, $n \approx 7{,}85/(\delta^2 I)$ para detectar um desvio $\delta$ (@exr-est-m05-tamanho).
+
+## Regiões de confiança por inversão de testes {#sec-est-m05-regioes}
+
+Uma **região de confiança** de nível $1 - \alpha$ é um conjunto aleatório $C(X) \subseteq \Theta$ com $P_\theta(\theta \in C(X)) \geq 1 - \alpha$ para todo $\theta$. O @thm-est-g06-dualidade mostrou a correspondência com testes: se, para cada $\theta_0$, $A(\theta_0)$ é a região de aceitação de um teste de nível $\alpha$ de $H_0 : \theta = \theta_0$, então $C(x) = \{\theta_0 : x \in A(\theta_0)\}$ é uma região de confiança de nível $1 - \alpha$, porque $\theta \in C(X) \iff X \in A(\theta)$; e reciprocamente. Assim, cada teste da trindade dá uma região:
+
+- **Wald:** o elipsoide $\{\theta : n(\hat\theta - \theta)\T\hat{\vb I}(\hat\theta - \theta) \leq \chi^2_{k,1-\alpha}\}$ — em uma dimensão, o intervalo $\hat\theta \pm z_{\alpha/2}\,\ep(\hat\theta)$;
+- **razão de verossimilhança:** $\{\theta : 2[L_n(\hat\theta) - L_n(\theta)] \leq \chi^2_{k,1-\alpha}\}$, o **conjunto de verossimilhança**, que acompanha a assimetria da log-verossimilhança e é invariante a reparametrizações (o interativo do @sec-est-g05);
+- **escore:** $\{\theta : R_n(\theta) \leq \chi^2_{k,1-\alpha}\}$ — para uma proporção, o intervalo de Wilson.
+
+Para um parâmetro de interesse $\psi$ na presença de perturbações $\lambda$, a versão da razão de verossimilhança usa a **verossimilhança perfilada** $L_n^p(\psi) = \max_\lambda L_n(\psi, \lambda)$: o intervalo $\{\psi : 2[L_n(\hat\theta) - L_n^p(\psi)] \leq \chi^2_{1,1-\alpha}\}$ tem cobertura assintótica $1 - \alpha$ pelo @thm-est-m05-wilks-composta.
+
+A inversão também transfere otimalidade. Um limite inferior de confiança $\theta_L(X)$ de nível $1 - \alpha$ — isto é, $P_\theta(\theta_L(X) \leq \theta) \geq 1 - \alpha$ — é **uniformemente mais acurado** (UMA) se, para todo outro limite inferior $\theta_L'$ de nível $1 - \alpha$, cobre menos os valores falsos:
+$$
+P_\theta(\theta_L(X) \leq \theta') \leq P_\theta(\theta_L'(X) \leq \theta') \qquad\text{para todos } \theta' < \theta .
+$$
+
+::: {#prp-est-m05-uma}
+## Testes UMP dão limites de confiança UMA
+Suponha que, para cada $\theta'$, o teste de $H_0 : \theta = \theta'$ contra $H_1 : \theta > \theta'$ com região de aceitação $A(\theta')$ seja UMP de nível $\alpha$, e que $\{\theta' : x \in A(\theta')\} = [\theta_L(x), \infty)$. Então $\theta_L$ é um limite inferior de confiança UMA de nível $1 - \alpha$.
+:::
+
+::: {.proof}
+A cobertura vem da dualidade. Seja $\theta_L'$ outro limite de nível $1 - \alpha$; então $A'(\theta') = \{x : \theta_L'(x) \leq \theta'\}$ é a região de aceitação de um teste de nível $\alpha$ de $H_0 : \theta = \theta'$. Para $\theta > \theta'$, a probabilidade de "cobrir" o valor falso $\theta'$ é um menos o poder do teste correspondente em $\theta$: $P_\theta(\theta_L(X) \leq \theta') = P_\theta(X \in A(\theta'))$ e $P_\theta(\theta_L'(X) \leq \theta') = P_\theta(X \in A'(\theta'))$. Como o primeiro teste é UMP, o seu poder em $\theta$ é maior, isto é, $P_\theta(X \in A(\theta')) \leq P_\theta(X \in A'(\theta'))$.
+:::
+
+Pelo @thm-est-m05-karlin-rubin, em famílias com RVM os limites de confiança obtidos invertendo os testes unilaterais usuais são UMA: o limite inferior $\bar X - z_\alpha/\sqrt n$ na normal, e os limites exatos da binomial e da Poisson. Os intervalos bilaterais correspondentes, como o de Clopper–Pearson (@exr-est-m05-clopper-pearson), herdam a propriedade de não viés dos testes bilaterais. A régua para comparar regiões é, portanto, a probabilidade de cobrir valores falsos — e não apenas o comprimento, que pode ser enganoso.
+
+## Testes múltiplos {#sec-est-m05-multiplos}
+
+Quando se testam $m$ hipóteses $H_1, \dots, H_m$, cada uma a 5%, a chance de ao menos uma rejeição falsa cresce rapidamente com $m$. Sejam $p_1, \dots, p_m$ os valores-p, **válidos**: $P(p_i \leq u) \leq u$ para todo $u$ quando $H_i$ é verdadeira (@thm-est-g06-p-uniforme). Seja $I_0$ o conjunto (desconhecido) das hipóteses verdadeiras, com $m_0$ elementos; $V$ o número de rejeições falsas e $R$ o número total de rejeições. Dois critérios de erro:
+
+- a **taxa de erro da família** $\mathrm{FWER} = P(V \geq 1)$, a probabilidade de ao menos um falso positivo;
+- a **taxa de falsas descobertas** $\mathrm{FDR} = \E[V/\max(R, 1)]$, a proporção esperada de falsos positivos entre as rejeições.
+
+O controle da FWER é apropriado quando um único falso positivo é grave (um conjunto de restrições que, juntas, sustentam uma conclusão); o da FDR, quando se faz uma triagem de muitas hipóteses e se aceita uma fração pequena de erros entre as "descobertas" (genes, ações, especificações).
+
+A correção de Bonferroni, que rejeita $H_i$ se $p_i \leq \alpha/m$, controla a FWER (@prp-est-g06-bonferroni), mas é conservadora. O procedimento de Holm é uniformemente melhor.
+
+::: {#thm-est-m05-holm}
+## Procedimento de Holm
+Ordene os valores-p, $p_{(1)} \leq \dots \leq p_{(m)}$, com hipóteses correspondentes $H_{(1)}, \dots, H_{(m)}$. Seja $j^*$ o primeiro índice com $p_{(j)} > \alpha/(m - j + 1)$ (ou $j^* = m + 1$ se não há). Rejeite $H_{(1)}, \dots, H_{(j^* - 1)}$. Então $\mathrm{FWER} \leq \alpha$, qualquer que seja a dependência entre os valores-p.
+:::
+
+::: {.proof}
+Se $m_0 = 0$, não há rejeições falsas. Caso contrário, seja $j_0$ a posição, na ordenação, do menor valor-p entre as hipóteses verdadeiras. As $j_0 - 1$ hipóteses anteriores são falsas, logo $j_0 - 1 \leq m - m_0$, isto é, $\alpha/(m - j_0 + 1) \leq \alpha/m_0$. Uma rejeição falsa exige que o procedimento chegue à posição $j_0$ e rejeite a hipótese ali, o que requer $p_{(j_0)} \leq \alpha/(m - j_0 + 1) \leq \alpha/m_0$, isto é, $\min_{i \in I_0}p_i \leq \alpha/m_0$. Pela subaditividade e pela validade dos valores-p,
+$$
+\mathrm{FWER} \leq P\Big(\min_{i \in I_0}p_i \leq \frac{\alpha}{m_0}\Big) \leq \sum_{i \in I_0}P\Big(p_i \leq \frac{\alpha}{m_0}\Big) \leq m_0\cdot\frac{\alpha}{m_0} = \alpha .
+$$
+:::
+
+Holm rejeita tudo o que Bonferroni rejeita (o primeiro limiar é o mesmo, $\alpha/m$, e os seguintes são maiores), sem nenhuma hipótese adicional.
+
+::: {#thm-est-m05-bh}
+## Benjamini–Hochberg
+Seja $k = \max\{j : p_{(j)} \leq j\alpha/m\}$ (ou $k = 0$) e rejeite $H_{(1)}, \dots, H_{(k)}$. Se os valores-p das hipóteses verdadeiras são uniformes, independentes entre si e independentes dos valores-p das hipóteses falsas, então
+$$
+\mathrm{FDR} = \frac{m_0}{m}\,\alpha \leq \alpha .
+$$
+:::
+
+::: {.proof}
+O número de rejeições é $R = \max\{j : \#\{l : p_l \leq j\alpha/m\} \geq j\}$, e são rejeitadas exatamente as hipóteses com $p_l \leq R\alpha/m$. Para $i \in I_0$, seja $R^{(i)}$ o número de rejeições quando $p_i$ é substituído por $0$; $R^{(i)} \geq 1$ e é função apenas dos demais valores-p.
+
+*Afirmação:* $\{H_i\ \text{rejeitada},\ R = k\} = \{p_i \leq k\alpha/m,\ R^{(i)} = k\}$. Se $p_i \leq k\alpha/m$, trocar $p_i$ por $0$ não altera as contagens $\#\{l : p_l \leq j\alpha/m\}$ para $j \geq k$. Assim, se $H_i$ é rejeitada com $R = k$, então $p_i \leq k\alpha/m$; a contagem em $k$ continua pelo menos $k$, nenhum $j > k$ passa a satisfazer a condição, e $R^{(i)} = k$. Reciprocamente, se $p_i \leq k\alpha/m$ e $R^{(i)} = k$, o mesmo raciocínio dá $R = k$, e $H_i$ é rejeitada porque $p_i \leq R\alpha/m$.
+
+Pela afirmação, pela independência entre $p_i$ e $R^{(i)}$ e pela uniformidade de $p_i$,
+$$
+\mathrm{FDR} = \sum_{i \in I_0}\sum_{k=1}^m\frac1k\,P(H_i\ \text{rejeitada},\ R = k) = \sum_{i \in I_0}\sum_{k=1}^m\frac1k\cdot\frac{k\alpha}{m}\,P(R^{(i)} = k) = \sum_{i \in I_0}\frac\alpha m = \frac{m_0}{m}\alpha .
+$$
+:::
+
+O procedimento continua válido sob certas formas de dependência positiva entre os valores-p, e uma versão com limiares divididos por $\sum_{j \leq m}1/j$ controla a FDR sob qualquer dependência (Benjamini–Yekutieli); admitimos esses resultados. Em finanças, a "proliferação de fatores" — centenas de características propostas para explicar retornos de ações — levou à recomendação de limiares $t$ muito acima de 2 (@sec-est-g06, @sec-fin-m06); em avaliações de políticas com muitos resultados, correções de Holm ou de FDR são hoje rotineiras (@sec-ecm-m08).
+
+## Pontes {#sec-est-m05-pontes}
+
+- **Econometria (@sec-ecm-m05).** A trindade em modelos de máxima verossimilhança: testes de razão de verossimilhança, de Wald para restrições não lineares (com o método delta) e do multiplicador de Lagrange para especificação — autocorrelação, heterocedasticidade, variáveis omitidas.
+- **GMM (@sec-ecm-m06).** Os análogos da trindade com a função objetivo do GMM; o teste $J$ de sobreidentificação é um teste de escore.
+- **Séries temporais (@sec-ecm-m10).** Testes de raiz unitária, em que a hipótese nula está na fronteira e a teoria qui-quadrado deste capítulo falha.
+- **Inferência bayesiana (@sec-est-m06).** O fator de Bayes compara hipóteses de outra forma; o paradoxo de Lindley mostra que os dois podem discordar.
+- **Finanças (@sec-fin-m06).** Testes de modelos de apreçamento (Gibbons–Ross–Shanken, testes de Wald de alfas conjuntos) e o problema dos testes múltiplos.
+
+## Interativo {#sec-est-m05-interativo}
+
+::: {.content-visible when-format="html"}
+**Neyman–Pearson com dados discretos.** Com $X \sim$ Bin$(n, p)$, o teste mais poderoso de $p = p_0$ contra $p = p_1 > p_0$ rejeita para $X$ grande. Barras cinzas: a distribuição sob $H_0$; azuis: sob $H_1$; em vinho, a região de rejeição, e em âmbar o ponto $X = c$, em que se rejeita com probabilidade $\gamma$ para atingir exatamente o tamanho $\alpha$. À direita, a curva ROC: o poder máximo para cada tamanho; os pontos são os testes não aleatorizados, e a aleatorização preenche os segmentos entre eles.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof nNPM05 = controle("n", [5, 60], {valor: 20, passo: 1, casas: 0})
+viewof p0M05 = controle("p₀", [0.05, 0.6], {valor: 0.3, passo: 0.01, casas: 2})
+viewof p1M05 = controle("p₁", [0.1, 0.95], {valor: 0.5, passo: 0.01, casas: 2})
+viewof alfaM05 = controle("α", [0.01, 0.2], {valor: 0.05, passo: 0.005, casas: 3})
+```
+
+```{ojs}
+//| echo: false
+md`${p1M05 <= p0M05 ? "**Escolha p₁ > p₀.** " : ""}Ponto de corte c = ${npM05.c}, γ = ${fmtM05(npM05.gama, 3)}. Tamanho = ${fmtM05(alfaM05, 3)}, poder = **${fmtM05(npM05.poder, 3)}**. O teste não aleatorizado que rejeita só para X > c tem tamanho ${fmtM05(npM05.tamCons, 3)} e poder ${fmtM05(npM05.podCons, 3)}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 260, grid: true,
+  x: {label: "X", domain: [-0.5, nNPM05 + 0.5]}, y: {label: "probabilidade"},
+  marks: [
+    Plot.rectY(barrasM05, {x1: d => d.x - 0.45, x2: d => d.x - 0.02, y: "p0", fill: d => (d.x > npM05.c ? "#8C2F39" : d.x === npM05.c ? "#B7791F" : "#9AA5B1")}),
+    Plot.rectY(barrasM05, {x1: d => d.x + 0.02, x2: d => d.x + 0.45, y: "p1", fill: "#2F5D8A", fillOpacity: 0.75})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 340, height: 300, grid: true,
+  x: {label: "tamanho", domain: [0, 1]}, y: {label: "poder", domain: [0, 1]},
+  marks: [
+    Plot.line([{x: 0, y: 0}, {x: 1, y: 1}], {x: "x", y: "y", stroke: "#9AA5B1", strokeDasharray: "4,3"}),
+    Plot.line(rocM05, {x: "a", y: "b", stroke: "#2F5D8A", strokeWidth: 1.5}),
+    Plot.dot(rocM05, {x: "a", y: "b", r: 2.5, fill: "#2F5D8A"}),
+    Plot.dot([{a: alfaM05, b: npM05.poder}], {x: "a", y: "b", r: 5, fill: "#8C2F39"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtM05 = (v, c) => v.toFixed(c).replace(".", ",")
+binomPMFM05 = (n, p) => {
+  const out = new Array(n + 1).fill(0)
+  let lc = 0
+  for (let k = 0; k <= n; k++) {
+    if (k > 0) lc += Math.log(n - k + 1) - Math.log(k)
+    out[k] = Math.exp(lc + k * Math.log(p) + (n - k) * Math.log(1 - p))
+  }
+  return out
+}
+pmf0M05 = binomPMFM05(nNPM05, p0M05)
+pmf1M05 = binomPMFM05(nNPM05, p1M05)
+barrasM05 = pmf0M05.map((p, x) => ({x, p0: p, p1: pmf1M05[x]}))
+caudaM05 = (pmf, c) => pmf.reduce((s, p, x) => s + (x > c ? p : 0), 0)
+npM05 = {
+  let c = nNPM05
+  while (c > 0 && caudaM05(pmf0M05, c - 1) <= alfaM05) c--
+  const acima = caudaM05(pmf0M05, c)
+  const gama = pmf0M05[c] > 0 ? Math.min(1, Math.max(0, (alfaM05 - acima) / pmf0M05[c])) : 0
+  return {c, gama, poder: caudaM05(pmf1M05, c) + gama * pmf1M05[c], tamCons: acima, podCons: caudaM05(pmf1M05, c)}
+}
+rocM05 = d3.range(nNPM05 + 1, -2, -1).map(c => ({a: caudaM05(pmf0M05, c), b: caudaM05(pmf1M05, c)}))
+```
+:::
+
+**A geometria da trindade.** Para uma amostra Poisson de tamanho $n$ e média amostral $\bar x$, a curva é a log-verossimilhança relativa $L_n(\lambda) - L_n(\hat\lambda)$, com $\hat\lambda = \bar x$. A razão de verossimilhança mede a queda vertical até $\lambda_0$ (vezes 2); Wald substitui a curva pela parábola com a curvatura no máximo (tracejada); o escore usa a inclinação da curva em $\lambda_0$ (reta âmbar) e a informação esperada lá. Longe de $\lambda_0$, ou com $n$ pequeno, os três discordam.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof xbarM05 = controle("média amostral x̄", [0.2, 5], {valor: 2.6, passo: 0.05, casas: 2})
+viewof lam0M05 = controle("λ₀ (hipótese nula)", [0.2, 5], {valor: 2, passo: 0.05, casas: 2})
+viewof nTrM05 = controle("n", [3, 200], {valor: 20, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Razão de verossimilhança **${fmtM05(trM05.lr, 2)}** (valor-p ${fmtM05(pQui1M05(trM05.lr), 3)}); Wald **${fmtM05(trM05.wald, 2)}** (valor-p ${fmtM05(pQui1M05(trM05.wald), 3)}); escore **${fmtM05(trM05.escore, 2)}** (valor-p ${fmtM05(pQui1M05(trM05.escore), 3)}). Valor crítico de 5% da qui-quadrado com 1 grau de liberdade: 3,84.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "λ", domain: [0.05, 6]}, y: {label: "L(λ) − L(λ̂)", domain: [Math.min(-6, -trM05.lr / 2 - 1), 0.5]},
+  marks: [
+    Plot.line(curvaTrM05, {x: "lam", y: "ll", stroke: "#2F5D8A", strokeWidth: 2, clip: true}),
+    Plot.line(curvaTrM05, {x: "lam", y: "wald", stroke: "#8C2F39", strokeDasharray: "5,3", clip: true}),
+    Plot.line(tangenteM05, {x: "lam", y: "y", stroke: "#B7791F", strokeWidth: 2, clip: true}),
+    Plot.ruleX([lam0M05], {stroke: "#5B6770", strokeDasharray: "3,3"}),
+    Plot.ruleY([-3.84 / 2], {stroke: "#9AA5B1", strokeDasharray: "2,4"}),
+    Plot.dot([{lam: lam0M05, ll: llM05(lam0M05)}], {x: "lam", y: "ll", r: 4, fill: "#2F5D8A"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+llM05 = lam => nTrM05 * (xbarM05 * Math.log(lam / xbarM05) - lam + xbarM05)
+trM05 = ({
+  lr: -2 * llM05(lam0M05),
+  wald: nTrM05 * (xbarM05 - lam0M05) ** 2 / xbarM05,
+  escore: nTrM05 * (xbarM05 - lam0M05) ** 2 / lam0M05
+})
+curvaTrM05 = d3.range(0.05, 6.001, 0.01).map(lam => ({lam, ll: llM05(lam), wald: -nTrM05 * (lam - xbarM05) ** 2 / (2 * xbarM05)}))
+tangenteM05 = {
+  const s = nTrM05 * (xbarM05 / lam0M05 - 1), y0 = llM05(lam0M05)
+  return [-0.8, 0.8].map(d => ({lam: lam0M05 + d, y: y0 + s * d}))
+}
+PhiM05 = x => {
+  const t = 1 / (1 + 0.3275911 * Math.abs(x) / Math.SQRT2)
+  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-(x * x) / 2)
+  return x >= 0 ? 0.5 * (1 + y) : 0.5 * (1 - y)
+}
+pQui1M05 = s => 2 * (1 - PhiM05(Math.sqrt(Math.max(0, s))))
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — o lema de Neyman–Pearson com dados binomiais e a curva ROC, e a geometria dos testes de razão de verossimilhança, Wald e escore — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-m05-laboratorio}
+
+### O teste aleatorizado exato e o conservador
+
+```{python}
+import numpy as np
+from scipy import stats
+
+rng = np.random.default_rng(5)
+n, p0, p1, alfa = 20, 0.3, 0.5, 0.05
+cauda0 = stats.binom.sf(np.arange(n + 1), n, p0)     # P0(X > c)
+c = int(np.argmax(cauda0 <= alfa))
+gama = (alfa - cauda0[c]) / stats.binom.pmf(c, n, p0)
+poder = stats.binom.sf(c, n, p1) + gama * stats.binom.pmf(c, n, p1)
+print(f"c = {c}, gama = {gama:.3f}")
+print(f"aleatorizado: tamanho exato {alfa}, poder {poder:.3f}")
+print(f"conservador (X > c): tamanho {cauda0[c]:.4f}, "
+      f"poder {stats.binom.sf(c, n, p1):.3f}")
+```
+
+### Wilks em amostras pequenas
+
+Para amostras exponenciais com média $\mu$, testamos $H_0 : \mu = 1$ pelos três testes. Com $\hat\mu = \bar X$ e $I(\mu) = 1/\mu^2$, as estatísticas são $\Lambda_n = 2n(\bar X - 1 - \log\bar X)$, $W_n = n(\bar X - 1)^2/\bar X^2$ e $R_n = n(\bar X - 1)^2$; medimos a taxa de rejeição a 5% sob $H_0$.
+
+```{python}
+R = 100_000
+for n in [5, 10, 30, 100]:
+    xb = rng.exponential(size=(R, n)).mean(axis=1)
+    lr = 2 * n * (xb - 1 - np.log(xb))
+    wald = n * (xb - 1) ** 2 / xb ** 2
+    esc = n * (xb - 1) ** 2
+    taxas = [np.mean(s > 3.841) for s in (lr, wald, esc)]
+    print(f"n = {n:>3}: rejeicao a 5%  RV {taxas[0]:.3f}  "
+          f"Wald {taxas[1]:.3f}  escore {taxas[2]:.3f}")
+```
+
+A razão de verossimilhança é a mais próxima do nível nominal; o Wald, com a variância calculada no estimador, rejeita demais em amostras pequenas, porque amostras com $\bar X$ pequeno têm erro padrão estimado pequeno; o escore fica um pouco abaixo de 5%. Na parametrização pela taxa $\theta = 1/\mu$, a estatística de Wald coincidiria com a do escore — outra face da falta de invariância do teste de Wald (@exr-est-m05-wald-invariancia).
+
+### Cobertura exata: Wald, Wilson e Clopper–Pearson
+
+Para a binomial, a cobertura de um intervalo pode ser calculada exatamente, somando as probabilidades dos $x$ cujo intervalo contém $p$.
+
+```{python}
+def intervalos(x, n, a=0.05):
+    z = stats.norm.ppf(1 - a / 2)
+    ph = x / n
+    ep = np.sqrt(ph * (1 - ph) / n)
+    wald = (ph - z * ep, ph + z * ep)
+    centro = (ph + z ** 2 / (2 * n)) / (1 + z ** 2 / n)
+    meia = z * np.sqrt(ph * (1 - ph) / n + z ** 2 / (4 * n ** 2))
+    wilson = (centro - meia / (1 + z ** 2 / n),
+              centro + meia / (1 + z ** 2 / n))
+    lo = stats.beta.ppf(a / 2, x, n - x + 1) if x > 0 else 0.0
+    hi = stats.beta.ppf(1 - a / 2, x + 1, n - x) if x < n else 1.0
+    return {"Wald": wald, "Wilson": wilson, "Clopper-Pearson": (lo, hi)}
+
+n = 30
+xs = np.arange(n + 1)
+tabela = [intervalos(x, n) for x in xs]
+for p in [0.05, 0.2, 0.5]:
+    probs = stats.binom.pmf(xs, n, p)
+    cob = {nome: sum(pr for t, pr in zip(tabela, probs)
+                     if t[nome][0] <= p <= t[nome][1])
+           for nome in tabela[0]}
+    texto = "  ".join(f"{k} {v:.3f}" for k, v in cob.items())
+    print(f"p = {p}: {texto}")
+```
+
+### Holm e Benjamini–Hochberg
+
+Com $m = 200$ hipóteses, das quais 40 falsas (estatísticas $z$ com média 3), comparamos a FWER, a FDR e o número médio de descobertas verdadeiras de Bonferroni, Holm e Benjamini–Hochberg.
+
+```{python}
+def procedimentos(p, a=0.05):
+    m = len(p)
+    ordem = np.argsort(p)
+    ps = p[ordem]
+    rej = {}
+    rej["Bonferroni"] = p <= a / m
+    limiar = a / (m - np.arange(m))
+    falha = np.nonzero(ps > limiar)[0]
+    k = falha[0] if len(falha) else m
+    holm = np.zeros(m, bool)
+    holm[ordem[:k]] = True
+    rej["Holm"] = holm
+    ok = np.nonzero(ps <= a * np.arange(1, m + 1) / m)[0]
+    kbh = ok[-1] + 1 if len(ok) else 0
+    bh = np.zeros(m, bool)
+    bh[ordem[:kbh]] = True
+    rej["BH"] = bh
+    return rej
+
+m, m1, R = 200, 40, 3000
+falsa = np.arange(m) < m1
+res = {k: [] for k in ["Bonferroni", "Holm", "BH"]}
+for _ in range(R):
+    z = rng.standard_normal(m) + 3 * falsa
+    p = stats.norm.sf(z)
+    for nome, r in procedimentos(p).items():
+        V, S = np.sum(r & ~falsa), np.sum(r & falsa)
+        res[nome].append((V >= 1, V / max(r.sum(), 1), S))
+for nome, v in res.items():
+    v = np.array(v, dtype=float)
+    fwer, fdr, desc = v.mean(axis=0)
+    print(f"{nome:<10} FWER {fwer:.3f}  FDR {fdr:.3f}  "
+          f"descobertas verdadeiras {desc:.1f} de {m1}")
+```
+
+## Aplicação: a persistência das quedas do PIB pela trindade de testes {#sec-est-m05-aplicacao}
+
+O @sec-est-g01 comparou a probabilidade de o PIB cair num trimestre depois de uma queda com a probabilidade depois de uma alta. Agora formalizamos a pergunta como um teste. Seja $D_t = 1$ se o PIB trimestral dessazonalizado cai no trimestre $t$. Num modelo de cadeia de Markov, $p_{01} = P(D_t = 1 \mid D_{t-1} = 0)$ e $p_{11} = P(D_t = 1 \mid D_{t-1} = 1)$; a hipótese de **ausência de persistência** é $H_0 : p_{01} = p_{11}$. Com $n_{ij}$ o número de transições de $i$ para $j$, a verossimilhança (condicional à primeira observação) é $p_{01}^{n_{01}}(1 - p_{01})^{n_{00}}p_{11}^{n_{11}}(1 - p_{11})^{n_{10}}$, com EMV $\hat p_{01} = n_{01}/n_{0\cdot}$ e $\hat p_{11} = n_{11}/n_{1\cdot}$ e, sob $H_0$, $\tilde p = (n_{01} + n_{11})/(n_{0\cdot} + n_{1\cdot})$. Os três testes têm distribuição assintótica $\chi^2_1$ (uma restrição); o do escore é a estatística qui-quadrado de Pearson da tabela de transições. Invertendo a razão de verossimilhança com dois graus de liberdade, obtemos a região de confiança de 95% para $(p_{01}, p_{11})$. As observações de uma cadeia de Markov não são independentes, mas a teoria assintótica vale para cadeias ergódicas (@sec-est-d01).
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import Markdown
+from formacao import dados, graficos
+
+graficos.estilo()
+try:
+    pib = dados.sgs("pib_dessaz", inicio="1996-01-01")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+def ll_bern(k, n, p):
+    p = np.clip(p, 1e-12, 1 - 1e-12)
+    return k * np.log(p) + (n - k) * np.log(1 - p)
+
+if disponivel:
+    D = (np.diff(np.log(pib.to_numpy())) < 0).astype(int)
+    ant, atu = D[:-1], D[1:]
+    n01 = np.sum((ant == 0) & (atu == 1))
+    n0 = np.sum(ant == 0)
+    n11 = np.sum((ant == 1) & (atu == 1))
+    n1 = np.sum(ant == 1)
+    p01, p11 = n01 / n0, n11 / n1
+    pt = (n01 + n11) / (n0 + n1)
+    lr = 2 * (ll_bern(n01, n0, p01) + ll_bern(n11, n1, p11)
+              - ll_bern(n01, n0, pt) - ll_bern(n11, n1, pt))
+    wald = (p11 - p01) ** 2 / (p11 * (1 - p11) / n1
+                               + p01 * (1 - p01) / n0)
+    escore = (p11 - p01) ** 2 / (pt * (1 - pt) * (1 / n0 + 1 / n1))
+    pv = lambda s: stats.chi2.sf(s, 1)
+    print(f"{len(D)} trimestres; {D.sum()} quedas")
+    print(f"P(queda | alta) = {n01}/{n0} = {p01:.3f}; "
+          f"P(queda | queda) = {n11}/{n1} = {p11:.3f}")
+    for nome, s in [("razao de veross.", lr), ("Wald", wald),
+                    ("escore (Pearson)", escore)]:
+        print(f"{nome:<17} {s:6.2f}   valor-p {pv(s):.4f}")
+
+    g = np.linspace(0.005, 0.995, 400)
+    A, B = np.meshgrid(g, g)
+    dev = 2 * (ll_bern(n01, n0, p01) + ll_bern(n11, n1, p11)
+               - ll_bern(n01, n0, A) - ll_bern(n11, n1, B))
+    fig, ax = plt.subplots(figsize=(5.2, 4.4))
+    ax.contourf(A, B, dev, levels=[0, stats.chi2.ppf(0.95, 2)],
+                colors=[graficos.PALETA["azul"]], alpha=0.3)
+    ax.contour(A, B, dev, levels=[stats.chi2.ppf(0.95, 2)],
+               colors=[graficos.PALETA["azul"]])
+    ax.plot([0, 1], [0, 1], ls="--", color=graficos.PALETA["vinho"],
+            label="$H_0$: sem persistência")
+    ax.plot(p01, p11, "o", color=graficos.PALETA["azul"])
+    ax.set_xlabel("P(queda | alta no trimestre anterior)")
+    ax.set_ylabel("P(queda | queda no trimestre anterior)")
+    ax.set_xlim(0, 0.8)
+    ax.set_ylim(0, 1)
+    ax.legend(frameon=False, loc="upper left")
+    graficos.fonte(ax, "IBGE, PIB dessazonalizado (SGS 22109).")
+    plt.tight_layout()
+    plt.show()
+
+    br = lambda v, c=3: f"{v:.{c}f}".replace(".", ",")
+    p_max = max(pv(lr), pv(wald), pv(escore))
+    conclusao = ("os três testes rejeitam a ausência de "
+                 "persistência a 5%" if p_max < 0.05 else
+                 "nem todos os testes rejeitam a ausência de "
+                 "persistência a 5%")
+    estats = [lr, wald, escore]
+    if max(estats) > 1.2 * min(estats):
+        dif = ("A diferença entre as três reflete o tamanho modesto "
+               "da amostra — poucas transições a partir de uma "
+               "queda —, que também se vê na região de confiança, "
+               "alongada na direção de $p_{11}$.")
+    else:
+        dif = ("As três estatísticas são próximas, como prevê o "
+               "teorema de Wilks.")
+    resumo = ("A probabilidade estimada de queda é "
+              f"{br(p11)} depois de uma queda e {br(p01)} depois de "
+              f"uma alta. As estatísticas são {br(lr, 2)} (razão de "
+              f"verossimilhança), {br(wald, 2)} (Wald) e "
+              f"{br(escore, 2)} (escore), e {conclusao}. {dif}")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+A persistência das recessões é um fato estilizado do ciclo econômico, e o modelo de cadeia de Markov para o estado da economia é o ponto de partida dos modelos de mudança de regime (@sec-ecm-d10). Aqui, a cadeia é observada; nos modelos de Hamilton, o regime é latente e inferido junto com os parâmetros, e os testes da trindade enfrentam o problema de parâmetros não identificados sob a hipótese nula.
+
+## Exercícios resolvidos {#sec-est-m05-exercicios}
+
+::: {#exr-est-m05-variancia}
+Com $X_1, \dots, X_n$ iid $\Normal(0, \sigma^2)$, encontre o teste UMP de nível $\alpha$ de $H_0 : \sigma \leq \sigma_0$ contra $H_1 : \sigma > \sigma_0$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A densidade conjunta é $(2\pi\sigma^2)^{-n/2}\exp(-\frac{1}{2\sigma^2}\sum x_i^2)$, uma família exponencial com $T = \sum x_i^2$ e $\eta = -1/(2\sigma^2)$, crescente em $\sigma$. Pelo @thm-est-m05-karlin-rubin, o teste que rejeita quando $\sum X_i^2 > c$ é UMP, com $c$ dado por $P_{\sigma_0}(\sum X_i^2 > c) = \alpha$. Como $\sum X_i^2/\sigma_0^2 \sim \chi^2_n$ sob $\sigma = \sigma_0$, $c = \sigma_0^2\chi^2_{n,1-\alpha}$. O poder em $\sigma$ é $P(\chi^2_n > \sigma_0^2\chi^2_{n,1-\alpha}/\sigma^2)$, crescente em $\sigma$.
+:::
+
+::: {#exr-est-m05-t}
+Com $X_1, \dots, X_n$ iid $\Normal(\mu, \sigma^2)$, os dois desconhecidos, mostre que a razão de verossimilhança para $H_0 : \mu = \mu_0$ é $\Lambda_n = n\log\big(1 + t^2/(n - 1)\big)$, em que $t$ é a estatística $t$ usual.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+O máximo da log-verossimilhança em $\sigma^2$, com $\mu$ fixo, é $-\frac n2\log\hat\sigma^2(\mu) - \frac n2 + \text{const.}$, com $\hat\sigma^2(\mu) = \frac1n\sum(X_i - \mu)^2$. Logo $\Lambda_n = n\log[\hat\sigma^2(\mu_0)/\hat\sigma^2(\bar X)]$. Pela @eq-est-g04-soma-quadrados, $\sum(X_i - \mu_0)^2 = \sum(X_i - \bar X)^2 + n(\bar X - \mu_0)^2$, e a razão é $1 + \frac{n(\bar X - \mu_0)^2}{(n - 1)S^2} = 1 + \frac{t^2}{n - 1}$. Como $\Lambda_n$ é uma função crescente de $\abs t$, o teste da razão de verossimilhança é o teste $t$ bilateral; e $\Lambda_n \approx t^2 \dto \chi^2_1$, coerente com Wilks.
+:::
+
+::: {#exr-est-m05-poisson}
+Para uma amostra Poisson$(\lambda)$, escreva as estatísticas da trindade para $H_0 : \lambda = \lambda_0$ e calcule-as com $n = 20$, $\bar x = 2{,}5$ e $\lambda_0 = 2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$L_n(\lambda) = n(\bar x\log\lambda - \lambda) + \text{const.}$, $\hat\lambda = \bar x$, escore $S_n(\lambda) = n(\bar x/\lambda - 1)$ e $I(\lambda) = 1/\lambda$. Então $\Lambda_n = 2n[\bar x\log(\bar x/\lambda_0) - (\bar x - \lambda_0)]$, $W_n = n(\bar x - \lambda_0)^2/\bar x$ e $R_n = S_n(\lambda_0)^2/(nI(\lambda_0)) = n(\bar x - \lambda_0)^2/\lambda_0$. Com os números, $\Lambda_n = 40[2{,}5\log 1{,}25 - 0{,}5] \approx 2{,}31$, $W_n = 20 \times 0{,}25/2{,}5 = 2{,}00$ e $R_n = 20 \times 0{,}25/2 = 2{,}50$; nenhum rejeita a 5% (3,84). Wald usa a variância estimada em $\hat\lambda$; escore, a variância sob $H_0$.
+:::
+
+::: {#exr-est-m05-wald-invariancia}
+Na exponencial com taxa $\theta$, compare a estatística de Wald para $H_0 : \theta = 1$ com a de $H_0 : \log\theta = 0$, e mostre que a razão de verossimilhança é a mesma nas duas formulações.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\hat\theta = 1/\bar X$ e $I(\theta) = 1/\theta^2$, logo $W_n = n(\hat\theta - 1)^2/\hat\theta^2 = n(1 - \bar X)^2$. Para $\psi = \log\theta$, $\hat\psi = -\log\bar X$ e $I(\psi) = 1$ (a informação se transforma por $(\dd\theta/\dd\psi)^2 = \theta^2$), logo $W_n' = n(\log\bar X)^2$. Com $\bar X = 0{,}6$ e $n = 10$, $W_n = 1{,}6$ e $W_n' \approx 2{,}61$: hipóteses idênticas, estatísticas diferentes. A razão de verossimilhança compara os máximos da verossimilhança com e sem a restrição, que não dependem de como o parâmetro é escrito: $\Lambda_n = 2n(\bar X - 1 - \log\bar X)$ nas duas formulações.
+:::
+
+::: {#exr-est-m05-clopper-pearson}
+Mostre que, para $X \sim$ Bin$(n, p)$, $P_p(X \geq x) = P(B \leq p)$ com $B \sim$ Beta$(x, n - x + 1)$, e deduza o intervalo de Clopper–Pearson invertendo os testes unilaterais exatos.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Sejam $U_1, \dots, U_n$ uniformes independentes. $X = \#\{i : U_i \leq p\} \sim$ Bin$(n, p)$, e $X \geq x$ se, e somente se, a $x$-ésima menor uniforme, $U_{(x)}$, é no máximo $p$; e $U_{(x)} \sim$ Beta$(x, n - x + 1)$. O limite inferior de nível $1 - \alpha/2$ é o menor $p$ que o teste de $H_0 : p$ contra $p' > p$ não rejeita, isto é, o $p$ com $P_p(X \geq x) = \alpha/2$: $p_L = $ quantil $\alpha/2$ da Beta$(x, n - x + 1)$. Analogamente, $p_U$ = quantil $1 - \alpha/2$ da Beta$(x + 1, n - x)$. Por construção, a cobertura é pelo menos $1 - \alpha$ para todo $p$; o laboratório mostra que ela costuma ser maior — o preço da exatidão com dados discretos.
+:::
+
+::: {#exr-est-m05-multiplos}
+Os valores-p de dez testes são $0{,}001$; $0{,}004$; $0{,}009$; $0{,}012$; $0{,}021$; $0{,}03$; $0{,}04$; $0{,}2$; $0{,}5$; $0{,}8$. Quais hipóteses são rejeitadas a 5% por Bonferroni, Holm e Benjamini–Hochberg?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Bonferroni usa o limiar $0{,}05/10 = 0{,}005$: rejeita as duas primeiras. Holm compara $p_{(j)}$ com $0{,}05/(11 - j)$: $0{,}001 \leq 0{,}005$, $0{,}004 \leq 0{,}0056$, $0{,}009 \leq 0{,}00625$? Não — para aqui: rejeita as duas primeiras. Benjamini–Hochberg compara $p_{(j)}$ com $0{,}005j$: $0{,}005$, $0{,}010$, $0{,}015$, $0{,}020$, $0{,}025$, $0{,}030$, $0{,}035$, $\dots$; o maior $j$ com $p_{(j)} \leq 0{,}005j$ é $j = 6$ ($0{,}03 \leq 0{,}03$; $0{,}04 > 0{,}035$): rejeita as seis primeiras. A FDR permite mais descobertas, ao custo de aceitar, em média, que até 5% delas sejam falsas.
+:::
+
+::: {#exr-est-m05-tamanho}
+Use o resultado de poder local para obter o tamanho de amostra que dá poder de 80% a um teste bilateral de nível 5% de $H_0 : \theta = \theta_0$ contra o desvio $\delta$, num modelo com informação $I$ por observação. Aplique a uma proporção com $p_0 = 0{,}5$ e $\delta = 0{,}05$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Sob $\theta_n = \theta_0 + \delta$, com $h = \sqrt n\delta$, a estatística de Wald é aproximadamente $\chi^2_1(nI\delta^2)$, isto é, $\sqrt{W_n} \approx \abs{\Normal(\sqrt{nI}\delta, 1)}$. O poder é cerca de $\Phi(\sqrt{nI}\abs\delta - 1{,}96)$ (desprezando a cauda oposta), e 80% exige $\sqrt{nI}\abs\delta = 1{,}96 + 0{,}84 = 2{,}80$, isto é, $n = 7{,}85/(I\delta^2)$. Para uma proporção, $I = 1/(p(1 - p)) = 4$ em $p = 0{,}5$, e $n = 7{,}85/(4 \times 0{,}0025) \approx 785$. Dobrar a precisão desejada (reduzir $\delta$ à metade) quadruplica a amostra.
+:::
+
+## Flashcards {#sec-est-m05-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que considerar testes aleatorizados?
+Com dados discretos, nem todo tamanho $\alpha$ é atingível por regiões de rejeição; sortear na fronteira dá tamanho exato e torna convexo o conjunto dos testes. Na prática: testes conservadores ou valores-p.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Enuncie as três partes do lema de Neyman–Pearson.
+Existência: há $k, \gamma$ com tamanho $\alpha$. Suficiência: rejeitar quando $p_1 > kp_0$ (aleatorizar na igualdade) é o mais poderoso. Necessidade: todo teste mais poderoso coincide com esse fora de $\{p_1 = kp_0\}$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é razão de verossimilhança monótona, e quais famílias a têm?
+$p_{\theta_2}/p_{\theta_1}$ não decrescente em $T$ para $\theta_1 < \theta_2$. Famílias exponenciais de um parâmetro com $\eta$ crescente (em $T$); uniforme $(0, \theta)$ (no máximo).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema de Karlin–Rubin?
+Com RVM em $T$, o teste que rejeita para $T > c$ (aleatorizando em $T = c$) com tamanho $\alpha$ em $\theta_0$ é UMP para $\theta \leq \theta_0$ contra $\theta > \theta_0$, com poder crescente.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que não há teste UMP bilateral na normal, e o que se usa no lugar?
+O teste mais poderoso contra $\theta_1 > \theta_0$ rejeita à direita e contra $\theta_1 < \theta_0$ à esquerda (necessidade em NP). Usa-se o UMP não viesado: o $z$ (ou $t$) bilateral.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Defina as estatísticas da trindade para $H_0 : \theta = \theta_0$.
+RV: $2[L(\hat\theta) - L(\theta_0)]$. Wald: $n(\hat\theta - \theta_0)\T\hat{\vb I}(\hat\theta - \theta_0)$. Escore: $\frac1n\vb S(\theta_0)\T\vb I(\theta_0)^{-1}\vb S(\theta_0)$. Todas $\dto \chi^2_k$ e diferem por $o_p(1)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a ideia da demonstração do teorema de Wilks?
+$\vb Z_n = n^{-1/2}\vb S(\theta_0) \dto \Normal(\vb 0, \vb I)$; $\sqrt n(\hat\theta - \theta_0) = \vb I^{-1}\vb Z_n + o_p(1)$; Taylor de $L$ em torno de $\hat\theta$ (escore nulo): $\Lambda_n = \vb Z_n\T\vb I^{-1}\vb Z_n + o_p(1) \dto \chi^2_k$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quantos graus de liberdade tem a RV com parâmetros de perturbação?
+O número $r$ de restrições: $2[L(\hat\theta) - L(\tilde\theta)] \dto \chi^2_r$ (complemento de Schur $\vb I_{\psi\psi\cdot\lambda}$).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais testes da trindade são invariantes a reparametrizações?
+Razão de verossimilhança e escore. Wald não: $\theta = 1$ e $\log\theta = 0$ dão estatísticas diferentes.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a distribuição da trindade sob alternativas locais?
+Com $\theta_n = \theta_0 + \vb h/\sqrt n$: $\chi^2_k(\vb h\T\vb I\vb h)$. Poder de 80% a 5% com 1 g.l.: não centralidade $\approx 7{,}85$, $n \approx 7{,}85/(I\delta^2)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como testes ótimos dão regiões de confiança ótimas?
+Invertendo testes UMP unilaterais obtêm-se limites de confiança UMA: menor probabilidade de cobrir valores falsos, para todo valor falso. A régua é a cobertura de valores falsos, não só o comprimento.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como funciona o procedimento de Holm, e por que controla a FWER?
+Ordena os valores-p e rejeita enquanto $p_{(j)} \leq \alpha/(m - j + 1)$. Uma rejeição falsa exige $\min_{I_0}p_i \leq \alpha/m_0$, de probabilidade $\leq \alpha$ (Bonferroni nos $m_0$ verdadeiros). Vale sob qualquer dependência.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que faz Benjamini–Hochberg, e o que garante?
+Rejeita as $k$ menores, $k = \max\{j : p_{(j)} \leq j\alpha/m\}$. Com valores-p nulos independentes e uniformes, FDR $= m_0\alpha/m \leq \alpha$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o intervalo de Clopper–Pearson?
+A inversão dos testes binomiais exatos: $[\text{Beta}_{\alpha/2}(x, n - x + 1),\ \text{Beta}_{1-\alpha/2}(x + 1, n - x)]$. Cobertura $\geq 1 - \alpha$ para todo $p$, geralmente conservadora.
+:::
+
+## Ficha-resumo {#sec-est-m05-ficha}
+
+::: {.ficha-resumo}
+**Testes.** $\phi : \mathcal X \to [0, 1]$; poder $\beta_\phi(\theta) = \E_\theta\phi$; nível $\sup_{\Theta_0}\beta \leq \alpha$; UMP.
+
+**Neyman–Pearson.** $\phi = 1$ se $p_1 > kp_0$, $\gamma$ se $=$, 0 se $<$. Existência ($k$ pelo quantil da razão, $\gamma$ na fronteira); suficiência ($(\phi - \phi')(p_1 - kp_0) \geq 0$); necessidade (q.t.p. fora da fronteira).
+
+**Karlin–Rubin.** RVM em $T$ (exponenciais com $\eta$ crescente; uniforme). Rejeitar $T > c$ é UMP para $\theta \leq \theta_0$ vs $\theta > \theta_0$; poder crescente. Bilateral: sem UMP; $z$/$t$ bilaterais são UMPNV (admitido); unilateral é viesado contra o outro lado.
+
+**Trindade.** RV $2[L(\hat\theta) - L(\theta_0)]$; Wald $n(\hat\theta - \theta_0)\T\hat{\vb I}(\hat\theta - \theta_0)$; escore $\frac1n\vb S\T\vb I^{-1}\vb S$ em $\theta_0$. Wilks: $\dto \chi^2_k$, diferenças $o_p(1)$. Composta: $\chi^2_r$ (Schur). Wald não invariante; escore só precisa do restrito. Local: $\chi^2_k(\vb h\T\vb I\vb h)$; $n \approx 7{,}85/(I\delta^2)$.
+
+**Regiões.** Inversão de testes; Wald (elipsoide), RV (conjunto de verossimilhança, perfilada), escore (Wilson). UMP $\Rightarrow$ UMA (menor cobertura de valores falsos). Clopper–Pearson pela Beta.
+
+**Testes múltiplos.** FWER $= P(V \geq 1)$; FDR $= \E[V/\max(R, 1)]$. Bonferroni $\alpha/m$; Holm $\alpha/(m - j + 1)$ passo a passo, qualquer dependência; BH $p_{(j)} \leq j\alpha/m$, FDR $= m_0\alpha/m$ com independência.
+:::
+
+## Notas bibliográficas {#sec-est-m05-notas}
+
+@casella2002 [cap. 8 e 9] apresenta o lema de Neyman–Pearson, Karlin–Rubin, os testes de razão de verossimilhança, Wald e escore, e a inversão de testes, com muitos exemplos; é a leitura principal da primeira metade do capítulo. @lehmann2005 é o tratado de referência: testes aleatorizados, testes não viesados e similares em famílias exponenciais (onde se demonstra que o teste $t$ é UMPNV), regiões de confiança UMA e invariância. @vandervaart1998 [cap. 15 e 16] desenvolve a teoria assintótica dos testes — o teorema de Wilks com parâmetros de perturbação, o poder local por contiguidade e o terceiro lema de Le Cam. O procedimento de Holm é de 1979; a taxa de falsas descobertas e o procedimento que a controla são de @benjamini1995.
