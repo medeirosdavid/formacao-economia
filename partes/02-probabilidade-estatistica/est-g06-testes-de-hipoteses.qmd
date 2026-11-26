@@ -10,14 +10,612 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-g06-motivacao}
 
-1. Hipóteses, erros e poder
-2. Valor-p
-3. Lema de Neyman–Pearson
-4. Testes para médias e proporções
-5. Relação entre testes e intervalos
-6. Testes múltiplos
-7. Aplicação: a inflação e a meta
+A inflação média de um período foi compatível com a meta? Uma mudança regulatória reduziu a inadimplência? O coeficiente de uma regressão é diferente de zero? Um fator de risco tem prêmio positivo? São perguntas de sim ou não respondidas com dados ruidosos, e qualquer resposta pode estar errada. Um **teste de hipóteses** é uma regra de decisão que controla a frequência de um tipo de erro — declarar um efeito que não existe — e, dentro desse limite, procura detectar efeitos que existem.
+
+O teste é a ferramenta mais usada da estatística aplicada e, provavelmente, a mais mal interpretada. O valor-p não é a probabilidade de a hipótese nula ser verdadeira; "não rejeitar" não é "aceitar"; significância estatística não é relevância econômica; e quem testa muitas hipóteses acaba encontrando "efeitos" por acaso. Entender a lógica do teste — e sua relação com os intervalos de confiança do @sec-est-g05 — protege contra esses erros.
+
+O capítulo desenvolve:
+
+1. hipóteses, regiões de rejeição, erros dos tipos I e II, tamanho e poder;
+2. o valor-p, sua distribuição sob a hipótese nula e sua interpretação;
+3. o lema de Neyman–Pearson e os testes mais poderosos;
+4. testes para médias e proporções, com uma e duas amostras;
+5. a dualidade entre testes e intervalos de confiança;
+6. testes múltiplos e a correção de Bonferroni.
+
+## Hipóteses, erros e poder {#sec-est-g06-hipoteses}
+
+::: {#def-est-g06-teste}
+## Teste de hipóteses
+Num modelo $\{f(x; \theta) : \theta \in \Theta\}$, sejam $\Theta_0$ e $\Theta_1$ uma partição de $\Theta$. A **hipótese nula** é $H_0: \theta \in \Theta_0$ e a **alternativa**, $H_1: \theta \in \Theta_1$; uma hipótese é **simples** se especifica um único valor de $\theta$, e **composta** caso contrário. Um **teste** é uma regra que, com base numa **estatística de teste** $T$, rejeita $H_0$ quando os dados caem numa **região de rejeição** $\mathcal R$ — tipicamente, $\{T > c\}$ ou $\{\abs T > c\}$ para um **valor crítico** $c$.
 :::
+
+Um teste pode errar de duas formas.
+
+| | $H_0$ verdadeira | $H_0$ falsa |
+|:--|:--|:--|
+| rejeita $H_0$ | **erro do tipo I** | decisão correta |
+| não rejeita $H_0$ | decisão correta | **erro do tipo II** |
+
+::: {#def-est-g06-poder}
+## Função poder, tamanho e nível
+A **função poder** de um teste é $\beta(\theta) \defeq \Prob_\theta(\text{rejeitar } H_0)$. Seu **tamanho** é $\sup_{\theta \in \Theta_0}\beta(\theta)$, a maior probabilidade de erro do tipo I; o teste tem **nível** $\alpha$ se seu tamanho é no máximo $\alpha$. Para $\theta \in \Theta_1$, $\beta(\theta)$ é o **poder** do teste contra a alternativa $\theta$, e $1 - \beta(\theta)$ é a probabilidade de erro do tipo II.
+:::
+
+O tratamento é **assimétrico**: fixa-se o nível $\alpha$ — convencionalmente 5% ou 1% — e, entre os testes de nível $\alpha$, procura-se o de maior poder. A hipótese nula é a que só se abandona diante de evidência forte: "o tratamento não tem efeito", "o coeficiente é zero", "a inflação está na meta". Por isso, **não rejeitar** $H_0$ não é evidência de que ela seja verdadeira — o teste pode simplesmente ter pouco poder; a conclusão correta é "os dados não permitem rejeitá-la".
+
+::: {#exm-est-g06-z}
+## O teste $z$ para a média
+Seja $X_1, \dots, X_n \iid \Normal(\mu, \sigma^2)$, com $\sigma$ conhecido, e considere $H_0: \mu \leq \mu_0$ contra $H_1: \mu > \mu_0$. Com $Z = \sqrt n(\bar X - \mu_0)/\sigma$, o teste rejeita $H_0$ se $Z > z_\alpha$, em que $z_\alpha = \Phi^{-1}(1 - \alpha)$ (1,645 para 5%). Como $\sqrt n(\bar X - \mu)/\sigma \sim \Normal(0, 1)$, a função poder é
+$$
+\beta(\mu) = \Prob_\mu\Big(\frac{\sqrt n(\bar X - \mu)}{\sigma} > z_\alpha - \frac{\sqrt n(\mu - \mu_0)}{\sigma}\Big) = 1 - \Phi\Big(z_\alpha - \frac{\sqrt n(\mu - \mu_0)}{\sigma}\Big) .
+$$ {#eq-est-g06-poder}
+Ela é crescente em $\mu$; em $\Theta_0$, o máximo está em $\mu = \mu_0$, onde vale $1 - \Phi(z_\alpha) = \alpha$: o tamanho é exatamente $\alpha$. Para $\mu > \mu_0$, o poder cresce com $n$ e com o **efeito padronizado** $(\mu - \mu_0)/\sigma$, e tende a 1 quando $n \to \infty$. Para ter poder $1 - \beta$ contra $\mu_1$, basta $z_\alpha - \sqrt n(\mu_1 - \mu_0)/\sigma = -z_\beta$, isto é,
+$$
+n = \Big(\frac{(z_\alpha + z_\beta)\,\sigma}{\mu_1 - \mu_0}\Big)^2 .
+$$ {#eq-est-g06-tamanho}
+O teste **bilateral** de $H_0: \mu = \mu_0$ contra $H_1: \mu \neq \mu_0$ rejeita se $\abs Z > z_{\alpha/2}$, e seu poder é $1 - \Phi(z_{\alpha/2} - \delta_n) + \Phi(-z_{\alpha/2} - \delta_n)$, com $\delta_n = \sqrt n(\mu - \mu_0)/\sigma$. O primeiro interativo mostra essas funções.
+:::
+
+## O valor-p {#sec-est-g06-valor-p}
+
+Fixar $\alpha$ e anunciar "rejeita" ou "não rejeita" joga fora informação: rejeitar com $Z = 1{,}7$ não é o mesmo que com $Z = 4{,}5$. O valor-p resume a força da evidência.
+
+::: {#def-est-g06-valor-p}
+## Valor-p
+Para um teste que rejeita $H_0$ quando $T$ é grande, e um valor observado $t$ da estatística, o **valor-p** é
+$$
+p \defeq \sup_{\theta \in \Theta_0}\Prob_\theta(T \geq t) :
+$$
+a probabilidade, sob a hipótese nula, de uma estatística pelo menos tão extrema quanto a observada. Equivalentemente, é o menor nível $\alpha$ em que o teste rejeitaria $H_0$ com os dados observados.
+:::
+
+No teste $z$ unilateral, $p = 1 - \Phi(z)$; no bilateral, $p = 2(1 - \Phi(\abs z))$. Rejeitar $H_0$ ao nível $\alpha$ equivale a $p \leq \alpha$.
+
+::: {#thm-est-g06-p-uniforme}
+## O valor-p é uniforme sob a hipótese nula
+Se $H_0$ é simples e $T$ tem, sob $H_0$, função de distribuição contínua $F_0$, então, sob $H_0$, o valor-p tem distribuição $U(0, 1)$; em particular, $\Prob_{H_0}(p \leq \alpha) = \alpha$.
+:::
+
+::: {.proof}
+Como $F_0$ é contínua, $\Prob_{H_0}(T \geq t) = 1 - F_0(t)$, e o valor-p é a variável $1 - F_0(T)$. Pela transformação integral de probabilidade (@thm-est-g02-pit), $F_0(T) \sim U(0, 1)$ sob $H_0$, e, portanto, $1 - F_0(T)$ também.
+:::
+
+Com estatísticas discretas, $\Prob_{H_0}(p \leq \alpha) \leq \alpha$: o teste é conservador. Sob a alternativa, a distribuição do valor-p se concentra perto de zero, tanto mais quanto maior o poder (segundo interativo).
+
+O valor-p é frequentemente mal interpretado. Três pontos:
+
+- **Ele não é $\Prob(H_0 \mid \text{dados})$.** É uma probabilidade calculada **supondo** $H_0$, sobre os dados — o condicionamento na direção oposta. Para obter a probabilidade de $H_0$ dados os dados, é preciso o teorema de Bayes, com uma probabilidade a priori e o poder do teste. Se 90% das hipóteses nulas que um pesquisador testa são verdadeiras e seus testes têm poder de 80%, então, entre os resultados "significativos a 5%", mais de um terço são falsos positivos (@exr-est-g06-descobertas) — a falácia da taxa de base do @sec-est-g01.
+- **Significância estatística não é relevância.** Com $n$ muito grande, efeitos minúsculos produzem valores-p minúsculos; com $n$ pequeno, efeitos grandes podem não ser significativos. O tamanho estimado do efeito e seu intervalo de confiança informam mais que o valor-p.
+- **O valor-p só vale para um teste escolhido antes de ver os dados.** Escolher, depois, a especificação, a amostra ou a hipótese que produz $p < 0{,}05$ invalida a garantia (@sec-est-g06-multiplos).
+
+## O lema de Neyman–Pearson {#sec-est-g06-neyman-pearson}
+
+Qual é o melhor teste? Para duas hipóteses simples, a resposta é completa: rejeitar quando a razão de verossimilhanças é grande.
+
+::: {#thm-est-g06-neyman-pearson}
+## Lema de Neyman–Pearson
+Sejam $f_0$ e $f_1$ as densidades (ou funções de probabilidade) conjuntas dos dados sob $H_0: \theta = \theta_0$ e $H_1: \theta = \theta_1$. Para $k > 0$, considere o teste que rejeita $H_0$ na região
+$$
+\mathcal R^* = \{\vb x : f_1(\vb x) > k\,f_0(\vb x)\},
+$$
+e seja $\alpha = \Prob_{\theta_0}(\mathcal R^*)$ seu tamanho. Então todo teste com região de rejeição $\mathcal R$ e $\Prob_{\theta_0}(\mathcal R) \leq \alpha$ tem poder $\Prob_{\theta_1}(\mathcal R) \leq \Prob_{\theta_1}(\mathcal R^*)$.
+:::
+
+::: {.proof}
+Para todo $\vb x$, vale $(\ind{\vb x \in \mathcal R^*} - \ind{\vb x \in \mathcal R})(f_1(\vb x) - kf_0(\vb x)) \geq 0$: em $\mathcal R^*$, o primeiro fator é $\geq 0$ e o segundo é positivo; fora de $\mathcal R^*$, o primeiro é $\leq 0$ e o segundo é $\leq 0$. Integrando (ou somando) em $\vb x$,
+$$
+\big(\Prob_{\theta_1}(\mathcal R^*) - \Prob_{\theta_1}(\mathcal R)\big) - k\big(\Prob_{\theta_0}(\mathcal R^*) - \Prob_{\theta_0}(\mathcal R)\big) \geq 0 .
+$$
+Como $\Prob_{\theta_0}(\mathcal R^*) - \Prob_{\theta_0}(\mathcal R) \geq \alpha - \alpha = 0$ e $k > 0$, segue que $\Prob_{\theta_1}(\mathcal R^*) \geq \Prob_{\theta_1}(\mathcal R)$.
+:::
+
+(Com dados discretos, pode não existir $k$ que dê tamanho exatamente $\alpha$; a teoria completa usa testes aleatorizados, que sorteiam a decisão quando $f_1 = kf_0$.)
+
+::: {#exm-est-g06-np-normal}
+## O teste $z$ é uniformemente mais poderoso
+No modelo normal com $\sigma$ conhecido, considere $H_0: \mu = \mu_0$ contra $H_1: \mu = \mu_1$, com $\mu_1 > \mu_0$. A razão de verossimilhanças é
+$$
+\frac{f_1(\vb x)}{f_0(\vb x)} = \exp\Big(\frac{1}{2\sigma^2}\sum_i\big[(x_i - \mu_0)^2 - (x_i - \mu_1)^2\big]\Big) = \exp\Big(\frac{n(\mu_1 - \mu_0)}{\sigma^2}\bar x - \frac{n(\mu_1^2 - \mu_0^2)}{2\sigma^2}\Big),
+$$
+crescente em $\bar x$. Logo $\{f_1 > kf_0\} = \{\bar x > c\}$, e o teste mais poderoso de tamanho $\alpha$ rejeita quando $Z > z_\alpha$ — o teste $z$ do @exm-est-g06-z. Como a região não depende do valor de $\mu_1$, o mesmo teste é o mais poderoso contra **toda** alternativa $\mu_1 > \mu_0$: é **uniformemente mais poderoso** para $H_1: \mu > \mu_0$. Contra a alternativa bilateral $\mu \neq \mu_0$, não existe teste uniformemente mais poderoso: o ótimo contra $\mu_1 > \mu_0$ é péssimo contra $\mu_1 < \mu_0$.
+:::
+
+Para hipóteses compostas, a generalização natural é o **teste da razão de verossimilhança**, que compara o máximo da verossimilhança sob $H_0$ com o máximo irrestrito: $\Lambda = \sup_{\Theta_0}L/\sup_\Theta L$. Sob condições de regularidade, $-2\log\Lambda$ tem, sob $H_0$, distribuição aproximadamente $\chi^2_r$, com $r$ o número de restrições (teorema de Wilks, @sec-ecm-m05). Com uma restrição, rejeitar a 5% significa $\ell(\hat\theta) - \ell(\theta_0) > 3{,}84/2 = 1{,}92$ — a linha tracejada do interativo de verossimilhança do @sec-est-g05.
+
+## Testes para médias e proporções {#sec-est-g06-testes}
+
+Os testes mais usados combinam uma estatística padronizada e uma distribuição de referência exata (sob normalidade) ou aproximada (pelo TCL). Em todos, a regra é: valor crítico ou valor-p obtidos da distribuição da estatística **sob $H_0$**.
+
+**Uma média.** Para $H_0: \mu = \mu_0$:
+
+- **teste $t$**: $T = \sqrt n(\bar X - \mu_0)/S$, com distribuição $t_{n-1}$ sob $H_0$ se os dados são normais (@thm-est-g04-amostras-normais); o teste bilateral rejeita se $\abs T > t_{n-1,\alpha/2}$;
+- **grandes amostras**: sem normalidade, $T \dto \Normal(0, 1)$ sob $H_0$ (@eq-est-g04-t-assintotica), e o teste com valores críticos normais — ou da $t$, por prudência — tem nível assintótico $\alpha$.
+
+**Uma proporção.** Para $H_0: p = p_0$, $Z = (\hat p - p_0)/\sqrt{p_0(1 - p_0)/n} \dto \Normal(0, 1)$ sob $H_0$. O desvio padrão é calculado com $p_0$, o valor sob $H_0$, e não com $\hat p$; com $n$ pequeno, usa-se a binomial exata.
+
+**Duas médias, amostras independentes.** Para $H_0: \mu_X = \mu_Y$ com amostras de tamanhos $n$ e $m$:
+
+- **grandes amostras**: $Z = (\bar X - \bar Y)/\sqrt{S_X^2/n + S_Y^2/m} \dto \Normal(0, 1)$;
+- **normais com variâncias iguais**: o teste $t$ com variância combinada (@prp-est-g06-combinada);
+- **normais com variâncias diferentes**: a estatística $Z$ acima, com uma distribuição $t$ cujos graus de liberdade são aproximados pela fórmula de Welch–Satterthwaite — o **teste de Welch**, que é o padrão dos programas estatísticos e quase não perde poder quando as variâncias são iguais.
+
+::: {#prp-est-g06-combinada}
+## Teste $t$ com variância combinada
+Sejam $X_1, \dots, X_n \iid \Normal(\mu_X, \sigma^2)$ e $Y_1, \dots, Y_m \iid \Normal(\mu_Y, \sigma^2)$ independentes, com a mesma variância, e
+$$
+S_p^2 = \frac{(n - 1)S_X^2 + (m - 1)S_Y^2}{n + m - 2} .
+$$
+Então $T = \dfrac{(\bar X - \bar Y) - (\mu_X - \mu_Y)}{S_p\sqrt{1/n + 1/m}} \sim t_{n+m-2}$.
+:::
+
+::: {.proof}
+$\bar X - \bar Y \sim \Normal(\mu_X - \mu_Y, \sigma^2(1/n + 1/m))$, pela independência. Pelo @thm-est-g04-amostras-normais, $(n - 1)S_X^2/\sigma^2 \sim \chi^2_{n-1}$ e $(m - 1)S_Y^2/\sigma^2 \sim \chi^2_{m-1}$, independentes entre si e das médias; pela aditividade (@prp-est-g04-qui-quadrado), $(n + m - 2)S_p^2/\sigma^2 \sim \chi^2_{n+m-2}$, independente de $\bar X - \bar Y$. Logo $T$ é uma normal padrão dividida pela raiz de uma qui-quadrado independente sobre seus graus de liberdade.
+:::
+
+**Amostras pareadas.** Quando as observações vêm em pares — a mesma empresa antes e depois de uma mudança, o mesmo domicílio em dois anos —, testa-se a média das diferenças $D_i = X_i - Y_i$ com o teste $t$ de uma amostra. Como $\Var(D) = \sigma_X^2 + \sigma_Y^2 - 2\Cov(X, Y)$, o pareamento elimina a variação comum aos pares e pode aumentar muito o poder (@exr-est-g06-pareado).
+
+**Duas proporções.** Para $H_0: p_1 = p_2$, usa-se a proporção combinada $\hat p = (k_1 + k_2)/(n_1 + n_2)$ no desvio padrão: $Z = (\hat p_1 - \hat p_2)/\sqrt{\hat p(1 - \hat p)(1/n_1 + 1/n_2)}$.
+
+## Testes e intervalos de confiança {#sec-est-g06-dualidade}
+
+::: {#thm-est-g06-dualidade}
+## Dualidade entre testes e intervalos
+(a) Suponha que, para cada $\theta_0 \in \Theta$, exista um teste de nível $\alpha$ de $H_0: \theta = \theta_0$, com região de **não rejeição** $A(\theta_0)$. Então $C(\vb X) \defeq \{\theta_0 : \vb X \in A(\theta_0)\}$ é uma região de confiança de nível $1 - \alpha$.
+(b) Reciprocamente, se $C(\vb X)$ é uma região de confiança de nível $1 - \alpha$, o teste que rejeita $H_0: \theta = \theta_0$ quando $\theta_0 \notin C(\vb X)$ tem nível $\alpha$.
+:::
+
+::: {.proof}
+Para (a), para todo $\theta_0$, $\Prob_{\theta_0}(\theta_0 \in C(\vb X)) = \Prob_{\theta_0}(\vb X \in A(\theta_0)) \geq 1 - \alpha$, pois o teste tem nível $\alpha$. Para (b), $\Prob_{\theta_0}(\text{rejeitar}) = \Prob_{\theta_0}(\theta_0 \notin C(\vb X)) \leq \alpha$.
+:::
+
+Um intervalo de confiança é o conjunto dos valores do parâmetro que um teste **não** rejeita. O intervalo $t$ do @sec-est-g05 é a inversão do teste $t$; o intervalo de Wilson é a inversão do teste de proporção com desvio padrão calculado sob $H_0$. Na prática, a dualidade dá uma leitura rápida: se o intervalo de 95% para uma diferença não contém zero, a hipótese de diferença nula é rejeitada a 5%. Mas cuidado com a leitura de **dois** intervalos separados: intervalos individuais que se sobrepõem não implicam diferença não significativa (@exr-est-g06-sobreposicao).
+
+## Testes múltiplos {#sec-est-g06-multiplos}
+
+Se $m$ hipóteses nulas verdadeiras e independentes são testadas a 5%, a probabilidade de pelo menos uma rejeição falsa é $1 - 0{,}95^m$: 40% com $m = 10$, 64% com $m = 20$. A probabilidade de rejeitar pelo menos uma nula verdadeira é a **taxa de erro da família** (*familywise error rate*, FWER).
+
+::: {#prp-est-g06-bonferroni}
+## Correção de Bonferroni
+Se cada uma de $m$ hipóteses é testada ao nível $\alpha/m$, a probabilidade de rejeitar pelo menos uma hipótese nula verdadeira é no máximo $\alpha$, qualquer que seja a dependência entre os testes.
+:::
+
+::: {.proof}
+Seja $E_j$ o evento "rejeitar $H_{0j}$" para cada hipótese nula verdadeira $j$. Pela desigualdade de Boole (@thm-est-g01-consequencias), $\Prob(\bigcup_j E_j) \leq \sum_j\Prob(E_j) \leq m\cdot\alpha/m = \alpha$.
+:::
+
+A correção de Bonferroni é conservadora — com muitos testes, perde muito poder —, e há procedimentos menos restritivos, como o de Holm, ou que controlam outra taxa, como a **taxa de falsas descobertas** de Benjamini e Hochberg, a fração esperada de rejeições que são falsas. O problema é central em economia empírica. Pesquisadores que tentam muitas especificações e reportam as significativas, ou uma literatura que publica sobretudo resultados com $p < 0{,}05$, produzem mais falsos positivos do que o nível nominal sugere. Em finanças, centenas de "fatores" que explicariam retornos foram propostos, e Harvey, Liu e Zhu argumentaram que, levando em conta os testes múltiplos, um novo fator deveria exigir estatística $t$ acima de 3 em vez de 2.
+
+## Pontes {#sec-est-g06-pontes}
+
+- **Inferência em regressão (@sec-ecm-g03, @sec-ecm-m02).** Testes $t$ e $F$ para coeficientes, com erros normais ou em grandes amostras, e com erros padrão robustos.
+- **Testes ótimos (@sec-est-m05).** Famílias com razão de verossimilhança monótona, testes não viesados e regiões de confiança ótimas.
+- **A trindade de testes (@sec-ecm-m05).** Wald, razão de verossimilhança e multiplicador de Lagrange — este último, o teste de escore.
+- **Raízes unitárias e quebras (@sec-ecm-m10).** Testes cujas estatísticas têm distribuições não padrão.
+- **Bootstrap (@sec-ecm-d07).** Valores críticos aproximados por reamostragem.
+- **Finanças (@sec-fin-m06, @sec-fin-g06).** Testes de modelos de apreçamento e de eficiência de mercado; testes múltiplos e o "zoológico de fatores".
+
+## Interativo {#sec-est-g06-interativo}
+
+::: {.content-visible when-format="html"}
+**Tamanho e poder.** A curva cinza é a distribuição da estatística $Z$ sob $H_0$ e a azul, sob uma alternativa com efeito padronizado $\delta = (\mu_1 - \mu_0)/\sigma$, em que $Z \sim \Normal(\sqrt n\,\delta, 1)$. A área vinho, sob a curva cinza na região de rejeição, é o nível $\alpha$; a área azul sombreada, sob a curva azul na mesma região, é o poder. Aumentar $n$ afasta as duas curvas; reduzir $\alpha$ encolhe a região de rejeição e o poder.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof deltaP = controle("efeito padronizado δ", [-1, 1], {valor: 0.3, passo: 0.01, casas: 2})
+viewof nP = controle("tamanho da amostra n", [2, 200], {valor: 30, passo: 1, casas: 0})
+viewof alfaP = controle("nível α", [0.001, 0.2], {valor: 0.05, passo: 0.001, casas: 3})
+viewof ladosP = seletor("alternativa", ["unilateral (μ > μ₀)", "bilateral (μ ≠ μ₀)"], {valor: "unilateral (μ > μ₀)"})
+```
+
+```{ojs}
+//| echo: false
+md`Valor crítico: ${fmtG06(critP, 3)}. **Poder = ${fmtG06(poderP, 3)}**. Para poder de 80% com este δ e este α, seria preciso n ≈ ${nOtimoP}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 280, grid: true,
+  x: {label: "estatística Z", domain: [-4, Math.max(4, centroP + 4)]}, y: {label: "densidade"},
+  marks: [
+    Plot.areaY(gradeP.filter(d => rejeitaP(d.z)), {x: "z", y: "h1", fill: "#2F5D8A", fillOpacity: 0.3}),
+    Plot.areaY(gradeP.filter(d => rejeitaP(d.z)), {x: "z", y: "h0", fill: "#8C2F39", fillOpacity: 0.6}),
+    Plot.line(gradeP, {x: "z", y: "h0", stroke: "#5B6770", strokeWidth: 2}),
+    Plot.line(gradeP, {x: "z", y: "h1", stroke: "#2F5D8A", strokeWidth: 2}),
+    Plot.ruleX(ladosP.startsWith("uni") ? [critP] : [-critP, critP], {stroke: "#8C2F39", strokeDasharray: "4,3"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtG06 = (v, c) => v.toFixed(c).replace(".", ",")
+erfG06 = x => {
+  const s = Math.sign(x), a = Math.abs(x), t = 1 / (1 + 0.3275911 * a)
+  const y = 1 - ((((1.061405429 * t - 1.453152027) * t + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-a * a)
+  return s * y
+}
+PhiG06 = z => 0.5 * (1 + erfG06(z / Math.SQRT2))
+qnormG06 = p => {
+  let lo = -10, hi = 10
+  for (let i = 0; i < 80; i++) { const m = (lo + hi) / 2; if (PhiG06(m) < p) lo = m; else hi = m }
+  return (lo + hi) / 2
+}
+centroP = Math.sqrt(nP) * deltaP
+critP = ladosP.startsWith("uni") ? qnormG06(1 - alfaP) : qnormG06(1 - alfaP / 2)
+rejeitaP = z => ladosP.startsWith("uni") ? z > critP : Math.abs(z) > critP
+poderP = ladosP.startsWith("uni") ? 1 - PhiG06(critP - centroP) : 1 - PhiG06(critP - centroP) + PhiG06(-critP - centroP)
+nOtimoP = Math.abs(deltaP) < 1e-6 ? "infinito (δ = 0)" : Math.ceil(((critP + qnormG06(0.8)) / Math.abs(deltaP)) ** 2)
+gradeP = d3.range(-4, Math.max(4, centroP + 4), 0.02).map(z => ({z,
+  h0: Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI),
+  h1: Math.exp(-((z - centroP) ** 2) / 2) / Math.sqrt(2 * Math.PI)}))
+```
+:::
+
+**A distribuição do valor-p.** Simulamos 3000 testes $z$ bilaterais de $H_0: \mu = 0$, cada um com uma amostra de tamanho $n$ de uma normal com média $\delta$ e variância 1, e fazemos o histograma dos valores-p. Com $\delta = 0$, $H_0$ é verdadeira e os valores-p são uniformes: 5% deles ficam abaixo de 0,05, por acaso. Com $\delta \neq 0$, eles se acumulam perto de zero, e a fração abaixo de 0,05 é o poder.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof deltaV = controle("média verdadeira δ", [0, 1], {valor: 0, passo: 0.01, casas: 2})
+viewof nV = controle("tamanho da amostra n", [5, 200], {valor: 25, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Fração de valores-p abaixo de 0,05: **${fmtG06(pValoresV.filter(p => p < 0.05).length / pValoresV.length, 3)}** ${deltaV === 0 ? "(H₀ verdadeira: deveria ser cerca de 0,05)" : "(poder teórico: " + fmtG06(1 - PhiG06(1.96 - Math.sqrt(nV) * deltaV) + PhiG06(-1.96 - Math.sqrt(nV) * deltaV), 3) + ")"}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 260, grid: true,
+  x: {label: "valor-p", domain: [0, 1]}, y: {label: "frequência"},
+  marks: [
+    Plot.rectY(pValoresV, Plot.binX({y: "count"}, {x: d => d, thresholds: d3.range(0, 1.0001, 0.05), fill: d => d < 0.05 ? "abaixo" : "acima"})),
+    Plot.ruleY([pValoresV.length / 20], {stroke: "#5B6770", strokeDasharray: "4,3"})
+  ],
+  color: {domain: ["abaixo", "acima"], range: ["#8C2F39", "#2F5D8A"]}
+})
+```
+
+```{ojs}
+//| echo: false
+geradorG06 = semente => () => {
+  semente |= 0; semente = semente + 0x6D2B79F5 | 0
+  let t = Math.imul(semente ^ semente >>> 15, 1 | semente)
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+  return ((t ^ t >>> 14) >>> 0) / 4294967296
+}
+pValoresV = {
+  const u = geradorG06(4242 + nV)
+  return d3.range(3000).map(() => {
+    let s = 0
+    for (let i = 0; i < nV; i++) {
+      const r = Math.sqrt(-2 * Math.log(1 - u())), th = 2 * Math.PI * u()
+      s += deltaV + r * Math.cos(th)
+    }
+    const z = Math.sqrt(nV) * (s / nV)
+    return 2 * (1 - PhiG06(Math.abs(z)))
+  })
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — tamanho e poder do teste $z$ e a distribuição do valor-p — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-g06-laboratorio}
+
+### Testes no `scipy` e à mão
+
+```{python}
+import numpy as np
+from scipy import stats
+
+np.set_printoptions(suppress=True)
+rng = np.random.default_rng(6)
+x = rng.normal(0.4, 1, size=25)
+y = rng.normal(0.0, 1, size=30)
+
+t_mao = np.sqrt(len(x)) * x.mean() / x.std(ddof=1)
+p_mao = 2 * stats.t.sf(abs(t_mao), len(x) - 1)
+res = stats.ttest_1samp(x, 0)
+print(f"uma amostra: t = {t_mao:.4f} (scipy {res.statistic:.4f}), "
+      f"p = {p_mao:.4f} (scipy {res.pvalue:.4f})")
+welch = stats.ttest_ind(x, y, equal_var=False)
+comb = stats.ttest_ind(x, y, equal_var=True)
+print(f"duas amostras: Welch t = {welch.statistic:.3f}, "
+      f"p = {welch.pvalue:.4f}")
+print(f"               combinada t = {comb.statistic:.3f}, "
+      f"p = {comb.pvalue:.4f}")
+```
+
+### Tamanho e poder por simulação
+
+Estimamos a probabilidade de rejeição do teste $t$ bilateral a 5% de $H_0: \mu = \mu_0$, com dados normais e exponenciais (centrados para ter a média testada), sob $H_0$ (tamanho) e com efeito de $0{,}5$ desvio padrão (poder).
+
+```{python}
+R = 20_000
+
+def taxa_rejeicao(gerar, n, efeito):
+    amostras = gerar((R, n)) + efeito
+    s = amostras.std(axis=1, ddof=1)
+    t = np.sqrt(n) * amostras.mean(axis=1) / s
+    return np.mean(np.abs(t) > stats.t.ppf(0.975, n - 1))
+
+geradores = {"normal": lambda s: rng.normal(size=s),
+             "exponencial": lambda s: rng.exponential(size=s) - 1}
+for nome, gerar in geradores.items():
+    for n in [10, 30, 100]:
+        tam = taxa_rejeicao(gerar, n, 0.0)
+        poder = taxa_rejeicao(gerar, n, 0.5)
+        print(f"{nome:>11}, n = {n:>3}: tamanho {tam:.3f}, "
+              f"poder {poder:.3f}")
+```
+
+Com dados exponenciais e $n$ pequeno, o tamanho real se afasta de 5%: a $t$ é exata só sob normalidade, e o TCL demora a agir com dados assimétricos (@sec-est-g04).
+
+### Variâncias diferentes: combinada contra Welch
+
+Quando as variâncias diferem e a amostra menor tem a variância maior, o teste combinado rejeita a hipótese nula verdadeira com frequência muito acima do nível.
+
+```{python}
+n, m = 10, 40
+X = rng.normal(0, 3, size=(R, n))
+Y = rng.normal(0, 1, size=(R, m))
+p_comb = stats.ttest_ind(X, Y, axis=1, equal_var=True).pvalue
+p_welch = stats.ttest_ind(X, Y, axis=1, equal_var=False).pvalue
+print(f"tamanho real a 5%: combinada {np.mean(p_comb < 0.05):.3f}, "
+      f"Welch {np.mean(p_welch < 0.05):.3f}")
+```
+
+### Testes múltiplos
+
+Simulamos 20 testes independentes de hipóteses nulas verdadeiras, repetidos muitas vezes, e contamos com que frequência pelo menos um rejeita, com e sem a correção de Bonferroni.
+
+```{python}
+m, n = 20, 30
+z = np.sqrt(n) * rng.normal(size=(R, m, n)).mean(axis=2)
+p = 2 * stats.norm.sf(np.abs(z))
+sem = np.mean((p < 0.05).any(axis=1))
+bonf = np.mean((p < 0.05 / m).any(axis=1))
+print("P(ao menos uma rejeicao falsa):")
+print(f"   sem correcao {sem:.3f} (teorico {1 - 0.95 ** m:.3f})")
+print(f"   Bonferroni   {bonf:.3f}")
+```
+
+## Aplicação: a inflação e a meta {#sec-est-g06-aplicacao}
+
+A meta de inflação foi de 4,5% ao ano de 2005 a 2018 — o equivalente a cerca de 0,367% ao mês. Testamos, para 2017–2018, a hipótese de que a inflação mensal **média** foi igual a esse valor; e, com o teste de Welch, se a média de 2010–2014 diferiu da de 2017–2019. A meta se refere à inflação acumulada em doze meses até dezembro, e não à média mensal; os testes respondem à pergunta, próxima mas diferente, de se o nível médio da inflação no período foi compatível com a meta. Como no @sec-est-g05, mostramos também a versão com erro padrão ajustado pela correlação entre meses consecutivos.
+
+```{python}
+import pandas as pd
+from IPython.display import Markdown
+from formacao import dados
+
+try:
+    ipca = dados.sgs("ipca", inicio="2000-01-01")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+def media_ep(x):
+    """Media, erro padrao iid e erro padrao ajustado por AR(1)."""
+    n, m, s = len(x), x.mean(), x.std(ddof=1)
+    rho = np.corrcoef(x[:-1], x[1:])[0, 1]
+    ep = s / np.sqrt(n)
+    return m, ep, ep * np.sqrt((1 + rho) / (1 - rho)), n
+
+if disponivel:
+    meta_mensal = 100 * (1.045 ** (1 / 12) - 1)
+    x = ipca.loc["2017":"2018"].to_numpy()
+    m, ep, ep_aj, n = media_ep(x)
+    t_iid, t_aj = (m - meta_mensal) / ep, (m - meta_mensal) / ep_aj
+    p_iid = 2 * stats.t.sf(abs(t_iid), n - 1)
+    p_aj = 2 * stats.t.sf(abs(t_aj), n - 1)
+    print(f"2017-2018: media {m:.3f}% vs meta mensal "
+          f"{meta_mensal:.3f}%")
+    print(f"   iid: t = {t_iid:.2f}, p = {p_iid:.3f}")
+    print(f"   ajustado: t = {t_aj:.2f}, p = {p_aj:.3f}")
+    a = media_ep(ipca.loc["2010":"2014"].to_numpy())
+    b = media_ep(ipca.loc["2017":"2019"].to_numpy())
+    dif = a[0] - b[0]
+    z_iid = dif / np.hypot(a[1], b[1])
+    z_aj = dif / np.hypot(a[2], b[2])
+    print(f"2010-2014 menos 2017-2019: diferenca {dif:.3f} p.p.")
+    print(f"   iid: z = {z_iid:.2f}, "
+          f"p = {2 * stats.norm.sf(abs(z_iid)):.3f}")
+    print(f"   ajustado: z = {z_aj:.2f}, "
+          f"p = {2 * stats.norm.sf(abs(z_aj)):.3f}")
+```
+
+```{python}
+if disponivel:
+    br = lambda v, c=3: f"{v:.{c}f}".replace(".", ",")
+    pv = lambda v: "p < 0,001" if v < 0.001 else f"p = {br(v)}"
+    decisao = lambda p: ("rejeita-se" if p < 0.05 else "não se rejeita")
+    resumo = (f"Em 2017–2018, a inflação mensal média foi de {br(m)}%, "
+              f"contra {br(meta_mensal)}% compatíveis com a meta: "
+              f"{decisao(p_iid)} a igualdade a 5% com o erro padrão "
+              f"iid ({pv(p_iid)}) e {decisao(p_aj)} com o erro "
+              f"padrão ajustado ({pv(p_aj)}). A diferença entre as "
+              f"médias de 2010–2014 e 2017–2019 é de {br(dif)} ponto "
+              f"percentual, com "
+              f"{pv(2 * stats.norm.sf(abs(z_aj)))} no teste ajustado.")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+Os testes ajustados são os mais confiáveis dos dois, mas ainda dependem de um modelo simples para a dependência e de poucos meses; não rejeitar a igualdade com 24 observações correlacionadas diz pouco. A avaliação do cumprimento da meta, na prática, olha para a inflação acumulada em doze meses e para o intervalo de tolerância, e a estatística correta para séries persistentes é tema do @sec-ecm-m02.
+
+## Exercícios resolvidos {#sec-est-g06-exercicios}
+
+::: {#exr-est-g06-poder}
+Um teste $z$ unilateral a 5% deve detectar, com poder de 80%, um aumento da média de $0{,}25$ desvio padrão. Qual é o tamanho de amostra necessário? E se o efeito fosse de $0{,}125$ desvio padrão?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela @eq-est-g06-tamanho, com $z_{0{,}05} = 1{,}645$ e $z_{0{,}20} = 0{,}842$, $n = ((1{,}645 + 0{,}842)/0{,}25)^2 = 9{,}948^2 \approx 99$. Com metade do efeito, $n$ quadruplica: cerca de 396. Detectar efeitos pequenos exige amostras grandes — e estudos com amostras pequenas, quando encontram efeitos significativos, tendem a superestimá-los, porque só estimativas grandes passam pelo filtro da significância.
+:::
+
+::: {#exr-est-g06-valor-p}
+Num teste $z$, observou-se $z = 2{,}1$. Calcule o valor-p unilateral e o bilateral, e diga em que níveis usuais (10%, 5%, 1%) $H_0$ é rejeitada em cada caso.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Unilateral: $p = 1 - \Phi(2{,}1) \approx 0{,}018$; rejeita a 10% e a 5%, não a 1%. Bilateral: $p = 2 \times 0{,}018 \approx 0{,}036$; mesmas conclusões. A escolha entre unilateral e bilateral deve ser feita **antes** de ver os dados, com base na pergunta: escolher o unilateral depois de ver o sinal da estimativa dobra, na prática, o nível do teste.
+:::
+
+::: {#exr-est-g06-descobertas}
+Suponha que 90% das hipóteses nulas testadas numa área de pesquisa sejam verdadeiras, que os testes sejam feitos a 5% e que tenham poder de 80% quando a nula é falsa. Que fração dos resultados significativos são falsos positivos? E se o poder fosse de 20%?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela probabilidade total, $\Prob(\text{rejeitar}) = 0{,}9 \times 0{,}05 + 0{,}1 \times 0{,}8 = 0{,}045 + 0{,}08 = 0{,}125$; por Bayes, $\Prob(H_0 \mid \text{rejeitar}) = 0{,}045/0{,}125 = 0{,}36$. Com poder de 20%, $0{,}045/(0{,}045 + 0{,}02) \approx 0{,}69$: mais de dois terços dos "achados" seriam falsos. Um valor-p abaixo de 5% está longe de significar 95% de chance de o efeito existir; a resposta depende da taxa de base e do poder — o raciocínio do @exm-est-g01-recessao.
+:::
+
+::: {#exr-est-g06-exponencial}
+As durações $X_1, \dots, X_n$ de episódios de desemprego são iid $\text{Exp}(\lambda)$. Use o lema de Neyman–Pearson para encontrar o teste mais poderoso de $H_0: \lambda = \lambda_0$ contra $H_1: \lambda = \lambda_1 < \lambda_0$ (durações mais longas) e seu valor crítico exato, usando que $2\lambda\sum_iX_i \sim \chi^2_{2n}$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A razão de verossimilhanças é $\frac{\lambda_1^n e^{-\lambda_1\sum x_i}}{\lambda_0^n e^{-\lambda_0\sum x_i}} = \big(\frac{\lambda_1}{\lambda_0}\big)^n e^{(\lambda_0 - \lambda_1)\sum x_i}$, crescente em $\sum x_i$ porque $\lambda_0 > \lambda_1$. O teste mais poderoso rejeita quando $\sum X_i > c$. Se $X \sim \text{Exp}(\lambda)$, $2\lambda X \sim \text{Exp}(1/2) = \text{Gama}(1, 1/2) = \chi^2_2$, e, pela aditividade, $2\lambda\sum X_i \sim \chi^2_{2n}$. Sob $H_0$, $\Prob(\sum X_i > c) = \Prob(\chi^2_{2n} > 2\lambda_0 c) = \alpha$ dá $c = \chi^2_{2n,1-\alpha}/(2\lambda_0)$. Como $c$ não depende de $\lambda_1$, o teste é uniformemente mais poderoso contra $H_1: \lambda < \lambda_0$.
+:::
+
+::: {#exr-est-g06-sobreposicao}
+Duas médias estimadas a partir de amostras independentes valem 0 e 3, ambas com erro padrão 1. Mostre que os intervalos de 95% individuais se sobrepõem, mas que a diferença é significativa a 5%.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Os intervalos são $[-1{,}96;\ 1{,}96]$ e $[1{,}04;\ 4{,}96]$, que se sobrepõem em $[1{,}04;\ 1{,}96]$. Mas a diferença tem erro padrão $\sqrt{1 + 1} \approx 1{,}414$, e $z = 3/1{,}414 \approx 2{,}12 > 1{,}96$: rejeita-se a igualdade a 5%. A sobreposição exigiria uma diferença de até $2 \times 1{,}96 = 3{,}92$, mas o teste da diferença só exige $1{,}96\sqrt 2 \approx 2{,}77$, porque os erros das duas estimativas não se somam linearmente, e sim em quadratura. Comparar intervalos "a olho" é conservador demais.
+:::
+
+::: {#exr-est-g06-pareado}
+Dez empresas foram observadas antes e depois de um programa. A diferença média (depois menos antes) na produtividade é $0{,}5$, com desvio padrão das diferenças $0{,}6$; os desvios padrão das medidas antes e depois são ambos $1{,}5$. Compare o teste pareado com o que trataria as amostras como independentes.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pareado: $t = 0{,}5/(0{,}6/\sqrt{10}) \approx 2{,}64$, com 9 graus de liberdade; o valor-p bilateral é cerca de 0,027. Independente: o erro padrão da diferença seria $1{,}5\sqrt{2/10} \approx 0{,}67$, e $t \approx 0{,}75$, longe de significativo. As empresas diferem muito entre si (desvio padrão 1,5), mas a mudança de cada uma é bem mais homogênea (0,6): o pareamento elimina a heterogeneidade entre empresas, que não tem relação com o programa — a mesma lógica dos efeitos fixos em dados em painel (@sec-ecm-g07).
+:::
+
+::: {#exr-est-g06-multiplos}
+Um pesquisador testa 20 hipóteses nulas verdadeiras e independentes a 5%. Qual é a probabilidade de pelo menos uma rejeição? Com a correção de Bonferroni, qual é o nível de cada teste e qual é essa probabilidade?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Sem correção, $1 - 0{,}95^{20} \approx 0{,}642$. Com Bonferroni, cada teste é feito a $0{,}05/20 = 0{,}0025$, e a probabilidade é $1 - 0{,}9975^{20} \approx 0{,}049$ — abaixo de 5%, como garante a @prp-est-g06-bonferroni, e muito perto dele porque os testes são independentes e o nível individual é pequeno ($1 - (1 - \alpha/m)^m \approx \alpha$).
+:::
+
+::: {#exr-est-g06-proporcao}
+Num lote de 1500 empréstimos, 42 ficaram inadimplentes. Teste, a 5%, a hipótese de que a probabilidade de inadimplência é no máximo 2%, contra a alternativa de que é maior.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\hat p = 42/1500 = 0{,}028$. Sob $H_0$ (na fronteira $p_0 = 0{,}02$), o desvio padrão de $\hat p$ é $\sqrt{0{,}02 \times 0{,}98/1500} \approx 0{,}00361$, e $z = (0{,}028 - 0{,}02)/0{,}00361 \approx 2{,}21$, com valor-p unilateral $1 - \Phi(2{,}21) \approx 0{,}013$: rejeita-se $H_0$ a 5%. Se os empréstimos não forem independentes — por exemplo, concentrados num setor —, a variância de $\hat p$ é maior que a binomial e o teste exagera a evidência.
+:::
+
+## Flashcards {#sec-est-g06-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## O que são erros dos tipos I e II?
+Tipo I: rejeitar $H_0$ verdadeira (probabilidade controlada pelo nível $\alpha$). Tipo II: não rejeitar $H_0$ falsa (probabilidade $1 -$ poder).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que são função poder e tamanho de um teste?
+$\beta(\theta) = \Prob_\theta(\text{rejeitar})$; tamanho $= \sup_{\Theta_0}\beta(\theta)$. Nível $\alpha$: tamanho $\leq \alpha$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o poder do teste $z$ unilateral?
+$\beta(\mu) = 1 - \Phi(z_\alpha - \sqrt n(\mu - \mu_0)/\sigma)$; para poder $1 - \beta$, $n = ((z_\alpha + z_\beta)\sigma/(\mu_1 - \mu_0))^2$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o valor-p?
+A probabilidade, sob $H_0$, de uma estatística pelo menos tão extrema quanto a observada; o menor $\alpha$ em que se rejeitaria $H_0$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a distribuição do valor-p sob $H_0$?
+Uniforme em $(0, 1)$ se a estatística é contínua (transformação integral de probabilidade); conservadora se discreta.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O valor-p é a probabilidade de $H_0$ ser verdadeira?
+Não. É $\Prob(\text{dados extremos} \mid H_0)$, não $\Prob(H_0 \mid \text{dados})$; esta exige Bayes, com priori e poder.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o lema de Neyman–Pearson?
+Para $H_0$ e $H_1$ simples, o teste mais poderoso de tamanho $\alpha$ rejeita quando $f_1/f_0 > k$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que o teste $z$ unilateral é uniformemente mais poderoso?
+A razão de verossimilhanças é crescente em $\bar x$ para todo $\mu_1 > \mu_0$, e a região $\{\bar X > c\}$ não depende de $\mu_1$. No caso bilateral, não há teste UMP.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual estatística testa uma média, e com que distribuição?
+$T = \sqrt n(\bar X - \mu_0)/S$: $t_{n-1}$ exata sob normalidade; $\Normal(0, 1)$ assintótica em geral.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando usar o teste de Welch, e quando o pareado?
+Welch: duas amostras independentes com variâncias possivelmente diferentes. Pareado: observações em pares; testa a média das diferenças e elimina a variação comum.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a relação entre testes e intervalos de confiança?
+O intervalo de nível $1 - \alpha$ é o conjunto dos $\theta_0$ não rejeitados pelo teste de nível $\alpha$ de $H_0: \theta = \theta_0$, e vice-versa.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Dois intervalos de 95% que se sobrepõem implicam diferença não significativa?
+Não: a diferença usa erro padrão $\sqrt{ep_1^2 + ep_2^2}$, menor que $ep_1 + ep_2$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o problema dos testes múltiplos, e o que faz Bonferroni?
+Com $m$ testes de nulas verdadeiras a 5%, a chance de ao menos um falso positivo é $1 - 0{,}95^m$. Bonferroni testa cada um a $\alpha/m$ e garante FWER $\leq \alpha$ (desigualdade de Boole).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## "Não rejeitar $H_0$" significa que $H_0$ é verdadeira?
+Não: o teste pode ter pouco poder. A conclusão é que os dados não permitem rejeitá-la; o intervalo de confiança mostra que valores continuam plausíveis.
+:::
+
+## Ficha-resumo {#sec-est-g06-ficha}
+
+::: {.ficha-resumo}
+**Estrutura.** $H_0: \theta \in \Theta_0$ contra $H_1: \theta \in \Theta_1$; estatística $T$ e região de rejeição. Erros: tipo I (rejeitar $H_0$ verdadeira), tipo II (não rejeitar $H_0$ falsa). Poder $\beta(\theta) = \Prob_\theta(\text{rejeitar})$; tamanho $\sup_{\Theta_0}\beta$; nível $\alpha$. Não rejeitar $\neq$ aceitar.
+
+**Teste $z$.** $Z = \sqrt n(\bar X - \mu_0)/\sigma$; unilateral: $Z > z_\alpha$, poder $1 - \Phi(z_\alpha - \sqrt n\delta)$; bilateral: $\abs Z > z_{\alpha/2}$. Tamanho de amostra $n = ((z_\alpha + z_\beta)/\delta)^2$.
+
+**Valor-p.** $\sup_{\Theta_0}\Prob(T \geq t_{\text{obs}})$; rejeita se $p \leq \alpha$; uniforme sob $H_0$ (contínua). Não é $\Prob(H_0 \mid \text{dados})$; falsos positivos dependem da taxa de base e do poder; significância $\neq$ relevância.
+
+**Neyman–Pearson.** Simples contra simples: rejeitar se $f_1/f_0 > k$ é o mais poderoso. Normal: teste $z$ unilateral é UMP. Razão de verossimilhança: $-2\log\Lambda \approx \chi^2_r$ (Wilks).
+
+**Médias e proporções.** $t = \sqrt n(\bar X - \mu_0)/S \sim t_{n-1}$ (normal) ou $\approx \Normal(0, 1)$. Proporção: $(\hat p - p_0)/\sqrt{p_0(1 - p_0)/n}$. Duas amostras: $(\bar X - \bar Y)/\sqrt{S_X^2/n + S_Y^2/m}$; combinada $t_{n+m-2}$ (variâncias iguais); Welch; pareado: $t$ nas diferenças; duas proporções com $\hat p$ combinado.
+
+**Dualidade.** IC $= \{\theta_0 \text{ não rejeitados}\}$; teste: rejeitar se $\theta_0 \notin$ IC. Sobreposição de ICs individuais não basta.
+
+**Testes múltiplos.** FWER $= 1 - (1 - \alpha)^m$ (independentes); Bonferroni $\alpha/m$ garante $\leq \alpha$; Holm, FDR; busca de especificações.
+:::
+
+## Notas bibliográficas {#sec-est-g06-notas}
+
+@casella2002 desenvolve testes de hipóteses com rigor — razão de verossimilhança, Neyman–Pearson, testes uniformemente mais poderosos, valores-p e a dualidade com regiões de confiança — e é a base do @sec-est-m05. @bussab2017 apresenta os testes para médias, proporções e variâncias com aplicações e discussão de interpretação. A discussão sobre o uso e o abuso dos valores-p ganhou força na última década, com uma declaração da American Statistical Association, em 2016, sobre o que eles significam e não significam, e com o debate sobre replicação em economia; o argumento sobre testes múltiplos em finanças é de Harvey, Liu e Zhu, num artigo de 2016 no *Review of Financial Studies*.
