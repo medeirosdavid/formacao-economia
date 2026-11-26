@@ -10,15 +10,786 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-g03-motivacao}
 
-1. Esperança e variância
-2. Momentos e função geradora de momentos
-3. Desigualdade de Jensen
-4. Distribuições conjuntas, marginais e condicionais
-5. Covariância, correlação e diversificação
-6. Esperança condicional (versão elementar) e melhor preditor
-7. Normal multivariada
-8. Aplicação: a inflação de amanhã dada a de hoje
+Uma distribuição inteira é informação demais para a maioria das decisões. O economista quer resumos: o retorno **esperado** de um ativo, o **risco** medido pela variância, a **covariância** entre a renda e o consumo, o valor **esperado** da inflação dado o que se sabe hoje. Este capítulo constrói esses resumos e as regras para manipulá-los.
+
+Três ideias têm peso especial no resto do livro. A **desigualdade de Jensen** explica a aversão ao risco: com utilidade côncava, uma loteria vale menos que seu valor esperado. A **covariância** explica a diversificação: o risco de uma carteira depende de como os ativos se movem juntos, não só de quão arriscado é cada um. E a **esperança condicional** é o melhor previsor de uma variável a partir de outra — o objeto que a regressão estima, que as expectativas racionais da macroeconomia formalizam e que o apreçamento de ativos usa para descontar fluxos futuros.
+
+O capítulo desenvolve:
+
+1. esperança, a "lei do estatístico inconsciente" e a fórmula da cauda;
+2. variância, momentos e a função geradora de momentos;
+3. a desigualdade de Jensen, com aversão ao risco e equivalente certo;
+4. distribuições conjuntas, marginais, condicionais e independência;
+5. covariância, correlação e diversificação;
+6. esperança condicional, expectativas iteradas, variância total e melhor preditor;
+7. a normal multivariada e suas distribuições condicionais.
+
+## Esperança {#sec-est-g03-esperanca}
+
+::: {#def-est-g03-esperanca}
+## Esperança
+A **esperança** (ou valor esperado, ou média) de uma variável discreta $X$ é
+$$
+\E[X] \defeq \sum_x x\,p_X(x),
+$$
+e a de uma variável contínua com densidade $f_X$ é
+$$
+\E[X] \defeq \int_{-\infty}^\infty x\,f_X(x)\,\dd x ,
+$$
+desde que a soma ou a integral convirjam **absolutamente**: $\sum_x \abs x\,p_X(x) < \infty$ ou $\int \abs x f_X(x)\,\dd x < \infty$. Nesse caso, dizemos que $X$ é **integrável**.
 :::
+
+A esperança é o centro de massa da distribuição. A exigência de convergência absoluta garante que o valor não dependa da ordem de soma (@thm-mat-g02-rearranjo-absoluto) e exclui distribuições sem média. A densidade de **Cauchy**, $f(x) = 1/(\pi(1 + x^2))$, é simétrica em torno de zero, mas $\int \abs x f(x)\,\dd x = \infty$: a Cauchy não tem esperança, e médias de amostras dela não se estabilizam (@sec-est-g04). Para variáveis mistas, a esperança soma a parte discreta e integra a contínua; a definição geral, pela integral de Lebesgue, está no @sec-est-m01.
+
+::: {#exm-est-g03-medias}
+## Médias das distribuições usuais
+(a) Bernoulli: $\E[X] = 0 \cdot (1 - p) + 1 \cdot p = p$. Binomial: $np$ (@exm-est-g03-binomial).
+(b) Poisson: $\E[X] = \sum_{k \geq 1} k e^{-\lambda}\lambda^k/k! = \lambda\sum_{k \geq 1} e^{-\lambda}\lambda^{k-1}/(k-1)! = \lambda$.
+(c) Uniforme em $[a, b]$: $(a + b)/2$. Exponencial: $1/\lambda$ (@exr-est-g03-cauda). Gama: $\alpha/\beta$, pois $\int_0^\infty x\,\frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}\,\dd x = \frac{\Gamma(\alpha + 1)}{\beta\,\Gamma(\alpha)}$ e $\Gamma(\alpha + 1) = \alpha\Gamma(\alpha)$ (por partes, como no @exm-mat-g04-gama).
+(d) Normal: $\E[X] = \mu$, porque $(x - \mu)f(x)$ é uma função ímpar em torno de $\mu$ e integrável.
+(e) Pareto: $\E[X] = \int_{x_m}^\infty x\cdot\alpha x_m^\alpha x^{-\alpha-1}\,\dd x = \frac{\alpha x_m}{\alpha - 1}$ se $\alpha > 1$, e $\E[X] = \infty$ se $\alpha \leq 1$: com cauda pesada o bastante, nem a média existe.
+:::
+
+Para calcular $\E[g(X)]$, não é preciso achar a distribuição de $g(X)$.
+
+::: {#thm-est-g03-lotus}
+## Esperança de uma função
+Se $X$ é discreta, $\E[g(X)] = \sum_x g(x)\,p_X(x)$; se $X$ é contínua, $\E[g(X)] = \int g(x)\,f_X(x)\,\dd x$ — sempre que a soma ou a integral convirjam absolutamente.
+:::
+
+::: {.proof}
+No caso discreto, $Y = g(X)$ é discreta, e $p_Y(y) = \sum_{x : g(x) = y} p_X(x)$. Então $\E[Y] = \sum_y y\sum_{x : g(x) = y}p_X(x) = \sum_y\sum_{x : g(x) = y} g(x)p_X(x) = \sum_x g(x)p_X(x)$, reagrupando uma série absolutamente convergente. No caso contínuo com $g$ nas condições do @thm-est-g02-transformacao, $\E[Y] = \int y f_Y(y)\,\dd y$ e a substituição $y = g(x)$ (@thm-mat-g04-substituicao) transforma a integral em $\int g(x)f_X(x)\,\dd x$. Para $g$ geral, o resultado é um teorema de teoria da medida, que admitimos (@sec-est-m01).
+:::
+
+Daí seguem imediatamente: $\E[aX + b] = a\E[X] + b$; se $g \leq h$, então $\E[g(X)] \leq \E[h(X)]$; e $\abs{\E[X]} \leq \E\abs X$. Para variáveis não negativas, a esperança também se escreve em termos da cauda.
+
+::: {#prp-est-g03-cauda}
+## Fórmula da cauda
+Se $X$ tem valores em $\{0, 1, 2, \dots\}$, então $\E[X] = \sum_{k=0}^\infty \Prob(X > k)$. Se $X \geq 0$ é contínua, $\E[X] = \int_0^\infty \Prob(X > t)\,\dd t$.
+:::
+
+::: {.proof}
+No caso discreto, $\sum_{k=0}^{n-1}\Prob(X > k) = \sum_{k=0}^{n-1}\sum_{j > k}p(j) = \sum_{j \geq 1}\min\{j, n\}\,p(j)$, pois cada $j$ aparece uma vez para cada $k < \min\{j, n\}$. Quando $n \to \infty$, os termos $\min\{j, n\}p(j)$ crescem para $j\,p(j)$; para cada $J$ fixo, $\sum_{j \leq J}\min\{j, n\}p(j) \to \sum_{j \leq J} j\,p(j)$, e as somas parciais são limitadas por $\E[X]$; logo o limite é $\sum_j j\,p(j) = \E[X]$ (valendo também quando ambos os lados são infinitos). No caso contínuo, $\int_0^\infty \Prob(X > t)\,\dd t = \int_0^\infty\int_t^\infty f(x)\,\dd x\,\dd t$, e, trocando a ordem de integração — o que é legítimo para integrandos não negativos (@sec-est-m01) —, obtém-se $\int_0^\infty\big(\int_0^x \dd t\big) f(x)\,\dd x = \int_0^\infty x f(x)\,\dd x$.
+:::
+
+## Variância, momentos e função geradora {#sec-est-g03-variancia}
+
+::: {#def-est-g03-variancia}
+## Variância e momentos
+Se $\E[X^2] < \infty$, a **variância** de $X$ é $\Var(X) \defeq \E[(X - \mu)^2]$, com $\mu = \E[X]$, e o **desvio padrão** é $\sigma = \sqrt{\Var(X)}$. Mais geralmente, $\E[X^k]$ é o **momento** de ordem $k$ e $\E[(X - \mu)^k]$ o momento **central**. A **assimetria** é $\E[(X - \mu)^3]/\sigma^3$ e a **curtose**, $\E[(X - \mu)^4]/\sigma^4$.
+:::
+
+($\E[X^2] < \infty$ implica $\E\abs X < \infty$, pois $\abs x \leq 1 + x^2$.)
+
+::: {#prp-est-g03-variancia}
+## Propriedades da variância
+(a) $\Var(X) = \E[X^2] - (\E[X])^2$.
+(b) $\Var(aX + b) = a^2\Var(X)$.
+(c) $\Var(X) \geq 0$; em particular, $\E[X^2] \geq (\E[X])^2$.
+:::
+
+::: {.proof}
+Para (a), expanda: $\E[(X - \mu)^2] = \E[X^2] - 2\mu\E[X] + \mu^2 = \E[X^2] - \mu^2$, pela linearidade. Para (b), $aX + b - (a\mu + b) = a(X - \mu)$. O item (c) vem de $(X - \mu)^2 \geq 0$.
+:::
+
+A variância é o principal indicador de dispersão e, em finanças, de risco; o desvio padrão tem a unidade de $X$. A assimetria mede a diferença entre as caudas (positiva para a log-normal, a renda e a inflação mensal); a curtose mede o peso das caudas, e vale 3 na normal — distribuições com curtose maior, como os retornos diários, têm **caudas pesadas**. Variâncias das distribuições usuais: Bernoulli, $p(1 - p)$; binomial, $np(1 - p)$ (@exm-est-g03-binomial); Poisson, $\lambda$; uniforme em $[a, b]$, $(b - a)^2/12$; exponencial, $1/\lambda^2$; gama, $\alpha/\beta^2$; normal, $\sigma^2$ — integrando por partes, $\int z^2\varphi(z)\,\dd z = [-z\varphi(z)] + \int\varphi = 1$, e $\Var(\mu + \sigma Z) = \sigma^2$.
+
+::: {#def-est-g03-fgm}
+## Função geradora de momentos
+A **função geradora de momentos** de $X$ é $M_X(t) \defeq \E[e^{tX}]$, para os $t$ em que a esperança é finita.
+:::
+
+Se $M_X$ é finita num intervalo $(-t_0, t_0)$, então todos os momentos de $X$ existem e $M_X^{(k)}(0) = \E[X^k]$: formalmente, derivar $\E[e^{tX}]$ em $t$ produz $\E[X^k e^{tX}]$. A justificativa — derivar sob o sinal de esperança — e o teorema a seguir são resultados de teoria da medida, que admitimos.
+
+::: {#thm-est-g03-unicidade-fgm}
+## Unicidade da função geradora (admitido)
+Se $M_X(t) = M_Y(t) < \infty$ para todo $t$ num intervalo aberto contendo 0, então $X$ e $Y$ têm a mesma distribuição. O mesmo vale para vetores aleatórios, com $M_{\vb X}(\vb t) = \E[e^{\vb t\T\vb X}]$.
+:::
+
+::: {#prp-est-g03-fgm}
+## Funções geradoras usuais
+(a) $M_{aX + b}(t) = e^{bt}M_X(at)$.
+(b) Bernoulli: $1 - p + pe^t$. Poisson: $\exp(\lambda(e^t - 1))$.
+(c) Normal: $M_X(t) = \exp(\mu t + \sigma^2t^2/2)$ para todo $t$.
+(d) Gama: $M_X(t) = (\beta/(\beta - t))^\alpha$ para $t < \beta$.
+:::
+
+::: {.proof}
+O item (a) é a linearidade: $\E[e^{t(aX + b)}] = e^{bt}\E[e^{(at)X}]$. Para (b), $\E[e^{tX}] = (1 - p) + pe^t$ e $\sum_k e^{tk}e^{-\lambda}\lambda^k/k! = e^{-\lambda}e^{\lambda e^t}$. Para (c), por (a) basta o caso padrão: completando o quadrado, $tz - z^2/2 = t^2/2 - (z - t)^2/2$, e
+$$
+\E[e^{tZ}] = e^{t^2/2}\int\frac{1}{\sqrt{2\pi}}e^{-(z - t)^2/2}\,\dd z = e^{t^2/2},
+$$
+pois a última integral é a de uma densidade normal com média $t$. Para (d), com $t < \beta$, $\int_0^\infty e^{tx}\frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x}\,\dd x = \frac{\beta^\alpha}{(\beta - t)^\alpha}$, pela substituição $u = (\beta - t)x$.
+:::
+
+Duas consequências úteis: os momentos da **log-normal** saem da função geradora da normal, pois $\E[Y^k] = \E[e^{kX}] = e^{k\mu + k^2\sigma^2/2}$ (@exr-est-g03-lognormal); e a curtose da normal é 3, derivando $M_Z$ quatro vezes em zero.
+
+## A desigualdade de Jensen {#sec-est-g03-jensen}
+
+::: {#thm-est-g03-jensen}
+## Desigualdade de Jensen
+Seja $\phi$ convexa e diferenciável num intervalo aberto $I$, e $X$ uma variável com valores em $I$, com $X$ e $\phi(X)$ integráveis. Então
+$$
+\phi(\E[X]) \leq \E[\phi(X)] .
+$$ {#eq-est-g03-jensen}
+Se $\phi$ é côncava, a desigualdade se inverte.
+:::
+
+::: {.proof}
+Seja $\mu = \E[X]$, que está em $I$ (é uma média de valores de $I$). Como $\phi$ é convexa e diferenciável, seu gráfico fica acima de cada tangente (@thm-mat-g03-concavidade, aplicado a $-\phi$): $\phi(x) \geq \phi(\mu) + \phi'(\mu)(x - \mu)$ para todo $x \in I$. Substituindo $x$ por $X$ e tomando esperanças, $\E[\phi(X)] \geq \phi(\mu) + \phi'(\mu)(\E[X] - \mu) = \phi(\mu)$.
+:::
+
+A diferenciabilidade não é necessária: toda função convexa tem, em cada ponto interior, uma reta de apoio (@sec-mat-m09), e a demonstração é a mesma. Se $\phi$ é estritamente convexa, a desigualdade é estrita, a menos que $X$ seja constante com probabilidade 1.
+
+::: {#exm-est-g03-jensen}
+## Aplicações de Jensen
+(a) **Aversão ao risco.** Se a utilidade $u$ da riqueza é côncava, $\E[u(W)] \leq u(\E[W])$: o agente prefere receber o valor esperado com certeza a enfrentar a loteria. O **equivalente certo** $EC$, definido por $u(EC) = \E[u(W)]$, satisfaz $EC \leq \E[W]$, e a diferença $\E[W] - EC$ é o **prêmio de risco** — o quanto o agente pagaria para eliminar o risco (interativo e @exr-est-g03-arrow-pratt).
+(b) **Médias aritmética e geométrica.** Com $\phi = \log$, côncava, $\E[\log X] \leq \log\E[X]$ para $X > 0$. Para retornos brutos $R_t$, a média dos log-retornos é menor que o log da média dos retornos: uma carteira que sobe 50% e depois cai 50% tem retorno médio aritmético zero e perde 25%. A diferença, aproximadamente metade da variância, é o "arrasto da volatilidade".
+(c) **Paradoxo de Siegel.** Com $\phi(x) = 1/x$, convexa em $(0, \infty)$, $\E[1/S] \geq 1/\E[S]$. Se $S$ é a taxa de câmbio em reais por dólar, $1/S$ é a taxa em dólares por real: não é possível que o câmbio futuro seja previsto sem viés nas duas cotações ao mesmo tempo.
+:::
+
+## Distribuições conjuntas {#sec-est-g03-conjuntas}
+
+Um **vetor aleatório** $(X, Y)$ é um par de variáveis aleatórias no mesmo espaço de probabilidade. Sua **função de distribuição conjunta** é $F(x, y) = \Prob(X \leq x, Y \leq y)$, em que a vírgula significa "e".
+
+::: {#def-est-g03-conjunta}
+## Distribuições conjuntas discretas e contínuas
+$(X, Y)$ é **discreto** se assume valores num conjunto enumerável, com **função de probabilidade conjunta** $p(x, y) = \Prob(X = x, Y = y)$. É **contínuo** se existe uma **densidade conjunta** $f(x, y) \geq 0$ com
+$$
+\Prob\big((X, Y) \in A\big) = \iint_A f(x, y)\,\dd x\,\dd y
+$$
+para todo retângulo $A$ — e, então, para todo conjunto "razoável" $A$ (@sec-est-m01).
+:::
+
+As **distribuições marginais** são as de cada coordenada. No caso discreto, $p_X(x) = \sum_y p(x, y)$, pela probabilidade total aplicada à partição $\{Y = y\}$; no contínuo, $f_X(x) = \int f(x, y)\,\dd y$, integrando a outra variável. A conjunta determina as marginais, mas não o contrário: as marginais nada dizem sobre como as variáveis se movem juntas.
+
+::: {#def-est-g03-independencia}
+## Variáveis independentes
+$X$ e $Y$ são **independentes** se $\Prob(X \in A, Y \in B) = \Prob(X \in A)\Prob(Y \in B)$ para todos os conjuntos $A, B$ — isto é, se os eventos determinados por $X$ são independentes dos determinados por $Y$. Para vetores discretos, isso equivale a $p(x, y) = p_X(x)p_Y(y)$; para contínuos, a $f(x, y) = f_X(x)f_Y(y)$. Variáveis $X_1, \dots, X_n$ são (mutuamente) independentes se $\Prob(X_1 \in A_1, \dots, X_n \in A_n) = \prod_i \Prob(X_i \in A_i)$.
+:::
+
+As equivalências com a fatoração de $p$ ou $f$ são diretas num sentido (tome $A = \{x\}$, $B = \{y\}$, ou derive) e, no outro, somando ou integrando o produto sobre $A \times B$. Se $X$ e $Y$ são independentes, também são $g(X)$ e $h(Y)$, quaisquer que sejam $g$ e $h$: $\{g(X) \in A\} = \{X \in g^{-1}(A)\}$.
+
+::: {#def-est-g03-condicional}
+## Distribuição condicional
+No caso discreto, se $p_X(x) > 0$, a **função de probabilidade condicional** de $Y$ dado $X = x$ é $p(y \mid x) \defeq p(x, y)/p_X(x)$ — a probabilidade condicional do @sec-est-g01. No caso contínuo, se $f_X(x) > 0$, a **densidade condicional** é $f(y \mid x) \defeq f(x, y)/f_X(x)$.
+:::
+
+No caso contínuo, $\Prob(X = x) = 0$ e a definição não sai da do @sec-est-g01; ela é o limite de $\Prob(Y \leq y \mid x < X \leq x + h)$ quando $h \to 0$, sob condições de regularidade, e é a única definição coerente com a probabilidade total, $f_Y(y) = \int f(y \mid x)f_X(x)\,\dd x$. Para cada $x$, $f(\cdot \mid x)$ é uma densidade; e $X$ e $Y$ são independentes se, e somente se, $f(y \mid x) = f_Y(y)$.
+
+::: {#exm-est-g03-triangulo}
+## Uniforme num triângulo
+Seja $(X, Y)$ uniforme no triângulo $T = \{0 \leq y \leq x \leq 1\}$, de área $1/2$: $f(x, y) = 2$ em $T$. As marginais são $f_X(x) = \int_0^x 2\,\dd y = 2x$ e $f_Y(y) = \int_y^1 2\,\dd x = 2(1 - y)$, para $x, y \in [0, 1]$. Como $f(x, y) \neq f_X(x)f_Y(y)$, as variáveis são dependentes — o que se vê sem contas: saber $X = x$ restringe $Y$ a $[0, x]$. A densidade condicional é $f(y \mid x) = 2/(2x) = 1/x$ em $[0, x]$: dado $X = x$, $Y$ é uniforme em $[0, x]$.
+:::
+
+## Covariância, correlação e diversificação {#sec-est-g03-covariancia}
+
+A esperança de uma função de um vetor aleatório calcula-se como no @thm-est-g03-lotus: $\E[g(X, Y)] = \sum_{x, y} g(x, y)p(x, y)$ ou $\iint g(x, y)f(x, y)\,\dd x\,\dd y$, desde que convirja absolutamente (demonstração idêntica no caso discreto; admitida no contínuo).
+
+::: {#thm-est-g03-linearidade}
+## Linearidade e produtos
+Sejam $X$ e $Y$ integráveis.
+
+(a) $\E[aX + bY] = a\E[X] + b\E[Y]$.
+(b) Se $X$ e $Y$ são independentes, $\E[XY] = \E[X]\E[Y]$; mais geralmente, $\E[g(X)h(Y)] = \E[g(X)]\E[h(Y)]$ quando as esperanças existem.
+:::
+
+::: {.proof}
+Fazemos o caso discreto; o contínuo é idêntico, com integrais. Para (a), $\E[aX + bY] = \sum_{x, y}(ax + by)p(x, y) = a\sum_x x\sum_y p(x, y) + b\sum_y y\sum_x p(x, y) = a\E[X] + b\E[Y]$, reordenando séries absolutamente convergentes e usando as marginais. Para (b), pela fatoração, $\sum_{x, y} g(x)h(y)p_X(x)p_Y(y) = \big(\sum_x g(x)p_X(x)\big)\big(\sum_y h(y)p_Y(y)\big)$.
+:::
+
+A linearidade **não** exige independência, e é a ferramenta mais poderosa para calcular esperanças.
+
+::: {#exm-est-g03-binomial}
+## Média e variância da binomial por indicadores
+Se $X \sim \text{Bin}(n, p)$, escreva $X = \sum_{i=1}^n B_i$, em que $B_i$ é o indicador de sucesso no ensaio $i$ — Bernoullis independentes. Então $\E[X] = \sum_i\E[B_i] = np$ e, pelo @cor-est-g03-variancia-soma, $\Var(X) = \sum_i\Var(B_i) = np(1 - p)$. Somar a série $\sum_k k\binom nk p^k(1 - p)^{n-k}$ seria muito mais trabalhoso.
+:::
+
+::: {#def-est-g03-covariancia}
+## Covariância e correlação
+Para $X$ e $Y$ com segundos momentos finitos, a **covariância** é
+$$
+\Cov(X, Y) \defeq \E\big[(X - \mu_X)(Y - \mu_Y)\big] = \E[XY] - \mu_X\mu_Y ,
+$$
+e, se $\sigma_X, \sigma_Y > 0$, a **correlação** é $\Corr(X, Y) \defeq \Cov(X, Y)/(\sigma_X\sigma_Y)$.
+:::
+
+(A segunda expressão sai expandindo o produto e usando a linearidade.) A covariância é **simétrica**, **bilinear** — $\Cov(aX + bY, Z) = a\Cov(X, Z) + b\Cov(Y, Z)$ — e satisfaz $\Cov(X, X) = \Var(X)$ e $\Cov(X, c) = 0$ para constantes $c$.
+
+::: {#cor-est-g03-variancia-soma}
+## Variância de somas
+Para $X_1, \dots, X_n$ com segundos momentos finitos e constantes $a_1, \dots, a_n$,
+$$
+\Var\Big(\sum_i a_iX_i\Big) = \sum_i\sum_j a_ia_j\Cov(X_i, X_j) = \vb a\T\vb\Sigma\vb a ,
+$$ {#eq-est-g03-variancia-soma}
+em que $\vb\Sigma$ é a **matriz de covariâncias**, com $\Sigma_{ij} = \Cov(X_i, X_j)$. Em particular, $\Var(X + Y) = \Var(X) + \Var(Y) + 2\Cov(X, Y)$, e, se as variáveis são independentes duas a duas (ou só não correlacionadas), $\Var(\sum_i X_i) = \sum_i\Var(X_i)$. A matriz $\vb\Sigma$ é simétrica e positiva semidefinida.
+:::
+
+::: {.proof}
+$\Var(\sum_i a_iX_i) = \Cov(\sum_i a_iX_i, \sum_j a_jX_j)$, e a bilinearidade expande a expressão. Pelo @thm-est-g03-linearidade (b), independência implica covariância nula. Por fim, $\vb a\T\vb\Sigma\vb a$ é uma variância, logo não negativa (@def-mat-g07-definida).
+:::
+
+::: {#prp-est-g03-correlacao}
+## A correlação está entre $-1$ e $1$
+$\abs{\Corr(X, Y)} \leq 1$. Além disso, $\Corr(X, Y) = \pm 1$ se, e somente se, $Y = a + bX$ com probabilidade 1, para constantes $a$ e $b$ com o sinal de $b$ igual ao da correlação.
+:::
+
+::: {.proof}
+Sejam $\tilde X = (X - \mu_X)/\sigma_X$ e $\tilde Y = (Y - \mu_Y)/\sigma_Y$, com variância 1 e $\Cov(\tilde X, \tilde Y) = \rho \defeq \Corr(X, Y)$. Pela @eq-est-g03-variancia-soma, $0 \leq \Var(\tilde Y \mp \tilde X) = 2 \mp 2\rho$, o que dá $-1 \leq \rho \leq 1$. Se $\rho = 1$, então $\Var(\tilde Y - \tilde X) = 0$, e uma variável com variância zero é constante com probabilidade 1 (@cor-est-g04-variancia-nula); como $\E[\tilde Y - \tilde X] = 0$, $\tilde Y = \tilde X$, que é uma relação afim entre $Y$ e $X$ com inclinação $\sigma_Y/\sigma_X > 0$. O caso $\rho = -1$ é análogo, e a recíproca é um cálculo direto.
+:::
+
+A correlação mede dependência **linear**. Independência implica correlação nula, mas não vale a recíproca: se $X \sim \Normal(0, 1)$ e $Y = X^2$, então $\Cov(X, Y) = \E[X^3] - \E[X]\E[X^2] = 0$, embora $Y$ seja uma função de $X$. É a desigualdade de Cauchy–Schwarz (@thm-mat-m10-cauchy-schwarz) no espaço das variáveis aleatórias com segundo momento finito, com o produto interno $\E[XY]$ aplicado às variáveis centradas.
+
+::: {#exm-est-g03-diversificacao}
+## Diversificação
+Uma carteira aplica a fração $1/n$ em cada um de $n$ ativos, com retornos de variância $\sigma^2$ e correlação $\rho$ entre cada par. Pela @eq-est-g03-variancia-soma,
+$$
+\Var\Big(\frac1n\sum_{i=1}^n R_i\Big) = \frac{1}{n^2}\big(n\sigma^2 + n(n - 1)\rho\sigma^2\big) = \frac{\sigma^2}{n} + \Big(1 - \frac1n\Big)\rho\sigma^2 \;\longrightarrow\; \rho\sigma^2 .
+$$
+Com retornos não correlacionados, o risco desaparece à medida que $n$ cresce; com correlação positiva, sobra o risco **sistemático** $\rho\sigma^2$, que nenhuma diversificação elimina. É por isso que, nos modelos de apreçamento, só o risco sistemático é remunerado (@sec-fin-g05).
+:::
+
+## Esperança condicional {#sec-est-g03-esperanca-condicional}
+
+::: {#def-est-g03-esperanca-condicional}
+## Esperança condicional
+A **esperança condicional** de $Y$ dado $X = x$ é a média da distribuição condicional:
+$$
+m(x) = \E[Y \mid X = x] \defeq \sum_y y\,p(y \mid x) \qquad\text{ou}\qquad \int y\,f(y \mid x)\,\dd y .
+$$
+A variável aleatória $\E[Y \mid X] \defeq m(X)$ é a esperança condicional de $Y$ dado $X$. A **variância condicional** é $\Var(Y \mid X = x) \defeq \E[(Y - m(x))^2 \mid X = x]$.
+:::
+
+$\E[Y \mid X]$ é uma **variável aleatória**: uma função de $X$, que diz qual é a média de $Y$ para cada valor possível de $X$. No @exm-est-g03-triangulo, $Y$ é uniforme em $[0, x]$ dado $X = x$, de modo que $\E[Y \mid X] = X/2$ e $\Var(Y \mid X) = X^2/12$.
+
+::: {#thm-est-g03-iteradas}
+## Expectativas iteradas
+Se $Y$ é integrável, $\E\big[\E[Y \mid X]\big] = \E[Y]$. Além disso, para $g$ tal que $g(X)Y$ é integrável, $\E[g(X)Y \mid X] = g(X)\E[Y \mid X]$; e, se $X$ e $Y$ são independentes, $\E[Y \mid X] = \E[Y]$.
+:::
+
+::: {.proof}
+No caso discreto, $\E[m(X)] = \sum_x m(x)p_X(x) = \sum_x\sum_y y\,\frac{p(x, y)}{p_X(x)}p_X(x) = \sum_{x, y} y\,p(x, y) = \E[Y]$. Dado $X = x$, $g(X) = g(x)$ é uma constante, que sai da média condicional. Sob independência, $p(y \mid x) = p_Y(y)$. O caso contínuo é idêntico, com integrais.
+:::
+
+A lei das expectativas iteradas é a probabilidade total em forma de médias: a média geral é a média das médias condicionais. Em macroeconomia, com $\E_t[\cdot]$ a esperança condicional à informação do período $t$, ela aparece como $\E_t[\E_{t+1}[X]] = \E_t[X]$: não se pode prever hoje a revisão de amanhã das próprias expectativas.
+
+::: {#thm-est-g03-variancia-total}
+## Variância total
+Se $\E[Y^2] < \infty$, então
+$$
+\Var(Y) = \E\big[\Var(Y \mid X)\big] + \Var\big(\E[Y \mid X]\big) .
+$$ {#eq-est-g03-variancia-total}
+:::
+
+::: {.proof}
+Pela @prp-est-g03-variancia aplicada à distribuição condicional, $\Var(Y \mid X) = \E[Y^2 \mid X] - m(X)^2$. Tomando esperanças e usando expectativas iteradas, $\E[\Var(Y \mid X)] = \E[Y^2] - \E[m(X)^2]$. Também $\Var(m(X)) = \E[m(X)^2] - (\E[m(X)])^2 = \E[m(X)^2] - (\E[Y])^2$. Somando, obtém-se $\E[Y^2] - (\E[Y])^2 = \Var(Y)$.
+:::
+
+A variância de $Y$ se divide entre a variação **dentro** dos grupos definidos por $X$ e a variação **entre** as médias dos grupos. A fração $\Var(\E[Y \mid X])/\Var(Y)$ mede quanto de $Y$ é "explicado" por $X$ — o $R^2$ populacional do melhor previsor.
+
+::: {#thm-est-g03-melhor-preditor}
+## A esperança condicional é o melhor previsor
+Se $\E[Y^2] < \infty$, então, entre todas as funções $g$ com $\E[g(X)^2] < \infty$, $g(X) = \E[Y \mid X]$ minimiza o erro quadrático médio $\E\big[(Y - g(X))^2\big]$.
+:::
+
+::: {.proof}
+Seja $m(X) = \E[Y \mid X]$. Expandindo $Y - g(X) = (Y - m(X)) + (m(X) - g(X))$,
+$$
+\E[(Y - g(X))^2] = \E[(Y - m(X))^2] + \E[(m(X) - g(X))^2] + 2\E[(Y - m(X))(m(X) - g(X))] .
+$$
+Pelas expectativas iteradas e porque $m(X) - g(X)$ é função de $X$, o último termo é $2\E\big[(m(X) - g(X))\,\E[Y - m(X) \mid X]\big] = 0$. Logo $\E[(Y - g(X))^2] \geq \E[(Y - m(X))^2]$, com igualdade só se $g(X) = m(X)$ com probabilidade 1.
+:::
+
+O erro de previsão $Y - \E[Y \mid X]$ tem média condicional zero e é, portanto, não correlacionado com **qualquer** função de $X$. Se nos restringirmos a previsores lineares $a + bX$, o ótimo é o **melhor previsor linear**, com $b = \Cov(X, Y)/\Var(X)$ e $a = \E[Y] - b\E[X]$ (@prp-ecm-g01-blp); quando a esperança condicional é linear — como no triângulo, em que $b = 1/2$ (@exr-est-g03-triangulo), ou na normal bivariada —, os dois coincidem. A regressão linear estima o melhor previsor linear; ela estima a esperança condicional quando esta é linear.
+
+## A normal multivariada {#sec-est-g03-normal-multivariada}
+
+::: {#def-est-g03-normal-multivariada}
+## Normal multivariada
+Um vetor aleatório $\vb X = (X_1, \dots, X_n)\T$ tem distribuição **normal multivariada** se toda combinação linear $\vb a\T\vb X = \sum_i a_iX_i$ tem distribuição normal (admitindo a normal degenerada $\Normal(c, 0)$, que é a constante $c$). Com $\vb\mu = \E[\vb X]$ e $\vb\Sigma$ a matriz de covariâncias, escrevemos $\vb X \sim \Normal(\vb\mu, \vb\Sigma)$.
+:::
+
+Pela linearidade e pela @eq-est-g03-variancia-soma, $\vb a\T\vb X \sim \Normal(\vb a\T\vb\mu, \vb a\T\vb\Sigma\vb a)$.
+
+::: {#thm-est-g03-normal-multivariada}
+## Propriedades da normal multivariada
+(a) Se $\vb X \sim \Normal(\vb\mu, \vb\Sigma)$, então $M_{\vb X}(\vb t) = \exp\big(\vb t\T\vb\mu + \frac12\vb t\T\vb\Sigma\vb t\big)$; em particular, a distribuição é determinada por $\vb\mu$ e $\vb\Sigma$.
+(b) Se $Z_1, \dots, Z_k$ são normais padrão independentes, $\vb Z = (Z_1, \dots, Z_k)\T \sim \Normal(\vb 0, \Id)$.
+(c) Se $\vb X \sim \Normal(\vb\mu, \vb\Sigma)$, $\vb A$ é uma matriz $m \times n$ e $\vb b \in \R^m$, então $\vb A\vb X + \vb b \sim \Normal(\vb A\vb\mu + \vb b, \vb A\vb\Sigma\vb A\T)$.
+(d) Particione $\vb X = (\vb X_1, \vb X_2)$. Então $\vb X_1$ e $\vb X_2$ são independentes se, e somente se, $\Cov(X_i, X_j) = 0$ para todo $X_i$ em $\vb X_1$ e $X_j$ em $\vb X_2$.
+:::
+
+::: {.proof}
+Para (a), $\vb t\T\vb X \sim \Normal(\vb t\T\vb\mu, \vb t\T\vb\Sigma\vb t)$, e $M_{\vb X}(\vb t) = \E[e^{1\cdot\vb t\T\vb X}]$ é a função geradora dessa normal avaliada em 1 (@prp-est-g03-fgm); pela unicidade (@thm-est-g03-unicidade-fgm), $\vb\mu$ e $\vb\Sigma$ determinam a distribuição.
+
+Para (b), pela independência e pelo @thm-est-g03-linearidade, $\E[e^{s\sum_i a_iZ_i}] = \prod_i\E[e^{sa_iZ_i}] = \prod_i e^{s^2a_i^2/2} = e^{s^2\sum_i a_i^2/2}$, que é a função geradora da $\Normal(0, \sum_i a_i^2)$; pela unicidade, $\vb a\T\vb Z$ é normal.
+
+Para (c), toda combinação linear $\vb c\T(\vb A\vb X + \vb b) = (\vb A\T\vb c)\T\vb X + \vb c\T\vb b$ é uma combinação linear de $\vb X$ mais uma constante, logo normal; média e covariâncias saem da linearidade.
+
+Para (d), independência implica covariâncias nulas. Reciprocamente, se as covariâncias cruzadas são nulas, $\vb\Sigma$ é bloco-diagonal, e, com $\vb t = (\vb t_1, \vb t_2)$, a função geradora de (a) fatora: $M_{\vb X}(\vb t) = M_{\vb X_1}(\vb t_1)M_{\vb X_2}(\vb t_2)$. Esse produto é a função geradora de um vetor com as mesmas marginais e componentes independentes; pela unicidade, $\vb X$ tem essa distribuição.
+:::
+
+Por (b) e (c), para quaisquer $\vb\mu$ e $\vb\Sigma$ positiva semidefinida existe $\vb X \sim \Normal(\vb\mu, \vb\Sigma)$: escreva $\vb\Sigma = \vb L\vb L\T$ (por exemplo, pela decomposição de Cholesky, @sec-mat-m02) e tome $\vb X = \vb\mu + \vb L\vb Z$ — é assim que se simulam normais correlacionadas. Se $\vb\Sigma$ é invertível, $\vb X$ tem densidade
+$$
+f(\vb x) = \frac{1}{(2\pi)^{n/2}\det(\vb\Sigma)^{1/2}}\exp\Big(-\frac12(\vb x - \vb\mu)\T\vb\Sigma^{-1}(\vb x - \vb\mu)\Big) ,
+$$ {#eq-est-g03-densidade-normal}
+cuja dedução usa a mudança de variáveis em $\R^n$ (@sec-est-m01); suas curvas de nível são elipses centradas em $\vb\mu$.
+
+A hipótese de normalidade **conjunta** em (d) é essencial. Se $X \sim \Normal(0, 1)$ e $S = \pm 1$ com probabilidade $1/2$, independente de $X$, então $Y = SX$ também é normal padrão e $\Cov(X, Y) = \E[S]\E[X^2] = 0$; mas $\abs Y = \abs X$, e as variáveis são dependentes. O par $(X, Y)$ não é normal bivariado: $X + Y$ vale zero com probabilidade $1/2$ (@exr-est-g03-normal-falsa).
+
+::: {#thm-est-g03-condicional-normal}
+## Distribuição condicional na normal bivariada
+Se $(X, Y)$ é normal bivariado, com médias $\mu_X, \mu_Y$, desvios padrão $\sigma_X, \sigma_Y > 0$ e correlação $\rho$, então, dado $X = x$,
+$$
+Y \mid X = x \;\sim\; \Normal\Big(\mu_Y + \rho\frac{\sigma_Y}{\sigma_X}(x - \mu_X),\ \sigma_Y^2(1 - \rho^2)\Big) .
+$$ {#eq-est-g03-condicional-normal}
+:::
+
+::: {.proof}
+Seja $\beta = \Cov(X, Y)/\Var(X) = \rho\sigma_Y/\sigma_X$ e $W = Y - \mu_Y - \beta(X - \mu_X)$. O par $(X, W)$ é uma transformação linear de $(X, Y)$, portanto normal bivariado (@thm-est-g03-normal-multivariada), com $\Cov(X, W) = \Cov(X, Y) - \beta\Var(X) = 0$; por (d), $X$ e $W$ são independentes. Além disso, $\E[W] = 0$ e $\Var(W) = \sigma_Y^2 - 2\beta\Cov(X, Y) + \beta^2\sigma_X^2 = \sigma_Y^2(1 - \rho^2)$. Como $Y = \mu_Y + \beta(X - \mu_X) + W$ e $W$ é independente de $X$, a distribuição condicional de $Y$ dado $X = x$ é a de $\mu_Y + \beta(x - \mu_X) + W$, que é a @eq-est-g03-condicional-normal.
+:::
+
+Na normal bivariada, a esperança condicional é **linear** em $x$ — coincide com o melhor previsor linear — e a variância condicional **não depende** de $x$: a regressão é homocedástica. São exatamente as hipóteses do modelo de regressão clássico (@sec-ecm-g01), que a normalidade conjunta produz automaticamente. A redução da variância, de $\sigma_Y^2$ para $\sigma_Y^2(1 - \rho^2)$, mostra que $\rho^2$ é a fração da variância de $Y$ explicada por $X$.
+
+## Pontes {#sec-est-g03-pontes}
+
+- **Teoremas-limite (@sec-est-g04).** Markov e Chebyshev limitam probabilidades de cauda por momentos; a média amostral tem variância $\sigma^2/n$; o teorema central do limite é provado com funções geradoras.
+- **Regressão (@sec-ecm-g01, @sec-ecm-m01).** MQO estima o melhor previsor linear; a normal multivariada fundamenta a inferência exata no modelo clássico.
+- **Esperança condicional geral (@sec-est-m02).** A definição como projeção em $L^2$ (@sec-mat-m10), sem densidades.
+- **Escolha sob incerteza (@sec-mic-m02).** Utilidade esperada, aversão ao risco, equivalente certo e o coeficiente de Arrow–Pratt.
+- **Finanças (@sec-fin-g04, @sec-fin-g05, @sec-fin-m01).** Média e variância de carteiras, diversificação, risco sistemático e a fronteira eficiente.
+- **Macroeconomia (@sec-mac-m04, @sec-mac-m10).** Expectativas racionais como esperanças condicionais; poupança precaucional por Jensen aplicado à utilidade marginal convexa.
+
+## Interativo {#sec-est-g03-interativo}
+
+::: {.content-visible when-format="html"}
+**A normal bivariada e a esperança condicional.** Os pontos são 800 sorteios de $(X, Y)$ normal bivariado com médias zero e desvios padrão 1. A reta vinho é $\E[Y \mid X = x] = \rho x$; a faixa âmbar marca, em $x_0$, a média condicional mais ou menos dois desvios padrão condicionais, $\pm 2\sqrt{1 - \rho^2}$. Note que a faixa tem a mesma largura em qualquer $x_0$ (homocedasticidade) e se estreita quando $\abs\rho$ cresce.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof rhoBiv = controle("correlação ρ", [-0.99, 0.99], {valor: 0.6, passo: 0.01, casas: 2})
+viewof x0Biv = controle("x₀", [-2.5, 2.5], {valor: 1, passo: 0.1, casas: 1})
+```
+
+```{ojs}
+//| echo: false
+md`Dado X = ${fmtG03(x0Biv, 1)}: média condicional **${fmtG03(rhoBiv * x0Biv, 2)}**, desvio padrão condicional **${fmtG03(Math.sqrt(1 - rhoBiv ** 2), 2)}** (contra 1 sem condicionar). Fração da variância de Y explicada por X: ρ² = ${fmtG03(rhoBiv ** 2, 2)}. Correlação na amostra simulada: ${fmtG03(corrBiv, 2)}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 520, aspectRatio: 1, grid: true,
+  x: {domain: [-3.5, 3.5], label: "x"}, y: {domain: [-3.5, 3.5], label: "y"},
+  marks: [
+    Plot.dot(pontosBiv, {x: "x", y: "y", r: 1.6, fill: "#2F5D8A", fillOpacity: 0.45}),
+    Plot.line([{x: -3.5, y: -3.5 * rhoBiv}, {x: 3.5, y: 3.5 * rhoBiv}], {x: "x", y: "y", stroke: "#8C2F39", strokeWidth: 2, clip: true}),
+    Plot.ruleX([x0Biv], {y1: rhoBiv * x0Biv - 2 * Math.sqrt(1 - rhoBiv ** 2), y2: rhoBiv * x0Biv + 2 * Math.sqrt(1 - rhoBiv ** 2), stroke: "#B7791F", strokeWidth: 6, strokeOpacity: 0.7}),
+    Plot.dot([{x: x0Biv, y: rhoBiv * x0Biv}], {x: "x", y: "y", r: 5, fill: "#8C2F39"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtG03 = (v, c) => v.toFixed(c).replace(".", ",")
+geradorG03 = semente => () => {
+  semente |= 0; semente = semente + 0x6D2B79F5 | 0
+  let t = Math.imul(semente ^ semente >>> 15, 1 | semente)
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+  return ((t ^ t >>> 14) >>> 0) / 4294967296
+}
+normaisBiv = {
+  const u = geradorG03(2026)
+  return d3.range(800).map(() => {
+    const r = Math.sqrt(-2 * Math.log(1 - u())), th = 2 * Math.PI * u()
+    return [r * Math.cos(th), r * Math.sin(th)]
+  })
+}
+pontosBiv = normaisBiv.map(([z1, z2]) => ({x: z1, y: rhoBiv * z1 + Math.sqrt(1 - rhoBiv ** 2) * z2}))
+corrBiv = {
+  const mx = d3.mean(pontosBiv, d => d.x), my = d3.mean(pontosBiv, d => d.y)
+  const sxy = d3.sum(pontosBiv, d => (d.x - mx) * (d.y - my))
+  const sxx = d3.sum(pontosBiv, d => (d.x - mx) ** 2), syy = d3.sum(pontosBiv, d => (d.y - my) ** 2)
+  return sxy / Math.sqrt(sxx * syy)
+}
+```
+:::
+
+**Jensen, equivalente certo e prêmio de risco.** Um agente com riqueza inicial 100 e utilidade CRRA $u(w) = w^{1-\gamma}/(1 - \gamma)$ (logaritmo se $\gamma = 1$) enfrenta uma loteria que soma ou subtrai $h$ com probabilidade $1/2$. A corda entre os dois resultados passa abaixo da curva: $\E[u(W)] < u(\E[W])$. O equivalente certo é a riqueza sem risco que dá a mesma utilidade esperada; o prêmio de risco é a distância até a média. O texto compara com a aproximação de Arrow–Pratt do @exr-est-g03-arrow-pratt.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof gamaJ = controle("aversão relativa ao risco γ", [0.1, 10], {valor: 2, passo: 0.1, casas: 1})
+viewof hJ = controle("tamanho do risco h", [1, 90], {valor: 40, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`E[W] = 100; equivalente certo **${fmtG03(ecJ, 2)}**; prêmio de risco **${fmtG03(100 - ecJ, 2)}**. Aproximação de Arrow–Pratt, γh²/(2·100): ${fmtG03(gamaJ * hJ * hJ / 200, 2)}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "riqueza w", domain: [5, 195]}, y: {label: "utilidade u(w)"},
+  marks: [
+    Plot.line(d3.range(5, 195.5, 0.5).map(w => ({w, v: uJ(w)})), {x: "w", y: "v", stroke: "#2F5D8A", strokeWidth: 2}),
+    Plot.line([{w: 100 - hJ, v: uJ(100 - hJ)}, {w: 100 + hJ, v: uJ(100 + hJ)}], {x: "w", y: "v", stroke: "#9AA5B1", strokeDasharray: "4,3"}),
+    Plot.dot([{w: 100, v: euJ}], {x: "w", y: "v", r: 5, fill: "#8C2F39"}),
+    Plot.dot([{w: 100, v: uJ(100)}], {x: "w", y: "v", r: 5, fill: "#2F5D8A"}),
+    Plot.dot([{w: ecJ, v: euJ}], {x: "w", y: "v", r: 5, fill: "#B7791F"}),
+    Plot.ruleY([euJ], {x1: ecJ, x2: 100, stroke: "#B7791F", strokeWidth: 2})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+uJ = w => Math.abs(gamaJ - 1) < 1e-9 ? Math.log(w) : Math.pow(w, 1 - gamaJ) / (1 - gamaJ)
+euJ = 0.5 * uJ(100 - hJ) + 0.5 * uJ(100 + hJ)
+ecJ = Math.abs(gamaJ - 1) < 1e-9 ? Math.exp(euJ) : Math.pow((1 - gamaJ) * euJ, 1 / (1 - gamaJ))
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — a normal bivariada com a esperança condicional e o equivalente certo de uma loteria — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-g03-laboratorio}
+
+### Momentos das distribuições usuais
+
+```{python}
+import numpy as np
+from scipy import stats
+
+rng = np.random.default_rng(3)
+dists = {"binomial(10, 0.3)": stats.binom(10, 0.3),
+         "poisson(4)": stats.poisson(4),
+         "exponencial(2)": stats.expon(scale=1 / 2),
+         "gama(3, 2)": stats.gamma(a=3, scale=1 / 2),
+         "normal(1, 4)": stats.norm(1, 2)}
+print(f"{'':>18} {'media':>7} {'var':>7} {'assim':>7} {'curt':>7}")
+for nome, d in dists.items():
+    m, v, s, k = d.stats(moments="mvsk")
+    print(f"{nome:>18} {m:7.3f} {v:7.3f} {s:7.3f} {k + 3:7.3f}")
+```
+
+O `scipy` reporta a curtose em excesso (curtose menos 3); somamos 3 para comparar com a definição do texto. As médias e variâncias conferem com as fórmulas: $np = 3$ e $np(1 - p) = 2{,}1$; $\lambda = 4$; $1/\lambda = 0{,}5$ e $1/\lambda^2 = 0{,}25$; $\alpha/\beta = 1{,}5$ e $\alpha/\beta^2 = 0{,}75$.
+
+### Diversificação
+
+Simulamos retornos de $n$ ativos com variância $\sigma^2 = 0{,}04$ e correlação $\rho = 0{,}3$ entre todos os pares — com um fator comum, $R_i = \sqrt\rho\,F + \sqrt{1 - \rho}\,e_i$, a forma mais simples de gerar essa estrutura — e comparamos a variância da carteira igualmente ponderada com a fórmula do @exm-est-g03-diversificacao.
+
+```{python}
+sigma2, rho, T = 0.04, 0.3, 200_000
+fator = rng.normal(size=T)
+for n in [1, 5, 20, 100]:
+    e = rng.normal(size=(T, n))
+    R = np.sqrt(sigma2) * (np.sqrt(rho) * fator[:, None]
+                           + np.sqrt(1 - rho) * e)
+    simulada = R.mean(axis=1).var()
+    formula = sigma2 / n + (1 - 1 / n) * rho * sigma2
+    print(f"n = {n:>3}: variancia simulada = {simulada:.5f}, "
+          f"formula = {formula:.5f}")
+print(f"limite (risco sistematico): {rho * sigma2:.5f}")
+```
+
+### Correlação nula sem independência
+
+```{python}
+x = rng.normal(size=1_000_000)
+y = x ** 2
+print(f"correlacao entre X e X^2: {np.corrcoef(x, y)[0, 1]:.4f}")
+print(f"E[Y | |X| < 0.5] = {y[np.abs(x) < 0.5].mean():.3f}, "
+      f"E[Y | |X| > 2] = {y[np.abs(x) > 2].mean():.3f}")
+
+s = rng.choice([-1, 1], size=x.size)
+y2 = s * x                          # normal, nao correlacionada com x
+print(f"Y = S X: media {y2.mean():.3f}, var {y2.var():.3f}, "
+      f"corr(X, Y) = {np.corrcoef(x, y2)[0, 1]:.4f}")
+print(f"P(X + Y = 0) = {np.mean(x + y2 == 0):.3f}")
+```
+
+### Expectativas iteradas e variância total no triângulo
+
+Simulamos o @exm-est-g03-triangulo: $X$ com densidade $2x$ (pelo método da inversão, $X = \sqrt U$) e, dado $X$, $Y$ uniforme em $[0, X]$.
+
+```{python}
+n = 1_000_000
+X = np.sqrt(rng.uniform(size=n))
+Y = X * rng.uniform(size=n)
+print(f"E[Y] = {Y.mean():.4f}   E[E[Y|X]] = {(X / 2).mean():.4f}")
+total = (X ** 2 / 12).mean() + (X / 2).var()
+print(f"Var(Y) = {Y.var():.5f}   E[Var(Y|X)] + Var(E[Y|X]) = "
+      f"{total:.5f}   (1/18 = {1 / 18:.5f})")
+b = np.cov(X, Y)[0, 1] / X.var()
+print(f"inclinacao do melhor previsor linear: {b:.4f} (esperanca "
+      f"condicional: 1/2)")
+```
+
+### A distribuição condicional na normal bivariada
+
+Simulamos uma normal bivariada pela decomposição $\vb\Sigma = \vb L\vb L\T$ e conferimos a @eq-est-g03-condicional-normal: a média condicional, olhando os pontos com $X$ perto de $x_0 = 1$; a variância condicional, que não depende de $x_0$, pela variância dos resíduos da reta $\mu_Y + \beta(X - \mu_X)$.
+
+```{python}
+mu = np.array([2.0, 5.0])
+sx, sy, r = 1.5, 3.0, 0.7
+Sigma = np.array([[sx ** 2, r * sx * sy], [r * sx * sy, sy ** 2]])
+L = np.linalg.cholesky(Sigma)
+Z = rng.normal(size=(2, 2_000_000))
+X, Y = mu[:, None] + L @ Z
+beta = r * sy / sx
+perto = np.abs(X - 1.0) < 0.02
+print(f"media condicional em x0 = 1: simulada {Y[perto].mean():.3f}, "
+      f"formula {mu[1] + beta * (1.0 - mu[0]):.3f}")
+residuo = Y - mu[1] - beta * (X - mu[0])
+print(f"variancia condicional: simulada {residuo.var():.3f}, "
+      f"formula {sy ** 2 * (1 - r ** 2):.3f}")
+```
+
+## Aplicação: a inflação de amanhã dada a de hoje {#sec-est-g03-aplicacao}
+
+Tratamos os pares de meses consecutivos $(\pi_t, \pi_{t+1})$ da variação mensal do IPCA desde 2000 como observações de uma distribuição conjunta e estimamos três objetos: a correlação, a esperança condicional $\E[\pi_{t+1} \mid \pi_t]$ — pela média de $\pi_{t+1}$ dentro de faixas de $\pi_t$ — e o melhor previsor linear. A decomposição da variância total mede quanto da variação da inflação de um mês é "explicada" pela do mês anterior.
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import Markdown
+from formacao import dados, graficos
+
+graficos.estilo()
+try:
+    ipca = dados.sgs("ipca", inicio="2000-01-01")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+if disponivel:
+    hoje, amanha = ipca.to_numpy()[:-1], ipca.to_numpy()[1:]
+    rho = np.corrcoef(hoje, amanha)[0, 1]
+    b = np.cov(hoje, amanha)[0, 1] / hoje.var(ddof=1)
+    a = amanha.mean() - b * hoje.mean()
+    faixas = pd.qcut(hoje, 5)
+    medias = pd.Series(amanha).groupby(faixas, observed=True).mean()
+    centros = pd.Series(hoje).groupby(faixas, observed=True).mean()
+    m_hat = pd.Series(amanha).groupby(faixas, observed=True) \
+              .transform("mean").to_numpy()
+    entre = m_hat.var() / amanha.var()
+    print(f"{len(hoje)} pares de meses; correlacao = {rho:.3f}")
+    print(f"melhor previsor linear: {a:.3f} + {b:.3f} x (hoje)")
+    print("media de amanha por quintil da inflacao de hoje:")
+    for c, m in zip(centros, medias):
+        print(f"   hoje ~ {c:.2f}%  ->  amanha {m:.2f}%")
+    print(f"fracao da variancia entre faixas: {entre:.3f}"
+          f" (rho^2 = {rho ** 2:.3f})")
+```
+
+```{python}
+if disponivel:
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.scatter(hoje, amanha, s=10, color=graficos.PALETA["azul"],
+               alpha=0.5, label="pares de meses")
+    ax.plot(centros, medias, "o-", color=graficos.PALETA["vinho"],
+            label="média por quintil")
+    grade = np.linspace(hoje.min(), hoje.max(), 50)
+    ax.plot(grade, a + b * grade, color=graficos.PALETA["ambar"],
+            label="melhor previsor linear")
+    ax.set_xlabel("IPCA no mês t (%)")
+    ax.set_ylabel("IPCA no mês t + 1 (%)")
+    ax.legend(frameon=False)
+    graficos.fonte(ax, "IBGE (IPCA), via SGS/BCB, série 433.")
+    fig.tight_layout()
+    plt.show()
+    pct = lambda v: f"{100 * v:.0f}%"
+    br = lambda v, c: f"{v:.{c}f}".replace(".", ",")
+    reta = a + b * centros.to_numpy()
+    desvio = np.abs(medias.to_numpy() - reta).max()
+    resumo = (f"A correlação entre a inflação de meses consecutivos é "
+              f"{br(rho, 2)}. As médias por faixa ficam a no máximo "
+              f"{br(desvio, 2)} ponto percentual da reta do melhor "
+              f"previsor linear, e a variação entre as faixas responde "
+              f"por {pct(entre)} da variância da inflação do mês "
+              "seguinte; o restante é variação dentro das faixas — o "
+              "que a inflação de hoje não antecipa.")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+A média por faixas é uma estimativa grosseira da esperança condicional: cinco faixas jogam fora a variação dentro de cada uma, e a média de cada faixa tem erro amostral. Estimá-la sem impor linearidade é o objeto da regressão não paramétrica; impor a forma linear e estimar $a$ e $b$ por mínimos quadrados é o @sec-ecm-g01, e o modelo autorregressivo que trata $\pi_t$ como processo estocástico é o do @sec-ecm-m09.
+
+## Exercícios resolvidos {#sec-est-g03-exercicios}
+
+::: {#exr-est-g03-sao-petersburgo}
+No **paradoxo de São Petersburgo**, uma moeda honesta é lançada até sair cara; se isso acontecer no lançamento $k$, o jogador recebe $2^k$. Mostre que o prêmio esperado é infinito, mas que, para um agente com utilidade logarítmica, o equivalente certo do jogo é 4.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+O lançamento $k$ é o primeiro cara com probabilidade $2^{-k}$, de modo que $\E[\text{prêmio}] = \sum_{k \geq 1}2^{-k}2^k = \sum_{k \geq 1}1 = \infty$. Já $\E[\log(\text{prêmio})] = \sum_{k \geq 1}2^{-k}k\log 2 = 2\log 2$, porque $\sum_k k2^{-k} = 2$ (@exr-est-g03-cauda, com a geométrica de parâmetro $1/2$). O equivalente certo é $e^{2\log 2} = 4$. A resolução de Daniel Bernoulli, em 1738, é a origem da utilidade esperada: o valor de uma loteria não é seu prêmio esperado.
+:::
+
+::: {#exr-est-g03-cauda}
+Use a fórmula da cauda para calcular a média da geométrica de parâmetro $p$ e da exponencial de taxa $\lambda$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para $X \sim \text{Geo}(p)$, $\Prob(X > k) = (1 - p)^k$, e $\E[X] = \sum_{k \geq 0}(1 - p)^k = 1/p$ (série geométrica): espera-se $1/p$ ensaios até o primeiro sucesso. Para $X \sim \text{Exp}(\lambda)$, $\E[X] = \int_0^\infty e^{-\lambda t}\,\dd t = 1/\lambda$. Com taxa mensal de saída do desemprego de 20%, a duração média é de 5 meses no modelo geométrico.
+:::
+
+::: {#exr-est-g03-carteira}
+Dois ativos têm retornos com variâncias $\sigma_1^2$, $\sigma_2^2$ e covariância $\sigma_{12}$. Encontre a fração $w$ aplicada no primeiro ativo que minimiza a variância de $wR_1 + (1 - w)R_2$. Quando a variância mínima é zero?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$V(w) = w^2\sigma_1^2 + (1 - w)^2\sigma_2^2 + 2w(1 - w)\sigma_{12}$ é uma parábola em $w$; a condição de primeira ordem dá
+$$
+w^* = \frac{\sigma_2^2 - \sigma_{12}}{\sigma_1^2 + \sigma_2^2 - 2\sigma_{12}},
+$$
+e o denominador é $\Var(R_1 - R_2) > 0$ (se os retornos não são iguais), de modo que $V$ é estritamente convexa. A variância mínima é zero se, e somente se, $wR_1 + (1 - w)R_2$ é constante, o que exige $\abs\rho = 1$ (@prp-est-g03-correlacao). Com $\rho = -1$, $w^* = \sigma_2/(\sigma_1 + \sigma_2)$ elimina todo o risco: é a lógica do *hedge*.
+:::
+
+::: {#exr-est-g03-soma-aleatoria}
+O número $N$ de inadimplências de uma carteira num ano tem média $\E[N]$ e variância $\Var(N)$, e as perdas $X_1, X_2, \dots$ de cada inadimplência são independentes entre si e de $N$, com média $\mu$ e variância $\sigma^2$. Mostre que a perda total $S = \sum_{i=1}^N X_i$ satisfaz $\E[S] = \E[N]\mu$ e $\Var(S) = \E[N]\sigma^2 + \Var(N)\mu^2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Dado $N = n$, $S$ é uma soma de $n$ variáveis independentes, com $\E[S \mid N = n] = n\mu$ e $\Var(S \mid N = n) = n\sigma^2$. Pelas expectativas iteradas, $\E[S] = \E[N\mu] = \E[N]\mu$. Pela variância total, $\Var(S) = \E[N\sigma^2] + \Var(N\mu) = \E[N]\sigma^2 + \mu^2\Var(N)$. O segundo termo mostra que a incerteza sobre **quantas** inadimplências ocorrem — que cresce quando elas são correlacionadas, como numa recessão — se soma à incerteza sobre o tamanho de cada perda. Com $N \sim \text{Poisson}(\lambda)$, $\Var(S) = \lambda(\sigma^2 + \mu^2) = \lambda\E[X^2]$.
+:::
+
+::: {#exr-est-g03-arrow-pratt}
+Seja $u$ duas vezes diferenciável e crescente, e $W = w + \varepsilon$, com $\E[\varepsilon] = 0$ e $\Var(\varepsilon) = \sigma^2$ pequena. Use aproximações de Taylor para mostrar que o prêmio de risco é aproximadamente $\pi \approx \frac12 A(w)\sigma^2$, com $A(w) = -u''(w)/u'(w)$. Para a CRRA, qual é $A(w)$?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Por definição, $u(w - \pi) = \E[u(w + \varepsilon)]$. À esquerda, em primeira ordem, $u(w - \pi) \approx u(w) - \pi u'(w)$; à direita, em segunda ordem (@thm-mat-g03-taylor), $\E[u(w) + u'(w)\varepsilon + \frac12u''(w)\varepsilon^2] = u(w) + \frac12u''(w)\sigma^2$. Igualando, $\pi \approx -\frac12\frac{u''(w)}{u'(w)}\sigma^2$. $A(w)$ é o coeficiente de **aversão absoluta ao risco** de Arrow–Pratt. Para a CRRA, $u'(w) = w^{-\gamma}$ e $u''(w) = -\gamma w^{-\gamma-1}$, logo $A(w) = \gamma/w$ e $wA(w) = \gamma$, a aversão **relativa** ao risco constante que dá nome à função. No interativo, com $w = 100$ e risco $\pm h$, a aproximação é $\gamma h^2/200$, boa para $h$ pequeno.
+:::
+
+::: {#exr-est-g03-lognormal}
+Seja $Y = e^X$ com $X \sim \Normal(\mu, \sigma^2)$. Mostre que $\E[Y] = e^{\mu + \sigma^2/2}$ e $\Var(Y) = e^{2\mu + \sigma^2}(e^{\sigma^2} - 1)$, e compare a média com a mediana.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela função geradora da normal (@prp-est-g03-fgm), $\E[Y] = M_X(1) = e^{\mu + \sigma^2/2}$ e $\E[Y^2] = M_X(2) = e^{2\mu + 2\sigma^2}$, de modo que $\Var(Y) = e^{2\mu + 2\sigma^2} - e^{2\mu + \sigma^2}$. A mediana é $e^\mu$ (@exr-est-g02-lognormal), menor que a média por um fator $e^{\sigma^2/2}$ — Jensen com a exponencial convexa: $e^{\E[X]} \leq \E[e^X]$. Em distribuições de renda aproximadamente log-normais, a renda média supera a mediana, e a diferença cresce com a desigualdade (com $\sigma$).
+:::
+
+::: {#exr-est-g03-triangulo}
+No @exm-est-g03-triangulo, calcule $\E[X]$, $\E[Y]$, $\Var(X)$, $\Var(Y)$, $\Cov(X, Y)$ e $\Corr(X, Y)$, e confira a fórmula da variância total.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Com as marginais $2x$ e $2(1 - y)$: $\E[X] = \int_0^1 2x^2 = 2/3$, $\E[X^2] = 1/2$, $\Var(X) = 1/2 - 4/9 = 1/18$; $\E[Y] = \int_0^1 2y(1 - y) = 1/3$, $\E[Y^2] = 2(1/3 - 1/4) = 1/6$, $\Var(Y) = 1/6 - 1/9 = 1/18$. $\E[XY] = \int_0^1\int_0^x 2xy\,\dd y\,\dd x = \int_0^1 x^3\,\dd x = 1/4$, logo $\Cov(X, Y) = 1/4 - 2/9 = 1/36$ e $\Corr(X, Y) = 1/2$. Variância total: $\Var(\E[Y \mid X]) = \Var(X/2) = 1/72$ e $\E[\Var(Y \mid X)] = \E[X^2]/12 = 1/24$; a soma é $1/72 + 3/72 = 1/18 = \Var(Y)$. O melhor previsor linear tem inclinação $\Cov/\Var(X) = 1/2$ e intercepto $1/3 - (1/2)(2/3) = 0$: coincide com $\E[Y \mid X] = X/2$, como deve, pois esta é linear.
+:::
+
+::: {#exr-est-g03-normal-falsa}
+Sejam $X \sim \Normal(0, 1)$ e $S$ independente de $X$, com $\Prob(S = 1) = \Prob(S = -1) = 1/2$, e $Y = SX$. Mostre que $Y \sim \Normal(0, 1)$, que $\Cov(X, Y) = 0$, que $X$ e $Y$ não são independentes e que $(X, Y)$ não é normal bivariado.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela probabilidade total e pela simetria da normal, $\Prob(Y \leq y) = \frac12\Prob(X \leq y) + \frac12\Prob(-X \leq y) = \Phi(y)$. $\Cov(X, Y) = \E[SX^2] = \E[S]\E[X^2] = 0$, pela independência. Mas $\Prob(\abs X \leq 1, \abs Y > 1) = 0$, enquanto $\Prob(\abs X \leq 1)\Prob(\abs Y > 1) > 0$: dependentes. Por fim, $X + Y = (1 + S)X$ vale 0 com probabilidade $1/2$ e não é constante — não é normal (nem degenerada) —, de modo que nem toda combinação linear de $(X, Y)$ é normal. Marginais normais não fazem um vetor normal.
+:::
+
+## Flashcards {#sec-est-g03-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando a esperança de $X$ existe?
+Quando $\sum\abs x p(x) < \infty$ ou $\int\abs x f(x)\,\dd x < \infty$. A Cauchy e a Pareto com $\alpha \leq 1$ não têm média.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como calcular $\E[g(X)]$ sem a distribuição de $g(X)$?
+$\E[g(X)] = \sum g(x)p(x)$ ou $\int g(x)f(x)\,\dd x$ (lei do estatístico inconsciente).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a fórmula da cauda para a esperança?
+Para $X \geq 0$: $\E[X] = \int_0^\infty\Prob(X > t)\,\dd t$; para valores inteiros, $\sum_{k \geq 0}\Prob(X > k)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são as fórmulas básicas da variância?
+$\Var(X) = \E[X^2] - (\E X)^2$; $\Var(aX + b) = a^2\Var(X)$; $\Var(X + Y) = \Var X + \Var Y + 2\Cov(X, Y)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a função geradora de momentos da normal?
+$M(t) = \exp(\mu t + \sigma^2t^2/2)$. As derivadas em 0 dão os momentos, e $M$ determina a distribuição (unicidade).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a desigualdade de Jensen?
+Para $\phi$ convexa, $\phi(\E X) \leq \E\phi(X)$; para côncava, ao contrário. Daí a aversão ao risco: $\E u(W) \leq u(\E W)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que são o equivalente certo e o prêmio de risco?
+$EC$ resolve $u(EC) = \E u(W)$; o prêmio é $\E W - EC \approx \frac12A(w)\sigma^2$, com $A = -u''/u'$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando duas variáveis são independentes, e o que isso implica para esperanças?
+Quando $p(x, y) = p_X(x)p_Y(y)$ (ou $f = f_Xf_Y$). Então $\E[g(X)h(Y)] = \E g(X)\,\E h(Y)$ e a covariância é zero.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Correlação nula implica independência?
+Não: $X \sim \Normal(0, 1)$ e $Y = X^2$ são não correlacionados e dependentes. Só para vetores conjuntamente normais.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a variância de uma carteira igualmente ponderada de $n$ ativos com correlação $\rho$?
+$\sigma^2/n + (1 - 1/n)\rho\sigma^2 \to \rho\sigma^2$: o risco sistemático não se diversifica.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que dizem as expectativas iteradas e a variância total?
+$\E[\E[Y \mid X]] = \E Y$; $\Var Y = \E[\Var(Y \mid X)] + \Var(\E[Y \mid X])$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o melhor previsor de $Y$ dado $X$ em erro quadrático médio?
+$\E[Y \mid X]$. O erro $Y - \E[Y \mid X]$ é não correlacionado com qualquer função de $X$. Entre previsores lineares, $b = \Cov(X, Y)/\Var X$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se define a normal multivariada, e o que ela preserva?
+Toda combinação linear é normal. $\vb A\vb X + \vb b \sim \Normal(\vb A\vb\mu + \vb b, \vb A\vb\Sigma\vb A\T)$; blocos não correlacionados são independentes.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a distribuição de $Y$ dado $X = x$ na normal bivariada?
+$\Normal(\mu_Y + \rho\frac{\sigma_Y}{\sigma_X}(x - \mu_X),\ \sigma_Y^2(1 - \rho^2))$: média linear, variância constante.
+:::
+
+## Ficha-resumo {#sec-est-g03-ficha}
+
+::: {.ficha-resumo}
+**Esperança.** $\E X = \sum xp(x)$ ou $\int xf(x)$, se absolutamente convergente (Cauchy não tem). $\E g(X) = \sum g(x)p(x)$. Linear, monótona. Cauda: $\E X = \int_0^\infty\Prob(X > t)\,\dd t$. Médias: $p$, $np$, $\lambda$, $1/p$, $1/\lambda$, $\alpha/\beta$, $\mu$, $\alpha x_m/(\alpha - 1)$.
+
+**Momentos.** $\Var X = \E X^2 - (\E X)^2$, $\Var(aX + b) = a^2\Var X$. Assimetria, curtose (normal: 3). FGM $M(t) = \E e^{tX}$: $M^{(k)}(0) = \E X^k$; unicidade (admitida); normal $e^{\mu t + \sigma^2t^2/2}$; Poisson $e^{\lambda(e^t - 1)}$; gama $(\beta/(\beta - t))^\alpha$.
+
+**Jensen.** $\phi$ convexa: $\phi(\E X) \leq \E\phi(X)$. Aversão ao risco, equivalente certo, prêmio $\approx \frac12A\sigma^2$; média geométrica $\leq$ aritmética; Siegel.
+
+**Conjuntas.** Marginais somando/integrando; independência: $f = f_Xf_Y$; condicional $f(y \mid x) = f(x, y)/f_X(x)$.
+
+**Covariância.** $\Cov = \E XY - \mu_X\mu_Y$, bilinear. $\Var(\vb a\T\vb X) = \vb a\T\vb\Sigma\vb a$, $\vb\Sigma \succeq 0$. $\abs\rho \leq 1$, com igualdade se, e só se, relação afim. Independência $\Rightarrow$ $\rho = 0$, não o contrário. Diversificação: $\to \rho\sigma^2$.
+
+**Esperança condicional.** $m(x) = \E[Y \mid X = x]$; $\E[\E[Y \mid X]] = \E Y$; $\E[g(X)Y \mid X] = g(X)\E[Y \mid X]$; $\Var Y = \E\Var(Y \mid X) + \Var\E[Y \mid X]$; melhor previsor em EQM; linear: $b = \Cov/\Var$.
+
+**Normal multivariada.** Toda combinação linear normal; $M(\vb t) = e^{\vb t\T\vb\mu + \vb t\T\vb\Sigma\vb t/2}$; $\vb\mu + \vb L\vb Z$; afins preservam; não correlacionados $\Leftrightarrow$ independentes (só conjuntamente normais). Condicional: média $\mu_Y + \rho\frac{\sigma_Y}{\sigma_X}(x - \mu_X)$, variância $\sigma_Y^2(1 - \rho^2)$.
+:::
+
+## Notas bibliográficas {#sec-est-g03-notas}
+
+@degroot2012 desenvolve esperança, momentos, distribuições conjuntas e condicionais com muitos exemplos; @casella2002 trata com mais profundidade as funções geradoras, as famílias multivariadas e a esperança condicional, e é o texto de referência para o restante desta parte. A definição da normal multivariada por combinações lineares é a que se usa em textos de econometria como @hansen2022, porque dispensa densidades e cobre o caso degenerado. A aversão ao risco e o prêmio de risco de Arrow–Pratt são desenvolvidos no @sec-mic-m02; a esperança condicional geral, sem densidades, no @sec-est-m02.
