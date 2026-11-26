@@ -2,6 +2,57 @@
 
 Registro curto de cada sessão: o que foi feito, decisões e pendências. Entradas mais recentes no topo.
 
+## 26/11/2026 — EST-M01 a EST-M06 (mestrado de Probabilidade e Estatística)
+
+**Feito** (seis capítulos, status rascunho; leituras padrão mais sete referências novas: Williams, van der Vaart, Lehmann–Casella, Lehmann–Romano, Robert, Benjamini–Hochberg e White)
+
+- **EST-M01** *Probabilidade com teoria da medida*:
+  - $\sigma$-álgebras, geradores de Borel, conjunto de Vitali; teorema $\pi$-$\lambda$ e unicidade (a função de distribuição determina a lei);
+  - extensão de Carathéodory, comprimento enumeravelmente aditivo (Heine–Borel), medida de Lebesgue, Lebesgue–Stieltjes pelo quantil;
+  - funções mensuráveis, aproximação por simples, lema de Doob–Dynkin; integral de Lebesgue, TCM, Fatou, TCD, derivação sob a integral, Riemann como caso particular;
+  - mudança de variáveis (LOTUS geral), densidades em relação a qualquer medida (mistas), medida produto, Tonelli–Fubini (com contraexemplo), mudança de variáveis linear em $\R^n$ (densidade da normal multivariada);
+  - dígitos binários iid e existência de sequências independentes; Radon–Nikodym (enunciado), regra da cadeia, distribuição de Cantor, mudança de medida.
+  - Aplicação: variações da meta Selic (SGS 432) como distribuição discreta, contra o IPCA. Interativos: Riemann × Lebesgue (com a escada de Cantor) e quatro sequências que testam TCM/TCD.
+- **EST-M02** *Esperança condicional*:
+  - $L^p$, Hölder, Minkowski, inclusões, Riesz–Fischer; esperança condicional como projeção em $L^2$ e extensão a $L^1$;
+  - propriedades (torre, retirar o conhecido, TCM/TCD condicionais), Jensen condicional, decomposição da variância e valor da informação;
+  - paradoxo de Borel–Kolmogorov; representação de Riesz e prova de Radon–Nikodym (von Neumann); fórmula de Bayes abstrata;
+  - distribuições condicionais regulares (existência para variáveis reais, desintegração); independência condicional.
+  - Aplicação: previsão do IPCA com conjuntos de informação aninhados (sazonalidade, 1 e 3 defasagens), dentro e fora da amostra. Interativos: esperança condicional em partições com a torre e o paradoxo de Borel–Kolmogorov por simulação.
+- **EST-M03** *Modos de convergência e teoremas-limite*:
+  - relações entre os modos e contraexemplos (máquina de escrever, pulso); Borel–Cantelli I e II; lei forte de Etemadi (com divergência sem média);
+  - Skorokhod em $\R$, Portmanteau, mapeamento contínuo, Slutsky; integrabilidade uniforme;
+  - funções características, resto de Taylor complexo, inversão, unicidade (e unicidade da FGM por analiticidade), Helly, tensão, continuidade de Lévy (e versão pela FGM);
+  - Lindeberg–Feller, Lindeberg–Lévy, Lyapunov, Cramér–Wold, TCL multivariado, $O_p$/$o_p$, método delta multivariado, Glivenko–Cantelli e DKW.
+  - Aplicação: função de distribuição empírica do IPCA com banda de DKW e comparação 2000–2012 × 2013+. Interativos: máquina de escrever e Glivenko–Cantelli com banda.
+- **EST-M04** *Suficiência, verossimilhança e eficiência*:
+  - suficiência e fatoração (caso discreto provado), suficiência mínima, famílias exponenciais (momentos por $A$, EMV como igualação de momentos), completude via unicidade da FGM, Basu;
+  - Rao–Blackwell, Lehmann–Scheffé, Cramér–Rao multivariado;
+  - consistência de Wald (desigualdade da informação), normalidade assintótica do EMV, Hodges, EMV sob má especificação e sanduíche.
+  - Aplicação: normal × $t$ por EMV para o crescimento do IBC-Br (SGS 24364), erros padrão pela informação × sanduíche. Interativos: Rao–Blackwell para $e^{-\lambda}$ e superefficiência de Hodges.
+- **EST-M05** *Testes ótimos e regiões de confiança*:
+  - Neyman–Pearson completo (aleatorizado: existência, suficiência, necessidade); RVM e Karlin–Rubin; ausência de UMP bilateral; testes não viesados;
+  - trindade (RV, Wald, escore), Wilks com nula simples e composta (complemento de Schur), poder local, não invariância de Wald;
+  - regiões por inversão, verossimilhança perfilada, limites UMA; Holm e Benjamini–Hochberg (com provas).
+  - Aplicação: persistência das quedas do PIB como cadeia de Markov, trindade e região de confiança por RV. Interativos: Neyman–Pearson binomial com curva ROC e geometria da trindade.
+- **EST-M06** *Inferência bayesiana*:
+  - teorema de Bayes para densidades (como distribuição condicional regular); conjugadas (beta–binomial, normal–normal, famílias exponenciais), preditiva;
+  - estimadores de Bayes por perda (média, mediana, quantil, moda), viés, admissibilidade, minimax; HPD; Jeffreys e invariância; prioris impróprias;
+  - fator de Bayes, paradoxo de Lindley, BIC; Bernstein–von Mises (admitido); James–Stein com lema de Stein; Metropolis–Hastings e Gibbs (balanço detalhado).
+  - Aplicação: AR(1) bayesiano do IPCA por Gibbs (persistência, meia-vida, média de longo prazo). Interativos: atualização beta–binomial e Metropolis numa bimodal.
+- Cada capítulo tem laboratório, 7 a 8 exercícios resolvidos e 14 ou 15 flashcards (85 cartões no total).
+- Resultados admitidos na graduação e agora demonstrados: unicidade da FGM, continuidade de Lévy, Slutsky, LOTUS geral, Tonelli, derivação sob a integral, lei de Khinchin (via lei forte), mudança de variáveis linear, normalidade assintótica do EMV, Wilks.
+- Admitidos nos capítulos de mestrado: extensão de Kolmogorov; mudança de variáveis não linear em $\R^n$; diferenciação e decomposição de Lebesgue; densidade das contínuas em $L^p$; integral de Dirichlet e princípio da identidade (análise complexa); Skorokhod em $\R^k$; recíproca de Feller; DKW–Massart; fatoração geral (Halmos–Savage); convolução de Hájek–Le Cam; UMPNV em famílias exponenciais e teste $t$; terceiro lema de Le Cam; Benjamini–Yekutieli; Bernstein–von Mises; aproximação de Laplace/BIC; teorema ergódico para cadeias de Markov; classe completa de Wald.
+- Dados novos usados: meta Selic (432) e IBC-Br dessazonalizado (24364), já no catálogo do pacote `formacao`.
+
+**Pendências**
+
+- [ ] David conferir no site as seis aplicações com dados reais (Selic 432, IPCA 433, IBC-Br 24364, PIB 22109), testadas aqui só com séries sintéticas.
+- [ ] David revisar EST-M01 a EST-M06, em especial o nível de detalhe das provas de Carathéodory, Etemadi, Lévy e Wilks composto, e a escolha do que foi admitido.
+- [ ] Trilha "Base quantitativa": inclui EST-M02 e EST-M03, mas não EST-M01, de que ambos dependem (e não inclui EST-G04); decidir se acrescenta.
+- [ ] Pendências anteriores continuam: revisar EST-G01 a G06, MAT-M01 e MAT-M10; conferir as aplicações do IPCA do MAT-G03 e MAT-G08; informar a fonte dos sumários.
+- [ ] Próximos capítulos naturais: ECM-G02 *Regressão linear múltipla* (abre a econometria) ou EST-D01 *Cadeias de Markov* (paga o teorema ergódico admitido aqui).
+
 ## 26/11/2026 — EST-G01 a EST-G06 (graduação de Probabilidade e Estatística)
 
 **Feito** (seis capítulos, status rascunho, com referências padrão: DeGroot & Schervish, Casella & Berger e Bussab & Morettin)
