@@ -375,6 +375,7 @@ espL = {
     emv = nL / soma; ll = t => nL * Math.log(t) - t * soma; info = t => 1 / (t * t); dominio = [0.01, 6]
   }
   const ep = 1 / Math.sqrt(nL * info(emv)), l0 = ll(emv)
+  dominio = [Math.max(dominio[0], emv - 6 * ep), Math.min(dominio[1], emv + 6 * ep)]
   const grade = d3.range(dominio[0], dominio[1], (dominio[1] - dominio[0]) / 400)
     .map(t => ({t, l: ll(t) - l0, q: -0.5 * nL * info(emv) * (t - emv) ** 2}))
   return {emv, ep, grade, dominio}

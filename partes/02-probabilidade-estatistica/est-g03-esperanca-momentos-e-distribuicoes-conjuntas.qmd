@@ -420,7 +420,7 @@ corrBiv = {
 ```
 :::
 
-**Jensen, equivalente certo e prêmio de risco.** Um agente com riqueza inicial 100 e utilidade CRRA $u(w) = w^{1-\gamma}/(1 - \gamma)$ (logaritmo se $\gamma = 1$) enfrenta uma loteria que soma ou subtrai $h$ com probabilidade $1/2$. A corda entre os dois resultados passa abaixo da curva: $\E[u(W)] < u(\E[W])$. O equivalente certo é a riqueza sem risco que dá a mesma utilidade esperada; o prêmio de risco é a distância até a média. O texto compara com a aproximação de Arrow–Pratt do @exr-est-g03-arrow-pratt.
+**Jensen, equivalente certo e prêmio de risco.** Um agente com riqueza inicial 100 e utilidade CRRA $u(w) = w^{1-\gamma}/(1 - \gamma)$ (logaritmo se $\gamma = 1$) enfrenta uma loteria que soma ou subtrai $h$ com probabilidade $1/2$. A corda entre os dois resultados passa abaixo da curva: $\E[u(W)] < u(\E[W])$. (A utilidade é desenhada numa escala normalizada, o que não altera o equivalente certo: ele não muda com transformações afins de $u$.) O equivalente certo é a riqueza sem risco que dá a mesma utilidade esperada; o prêmio de risco é a distância até a média. O texto compara com a aproximação de Arrow–Pratt do @exr-est-g03-arrow-pratt.
 
 ::: {.interativo}
 ```{ojs}
@@ -438,14 +438,14 @@ md`E[W] = 100; equivalente certo **${fmtG03(ecJ, 2)}**; prêmio de risco **${fmt
 //| echo: false
 Plot.plot({
   width: 640, height: 300, grid: true,
-  x: {label: "riqueza w", domain: [5, 195]}, y: {label: "utilidade u(w)"},
+  x: {label: "riqueza w", domain: [loJ, hiJ]}, y: {label: "utilidade (normalizada)", domain: [0, 1]},
   marks: [
-    Plot.line(d3.range(5, 195.5, 0.5).map(w => ({w, v: uJ(w)})), {x: "w", y: "v", stroke: "#2F5D8A", strokeWidth: 2}),
-    Plot.line([{w: 100 - hJ, v: uJ(100 - hJ)}, {w: 100 + hJ, v: uJ(100 + hJ)}], {x: "w", y: "v", stroke: "#9AA5B1", strokeDasharray: "4,3"}),
-    Plot.dot([{w: 100, v: euJ}], {x: "w", y: "v", r: 5, fill: "#8C2F39"}),
-    Plot.dot([{w: 100, v: uJ(100)}], {x: "w", y: "v", r: 5, fill: "#2F5D8A"}),
-    Plot.dot([{w: ecJ, v: euJ}], {x: "w", y: "v", r: 5, fill: "#B7791F"}),
-    Plot.ruleY([euJ], {x1: ecJ, x2: 100, stroke: "#B7791F", strokeWidth: 2})
+    Plot.line(d3.range(loJ, hiJ, (hiJ - loJ) / 300).map(w => ({w, v: vJ(w)})), {x: "w", y: "v", stroke: "#2F5D8A", strokeWidth: 2}),
+    Plot.line([{w: 100 - hJ, v: vJ(100 - hJ)}, {w: 100 + hJ, v: vJ(100 + hJ)}], {x: "w", y: "v", stroke: "#9AA5B1", strokeDasharray: "4,3"}),
+    Plot.dot([{w: 100, v: nJ(euJ)}], {x: "w", y: "v", r: 5, fill: "#8C2F39"}),
+    Plot.dot([{w: 100, v: vJ(100)}], {x: "w", y: "v", r: 5, fill: "#2F5D8A"}),
+    Plot.dot([{w: ecJ, v: nJ(euJ)}], {x: "w", y: "v", r: 5, fill: "#B7791F"}),
+    Plot.ruleY([nJ(euJ)], {x1: ecJ, x2: 100, stroke: "#B7791F", strokeWidth: 2})
   ]
 })
 ```
@@ -455,6 +455,10 @@ Plot.plot({
 uJ = w => Math.abs(gamaJ - 1) < 1e-9 ? Math.log(w) : Math.pow(w, 1 - gamaJ) / (1 - gamaJ)
 euJ = 0.5 * uJ(100 - hJ) + 0.5 * uJ(100 + hJ)
 ecJ = Math.abs(gamaJ - 1) < 1e-9 ? Math.exp(euJ) : Math.pow((1 - gamaJ) * euJ, 1 / (1 - gamaJ))
+loJ = Math.max(1, 100 - 1.15 * hJ)
+hiJ = 100 + 1.15 * hJ
+nJ = v => (v - uJ(loJ)) / (uJ(hiJ) - uJ(loJ))
+vJ = w => nJ(uJ(w))
 ```
 :::
 :::

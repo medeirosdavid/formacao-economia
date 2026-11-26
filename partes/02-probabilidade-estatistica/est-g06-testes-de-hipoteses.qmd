@@ -223,8 +223,8 @@ Plot.plot({
   width: 640, height: 280, grid: true,
   x: {label: "estatística Z", domain: [-4, Math.max(4, centroP + 4)]}, y: {label: "densidade"},
   marks: [
-    Plot.areaY(gradeP.filter(d => rejeitaP(d.z)), {x: "z", y: "h1", fill: "#2F5D8A", fillOpacity: 0.3}),
-    Plot.areaY(gradeP.filter(d => rejeitaP(d.z)), {x: "z", y: "h0", fill: "#8C2F39", fillOpacity: 0.6}),
+    Plot.areaY(gradeP.filter(d => rejeitaP(d.z)), {x: "z", y: "h1", z: "lado", fill: "#2F5D8A", fillOpacity: 0.3}),
+    Plot.areaY(gradeP.filter(d => rejeitaP(d.z)), {x: "z", y: "h0", z: "lado", fill: "#8C2F39", fillOpacity: 0.6}),
     Plot.line(gradeP, {x: "z", y: "h0", stroke: "#5B6770", strokeWidth: 2}),
     Plot.line(gradeP, {x: "z", y: "h1", stroke: "#2F5D8A", strokeWidth: 2}),
     Plot.ruleX(ladosP.startsWith("uni") ? [critP] : [-critP, critP], {stroke: "#8C2F39", strokeDasharray: "4,3"})
@@ -251,7 +251,7 @@ critP = ladosP.startsWith("uni") ? qnormG06(1 - alfaP) : qnormG06(1 - alfaP / 2)
 rejeitaP = z => ladosP.startsWith("uni") ? z > critP : Math.abs(z) > critP
 poderP = ladosP.startsWith("uni") ? 1 - PhiG06(critP - centroP) : 1 - PhiG06(critP - centroP) + PhiG06(-critP - centroP)
 nOtimoP = Math.abs(deltaP) < 1e-6 ? "infinito (δ = 0)" : Math.ceil(((critP + qnormG06(0.8)) / Math.abs(deltaP)) ** 2)
-gradeP = d3.range(-4, Math.max(4, centroP + 4), 0.02).map(z => ({z,
+gradeP = d3.range(-4, Math.max(4, centroP + 4), 0.02).map(z => ({z, lado: z < 0 ? "esquerda" : "direita",
   h0: Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI),
   h1: Math.exp(-((z - centroP) ** 2) / 2) / Math.sqrt(2 * Math.PI)}))
 ```
