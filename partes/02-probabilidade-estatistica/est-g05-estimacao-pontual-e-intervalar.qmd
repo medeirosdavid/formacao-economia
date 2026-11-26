@@ -10,14 +10,691 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-g05-motivacao}
 
-1. Estimadores: viés, variância e erro quadrático médio
-2. Consistência
-3. Informação de Fisher e cota de Cramér–Rao
-4. Método dos momentos
-5. Máxima verossimilhança (introdução)
-6. Intervalos de confiança
-7. Aplicação: a inflação média em diferentes períodos
+Toda estatística econômica é uma **estimativa**. A taxa de desemprego da PNAD Contínua estima a de toda a força de trabalho a partir de uma amostra de domicílios, e o IBGE divulga, junto com ela, uma medida de sua precisão. Um banco estima a probabilidade de inadimplência de cada classe de risco; um econometrista estima a elasticidade da demanda; o Banco Central estima o hiato do produto. Duas perguntas se repetem: que regra usar para transformar dados em estimativa, e quão confiável é o número obtido?
+
+A primeira é a da **estimação pontual**: que propriedades torna um estimador bom — não ter viés, ter variância pequena, acertar quando a amostra cresce — e que métodos gerais produzem estimadores — o dos momentos e o da máxima verossimilhança. A segunda é a da **estimação intervalar**: um intervalo de confiança traduz a incerteza amostral numa faixa de valores plausíveis, com uma garantia de cobertura que precisa ser entendida corretamente.
+
+O capítulo desenvolve:
+
+1. modelos estatísticos, estimadores e estimativas;
+2. viés, variância e erro quadrático médio;
+3. consistência e normalidade assintótica;
+4. informação de Fisher e a cota de Cramér–Rao;
+5. o método dos momentos;
+6. a máxima verossimilhança e sua invariância;
+7. intervalos de confiança: pivôs, amostras normais, grandes amostras e proporções.
+
+## Modelos e estimadores {#sec-est-g05-modelos}
+
+::: {#def-est-g05-modelo}
+## Modelo paramétrico, estimador e estimativa
+Um **modelo paramétrico** é uma família de distribuições $\{f(x; \theta) : \theta \in \Theta\}$ indexada por um **parâmetro** $\theta$ que varia num **espaço paramétrico** $\Theta \subseteq \R^k$; supõe-se que os dados $X_1, \dots, X_n$ são uma amostra aleatória de $f(\cdot\,; \theta_0)$ para algum $\theta_0 \in \Theta$ desconhecido. Um **estimador** de $\theta$ é uma estatística $\hat\theta = T(X_1, \dots, X_n)$; o valor que ela assume numa amostra observada é uma **estimativa**.
 :::
+
+O estimador é uma variável aleatória — uma regra —, e suas propriedades são propriedades da sua distribuição, a **distribuição amostral**, que depende de $\theta$. Escrevemos $\E_\theta$, $\Var_\theta$ e $\Prob_\theta$ para indicar que as contas são feitas supondo que $\theta$ é o valor verdadeiro. Exemplos: a proporção de inadimplentes numa amostra, que estima o $p$ de um modelo de Bernoulli; a média e a variância amostrais, que estimam $\mu$ e $\sigma^2$ num modelo normal; o inverso da duração média, que estima a taxa $\lambda$ de um modelo exponencial de durações.
+
+## Viés, variância e erro quadrático médio {#sec-est-g05-eqm}
+
+::: {#def-est-g05-vies}
+## Viés e erro quadrático médio
+O **viés** de $\hat\theta$ é $b(\theta) \defeq \E_\theta[\hat\theta] - \theta$; o estimador é **não viesado** se $b(\theta) = 0$ para todo $\theta \in \Theta$. O **erro quadrático médio** é $\text{EQM}(\theta) \defeq \E_\theta[(\hat\theta - \theta)^2]$.
+:::
+
+::: {#prp-est-g05-eqm}
+## Decomposição do erro quadrático médio
+$\text{EQM}(\theta) = \Var_\theta(\hat\theta) + b(\theta)^2$.
+:::
+
+::: {.proof}
+Escreva $\hat\theta - \theta = (\hat\theta - \E_\theta\hat\theta) + b(\theta)$ e expanda o quadrado; o termo cruzado tem esperança $2b(\theta)\E_\theta[\hat\theta - \E_\theta\hat\theta] = 0$.
+:::
+
+O EQM combina os dois defeitos de um estimador: errar sistematicamente (viés) e oscilar de amostra para amostra (variância). Não ter viés é uma virtude, mas não a única: um estimador ligeiramente viesado com variância muito menor pode errar menos.
+
+::: {#exm-est-g05-variancia}
+## Estimando a variância
+Num modelo com média $\mu$ e variância $\sigma^2$, considere $S^2 = \frac{1}{n-1}\sum_i(X_i - \bar X)^2$ e $\hat\sigma^2 = \frac1n\sum_i(X_i - \bar X)^2 = \frac{n-1}{n}S^2$. Pela @prp-est-g04-momentos-amostrais, $S^2$ é não viesado, e $\hat\sigma^2$ tem viés $-\sigma^2/n$: subestima a variância em média. Numa amostra normal, porém, $\Var(S^2) = 2\sigma^4/(n - 1)$ (@exr-est-g04-variancia-s2), e
+$$
+\text{EQM}(\hat\sigma^2) = \Big(\frac{n-1}{n}\Big)^2\frac{2\sigma^4}{n-1} + \frac{\sigma^4}{n^2} = \frac{(2n - 1)\sigma^4}{n^2} < \frac{2\sigma^4}{n - 1} = \text{EQM}(S^2),
+$$
+porque $(2n - 1)(n - 1) = 2n^2 - 3n + 1 < 2n^2$. O estimador viesado erra menos. Dividindo por $n + 1$, o EQM é ainda menor — é o mínimo nessa família (@exr-est-g05-divisor).
+:::
+
+A propriedade de não ter viés também não sobrevive a transformações não lineares: $S^2$ é não viesado para $\sigma^2$, mas $S$ é viesado para $\sigma$, pois, pela desigualdade de Jensen, $\E[S] \leq \sqrt{\E[S^2]} = \sigma$.
+
+## Consistência {#sec-est-g05-consistencia}
+
+::: {#def-est-g05-consistencia}
+## Consistência e normalidade assintótica
+Uma sequência de estimadores $\hat\theta_n$ é **consistente** se $\hat\theta_n \pto \theta$ para todo $\theta \in \Theta$. É **assintoticamente normal** se existe $V(\theta) > 0$ com $\sqrt n(\hat\theta_n - \theta) \dto \Normal(0, V(\theta))$; nesse caso, $V(\theta)$ é a **variância assintótica** e $\sqrt{V(\hat\theta_n)/n}$ é o **erro padrão** de $\hat\theta_n$.
+:::
+
+::: {#prp-est-g05-consistencia}
+## EQM tendendo a zero implica consistência
+Se $\text{EQM}_n(\theta) \to 0$ para todo $\theta$ — em particular, se o viés e a variância tendem a zero —, então $\hat\theta_n$ é consistente.
+:::
+
+::: {.proof}
+Pela desigualdade de Markov aplicada a $(\hat\theta_n - \theta)^2$, $\Prob_\theta(\abs{\hat\theta_n - \theta} \geq \varepsilon) \leq \text{EQM}_n(\theta)/\varepsilon^2 \to 0$.
+:::
+
+$\bar X_n$ é consistente para $\mu$ (lei dos grandes números), e $S_n^2$ e $\hat\sigma^2_n$ o são para $\sigma^2$ (@cor-est-g04-variancia-amostral). Viés e consistência são conceitos independentes: $\hat\sigma^2_n$ é viesado e consistente; já $X_1$, que usa só a primeira observação, é não viesado para $\mu$ e inconsistente. A consistência é a exigência mínima de um estimador: com dados suficientes, ele acerta. A normalidade assintótica diz com que precisão.
+
+## Informação de Fisher e a cota de Cramér–Rao {#sec-est-g05-cramer-rao}
+
+Entre estimadores não viesados, qual é a menor variância possível? Para modelos "regulares", há uma cota inferior, e ela depende de quanta informação cada observação carrega sobre $\theta$.
+
+::: {#def-est-g05-fisher}
+## Escore e informação de Fisher
+Seja $\theta \in \Theta \subseteq \R$, um intervalo aberto. O **escore** de uma observação é $s(x; \theta) \defeq \pd{}{\theta}\log f(x; \theta)$, e a **informação de Fisher** é $I(\theta) \defeq \E_\theta[s(X; \theta)^2]$.
+:::
+
+Dizemos que o modelo é **regular** se o suporte $\{x : f(x; \theta) > 0\}$ não depende de $\theta$, se $f$ é diferenciável em $\theta$ e se é permitido derivar em $\theta$ sob o sinal de integral (ou de soma) nas contas abaixo — condições que valem nos modelos de Bernoulli, Poisson, normal e exponencial, mas não no da uniforme em $[0, \theta]$, cujo suporte depende de $\theta$.
+
+::: {#lem-est-g05-escore}
+## O escore tem média zero
+Num modelo regular, $\E_\theta[s(X; \theta)] = 0$, de modo que $I(\theta) = \Var_\theta(s(X; \theta))$.
+:::
+
+::: {.proof}
+No caso contínuo, $\E_\theta[s] = \int \frac{\partial_\theta f(x; \theta)}{f(x; \theta)}f(x; \theta)\,\dd x = \int\partial_\theta f(x; \theta)\,\dd x = \frac{\dd}{\dd\theta}\int f(x; \theta)\,\dd x = \frac{\dd}{\dd\theta}1 = 0$; no discreto, troque integrais por somas.
+:::
+
+::: {#thm-est-g05-cramer-rao}
+## Cota de Cramér–Rao
+Num modelo regular, seja $T = T(X_1, \dots, X_n)$ um estimador não viesado de $\theta$ com variância finita, para o qual se possa derivar $\E_\theta[T]$ sob o sinal de integral. Então
+$$
+\Var_\theta(T) \geq \frac{1}{n\,I(\theta)} .
+$$ {#eq-est-g05-cramer-rao}
+:::
+
+::: {.proof}
+Seja $S_n = \sum_i s(X_i; \theta) = \pd{}{\theta}\log\prod_i f(X_i; \theta)$ o escore da amostra. Pelo @lem-est-g05-escore e pela independência, $\E_\theta[S_n] = 0$ e $\Var_\theta(S_n) = nI(\theta)$. Com $f_n(\vb x; \theta) = \prod_i f(x_i; \theta)$ a densidade conjunta,
+$$
+\Cov_\theta(T, S_n) = \E_\theta[TS_n] = \int T(\vb x)\,\frac{\partial_\theta f_n(\vb x; \theta)}{f_n(\vb x; \theta)}f_n(\vb x; \theta)\,\dd\vb x = \frac{\dd}{\dd\theta}\E_\theta[T] = \frac{\dd}{\dd\theta}\theta = 1 .
+$$
+Pela @prp-est-g03-correlacao (Cauchy–Schwarz), $1 = \Cov_\theta(T, S_n)^2 \leq \Var_\theta(T)\Var_\theta(S_n) = \Var_\theta(T)\,nI(\theta)$.
+:::
+
+Um estimador não viesado cuja variância atinge a cota é **eficiente**: nenhum outro estimador não viesado tem variância menor.
+
+::: {#exm-est-g05-eficiencia}
+## Estimadores eficientes
+(a) **Bernoulli.** $\log f(x; p) = x\log p + (1 - x)\log(1 - p)$, de modo que $s = \frac{x}{p} - \frac{1-x}{1-p} = \frac{x - p}{p(1-p)}$ e $I(p) = \frac{\Var(X)}{p^2(1-p)^2} = \frac{1}{p(1-p)}$. A cota é $p(1 - p)/n$, exatamente a variância de $\bar X$: a proporção amostral é eficiente.
+(b) **Normal com variância conhecida.** $s = (x - \mu)/\sigma^2$, $I(\mu) = 1/\sigma^2$, cota $\sigma^2/n = \Var(\bar X)$: a média amostral é eficiente.
+(c) **Poisson.** $s = x/\lambda - 1$, $I(\lambda) = \Var(X)/\lambda^2 = 1/\lambda$, cota $\lambda/n = \Var(\bar X)$.
+(d) **Uniforme em $[0, \theta]$.** O modelo não é regular, e a cota não se aplica: o estimador baseado no máximo da amostra tem variância da ordem de $1/n^2$, muito menor que a "cota" de ordem $1/n$ (@exr-est-g05-uniforme).
+:::
+
+## O método dos momentos {#sec-est-g05-momentos}
+
+Se o parâmetro determina os momentos populacionais, $\E_\theta[X^j] = m_j(\theta)$, e os momentos amostrais $\hat m_j = \frac1n\sum_i X_i^j$ convergem para eles (lei dos grandes números), é natural estimar $\theta$ igualando uns aos outros.
+
+::: {#def-est-g05-momentos}
+## Estimador de momentos
+Com $\theta \in \R^k$, o **estimador de momentos** $\tilde\theta$ é a solução do sistema $m_j(\tilde\theta) = \hat m_j$, $j = 1, \dots, k$.
+:::
+
+Se a função $\theta \mapsto (m_1(\theta), \dots, m_k(\theta))$ é invertível com inversa contínua, o estimador de momentos é consistente: os $\hat m_j$ convergem em probabilidade para os $m_j(\theta)$, e a inversa contínua preserva a convergência (@prp-est-g04-continuidade, estendida a $k$ argumentos).
+
+::: {#exm-est-g05-momentos}
+## Estimadores de momentos
+(a) **Exponencial.** $\E[X] = 1/\lambda$, logo $\tilde\lambda = 1/\bar X$.
+(b) **Normal.** $\E[X] = \mu$ e $\E[X^2] = \sigma^2 + \mu^2$, logo $\tilde\mu = \bar X$ e $\tilde\sigma^2 = \hat m_2 - \bar X^2 = \frac1n\sum_i(X_i - \bar X)^2$.
+(c) **Uniforme em $[0, \theta]$.** $\E[X] = \theta/2$, logo $\tilde\theta = 2\bar X$, não viesado, com variância $\theta^2/(3n)$. Ele pode dar um valor **menor** que a maior observação — um $\theta$ incompatível com os dados.
+(d) **Gama.** $\E[X] = \alpha/\beta$ e $\Var(X) = \alpha/\beta^2$, logo $\tilde\beta = \bar X/\tilde\sigma^2$ e $\tilde\alpha = \bar X^2/\tilde\sigma^2$.
+:::
+
+O método é simples e sempre dá alguma resposta, mas não usa toda a informação da distribuição e pode ser ineficiente, como em (c). Sua generalização — escolher momentos implicados por um modelo econômico, inclusive condições de primeira ordem de agentes otimizadores — é o **método generalizado dos momentos** (@sec-ecm-m06), central em macroeconomia e finanças.
+
+## A máxima verossimilhança {#sec-est-g05-mv}
+
+::: {#def-est-g05-verossimilhanca}
+## Verossimilhança e estimador de máxima verossimilhança
+Dada a amostra observada, a **função de verossimilhança** é $L(\theta) \defeq \prod_{i=1}^n f(X_i; \theta)$, vista como função de $\theta$, e a **log-verossimilhança** é $\ell(\theta) = \log L(\theta) = \sum_i\log f(X_i; \theta)$. O **estimador de máxima verossimilhança** (EMV) é o valor $\hat\theta \in \Theta$ que maximiza $L$ (e, equivalentemente, $\ell$).
+:::
+
+A ideia é escolher o parâmetro sob o qual os dados observados seriam mais prováveis. A log-verossimilhança é preferível para contas — transforma produtos em somas — e, num modelo regular, sua derivada é o escore da amostra: a condição de primeira ordem $\ell'(\hat\theta) = 0$ diz que o escore médio é zero na estimativa, a versão amostral do @lem-est-g05-escore.
+
+::: {#exm-est-g05-emv}
+## Estimadores de máxima verossimilhança
+(a) **Bernoulli.** Com $k = \sum_i X_i$ sucessos, $\ell(p) = k\log p + (n - k)\log(1 - p)$. Se $0 < k < n$, $\ell'(p) = k/p - (n - k)/(1 - p) = 0$ dá $\hat p = k/n = \bar X$, e $\ell'' < 0$ garante o máximo; se $k = 0$ ou $k = n$, $\ell$ é monótona e o máximo está na fronteira, de novo em $\hat p = \bar X$.
+(b) **Poisson.** $\ell(\lambda) = \sum_iX_i\log\lambda - n\lambda - \sum_i\log X_i!$, logo $\hat\lambda = \bar X$.
+(c) **Exponencial.** $\ell(\lambda) = n\log\lambda - \lambda\sum_iX_i$, logo $\hat\lambda = 1/\bar X$, que coincide com o estimador de momentos.
+(d) **Normal.** $\ell(\mu, \sigma^2) = -\frac n2\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_i(X_i - \mu)^2$. Para cada $\sigma^2$, o máximo em $\mu$ é $\bar X$, que minimiza a soma de quadrados; substituindo e maximizando em $\sigma^2$, $\hat\sigma^2 = \frac1n\sum_i(X_i - \bar X)^2$ — o estimador viesado do @exm-est-g05-variancia.
+(e) **Uniforme em $[0, \theta]$.** $L(\theta) = \theta^{-n}$ se $\theta \geq \max_iX_i$ e $L(\theta) = 0$ caso contrário. $L$ é decrescente onde é positiva, e o máximo está na fronteira: $\hat\theta = X_{(n)} \defeq \max_iX_i$. Não há condição de primeira ordem — o modelo não é regular —, e o EMV é viesado para baixo, pois nunca passa de $\theta$ (@exr-est-g05-uniforme).
+:::
+
+::: {#prp-est-g05-invariancia}
+## Invariância do EMV
+Se $\hat\theta$ é o EMV de $\theta$ e $g: \Theta \to g(\Theta)$ é uma bijeção, então $g(\hat\theta)$ é o EMV de $\eta = g(\theta)$.
+:::
+
+::: {.proof}
+Na parametrização por $\eta$, a verossimilhança é $L^*(\eta) = L(g^{-1}(\eta))$. Para todo $\eta$, $L^*(\eta) = L(g^{-1}(\eta)) \leq L(\hat\theta) = L^*(g(\hat\theta))$, de modo que $g(\hat\theta)$ maximiza $L^*$.
+:::
+
+Com uma definição apropriada de verossimilhança "induzida", o resultado vale para qualquer $g$. Assim, o EMV do desvio padrão num modelo normal é $\hat\sigma = \sqrt{\hat\sigma^2}$, e o da probabilidade de nenhum evento num modelo de Poisson, $e^{-\lambda}$, é $e^{-\bar X}$ — propriedades que o não viés não tem.
+
+A justificativa mais forte para a máxima verossimilhança é assintótica. Sob condições de regularidade, o EMV é consistente e assintoticamente normal, com a menor variância assintótica possível:
+$$
+\sqrt n\,(\hat\theta_n - \theta) \;\dto\; \Normal\Big(0, \frac{1}{I(\theta)}\Big) ,
+$$ {#eq-est-g05-emv-assintotica}
+de modo que o erro padrão do EMV é $1/\sqrt{nI(\hat\theta)}$. Admitimos esse resultado, demonstrado nos @sec-est-m04 e @sec-ecm-m05. No modelo exponencial, $I(\lambda) = 1/\lambda^2$ (@exr-est-g05-exponencial), e a @eq-est-g05-emv-assintotica dá $\sqrt n(1/\bar X - \lambda) \dto \Normal(0, \lambda^2)$ — exatamente o que o método delta deu no @sec-est-g04.
+
+## Intervalos de confiança {#sec-est-g05-intervalos}
+
+Uma estimativa pontual sem medida de precisão diz pouco. O intervalo de confiança traduz a distribuição amostral do estimador numa faixa de valores.
+
+::: {#def-est-g05-intervalo}
+## Intervalo de confiança
+Um **intervalo de confiança** de nível $1 - \alpha$ para $\theta$ é um par de estatísticas $L = L(X_1, \dots, X_n) \leq U = U(X_1, \dots, X_n)$ tal que
+$$
+\Prob_\theta(L \leq \theta \leq U) \geq 1 - \alpha \qquad\text{para todo } \theta \in \Theta .
+$$
+A probabilidade do lado esquerdo é a **cobertura** do intervalo. Se a cobertura só tende a $1 - \alpha$ quando $n \to \infty$, o intervalo tem nível **assintótico** $1 - \alpha$.
+:::
+
+O aleatório é o intervalo, não o parâmetro. Antes de coletar os dados, há probabilidade $1 - \alpha$ de o procedimento produzir um intervalo que contém $\theta$; depois, o intervalo calculado, $[2{,}1;\ 3{,}4]$ digamos, contém ou não contém $\theta$, e não há probabilidade (frequentista) envolvida. "Confiança de 95%" qualifica o **método**: em 95% das amostras possíveis, ele acerta. O primeiro interativo mostra isso. A afirmação "$\theta$ está em $[2{,}1;\ 3{,}4]$ com probabilidade 95%" é a do intervalo de credibilidade bayesiano (@sec-est-m06), que exige uma distribuição a priori para $\theta$.
+
+O método geral de construção usa uma **quantidade pivotal**: uma função $Q(X_1, \dots, X_n; \theta)$ cuja distribuição não depende de $\theta$. Se $\Prob(a \leq Q \leq b) = 1 - \alpha$ e a desigualdade $a \leq Q \leq b$ pode ser resolvida para $\theta$, obtém-se o intervalo. Denotamos por $z_{\alpha/2} = \Phi^{-1}(1 - \alpha/2)$ o quantil superior da normal padrão (1,96 para $\alpha = 5\%$), e por $t_{k,\alpha/2}$ e $\chi^2_{k,p}$ os quantis correspondentes da $t_k$ e da $\chi^2_k$ (o último, com probabilidade $p$ **abaixo**).
+
+::: {#thm-est-g05-ic-normal}
+## Intervalos exatos em amostras normais
+Seja $X_1, \dots, X_n \iid \Normal(\mu, \sigma^2)$, com $n \geq 2$. São intervalos de confiança de nível exato $1 - \alpha$:
+
+(a) para $\mu$, com $\sigma$ conhecido: $\bar X \pm z_{\alpha/2}\,\sigma/\sqrt n$;
+(b) para $\mu$, com $\sigma$ desconhecido: $\bar X \pm t_{n-1,\alpha/2}\,S/\sqrt n$;
+(c) para $\sigma^2$: $\Big[\dfrac{(n - 1)S^2}{\chi^2_{n-1,1-\alpha/2}},\ \dfrac{(n - 1)S^2}{\chi^2_{n-1,\alpha/2}}\Big]$.
+:::
+
+::: {.proof}
+Para (a), $Q = \sqrt n(\bar X - \mu)/\sigma \sim \Normal(0, 1)$ (@thm-est-g04-amostras-normais), e $-z_{\alpha/2} \leq Q \leq z_{\alpha/2}$ equivale a $\bar X - z_{\alpha/2}\sigma/\sqrt n \leq \mu \leq \bar X + z_{\alpha/2}\sigma/\sqrt n$. Para (b), o pivô é $\sqrt n(\bar X - \mu)/S \sim t_{n-1}$, e a mesma inversão vale com os quantis da $t$. Para (c), $Q = (n - 1)S^2/\sigma^2 \sim \chi^2_{n-1}$, e $\chi^2_{n-1,\alpha/2} \leq Q \leq \chi^2_{n-1,1-\alpha/2}$ equivale à desigualdade do enunciado, invertendo as frações.
+:::
+
+O intervalo (b) é mais largo que (a) por dois motivos: $t_{n-1,\alpha/2} > z_{\alpha/2}$, o preço de estimar $\sigma$, e o fato de $S$ ser aleatório. Com $n = 10$, $t_{9;\,0{,}025} = 2{,}26$ contra 1,96. O intervalo (c) não é simétrico em torno de $S^2$, porque a qui-quadrado é assimétrica, e depende criticamente da normalidade.
+
+Sem normalidade, o teorema central do limite e o lema de Slutsky dão intervalos de nível assintótico $1 - \alpha$, a partir da @eq-est-g04-t-assintotica:
+
+- **média**: $\bar X \pm z_{\alpha/2}\,S/\sqrt n$;
+- **proporção** (intervalo de Wald): $\hat p \pm z_{\alpha/2}\sqrt{\hat p(1 - \hat p)/n}$;
+- **diferença de médias** de duas amostras independentes, de tamanhos $n$ e $m$: $(\bar X - \bar Y) \pm z_{\alpha/2}\sqrt{S_X^2/n + S_Y^2/m}$;
+- **EMV**: $\hat\theta \pm z_{\alpha/2}/\sqrt{nI(\hat\theta)}$, pela @eq-est-g05-emv-assintotica.
+
+Na prática, usa-se $t_{n-1}$ no lugar de $z$ também sem normalidade, o que alarga um pouco o intervalo e protege em amostras pequenas. O intervalo de Wald para proporções tem cobertura ruim quando $n$ é pequeno ou $p$ está perto de 0 ou 1 — com nenhum sucesso observado, ele tem largura zero —, e o **intervalo de Wilson** (@exr-est-g05-wilson) é preferível; o laboratório compara os dois.
+
+A largura do intervalo da média é $2z_{\alpha/2}\sigma/\sqrt n$, e o **erro** (meia largura) $E$ desejado determina o tamanho de amostra: $n = (z_{\alpha/2}\sigma/E)^2$. Reduzir o erro à metade exige quadruplicar a amostra.
+
+## Pontes {#sec-est-g05-pontes}
+
+- **Testes de hipóteses (@sec-est-g06).** Todo intervalo de confiança corresponde a uma família de testes, e vice-versa.
+- **Inferência estatística (@sec-est-m04, @sec-est-m05).** Suficiência, estimadores não viesados de variância mínima, propriedades assintóticas do EMV e regiões de confiança ótimas.
+- **Verossimilhança em econometria (@sec-ecm-m05).** EMV em modelos de regressão, probit, logit e séries temporais; os testes de Wald, da razão de verossimilhança e do multiplicador de Lagrange.
+- **GMM (@sec-ecm-m06).** O método dos momentos com mais condições que parâmetros, a partir de condições de equilíbrio.
+- **Inferência bayesiana (@sec-est-m06).** Distribuições a posteriori e intervalos de credibilidade.
+- **Regressão (@sec-ecm-g01, @sec-ecm-g03).** O MQO como estimador de momentos e, com erros normais, de máxima verossimilhança; intervalos para coeficientes.
+
+## Interativo {#sec-est-g05-interativo}
+
+::: {.content-visible when-format="html"}
+**O que significa 95% de confiança.** Cada linha horizontal é o intervalo calculado numa amostra simulada de tamanho $n$; a linha vertical é a média verdadeira $\mu = 1$. Os intervalos em vinho não a contêm. A cobertura de 100 intervalos varia de uma rodada para outra; a de 4000 amostras, mostrada no texto, revela a cobertura do método. Compare o intervalo com $z$ e $\sigma$ estimado — que cobre menos do que promete em amostras pequenas — com o intervalo $t$, e veja o efeito de dados assimétricos (exponenciais).
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof metodoIC = seletor("intervalo", ["z com σ conhecido", "z com σ estimado", "t com σ estimado"], {valor: "t com σ estimado"})
+viewof dadosIC = seletor("distribuição dos dados", ["normal (μ = 1, σ = 1)", "exponencial (μ = 1, σ = 1)"], {valor: "normal (μ = 1, σ = 1)"})
+viewof nIC = controle("tamanho da amostra n", [5, 200], {valor: 10, passo: 1, casas: 0})
+viewof nivelIC = controle("nível de confiança", [0.8, 0.99], {valor: 0.95, passo: 0.01, casas: 2})
+viewof sementeIC = controle("semente", [1, 50], {valor: 1, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Nos 100 intervalos desenhados, ${intervalosIC.filter(d => d.cobre).length} contêm μ. Cobertura em 4000 amostras: **${fmtG05(100 * coberturaIC, 1)}%** (nominal: ${fmtG05(100 * nivelIC, 0)}%). Quantil usado: ${fmtG05(quantilIC, 3)}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 420,
+  x: {label: "intervalo para μ", domain: [-0.5, 2.5]}, y: {axis: null, domain: [0, 101]},
+  color: {domain: [true, false], range: ["#2F5D8A", "#8C2F39"]},
+  marks: [
+    Plot.ruleX([1], {stroke: "#5B6770", strokeWidth: 1.5}),
+    Plot.link(intervalosIC, {x1: "L", x2: "U", y1: "i", y2: "i", stroke: "cobre", strokeWidth: 1.6, clip: true}),
+    Plot.dot(intervalosIC, {x: "m", y: "i", r: 1.5, fill: "cobre"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtG05 = (v, c) => v.toFixed(c).replace(".", ",")
+geradorG05 = semente => () => {
+  semente |= 0; semente = semente + 0x6D2B79F5 | 0
+  let t = Math.imul(semente ^ semente >>> 15, 1 | semente)
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+  return ((t ^ t >>> 14) >>> 0) / 4294967296
+}
+qnormG05 = p => {
+  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239]
+  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572]
+  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783]
+  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416]
+  const cauda = r => (((((c[0] * r + c[1]) * r + c[2]) * r + c[3]) * r + c[4]) * r + c[5]) / ((((d[0] * r + d[1]) * r + d[2]) * r + d[3]) * r + 1)
+  if (p < 0.02425) return cauda(Math.sqrt(-2 * Math.log(p)))
+  if (p > 1 - 0.02425) return -cauda(Math.sqrt(-2 * Math.log(1 - p)))
+  const s = p - 0.5, r = s * s
+  return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * s / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1)
+}
+qtG05 = (p, k) => {
+  const z = qnormG05(p), z3 = z ** 3, z5 = z ** 5, z7 = z ** 7
+  return z + (z3 + z) / (4 * k) + (5 * z5 + 16 * z3 + 3 * z) / (96 * k * k)
+           + (3 * z7 + 19 * z5 + 17 * z3 - 15 * z) / (384 * k ** 3)
+}
+quantilIC = metodoIC.startsWith("t") ? qtG05(1 - (1 - nivelIC) / 2, nIC - 1) : qnormG05(1 - (1 - nivelIC) / 2)
+amostraIC = u => {
+  const x = d3.range(nIC).map(() => {
+    if (dadosIC.startsWith("normal")) {
+      const r = Math.sqrt(-2 * Math.log(1 - u())), th = 2 * Math.PI * u()
+      return 1 + r * Math.cos(th)
+    }
+    return -Math.log(1 - u())
+  })
+  const m = d3.mean(x), s = metodoIC === "z com σ conhecido" ? 1 : d3.deviation(x)
+  const h = quantilIC * s / Math.sqrt(nIC)
+  return {m, L: m - h, U: m + h, cobre: m - h <= 1 && 1 <= m + h}
+}
+intervalosIC = {
+  const u = geradorG05(sementeIC * 131 + nIC)
+  return d3.range(100).map(i => ({i: i + 1, ...amostraIC(u)}))
+}
+coberturaIC = {
+  const u = geradorG05(sementeIC * 977 + nIC + 5)
+  let c = 0
+  for (let r = 0; r < 4000; r++) if (amostraIC(u).cobre) c++
+  return c / 4000
+}
+```
+:::
+
+**A função de verossimilhança.** A curva azul é a log-verossimilhança $\ell(\theta) - \ell(\hat\theta)$ de uma amostra simulada; seu máximo é o EMV. A curva âmbar é a aproximação quadrática $-\frac12 nI(\hat\theta)(\theta - \hat\theta)^2$, cuja curvatura é a informação observada: quanto mais pontiaguda a verossimilhança, mais precisa a estimativa. O segmento vinho é o intervalo de 95% $\hat\theta \pm 1{,}96/\sqrt{nI(\hat\theta)}$; os valores de $\theta$ acima da linha tracejada, em $-1{,}92$, formam o intervalo da razão de verossimilhança (@sec-est-g06), que acompanha a assimetria da curva.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof modeloL = seletor("modelo", ["Bernoulli (p)", "Poisson (λ)", "Exponencial (λ)"], {valor: "Bernoulli (p)"})
+viewof nL = controle("tamanho da amostra n", [5, 500], {valor: 30, passo: 1, casas: 0})
+viewof thetaL = controle("parâmetro verdadeiro (escala de 0 a 1)", [0.05, 0.95], {valor: 0.2, passo: 0.01, casas: 2})
+viewof sementeL = controle("semente", [1, 50], {valor: 1, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Parâmetro verdadeiro: ${fmtG05(verdadeiroL, 2)}. EMV: **${fmtG05(espL.emv, 3)}**; erro padrão 1/√(n I(θ̂)) = ${fmtG05(espL.ep, 3)}; intervalo de 95%: [${fmtG05(espL.emv - 1.96 * espL.ep, 3)}; ${fmtG05(espL.emv + 1.96 * espL.ep, 3)}].`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "θ", domain: espL.dominio}, y: {label: "ℓ(θ) − ℓ(θ̂)", domain: [-8, 0.5]},
+  marks: [
+    Plot.ruleY([-1.92], {stroke: "#5B6770", strokeDasharray: "4,3"}),
+    Plot.line(espL.grade, {x: "t", y: "l", stroke: "#2F5D8A", strokeWidth: 2, clip: true}),
+    Plot.line(espL.grade, {x: "t", y: "q", stroke: "#B7791F", strokeDasharray: "5,3", clip: true}),
+    Plot.ruleY([-0.15], {x1: espL.emv - 1.96 * espL.ep, x2: espL.emv + 1.96 * espL.ep, stroke: "#8C2F39", strokeWidth: 4}),
+    Plot.ruleX([verdadeiroL], {stroke: "#4A7C59", strokeWidth: 1.5})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+verdadeiroL = modeloL === "Bernoulli (p)" ? thetaL : (modeloL === "Poisson (λ)" ? 10 * thetaL : 4 * thetaL)
+espL = {
+  const u = geradorG05(sementeL * 313 + nL)
+  let soma = 0
+  for (let i = 0; i < nL; i++) {
+    const v = u()
+    if (modeloL === "Bernoulli (p)") soma += v < verdadeiroL ? 1 : 0
+    else if (modeloL === "Exponencial (λ)") soma += -Math.log(1 - v) / verdadeiroL
+    else { let k = 0, p = Math.exp(-verdadeiroL), F = p; while (v > F) { k++; p *= verdadeiroL / k; F += p } soma += k }
+  }
+  let emv, ll, info, dominio
+  if (modeloL === "Bernoulli (p)") {
+    emv = Math.min(Math.max(soma / nL, 1e-3), 1 - 1e-3)
+    ll = t => soma * Math.log(t) + (nL - soma) * Math.log(1 - t); info = t => 1 / (t * (1 - t)); dominio = [0.001, 0.999]
+  } else if (modeloL === "Poisson (λ)") {
+    emv = Math.max(soma / nL, 1e-3); ll = t => soma * Math.log(t) - nL * t; info = t => 1 / t; dominio = [0.01, 12]
+  } else {
+    emv = nL / soma; ll = t => nL * Math.log(t) - t * soma; info = t => 1 / (t * t); dominio = [0.01, 6]
+  }
+  const ep = 1 / Math.sqrt(nL * info(emv)), l0 = ll(emv)
+  const grade = d3.range(dominio[0], dominio[1], (dominio[1] - dominio[0]) / 400)
+    .map(t => ({t, l: ll(t) - l0, q: -0.5 * nL * info(emv) * (t - emv) ** 2}))
+  return {emv, ep, grade, dominio}
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — a cobertura de intervalos de confiança e a função de verossimilhança — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-g05-laboratorio}
+
+### Viés, variância e EQM de estimadores da variância
+
+Comparamos, em amostras normais de tamanho 10 com $\sigma^2 = 1$, os estimadores $\sum(X_i - \bar X)^2/c$ para $c = n - 1, n, n + 1$.
+
+```{python}
+import numpy as np
+from scipy import stats, optimize
+
+np.set_printoptions(suppress=True)
+rng = np.random.default_rng(5)
+n, R = 10, 200_000
+x = rng.normal(0, 1, size=(R, n))
+sq = ((x - x.mean(axis=1, keepdims=True)) ** 2).sum(axis=1)
+print("  c    vies    variancia   EQM")
+for c in [n - 1, n, n + 1]:
+    est = sq / c
+    vies, var = est.mean() - 1, est.var()
+    print(f"{c:>3}  {vies:7.4f}  {var:9.4f}  {var + vies ** 2:7.4f}")
+```
+
+### A uniforme: momentos contra máxima verossimilhança
+
+```{python}
+theta, n = 1.0, 20
+u = rng.uniform(0, theta, size=(R, n))
+estimadores = {"momentos 2 media": 2 * u.mean(axis=1),
+               "EMV (maximo)": u.max(axis=1),
+               "maximo corrigido": (n + 1) / n * u.max(axis=1)}
+for nome, est in estimadores.items():
+    vies, var = est.mean() - theta, est.var()
+    print(f"{nome:>18}: vies {vies:7.4f}, variancia {var:.5f}, "
+          f"EQM {var + vies ** 2:.5f}")
+print(f"teoricas: theta^2/(3n) = {theta ** 2 / (3 * n):.5f}, "
+      f"theta^2/(n(n+2)) = {theta ** 2 / (n * (n + 2)):.5f}")
+```
+
+### Máxima verossimilhança numérica
+
+Para a gama, o EMV não tem fórmula fechada; maximizamos a log-verossimilhança numericamente e comparamos com o estimador de momentos.
+
+```{python}
+alfa, beta, n = 2.0, 0.5, 200
+x = rng.gamma(alfa, 1 / beta, size=n)
+
+def menos_ell(par):
+    a, b = np.exp(par)                       # garante a, b > 0
+    return -np.sum(stats.gamma.logpdf(x, a, scale=1 / b))
+
+res = optimize.minimize(menos_ell, x0=[0.0, 0.0], method="BFGS")
+a_mv, b_mv = np.exp(res.x)
+s2 = x.var()
+a_mm, b_mm = x.mean() ** 2 / s2, x.mean() / s2
+print(f"verdadeiros:     alfa = {alfa:.3f}, beta = {beta:.3f}")
+print(f"max. verossim.:  alfa = {a_mv:.3f}, beta = {b_mv:.3f}")
+print(f"momentos:        alfa = {a_mm:.3f}, beta = {b_mm:.3f}")
+```
+
+### Cobertura de intervalos
+
+Estimamos por simulação a cobertura de três intervalos nominais de 95%: $z$ e $t$ para a média de amostras normais pequenas, e Wald e Wilson para uma proporção pequena.
+
+```{python}
+n, R = 8, 100_000
+x = rng.normal(0, 1, size=(R, n))
+m, s = x.mean(axis=1), x.std(axis=1, ddof=1)
+for nome, q in [("z", stats.norm.ppf(0.975)),
+                ("t", stats.t.ppf(0.975, n - 1))]:
+    cobre = np.abs(m) <= q * s / np.sqrt(n)
+    print(f"media, n = {n}, intervalo {nome}: "
+          f"cobertura {cobre.mean():.3f}")
+
+p, n = 0.05, 40
+k = rng.binomial(n, p, size=R)
+ph = k / n
+z = stats.norm.ppf(0.975)
+wald = np.abs(ph - p) <= z * np.sqrt(ph * (1 - ph) / n)
+centro = (ph + z ** 2 / (2 * n)) / (1 + z ** 2 / n)
+raiz = np.sqrt(ph * (1 - ph) / n + z ** 2 / (4 * n ** 2))
+meia = z * raiz / (1 + z ** 2 / n)
+wilson = np.abs(centro - p) <= meia
+print(f"proporcao p = {p}, n = {n}: Wald {wald.mean():.3f}, "
+      f"Wilson {wilson.mean():.3f}")
+```
+
+## Aplicação: a inflação média em diferentes períodos {#sec-est-g05-aplicacao}
+
+Estimamos a inflação mensal média em três períodos do regime de metas — 2004–2008, 2010–2014 e 2017–2019 — com intervalos de confiança de 95%, e a proporção de meses com IPCA acima de 0,5%. O intervalo usual trata os meses como uma amostra iid, o que eles não são: a inflação de um mês está correlacionada com a do anterior (@sec-est-g03). Com correlação $\rho$ entre meses consecutivos, num processo autorregressivo de primeira ordem, a variância da média é aproximadamente $\frac{\sigma^2}{n}\cdot\frac{1 + \rho}{1 - \rho}$ — como se houvesse $n(1 - \rho)/(1 + \rho)$ observações independentes. Mostramos os dois intervalos.
+
+```{python}
+import pandas as pd
+from IPython.display import Markdown
+from formacao import dados
+
+try:
+    ipca = dados.sgs("ipca", inicio="2000-01-01")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+periodos = [("2004", "2008"), ("2010", "2014"), ("2017", "2019")]
+if disponivel:
+    linhas = []
+    for ini, fim in periodos:
+        x = ipca.loc[ini:fim].to_numpy()
+        n, m, s = len(x), x.mean(), x.std(ddof=1)
+        rho = np.corrcoef(x[:-1], x[1:])[0, 1]
+        ep = s / np.sqrt(n)
+        ep_aj = ep * np.sqrt((1 + rho) / (1 - rho))
+        q = stats.t.ppf(0.975, n - 1)
+        ph = np.mean(x > 0.5)
+        ep_p = np.sqrt(ph * (1 - ph) / n)
+        linhas.append((f"{ini}-{fim}", n, m, m - q * ep, m + q * ep,
+                       m - q * ep_aj, m + q * ep_aj, rho, ph, ep_p))
+        print(f"{ini}-{fim}: n = {n}, media = {m:.3f}%, "
+              f"rho = {rho:.2f}")
+        print(f"   IC 95% iid:       [{m - q * ep:.3f}; "
+              f"{m + q * ep:.3f}]")
+        print(f"   IC 95% ajustado:  [{m - q * ep_aj:.3f}; "
+              f"{m + q * ep_aj:.3f}]")
+        print(f"   meses acima de 0,5%: {ph:.2f} "
+              f"[{ph - 1.96 * ep_p:.2f}; {ph + 1.96 * ep_p:.2f}]")
+```
+
+```{python}
+if disponivel:
+    br = lambda v, c=2: f"{v:.{c}f}".replace(".", ",")
+    anual = lambda v: 100 * ((1 + v / 100) ** 12 - 1)
+    partes = []
+    for nome, n, m, l1, u1, l2, u2, rho, ph, ep_p in linhas:
+        nome = nome.replace("-", "–")
+        partes.append(f"em {nome}, {br(m)}% ao mês ({br(anual(m), 1)}% "
+                      f"ao ano), com intervalo ajustado de "
+                      f"[{br(l2)}; {br(u2)}]")
+    resumo = ("A inflação mensal média foi a seguinte: "
+              + "; ".join(partes) +
+              ". O ajuste pela correlação entre meses alarga os "
+              "intervalos — tanto mais quanto maior a persistência —, "
+              "e intervalos que pareciam separados podem se sobrepor.")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+O ajuste usado aqui supõe um processo autorregressivo de primeira ordem e estima $\rho$ com poucos dados; o tratamento geral — erros padrão robustos à autocorrelação, como os de Newey–West — está no @sec-ecm-m02. A lição permanece: a fórmula $S/\sqrt n$ pressupõe observações independentes, e, com dados econômicos em sequência temporal, ela costuma **subestimar** a incerteza.
+
+## Exercícios resolvidos {#sec-est-g05-exercicios}
+
+::: {#exr-est-g05-divisor}
+Em amostras normais, considere os estimadores $\hat\sigma^2_c = \frac1c\sum_i(X_i - \bar X)^2$. Mostre que o EQM é mínimo para $c = n + 1$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $a = n - 1$ e $W = \sum_i(X_i - \bar X)^2 = \sigma^2 V$, com $V \sim \chi^2_a$, de média $a$ e variância $2a$. Então $\E[\hat\sigma^2_c] = a\sigma^2/c$ e $\Var(\hat\sigma^2_c) = 2a\sigma^4/c^2$, e, com $u = 1/c$, $\text{EQM}/\sigma^4 = 2au^2 + (au - 1)^2$. A derivada em $u$, $4au + 2a(au - 1)$, se anula em $u = 1/(a + 2)$, e a função é convexa; logo $c = a + 2 = n + 1$. O EQM mínimo, $2\sigma^4/(n + 1)$, é menor que o de $S^2$ ($c = n - 1$) e o do EMV ($c = n$).
+:::
+
+::: {#exr-est-g05-uniforme}
+Seja $X_1, \dots, X_n \iid U(0, \theta)$ e $M = \max_iX_i$. (a) Encontre a distribuição de $M$, $\E[M]$ e $\Var(M)$. (b) Mostre que $\frac{n+1}{n}M$ é não viesado, com variância $\theta^2/(n(n + 2))$, e compare com o estimador de momentos.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para (a), $M \leq x$ se, e somente se, todas as observações são $\leq x$; pela independência, $\Prob(M \leq x) = (x/\theta)^n$ em $[0, \theta]$, com densidade $nx^{n-1}/\theta^n$. Daí $\E[M] = \frac{n}{n+1}\theta$, $\E[M^2] = \frac{n}{n+2}\theta^2$ e $\Var(M) = \frac{n\theta^2}{(n+1)^2(n+2)}$. Para (b), $\E[\frac{n+1}{n}M] = \theta$ e $\Var(\frac{n+1}{n}M) = \frac{(n+1)^2}{n^2}\Var(M) = \frac{\theta^2}{n(n+2)}$. O estimador de momentos $2\bar X$ tem variância $\theta^2/(3n)$: a razão entre as variâncias é $3/(n + 2)$, e o estimador baseado no máximo é muito mais preciso. A razão é que o máximo concentra a informação sobre a fronteira do suporte — exatamente o que viola a regularidade de Cramér–Rao.
+:::
+
+::: {#exr-est-g05-poisson}
+No modelo de Poisson, mostre que o EMV de $\lambda$ é eficiente e encontre o EMV e um erro padrão aproximado para $\Prob(X = 0) = e^{-\lambda}$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\hat\lambda = \bar X$ é não viesado e tem variância $\lambda/n = 1/(nI(\lambda))$ (@exm-est-g05-eficiencia): atinge a cota. Pela invariância, o EMV de $e^{-\lambda}$ é $e^{-\bar X}$. Pelo método delta, com $g(\lambda) = e^{-\lambda}$ e $g'(\lambda) = -e^{-\lambda}$, $\sqrt n(e^{-\bar X} - e^{-\lambda}) \dto \Normal(0, e^{-2\lambda}\lambda)$, e o erro padrão é aproximadamente $e^{-\bar X}\sqrt{\bar X/n}$. Note que $e^{-\bar X}$ é viesado (por Jensen, $\E[e^{-\bar X}] > e^{-\lambda}$), embora seja consistente e assintoticamente eficiente.
+:::
+
+::: {#exr-est-g05-exponencial}
+No modelo exponencial, calcule a informação de Fisher $I(\lambda)$, a variância assintótica do EMV e o EMV da duração mediana. Com durações de desemprego de 50 pessoas e média amostral de 6 meses, construa um intervalo de 95% para $\lambda$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\log f(x; \lambda) = \log\lambda - \lambda x$, de modo que $s = 1/\lambda - x$ e $I(\lambda) = \Var(X) = 1/\lambda^2$. Pela @eq-est-g05-emv-assintotica, $\sqrt n(\hat\lambda - \lambda) \dto \Normal(0, \lambda^2)$. A mediana da exponencial é $\log 2/\lambda$, e, pela invariância, seu EMV é $\bar X\log 2$. Com $\bar X = 6$, $\hat\lambda = 1/6 \approx 0{,}167$ por mês, com erro padrão $\hat\lambda/\sqrt n \approx 0{,}0236$; o intervalo de 95% é $0{,}167 \pm 1{,}96 \times 0{,}0236 \approx [0{,}120;\ 0{,}213]$. A duração mediana estimada é $6\log 2 \approx 4{,}2$ meses.
+:::
+
+::: {#exr-est-g05-wilson}
+O intervalo de Wilson para uma proporção é o conjunto dos $p$ para os quais $\abs{\hat p - p} \leq z\sqrt{p(1 - p)/n}$, com $z = z_{\alpha/2}$. Encontre seus extremos e mostre que ele nunca tem largura zero.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Elevando ao quadrado, $(\hat p - p)^2 \leq \frac{z^2}{n}p(1 - p)$, uma desigualdade quadrática em $p$: $p^2(1 + z^2/n) - p(2\hat p + z^2/n) + \hat p^2 \leq 0$. Os extremos são as raízes,
+$$
+\frac{\hat p + \frac{z^2}{2n} \pm z\sqrt{\frac{\hat p(1 - \hat p)}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}} .
+$$
+O centro é puxado de $\hat p$ em direção a $1/2$, e o termo $z^2/(4n^2)$ sob a raiz garante largura positiva mesmo com $\hat p = 0$: com nenhum sucesso em $n$ ensaios, o intervalo é $[0;\ \frac{z^2/n}{1 + z^2/n}]$, cerca de $[0;\ 3{,}8/n]$ para $z = 1{,}96$ e $n$ grande. A cobertura de Wilson é muito mais próxima da nominal que a de Wald (laboratório).
+:::
+
+::: {#exr-est-g05-tamanho}
+Quantas observações são necessárias para estimar uma média com erro de no máximo $E$ e 95% de confiança, se $\sigma \approx 0{,}25$ e $E = 0{,}05$? E para uma proporção com erro de 3 pontos percentuais, sem nenhuma informação sobre $p$?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para a média, $n = (1{,}96 \times 0{,}25/0{,}05)^2 = 9{,}8^2 \approx 96$. Para a proporção, no pior caso $p = 1/2$, $\sigma = 1/2$ e $n = (1{,}96 \times 0{,}5/0{,}03)^2 \approx 1068$. Na prática, o tamanho também precisa considerar o plano amostral: amostras por conglomerados — domicílios sorteados em setores censitários sorteados, como na PNAD — têm um **efeito de desenho** que multiplica a variância e exige amostras maiores.
+:::
+
+::: {#exr-est-g05-sigma2}
+Uma amostra normal de tamanho 20 tem $S^2 = 4$. Construa um intervalo de 95% para $\sigma^2$, usando $\chi^2_{19;\,0{,}025} \approx 8{,}907$ e $\chi^2_{19;\,0{,}975} \approx 32{,}852$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pelo @thm-est-g05-ic-normal (c), o intervalo é $[19 \times 4/32{,}852;\ 19 \times 4/8{,}907] \approx [2{,}31;\ 8{,}53]$. Ele é assimétrico em torno de $S^2 = 4$ — vai muito mais para cima que para baixo — porque a qui-quadrado é assimétrica à direita. Para $\sigma$, basta tirar a raiz dos extremos: $[1{,}52;\ 2{,}92]$, pela monotonicidade da raiz.
+:::
+
+::: {#exr-est-g05-duas-proporcoes}
+Numa pesquisa, a taxa de desocupação estimada é 12% numa região (amostra de 2000 pessoas na força de trabalho) e 9% noutra (amostra de 2500), com amostras independentes. Construa um intervalo de 95% para a diferença.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A diferença estimada é $0{,}03$, com erro padrão $\sqrt{\frac{0{,}12 \times 0{,}88}{2000} + \frac{0{,}09 \times 0{,}91}{2500}} = \sqrt{0{,}0000528 + 0{,}0000328} \approx 0{,}00925$. O intervalo é $0{,}03 \pm 1{,}96 \times 0{,}00925 \approx [0{,}012;\ 0{,}048]$: a diferença é estatisticamente distinta de zero, mas pode estar entre pouco mais de 1 e quase 5 pontos percentuais. As variâncias se somam porque as amostras são independentes; com amostras pareadas (as mesmas pessoas em dois momentos), seria preciso a covariância.
+:::
+
+## Flashcards {#sec-est-g05-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a diferença entre estimador e estimativa?
+O estimador é uma regra — uma variável aleatória, função da amostra; a estimativa é o valor que ela assume nos dados observados.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se decompõe o erro quadrático médio?
+$\text{EQM} = \Var(\hat\theta) + \text{viés}^2$. Um estimador viesado pode ter EQM menor que um não viesado.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual estimador de $\sigma^2$ é não viesado, e qual tem menor EQM em amostras normais?
+$S^2$ (divide por $n - 1$) é não viesado; dividir por $n$ (EMV) dá EQM menor; dividir por $n + 1$ minimiza o EQM.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é um estimador consistente, e como prová-lo?
+$\hat\theta_n \pto \theta$. Basta EQM $\to 0$ (Markov). Viés e consistência são independentes.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que são o escore e a informação de Fisher?
+Escore $s = \partial_\theta\log f(x; \theta)$, com média zero; $I(\theta) = \E[s^2] = \Var(s)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a cota de Cramér–Rao?
+Em modelos regulares, todo estimador não viesado tem $\Var \geq 1/(nI(\theta))$. $\bar X$ atinge a cota em Bernoulli, Poisson e normal. A uniforme não é regular.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como funciona o método dos momentos?
+Iguala momentos amostrais a populacionais e resolve para $\theta$. Na uniforme $[0, \theta]$: $\tilde\theta = 2\bar X$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o estimador de máxima verossimilhança?
+O $\hat\theta$ que maximiza $L(\theta) = \prod f(X_i; \theta)$. Bernoulli: $\bar X$; Poisson: $\bar X$; exponencial: $1/\bar X$; normal: $\bar X$ e $\frac1n\sum(X_i - \bar X)^2$; uniforme: $\max X_i$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Que propriedades tem o EMV?
+É invariante ($\widehat{g(\theta)} = g(\hat\theta)$) e, em modelos regulares, consistente e assintoticamente normal com variância $1/(nI(\theta))$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que significa "95% de confiança"?
+Que o procedimento produz intervalos que contêm $\theta$ em 95% das amostras. O intervalo calculado contém ou não $\theta$; a probabilidade se refere ao método.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o intervalo para a média de uma amostra normal com $\sigma$ desconhecido?
+$\bar X \pm t_{n-1,\alpha/2}S/\sqrt n$, exato, a partir do pivô $\sqrt n(\bar X - \mu)/S \sim t_{n-1}$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o intervalo para $\sigma^2$ de uma amostra normal?
+$[(n - 1)S^2/\chi^2_{n-1,1-\alpha/2},\ (n - 1)S^2/\chi^2_{n-1,\alpha/2}]$, assimétrico e sensível à normalidade.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que preferir o intervalo de Wilson ao de Wald para proporções?
+O de Wald tem cobertura ruim com $n$ pequeno ou $p$ perto de 0 ou 1 (e largura zero se $\hat p = 0$); Wilson inverte o teste com a variância em $p$ e cobre melhor.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como a autocorrelação afeta o intervalo para uma média?
+Com correlação $\rho > 0$ entre observações consecutivas, a variância da média é cerca de $\frac{\sigma^2}{n}\frac{1 + \rho}{1 - \rho}$: o intervalo iid é estreito demais.
+:::
+
+## Ficha-resumo {#sec-est-g05-ficha}
+
+::: {.ficha-resumo}
+**Modelo.** $\{f(x; \theta) : \theta \in \Theta\}$; estimador $\hat\theta = T(X)$ (aleatório) $\neq$ estimativa.
+
+**Qualidade.** Viés $\E\hat\theta - \theta$; $\text{EQM} = \Var + \text{viés}^2$. $S^2$ não viesado; $\hat\sigma^2 = \frac{n-1}{n}S^2$ tem EQM menor; $c = n + 1$ minimiza. Não viés não é invariante ($\E S < \sigma$). Consistência: $\hat\theta_n \pto \theta$; EQM $\to 0$ basta. Normalidade assintótica; erro padrão.
+
+**Cramér–Rao.** Escore $s = \partial_\theta\log f$, $\E s = 0$; $I = \E s^2$. Não viesado: $\Var \geq 1/(nI)$ (Cauchy–Schwarz com o escore). Bernoulli $I = 1/(p(1 - p))$, Poisson $1/\lambda$, normal $1/\sigma^2$, exponencial $1/\lambda^2$. Uniforme: não regular.
+
+**Momentos.** $m_j(\tilde\theta) = \hat m_j$; consistente se a inversa é contínua. Exponencial $1/\bar X$; uniforme $2\bar X$; gama $\bar X^2/\tilde\sigma^2$, $\bar X/\tilde\sigma^2$.
+
+**Máxima verossimilhança.** $\hat\theta = \argmax\prod f(X_i; \theta)$; CPO: escore zero. Bernoulli/Poisson $\bar X$; exponencial $1/\bar X$; normal $(\bar X, \hat\sigma^2)$; uniforme $\max X_i$. Invariância. Assintótica: $\sqrt n(\hat\theta - \theta) \dto \Normal(0, 1/I)$.
+
+**Intervalos.** Cobertura $\geq 1 - \alpha$ para todo $\theta$; pivôs. Normal: $\bar X \pm z\sigma/\sqrt n$; $\bar X \pm t_{n-1}S/\sqrt n$; $\sigma^2$ por $\chi^2_{n-1}$. Grandes amostras: $\bar X \pm zS/\sqrt n$; Wald $\hat p \pm z\sqrt{\hat p(1 - \hat p)/n}$ (melhor: Wilson); diferença de médias com $\sqrt{S_X^2/n + S_Y^2/m}$; EMV $\pm z/\sqrt{nI(\hat\theta)}$. Tamanho: $n = (z\sigma/E)^2$. Autocorrelação: fator $(1 + \rho)/(1 - \rho)$ na variância.
+:::
+
+## Notas bibliográficas {#sec-est-g05-notas}
+
+@casella2002 é a referência para este capítulo e o próximo: trata métodos de estimação, critérios de avaliação de estimadores — inclusive a cota de Cramér–Rao — e intervalos de confiança com profundidade, e prepara a teoria de mestrado. @bussab2017 apresenta estimação e intervalos com ênfase em aplicações, inclusive amostragem e dimensionamento de amostras. As propriedades assintóticas do EMV, admitidas aqui, são demonstradas no @sec-est-m04; o problema da cobertura dos intervalos para proporções, que motivou o uso dos intervalos de Wilson e de Agresti–Coull, é discutido em textos de estatística aplicada a partir de estudos de simulação como o do laboratório.
