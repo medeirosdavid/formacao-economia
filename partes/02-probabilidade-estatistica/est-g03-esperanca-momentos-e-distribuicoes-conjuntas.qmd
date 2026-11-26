@@ -530,10 +530,10 @@ Y = X * rng.uniform(size=n)
 print(f"E[Y] = {Y.mean():.4f}   E[E[Y|X]] = {(X / 2).mean():.4f}")
 total = (X ** 2 / 12).mean() + (X / 2).var()
 print(f"Var(Y) = {Y.var():.5f}   E[Var(Y|X)] + Var(E[Y|X]) = "
-      f"{total:.5f}   (1/18 = {1 / 18:.5f})")
+      f"{total:.5f}")
+print(f"valor teorico: 1/18 = {1 / 18:.5f}")
 b = np.cov(X, Y)[0, 1] / X.var()
-print(f"inclinacao do melhor previsor linear: {b:.4f} (esperanca "
-      f"condicional: 1/2)")
+print(f"inclinacao do melhor previsor linear: {b:.4f} (teorica: 1/2)")
 ```
 
 ### A distribuição condicional na normal bivariada

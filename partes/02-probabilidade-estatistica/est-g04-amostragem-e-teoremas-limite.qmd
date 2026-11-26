@@ -10,15 +10,735 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-g04-motivacao}
 
-1. Amostra aleatória e estatísticas
-2. Desigualdades de Markov e Chebyshev
-3. Lei dos grandes números
-4. Teorema central do limite
-5. Lema de Slutsky e aproximações
-6. Distribuições qui-quadrado, t e F
-7. Amostras normais: média e variância amostrais
-8. Aplicação: o teorema central do limite com a inflação brasileira
+A taxa de desemprego divulgada pelo IBGE não vem de entrevistas com toda a força de trabalho, mas com uma amostra de domicílios. Uma pesquisa eleitoral ouve 2 mil pessoas para falar de um eleitorado de mais de 150 milhões. Um banco estima a probabilidade de inadimplência de uma carteira a partir dos empréstimos que já venceram. Em todos os casos, uma média calculada numa amostra é usada no lugar de uma quantidade populacional desconhecida. Por que isso funciona, e com que precisão?
+
+Duas respostas sustentam toda a estatística. A **lei dos grandes números** diz que a média amostral se aproxima da média populacional à medida que a amostra cresce. O **teorema central do limite** diz como é o erro: aproximadamente normal, com desvio padrão $\sigma/\sqrt n$ — qualquer que seja a distribuição dos dados. Com elas e com as distribuições que surgem de amostras normais — qui-quadrado, $t$ e $F$ —, os capítulos seguintes constroem intervalos de confiança e testes de hipóteses.
+
+O capítulo desenvolve:
+
+1. amostras aleatórias, média e variância amostrais;
+2. as desigualdades de Markov e Chebyshev;
+3. convergência em probabilidade e a lei dos grandes números;
+4. convergência em distribuição e o teorema central do limite;
+5. o lema de Slutsky e o método delta;
+6. as distribuições qui-quadrado, $t$ e $F$;
+7. a distribuição exata da média e da variância amostrais em amostras normais.
+
+## Amostra aleatória e estatísticas {#sec-est-g04-amostra}
+
+::: {#def-est-g04-amostra}
+## Amostra aleatória e estatística
+Uma **amostra aleatória** de tamanho $n$ de uma distribuição $F$ é uma sequência $X_1, \dots, X_n$ de variáveis aleatórias independentes, todas com distribuição $F$ — independentes e identicamente distribuídas, ou iid: $X_1, \dots, X_n \iid F$. Uma **estatística** é qualquer função $T = T(X_1, \dots, X_n)$ da amostra. As principais são a **média amostral**, a **variância amostral** e a **função de distribuição empírica**:
+$$
+\bar X_n = \frac1n\sum_{i=1}^n X_i, \qquad S_n^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar X_n)^2, \qquad \hat F_n(x) = \frac1n\sum_{i=1}^n \ind{X_i \leq x} .
+$$
 :::
+
+O modelo iid descreve sorteios com reposição de uma população, ou sem reposição de uma população muito maior que a amostra (@sec-est-g02), e experimentos repetidos em condições idênticas. Séries temporais econômicas raramente são iid — a inflação deste mês depende da do mês passado (@sec-est-g03) —, e a teoria para dados dependentes é a do @sec-est-d02. Pesquisas como a PNAD usam planos amostrais complexos, com estratificação e conglomerados, mas a lógica é a mesma.
+
+::: {#prp-est-g04-momentos-amostrais}
+## Momentos da média e da variância amostrais
+Seja $X_1, \dots, X_n$ iid com média $\mu$ e variância $\sigma^2$, e $n \geq 2$. Então
+$$
+\E[\bar X_n] = \mu, \qquad \Var(\bar X_n) = \frac{\sigma^2}{n}, \qquad \E[S_n^2] = \sigma^2 .
+$$
+Além disso, para cada $x$, $\E[\hat F_n(x)] = F(x)$ e $\Var(\hat F_n(x)) = F(x)(1 - F(x))/n$.
+:::
+
+::: {.proof}
+A média sai da linearidade e a variância, do @cor-est-g03-variancia-soma, pois as variáveis são independentes: $\Var(\bar X_n) = n\sigma^2/n^2$. Para $S_n^2$, use a identidade
+$$
+\sum_{i=1}^n (X_i - \bar X_n)^2 = \sum_{i=1}^n (X_i - \mu)^2 - n(\bar X_n - \mu)^2 ,
+$$ {#eq-est-g04-soma-quadrados}
+que se obtém escrevendo $X_i - \mu = (X_i - \bar X_n) + (\bar X_n - \mu)$, expandindo o quadrado e usando $\sum_i (X_i - \bar X_n) = 0$. Tomando esperanças, $\E[\sum_i (X_i - \bar X_n)^2] = n\sigma^2 - n\,\sigma^2/n = (n - 1)\sigma^2$. Por fim, $n\hat F_n(x)$ é uma soma de $n$ indicadores independentes, cada um Bernoulli com parâmetro $F(x)$, ou seja, $n\hat F_n(x) \sim \text{Bin}(n, F(x))$.
+:::
+
+A divisão por $n - 1$ em $S_n^2$ — e não por $n$ — compensa o fato de os desvios serem medidos em relação a $\bar X_n$, que está mais perto dos dados do que $\mu$: a soma dos quadrados dos desvios é a menor possível em torno de $\bar X_n$. Diz-se que um dos $n$ "graus de liberdade" foi usado para estimar a média.
+
+## As desigualdades de Markov e Chebyshev {#sec-est-g04-desigualdades}
+
+::: {#thm-est-g04-markov}
+## Desigualdade de Markov
+Se $X \geq 0$ e $a > 0$, então $\Prob(X \geq a) \leq \E[X]/a$.
+:::
+
+::: {.proof}
+Como $X \geq 0$, vale $a\,\ind{X \geq a} \leq X$ (o lado esquerdo é $a$ quando $X \geq a$ e 0 caso contrário). Tomando esperanças, $a\Prob(X \geq a) \leq \E[X]$.
+:::
+
+::: {#cor-est-g04-chebyshev}
+## Desigualdade de Chebyshev
+Se $X$ tem média $\mu$ e variância $\sigma^2$, então, para todo $\varepsilon > 0$,
+$$
+\Prob(\abs{X - \mu} \geq \varepsilon) \leq \frac{\sigma^2}{\varepsilon^2} .
+$$
+:::
+
+::: {.proof}
+Aplique Markov a $(X - \mu)^2 \geq 0$ com $a = \varepsilon^2$: $\Prob(\abs{X - \mu} \geq \varepsilon) = \Prob((X - \mu)^2 \geq \varepsilon^2) \leq \E[(X - \mu)^2]/\varepsilon^2$.
+:::
+
+::: {#cor-est-g04-variancia-nula}
+## Variância nula
+$\Var(X) = 0$ se, e somente se, $\Prob(X = \mu) = 1$.
+:::
+
+::: {.proof}
+Se $\Prob(X = \mu) = 1$, então $(X - \mu)^2 = 0$ com probabilidade 1 e a variância é zero. Reciprocamente, se $\Var(X) = 0$, Chebyshev dá $\Prob(\abs{X - \mu} \geq 1/k) = 0$ para todo $k$, e, pela desigualdade de Boole, $\Prob(X \neq \mu) = \Prob(\bigcup_k\{\abs{X - \mu} \geq 1/k\}) = 0$.
+:::
+
+As desigualdades valem para **qualquer** distribuição, e por isso são conservadoras. Para $\varepsilon = 2\sigma$, Chebyshev garante $\Prob(\abs{X - \mu} \geq 2\sigma) \leq 1/4$; para a normal, a probabilidade é cerca de 0,046. Seu valor está na generalidade: elas provam teoremas — como a lei dos grandes números — sem nenhuma hipótese sobre a forma da distribuição.
+
+## A lei dos grandes números {#sec-est-g04-lgn}
+
+::: {#def-est-g04-convergencia-probabilidade}
+## Convergência em probabilidade
+Uma sequência de variáveis aleatórias $Y_n$ **converge em probabilidade** para $c$, e escrevemos $Y_n \pto c$, se $\Prob(\abs{Y_n - c} > \varepsilon) \to 0$ para todo $\varepsilon > 0$.
+:::
+
+::: {#thm-est-g04-lgn}
+## Lei fraca dos grandes números
+Se $X_1, X_2, \dots$ são iid com média $\mu$ e variância $\sigma^2 < \infty$, então $\bar X_n \pto \mu$.
+:::
+
+::: {.proof}
+Por Chebyshev e pela @prp-est-g04-momentos-amostrais, $\Prob(\abs{\bar X_n - \mu} \geq \varepsilon) \leq \frac{\sigma^2}{n\varepsilon^2} \to 0$.
+:::
+
+A hipótese de variância finita é dispensável: basta $\E\abs{X} < \infty$ (lei de Khinchin), e vale até uma versão mais forte, a **lei forte**, em que $\bar X_n \to \mu$ com probabilidade 1 (@sec-est-m03). Já a existência da média é essencial. Para a distribuição de Cauchy, que não tem média, $\bar X_n$ tem a **mesma** distribuição de Cauchy de cada observação, qualquer que seja $n$ — a média de mil observações não é mais precisa que uma só (interativo e laboratório).
+
+Aplicada a indicadores, a lei dá a **interpretação frequentista** da probabilidade (@sec-est-g01): se $A$ é um evento e $X_i = \ind{\text{$A$ ocorre no ensaio } i}$, a frequência relativa $\bar X_n$ converge em probabilidade para $\Prob(A)$. Em particular, $\hat F_n(x) \pto F(x)$ para cada $x$; o teorema de Glivenko–Cantelli garante que a convergência é até uniforme em $x$. É também a base do **método de Monte Carlo**: para calcular $\E[g(X)]$, simulam-se $X_1, \dots, X_n$ e toma-se a média dos $g(X_i)$, com erro da ordem de $\sigma/\sqrt n$ (@sec-cmp-m03).
+
+::: {#prp-est-g04-continuidade}
+## Funções contínuas preservam a convergência em probabilidade
+Se $Y_n \pto a$, $W_n \pto b$ e $g: \R^2 \to \R$ é contínua em $(a, b)$, então $g(Y_n, W_n) \pto g(a, b)$. Em particular, somas, produtos e quocientes (com $b \neq 0$) preservam a convergência em probabilidade.
+:::
+
+::: {.proof}
+Dado $\varepsilon > 0$, a continuidade dá $\delta > 0$ tal que $\abs{g(y, w) - g(a, b)} \leq \varepsilon$ sempre que $\abs{y - a} < \delta$ e $\abs{w - b} < \delta$. Logo $\{\abs{g(Y_n, W_n) - g(a, b)} > \varepsilon\} \subseteq \{\abs{Y_n - a} \geq \delta\} \cup \{\abs{W_n - b} \geq \delta\}$, e, pela desigualdade de Boole, a probabilidade do lado esquerdo é no máximo a soma de duas probabilidades que tendem a zero.
+:::
+
+::: {#cor-est-g04-variancia-amostral}
+## Convergência da variância amostral
+Se $X_1, X_2, \dots$ são iid com $\E[X^4] < \infty$, então $S_n^2 \pto \sigma^2$ e $S_n \pto \sigma$.
+:::
+
+::: {.proof}
+Escreva $S_n^2 = \frac{n}{n-1}\big(\frac1n\sum_i X_i^2 - \bar X_n^2\big)$, que é a @eq-est-g04-soma-quadrados com $\mu = 0$. Pela lei dos grandes números aplicada às variáveis iid $X_i^2$, que têm variância finita porque $\E[X^4] < \infty$, $\frac1n\sum_i X_i^2 \pto \E[X^2]$; também $\bar X_n \pto \mu$ e $n/(n - 1) \to 1$. Pela @prp-est-g04-continuidade, $S_n^2 \pto \E[X^2] - \mu^2 = \sigma^2$, e, pela continuidade da raiz quadrada, $S_n \pto \sigma$.
+:::
+
+Pela lei de Khinchin, a conclusão vale já com $\E[X^2] < \infty$.
+
+## O teorema central do limite {#sec-est-g04-tcl}
+
+A lei dos grandes números diz que $\bar X_n - \mu \to 0$; o teorema central do limite descreve o tamanho e a forma desse erro, ampliado pelo fator $\sqrt n$.
+
+::: {#def-est-g04-convergencia-distribuicao}
+## Convergência em distribuição
+$Y_n$ **converge em distribuição** para $Y$, e escrevemos $Y_n \dto Y$, se $F_{Y_n}(y) \to F_Y(y)$ em todo ponto $y$ de continuidade de $F_Y$.
+:::
+
+A ressalva sobre os pontos de continuidade é técnica: se $Y_n = 1/n$ e $Y = 0$, queremos dizer que $Y_n \dto Y$, embora $F_{Y_n}(0) = 0$ não convirja para $F_Y(0) = 1$. Quando o limite é normal, a convergência vale em todo ponto. A ferramenta para provar convergência em distribuição é a função geradora de momentos.
+
+::: {#thm-est-g04-levy}
+## Teorema de continuidade (admitido)
+Se $M_{Y_n}(t) \to M_Y(t) < \infty$ para todo $t$ num intervalo aberto contendo 0, então $Y_n \dto Y$.
+:::
+
+::: {#thm-est-g04-tcl}
+## Teorema central do limite
+Se $X_1, X_2, \dots$ são iid com média $\mu$ e variância $\sigma^2 \in (0, \infty)$, então
+$$
+Z_n \defeq \frac{\sqrt n\,(\bar X_n - \mu)}{\sigma} \;\dto\; \Normal(0, 1),
+$$
+isto é, $\Prob(Z_n \leq z) \to \Phi(z)$ para todo $z \in \R$.
+:::
+
+::: {.proof}
+Fazemos a demonstração supondo que a função geradora de $X$ é finita num intervalo em torno de 0; o caso geral usa funções características (@sec-est-m03). Sejam $Y_i = (X_i - \mu)/\sigma$, iid com média 0 e variância 1, e $M = M_{Y_i}$, finita em $(-t_0, t_0)$ e, admitido, infinitamente diferenciável nesse intervalo, com $M(0) = 1$, $M'(0) = \E[Y] = 0$ e $M''(0) = \E[Y^2] = 1$. Pela fórmula de Taylor (@thm-mat-g03-taylor), para cada $s$ existe $\xi_s$ entre 0 e $s$ com
+$$
+M(s) = 1 + \frac{M''(\xi_s)}{2}s^2 .
+$$
+Como $Z_n = \sum_i Y_i/\sqrt n$ e as $Y_i$ são independentes, $M_{Z_n}(t) = M(t/\sqrt n)^n$ (@thm-est-g03-linearidade). Para $t$ fixo e $n$ grande,
+$$
+M_{Z_n}(t) = \Big(1 + \frac{a_n}{n}\Big)^n, \qquad a_n = \frac{t^2}{2}M''(\xi_{t/\sqrt n}) \to \frac{t^2}{2},
+$$
+porque $\xi_{t/\sqrt n} \to 0$ e $M''$ é contínua em 0. Pelo @lem-est-g02-limite-exp, $M_{Z_n}(t) \to e^{t^2/2}$, a função geradora da $\Normal(0, 1)$ (@prp-est-g03-fgm). Pelo teorema de continuidade, $Z_n \dto \Normal(0, 1)$; como $\Phi$ é contínua, a convergência vale em todo $z$.
+:::
+
+O teorema é notável pelo que **não** exige: a distribuição dos dados pode ser assimétrica, discreta, com caudas pesadas — basta variância finita. Na prática, ele autoriza a aproximação
+$$
+\bar X_n \;\overset{a}{\sim}\; \Normal\Big(\mu, \frac{\sigma^2}{n}\Big),
+$$
+cuja qualidade depende de $n$ e da distribuição: quanto mais assimétrica, mais lenta a convergência. A assimetria de $\bar X_n$ é a das observações dividida por $\sqrt n$ (@exr-est-g04-assimetria), e o teorema de Berry–Esseen dá uma cota para o erro da aproximação, proporcional a $\E\abs{Y}^3/\sqrt n$. O TCL também explica a onipresença da normal: uma variável que resulta da soma de muitos efeitos pequenos e independentes — erros de medida, choques idiossincráticos — é aproximadamente normal; e uma que resulta de muitos fatores multiplicativos é aproximadamente log-normal.
+
+::: {#cor-est-g04-moivre-laplace}
+## Aproximação normal da binomial (de Moivre–Laplace)
+Se $X_n \sim \text{Bin}(n, p)$ com $p \in (0, 1)$ fixo, então $\dfrac{X_n - np}{\sqrt{np(1 - p)}} \dto \Normal(0, 1)$.
+:::
+
+::: {.proof}
+$X_n$ tem a distribuição de uma soma de $n$ Bernoullis iid, com média $p$ e variância $p(1 - p)$; aplique o TCL.
+:::
+
+Na prática, $\Prob(X_n \leq k) \approx \Phi\big((k + 0{,}5 - np)/\sqrt{np(1 - p)}\big)$; o $0{,}5$ — a **correção de continuidade** — compensa a aproximação de uma distribuição discreta por uma contínua (@exr-est-g04-binomial). Compare com a aproximação de Poisson (@thm-est-g02-poisson), adequada quando $p$ é pequeno e $np$ é moderado.
+
+## O lema de Slutsky e o método delta {#sec-est-g04-slutsky}
+
+O TCL padroniza $\bar X_n$ com o desvio padrão populacional $\sigma$, que em geral não se conhece. Substituí-lo por $S_n$ não muda o limite.
+
+::: {#thm-est-g04-slutsky}
+## Lema de Slutsky (admitido)
+Se $Y_n \dto Y$ e $W_n \pto c$, com $c$ constante, então $Y_n + W_n \dto Y + c$, $W_nY_n \dto cY$ e, se $c \neq 0$, $Y_n/W_n \dto Y/c$.
+:::
+
+A demonstração está no @sec-est-m03. Como consequência imediata do TCL, do @cor-est-g04-variancia-amostral e de Slutsky:
+$$
+\frac{\sqrt n\,(\bar X_n - \mu)}{S_n} \;\dto\; \Normal(0, 1) .
+$$ {#eq-est-g04-t-assintotica}
+É a estatística sobre a qual se constroem os intervalos de confiança e os testes "para grandes amostras" (@sec-est-g05, @sec-est-g06).
+
+Muitas vezes o interesse não é em $\bar X_n$, mas numa função dela: a taxa $1/\bar X_n$ de uma exponencial, o logaritmo de uma média, uma razão de chances. O método delta transporta a normalidade assintótica.
+
+::: {#thm-est-g04-delta}
+## Método delta
+Se $\sqrt n\,(Y_n - \theta) \dto \Normal(0, \tau^2)$ e $g$ é diferenciável em $\theta$, então
+$$
+\sqrt n\,\big(g(Y_n) - g(\theta)\big) \;\dto\; \Normal\big(0,\ g'(\theta)^2\tau^2\big) .
+$$
+:::
+
+::: {.proof}
+Pelo lema de Carathéodory (@lem-mat-g03-caratheodory), $g(y) - g(\theta) = \phi(y)(y - \theta)$ com $\phi$ contínua em $\theta$ e $\phi(\theta) = g'(\theta)$. Logo $\sqrt n\,(g(Y_n) - g(\theta)) = \phi(Y_n)\cdot\sqrt n\,(Y_n - \theta)$. Por Slutsky, $Y_n - \theta = n^{-1/2}\cdot\sqrt n(Y_n - \theta) \dto 0\cdot Y = 0$, e convergência em distribuição para uma constante implica convergência em probabilidade (para $\varepsilon > 0$, $\Prob(\abs{Y_n - \theta} > \varepsilon) \leq F_n(\theta - \varepsilon) + 1 - F_n(\theta + \varepsilon) \to 0$, com $F_n$ a função de distribuição de $Y_n$). Pela @prp-est-g04-continuidade, $\phi(Y_n) \pto g'(\theta)$; por Slutsky, o produto converge para $g'(\theta)$ vezes uma $\Normal(0, \tau^2)$.
+:::
+
+Se $X_i \iid \text{Exp}(\lambda)$, então $\sqrt n(\bar X_n - 1/\lambda) \dto \Normal(0, 1/\lambda^2)$, e, com $g(x) = 1/x$, $g'(1/\lambda) = -\lambda^2$: $\sqrt n(1/\bar X_n - \lambda) \dto \Normal(0, \lambda^2)$. É a distribuição aproximada do estimador natural da taxa (@sec-est-g05).
+
+## As distribuições qui-quadrado, $t$ e $F$ {#sec-est-g04-distribuicoes}
+
+Três distribuições construídas a partir de normais padrão independentes aparecem em toda a inferência.
+
+::: {#def-est-g04-qui-quadrado}
+## Qui-quadrado
+Se $Z_1, \dots, Z_k \iid \Normal(0, 1)$, a distribuição de $V = Z_1^2 + \dots + Z_k^2$ é a **qui-quadrado com $k$ graus de liberdade**, $\chi^2_k$.
+:::
+
+::: {#prp-est-g04-qui-quadrado}
+## Propriedades da qui-quadrado
+(a) $\chi^2_k = \text{Gama}(k/2, 1/2)$, com densidade $f(v) = \frac{1}{2^{k/2}\Gamma(k/2)}v^{k/2-1}e^{-v/2}$ para $v > 0$.
+(b) $\E[V] = k$ e $\Var(V) = 2k$.
+(c) Se $V_1 \sim \chi^2_a$ e $V_2 \sim \chi^2_b$ são independentes, $V_1 + V_2 \sim \chi^2_{a+b}$.
+:::
+
+::: {.proof}
+Para $t < 1/2$, completando a integral,
+$$
+\E[e^{tZ^2}] = \int\frac{1}{\sqrt{2\pi}}e^{-(1 - 2t)z^2/2}\,\dd z = (1 - 2t)^{-1/2},
+$$
+pois o integrando é $(1 - 2t)^{-1/2}$ vezes a densidade de uma $\Normal(0, 1/(1 - 2t))$. Pela independência, $M_V(t) = (1 - 2t)^{-k/2}$, que é a função geradora da $\text{Gama}(k/2, 1/2)$, $(\frac{1/2}{1/2 - t})^{k/2}$ (@prp-est-g03-fgm); pela unicidade, vale (a). O item (b) sai das fórmulas da gama: $\alpha/\beta = k$ e $\alpha/\beta^2 = 2k$. Para (c), o produto das funções geradoras é $(1 - 2t)^{-(a+b)/2}$.
+:::
+
+::: {#def-est-g04-t}
+## $t$ de Student e $F$
+Se $Z \sim \Normal(0, 1)$ e $V \sim \chi^2_k$ são independentes, a distribuição de $T = Z/\sqrt{V/k}$ é a **$t$ de Student com $k$ graus de liberdade**, $t_k$. Se $V_1 \sim \chi^2_a$ e $V_2 \sim \chi^2_b$ são independentes, a distribuição de $(V_1/a)/(V_2/b)$ é a **$F$ com $a$ e $b$ graus de liberdade**, $F_{a,b}$.
+:::
+
+::: {#thm-est-g04-densidade-t}
+## Densidade da $t$
+A densidade da $t_k$ é
+$$
+f(t) = \frac{\Gamma\big(\frac{k+1}{2}\big)}{\sqrt{k\pi}\;\Gamma\big(\frac k2\big)}\Big(1 + \frac{t^2}{k}\Big)^{-(k+1)/2}, \qquad t \in \R .
+$$ {#eq-est-g04-densidade-t}
+:::
+
+::: {.proof}
+Condicionando em $V$, que é independente de $Z$, $\Prob(T \leq t \mid V = v) = \Phi(t\sqrt{v/k})$, e, pela probabilidade total, $F_T(t) = \int_0^\infty\Phi(t\sqrt{v/k})f_V(v)\,\dd v$. Derivando sob o sinal de integral (o que é legítimo aqui; @sec-est-m01),
+$$
+f_T(t) = \int_0^\infty\varphi\big(t\sqrt{v/k}\big)\sqrt{\frac vk}\,\frac{v^{k/2-1}e^{-v/2}}{2^{k/2}\Gamma(k/2)}\,\dd v = \frac{1}{\sqrt{2\pi k}\,2^{k/2}\Gamma(k/2)}\int_0^\infty v^{\frac{k+1}{2}-1}e^{-\frac v2\left(1 + \frac{t^2}{k}\right)}\,\dd v .
+$$
+A última integral é $\Gamma(\frac{k+1}{2})\big(\frac{2}{1 + t^2/k}\big)^{(k+1)/2}$, pela substituição $u = \frac v2(1 + t^2/k)$ na definição de $\Gamma$. Simplificando as potências de 2, obtém-se a @eq-est-g04-densidade-t.
+:::
+
+A $t_k$ é simétrica em torno de zero e tem caudas mais pesadas que a normal, tanto mais quanto menor $k$: a $t_1$ é a Cauchy (@exr-est-g04-t1), e a variância da $t_k$, para $k > 2$, é $k/(k - 2) > 1$. Quando $k \to \infty$, $V/k \pto 1$ pela lei dos grandes números, e, por Slutsky, $t_k \dto \Normal(0, 1)$: para $k$ acima de algumas dezenas, a diferença é pequena (os quantis de 97,5% são 2,23 para $k = 10$, 2,04 para $k = 30$ e 1,96 no limite). A densidade da $F_{a,b}$, obtida do mesmo modo, é proporcional a $x^{a/2-1}(1 + ax/b)^{-(a+b)/2}$ em $x > 0$; e $t_k^2 \sim F_{1,k}$ (@exr-est-g04-f-t). A $F$ compara variâncias e testa restrições conjuntas em regressões (@sec-ecm-g03).
+
+## Amostras normais {#sec-est-g04-amostras-normais}
+
+Quando os dados são normais, a média e a variância amostrais têm distribuições **exatas**, para qualquer $n$.
+
+::: {#thm-est-g04-amostras-normais}
+## Média e variância amostrais de uma amostra normal
+Se $X_1, \dots, X_n \iid \Normal(\mu, \sigma^2)$, com $n \geq 2$, então:
+
+(a) $\bar X_n \sim \Normal(\mu, \sigma^2/n)$;
+(b) $\bar X_n$ e $S_n^2$ são independentes;
+(c) $(n - 1)S_n^2/\sigma^2 \sim \chi^2_{n-1}$;
+(d) $\dfrac{\sqrt n\,(\bar X_n - \mu)}{S_n} \sim t_{n-1}$.
+:::
+
+::: {.proof}
+Pelo @thm-est-g03-normal-multivariada (b) e (c), $\vb X = (X_1, \dots, X_n)\T = \mu\vb 1 + \sigma\vb Z$, com $\vb Z \sim \Normal(\vb 0, \Id)$, é normal multivariado, assim como qualquer transformação linear dele. O item (a) segue, pois $\bar X_n$ é uma combinação linear com a média e a variância da @prp-est-g04-momentos-amostrais.
+
+Para (b), o vetor $(\bar X_n, X_1 - \bar X_n, \dots, X_n - \bar X_n)$ é uma transformação linear de $\vb X$, logo normal multivariado. Para cada $j$, $\Cov(\bar X_n, X_j - \bar X_n) = \Cov(\bar X_n, X_j) - \Var(\bar X_n) = \sigma^2/n - \sigma^2/n = 0$, pois $\Cov(\bar X_n, X_j) = \frac1n\sum_i\Cov(X_i, X_j) = \sigma^2/n$. Pelo item (d) do mesmo teorema, $\bar X_n$ é independente do vetor de desvios, e portanto de $S_n^2$, que é função dele.
+
+Para (c), divida a @eq-est-g04-soma-quadrados por $\sigma^2$:
+$$
+\underbrace{\sum_{i=1}^n\Big(\frac{X_i - \mu}{\sigma}\Big)^2}_{W} = \underbrace{\frac{(n - 1)S_n^2}{\sigma^2}}_{U} + \underbrace{\Big(\frac{\sqrt n\,(\bar X_n - \mu)}{\sigma}\Big)^2}_{R} .
+$$
+$W \sim \chi^2_n$, por ser a soma dos quadrados de $n$ normais padrão independentes; $R \sim \chi^2_1$, por (a); e $U$ e $R$ são independentes, por (b). Logo, para $t < 1/2$, $(1 - 2t)^{-n/2} = M_W(t) = M_U(t)M_R(t) = M_U(t)(1 - 2t)^{-1/2}$, e $M_U(t) = (1 - 2t)^{-(n-1)/2}$; pela unicidade, $U \sim \chi^2_{n-1}$.
+
+Para (d), escreva a estatística como $\dfrac{\sqrt n(\bar X_n - \mu)/\sigma}{\sqrt{U/(n - 1)}}$: o numerador é $\Normal(0, 1)$, $U \sim \chi^2_{n-1}$ e os dois são independentes; pela definição, a razão é $t_{n-1}$.
+:::
+
+O teorema é o fundamento dos intervalos e testes "$t$" em amostras pequenas (@sec-est-g05, @sec-est-g06). Seus itens têm robustez muito diferente. O item (d) é aproximadamente válido para grandes amostras mesmo sem normalidade, pela @eq-est-g04-t-assintotica. Já o item (c) depende criticamente da normalidade — com caudas pesadas, a variância de $S_n^2$ é muito maior que $2\sigma^4/(n - 1)$ —, e a independência do item (b) **caracteriza** a normal: em nenhuma outra distribuição a média e a variância amostrais são independentes (o laboratório mostra a dependência na exponencial).
+
+## Pontes {#sec-est-g04-pontes}
+
+- **Estimação e testes (@sec-est-g05, @sec-est-g06).** Consistência é a lei dos grandes números; intervalos e testes usam o TCL, Slutsky e as distribuições $t$, $\chi^2$ e $F$.
+- **Teoria assintótica (@sec-est-m03, @sec-ecm-m02).** Convergência quase certa, funções características, Slutsky e o método delta em vetores; a assintótica do MQO.
+- **Dados dependentes (@sec-est-d02).** Leis dos grandes números e TCL para séries temporais estacionárias e ergódicas; erros padrão robustos à autocorrelação.
+- **Monte Carlo e bootstrap (@sec-cmp-m03, @sec-ecm-d07).** A lei dos grandes números justifica a simulação; o bootstrap aproxima distribuições amostrais reamostrando os dados, como na aplicação deste capítulo.
+- **Regressão (@sec-ecm-g03).** Testes $t$ e $F$ em regressões com erros normais.
+
+## Interativo {#sec-est-g04-interativo}
+
+::: {.content-visible when-format="html"}
+**A lei dos grandes números.** Cada linha é a trajetória da média amostral $\bar X_n$ de uma sequência simulada, à medida que $n$ cresce até 5000; a linha tracejada é a média populacional. Na Pareto com $\alpha = 1{,}5$, a média existe, mas a variância é infinita, e a convergência é lenta e sujeita a saltos; na Cauchy, não há média, e as trajetórias nunca se estabilizam.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof distLGN = seletor("distribuição", ["Bernoulli (p = 0,3)", "Exponencial (média 1)", "Pareto (α = 1,5; média 3)", "Cauchy (sem média)"], {valor: "Exponencial (média 1)"})
+viewof sementeLGN = controle("semente", [1, 50], {valor: 1, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "n", type: "log", domain: [1, 5000]}, y: {label: "média amostral", domain: espLGN.dominio},
+  color: {range: ["#2F5D8A", "#8C2F39", "#B7791F", "#4A7C59", "#5B6770"]},
+  marks: [
+    ...(espLGN.media === null ? [] : [Plot.ruleY([espLGN.media], {stroke: "#5B6770", strokeDasharray: "5,3"})]),
+    Plot.line(trajLGN, {x: "n", y: "m", stroke: "k", strokeWidth: 1.5, clip: true})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+geradorG04 = semente => () => {
+  semente |= 0; semente = semente + 0x6D2B79F5 | 0
+  let t = Math.imul(semente ^ semente >>> 15, 1 | semente)
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+  return ((t ^ t >>> 14) >>> 0) / 4294967296
+}
+espLGN = ({
+  "Bernoulli (p = 0,3)": {Q: u => u < 0.3 ? 1 : 0, media: 0.3, dominio: [0, 1]},
+  "Exponencial (média 1)": {Q: u => -Math.log(1 - u), media: 1, dominio: [0, 2.5]},
+  "Pareto (α = 1,5; média 3)": {Q: u => Math.pow(1 - u, -1 / 1.5), media: 3, dominio: [0, 8]},
+  "Cauchy (sem média)": {Q: u => Math.tan(Math.PI * (u - 0.5)), media: null, dominio: [-6, 6]}
+})[distLGN]
+trajLGN = {
+  const pts = []
+  for (let k = 0; k < 5; k++) {
+    const u = geradorG04(sementeLGN * 1009 + k * 7)
+    let soma = 0
+    for (let n = 1; n <= 5000; n++) {
+      soma += espLGN.Q(u())
+      if (n < 50 || n % 10 === 0) pts.push({k: `trajetória ${k + 1}`, n, m: soma / n})
+    }
+  }
+  return pts
+}
+```
+:::
+
+**O teorema central do limite.** Para cada uma de 5000 amostras simuladas de tamanho $n$, calculamos a média padronizada $Z_n = \sqrt n(\bar X_n - \mu)/\sigma$; o histograma é comparado com a densidade $\Normal(0, 1)$. Com dados assimétricos, a aproximação melhora devagar; a assimetria de $Z_n$ cai como $1/\sqrt n$. O texto mostra quanto a aproximação normal erra na cauda esquerda, $\Prob(Z_n \leq -1{,}645)$, que deveria ser 5%.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof distTCL = seletor("distribuição dos dados", ["Dado honesto", "Uniforme (0, 1)", "Exponencial (λ = 1)", "Bernoulli (p = 0,1)", "Log-normal (σ = 1)"], {valor: "Exponencial (λ = 1)"})
+viewof nTCL = controle("tamanho da amostra n", [1, 200], {valor: 5, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Assimetria de Z_n na simulação: ${fmtG04(assimTCL, 2)} (teórica: ${fmtG04(espTCL.assim / Math.sqrt(nTCL), 2)}). P(Z_n ≤ −1,645): **${fmtG04(caudaTCL, 3)}** (aproximação normal: 0,050).`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 280, grid: true,
+  x: {label: "média padronizada", domain: [-4, 4]}, y: {label: "densidade"},
+  marks: [
+    Plot.rectY(binsTCL, {x1: "x1", x2: "x2", y: "y", fill: "#2F5D8A", fillOpacity: 0.55, inset: 0.3}),
+    Plot.line(d3.range(-4, 4.01, 0.05).map(z => ({z, f: Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI)})), {x: "z", y: "f", stroke: "#8C2F39", strokeWidth: 2}),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtG04 = (v, c) => v.toFixed(c).replace(".", ",")
+espTCL = ({
+  "Dado honesto": {Q: u => 1 + Math.floor(6 * u), mu: 3.5, sigma: Math.sqrt(35 / 12), assim: 0},
+  "Uniforme (0, 1)": {Q: u => u, mu: 0.5, sigma: Math.sqrt(1 / 12), assim: 0},
+  "Exponencial (λ = 1)": {Q: u => -Math.log(1 - u), mu: 1, sigma: 1, assim: 2},
+  "Bernoulli (p = 0,1)": {Q: u => u < 0.1 ? 1 : 0, mu: 0.1, sigma: Math.sqrt(0.09), assim: 0.8 / Math.sqrt(0.09)},
+  "Log-normal (σ = 1)": {Q: u => Math.exp(qnormG04(u)), mu: Math.exp(0.5), sigma: Math.sqrt((Math.E - 1) * Math.E),
+     assim: (Math.E + 2) * Math.sqrt(Math.E - 1)}
+})[distTCL]
+qnormG04 = p => {
+  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239]
+  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572]
+  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783]
+  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416]
+  const cauda = r => (((((c[0] * r + c[1]) * r + c[2]) * r + c[3]) * r + c[4]) * r + c[5]) / ((((d[0] * r + d[1]) * r + d[2]) * r + d[3]) * r + 1)
+  if (p < 0.02425) return cauda(Math.sqrt(-2 * Math.log(p)))
+  if (p > 1 - 0.02425) return -cauda(Math.sqrt(-2 * Math.log(1 - p)))
+  const s = p - 0.5, r = s * s
+  return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * s / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1)
+}
+zTCL = {
+  const u = geradorG04(97 + nTCL)
+  return d3.range(5000).map(() => {
+    let s = 0
+    for (let i = 0; i < nTCL; i++) s += espTCL.Q(u())
+    return Math.sqrt(nTCL) * (s / nTCL - espTCL.mu) / espTCL.sigma
+  })
+}
+assimTCL = {
+  const m = d3.mean(zTCL), s = d3.deviation(zTCL)
+  return d3.mean(zTCL, z => ((z - m) / s) ** 3)
+}
+caudaTCL = zTCL.filter(z => z <= -1.645).length / zTCL.length
+binsTCL = {
+  const k = 48, lo = -4, w = 8 / k, cont = new Array(k).fill(0)
+  for (const z of zTCL) { const j = Math.floor((z - lo) / w); if (j >= 0 && j < k) cont[j]++ }
+  return cont.map((c, j) => ({x1: lo + j * w, x2: lo + (j + 1) * w, y: c / (zTCL.length * w)}))
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — trajetórias da lei dos grandes números e o teorema central do limite com várias distribuições — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-g04-laboratorio}
+
+### Markov e Chebyshev contra as probabilidades exatas
+
+```{python}
+import numpy as np
+from scipy import stats
+
+np.set_printoptions(suppress=True)
+rng = np.random.default_rng(4)
+expo = stats.expon()                           # media 1, variancia 1
+print(" a   P(X >= a)  Markov   P(|X-1| >= a)  Chebyshev")
+for a in [1, 2, 3, 5]:
+    exata_cheb = expo.sf(1 + a) + expo.cdf(max(1 - a, 0))
+    print(f"{a:>2}   {expo.sf(a):8.4f}  {1 / a:6.3f}   "
+          f"{exata_cheb:12.4f}  {1 / a ** 2:9.3f}")
+```
+
+### Médias que convergem e médias que não convergem
+
+Para a exponencial, o erro $\abs{\bar X_n - \mu}$ cai como $1/\sqrt n$; para a Cauchy, a média de $n$ observações tem a mesma dispersão de uma só.
+
+```{python}
+geradores = [("exponencial", rng.exponential),
+             ("cauchy", rng.standard_cauchy)]
+for nome, gerar in geradores:
+    print(nome)
+    for n in [10, 100, 1000, 10_000]:
+        medias = gerar(size=(2000, n)).mean(axis=1)
+        iqr = np.subtract(*np.percentile(medias, [75, 25]))
+        print(f"   n = {n:>6}: interquartil das medias = {iqr:.4f}")
+```
+
+### O TCL e a assimetria
+
+A assimetria de $\bar X_n$ para dados exponenciais (assimetria 2) deve cair como $2/\sqrt n$, e a probabilidade de cauda $\Prob(Z_n \leq -1{,}645)$ deve se aproximar de 5%.
+
+```{python}
+for n in [1, 5, 25, 100, 400]:
+    medias = rng.exponential(size=(20_000, n)).mean(axis=1)
+    z = np.sqrt(n) * (medias - 1)
+    print(f"n = {n:>3}: assimetria = {stats.skew(z):6.3f} "
+          f"(2/sqrt(n) = {2 / np.sqrt(n):.3f}), "
+          f"P(Z <= -1.645) = {np.mean(z <= -1.645):.3f}")
+```
+
+Com dados assimétricos à direita, a média padronizada tem cauda esquerda **mais curta** que a normal para $n$ pequeno: a aproximação normal superestima a probabilidade de médias muito baixas e subestima a de médias muito altas.
+
+### Qui-quadrado, $t$ e $F$ por simulação
+
+Construímos as três distribuições a partir de normais, como nas definições, e comparamos quantis simulados com os do `scipy`.
+
+```{python}
+Z = rng.normal(size=(200_000, 11))
+V5 = (Z[:, :5] ** 2).sum(axis=1)               # qui-quadrado com 5 g.l.
+T5 = Z[:, 5] / np.sqrt(V5 / 5)                 # t com 5 g.l.
+V3 = (Z[:, 6:9] ** 2).sum(axis=1)
+F35 = (V3 / 3) / (V5 / 5)                      # F com 3 e 5 g.l.
+for nome, x, d in [("chi2(5)", V5, stats.chi2(5)),
+                   ("t(5)", T5, stats.t(5)),
+                   ("F(3, 5)", F35, stats.f(3, 5))]:
+    q_sim = np.quantile(x, [0.05, 0.5, 0.95])
+    q_teo = d.ppf([0.05, 0.5, 0.95])
+    print(f"{nome:>8}: simulados {np.round(q_sim, 3)}")
+    print(f"{'':>8}  teoricos  {np.round(q_teo, 3)}")
+```
+
+### Média e variância amostrais: normal contra exponencial
+
+Em amostras normais, $\bar X_n$ e $S_n^2$ são independentes; em amostras exponenciais, amostras com média alta tendem a ter variância alta.
+
+```{python}
+n = 10
+casos = [("normal", rng.normal(1, 1, size=(100_000, n))),
+         ("exponencial", rng.exponential(1, size=(100_000, n)))]
+for nome, amostras in casos:
+    m = amostras.mean(axis=1)
+    s2 = amostras.var(axis=1, ddof=1)
+    print(f"{nome:>11}: E[S2] = {s2.mean():.3f}, "
+          f"corr(media, S2) = {np.corrcoef(m, s2)[0, 1]:.3f}")
+u = (n - 1) * rng.normal(size=(100_000, n)).var(axis=1, ddof=1)
+print(f"(n-1)S2/sigma2: media {u.mean():.3f} (n-1 = {n - 1}), "
+      f"var {u.var():.3f} (2(n-1) = {2 * (n - 1)})")
+```
+
+## Aplicação: o teorema central do limite com a inflação brasileira {#sec-est-g04-aplicacao}
+
+Tomamos como "população" a distribuição empírica da variação mensal do IPCA desde 2000 — assimétrica à direita, como vimos no @sec-est-g02 — e sorteamos dela, com reposição, amostras de $n$ meses. Como os meses são sorteados de forma independente, a média amostral obedece às hipóteses do TCL, e podemos ver a distribuição de $\bar X_n$ ficar normal à medida que $n$ cresce. (Na série real, os meses consecutivos são dependentes, e a média de 12 meses seguidos é **mais** variável do que a de 12 meses sorteados; esse é o problema dos erros padrão com autocorrelação, @sec-ecm-m02.)
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import Markdown
+from formacao import dados, graficos
+
+graficos.estilo()
+try:
+    ipca = dados.sgs("ipca", inicio="2000-01-01")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+if disponivel:
+    pop = ipca.to_numpy()
+    mu, sigma = pop.mean(), pop.std()
+    print(f"populacao: {len(pop)} meses, media {mu:.3f}%, "
+          f"desvio padrao {sigma:.3f}, "
+          f"assimetria {stats.skew(pop):.2f}")
+    resultados = {}
+    for n in [1, 3, 12, 36]:
+        medias = rng.choice(pop, size=(20_000, n)).mean(axis=1)
+        z = np.sqrt(n) * (medias - mu) / sigma
+        fora = np.mean(np.abs(z) >= 2)
+        resultados[n] = (medias, stats.skew(medias), fora)
+        print(f"n = {n:>2}: dp {medias.std():.4f} "
+              f"(sigma/sqrt(n) {sigma / np.sqrt(n):.4f}), "
+              f"assim. {stats.skew(medias):5.2f}, "
+              f"P(|Z|>=2) {fora:.3f}")
+```
+
+```{python}
+if disponivel:
+    fig, axs = plt.subplots(1, 4, figsize=(10, 2.8), sharey=False)
+    for ax, (n, (medias, assim, fora)) in zip(axs, resultados.items()):
+        ax.hist(medias, bins=40, density=True,
+                color=graficos.PALETA["azul"], alpha=0.6)
+        g = np.linspace(medias.min(), medias.max(), 200)
+        ax.plot(g, stats.norm.pdf(g, mu, sigma / np.sqrt(n)),
+                color=graficos.PALETA["vinho"])
+        ax.set_title(f"n = {n}")
+        ax.set_yticks([])
+    axs[0].set_xlabel("média do IPCA mensal (%)")
+    graficos.fonte(axs[0], "IBGE (IPCA), via SGS/BCB, série 433.")
+    fig.tight_layout()
+    plt.show()
+    br = lambda v, c=2: f"{v:.{c}f}".replace(".", ",")
+    resumo = (f"A assimetria cai de {br(resultados[1][1])} com um mês "
+              f"para {br(resultados[36][1])} com 36 meses, e a fração "
+              f"de médias a mais de dois desvios padrão da média "
+              f"populacional fica em "
+              f"{br(100 * resultados[36][2], 1)}%, "
+              "perto dos 4,6% da normal. Chebyshev garantiria apenas "
+              "que essa fração não passa de 25%.")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+Reamostrar os próprios dados para aproximar a distribuição de uma estatística é a ideia do **bootstrap** (@sec-ecm-d07), aqui usada para fins didáticos: a população é a distribuição empírica, conhecida, e podemos comparar a aproximação normal com a distribuição exata das médias.
+
+## Exercícios resolvidos {#sec-est-g04-exercicios}
+
+::: {#exr-est-g04-markov-justa}
+Mostre que a desigualdade de Markov não pode ser melhorada: para cada $a > 0$ e $m \in (0, a]$, existe $X \geq 0$ com $\E[X] = m$ e $\Prob(X \geq a) = m/a$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Tome $X = a$ com probabilidade $m/a$ e $X = 0$ com probabilidade $1 - m/a$. Então $\E[X] = a\cdot m/a = m$ e $\Prob(X \geq a) = m/a = \E[X]/a$. A cota é atingida porque toda a massa acima de $a$ está **em** $a$ e o resto está em zero — a situação em que a média "gasta" o mínimo possível para colocar probabilidade na cauda.
+:::
+
+::: {#exr-est-g04-pesquisa}
+Uma pesquisa quer estimar a proporção $p$ de eleitores de um candidato com erro de no máximo 2 pontos percentuais, com probabilidade de pelo menos 95%. Qual tamanho de amostra garante isso pela desigualdade de Chebyshev? E pela aproximação normal?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A proporção amostral $\hat p$ é a média de $n$ Bernoullis, com variância $p(1 - p)/n \leq 1/(4n)$. Por Chebyshev, $\Prob(\abs{\hat p - p} \geq 0{,}02) \leq \frac{1}{4n \times 0{,}0004}$, que é no máximo 0,05 se $n \geq 12\,500$. Pela aproximação normal, $\Prob(\abs{\hat p - p} \geq 0{,}02) \approx 2(1 - \Phi(0{,}02\sqrt n/\sqrt{p(1 - p)}))$, e, no pior caso $p = 1/2$, basta $0{,}02\sqrt n/0{,}5 \geq 1{,}96$, isto é, $n \geq 2401$. É por isso que pesquisas com cerca de 2400 entrevistas anunciam margem de erro de 2 pontos — sob a hipótese de amostragem aleatória simples, que planos amostrais reais só aproximam.
+:::
+
+::: {#exr-est-g04-binomial}
+Uma moeda honesta é lançada 100 vezes. Aproxime a probabilidade de sair cara pelo menos 60 vezes, com e sem correção de continuidade.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$X \sim \text{Bin}(100, 1/2)$, com média 50 e desvio padrão 5. Sem correção, $\Prob(X \geq 60) \approx 1 - \Phi(2) \approx 0{,}0228$. Com correção, $\Prob(X \geq 60) = \Prob(X > 59{,}5) \approx 1 - \Phi(1{,}9) \approx 0{,}0287$. O valor exato é cerca de 0,0284: a correção de continuidade melhora muito a aproximação, porque a massa de probabilidade em 60 se distribui no intervalo $[59{,}5;\ 60{,}5]$ na versão contínua.
+:::
+
+::: {#exr-est-g04-assimetria}
+Sejam $Y_1, \dots, Y_n$ iid com média 0, variância 1 e $\E[Y^3] = \gamma$. Mostre que a assimetria de $\sum_i Y_i$ é $\gamma/\sqrt n$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\E[(\sum_i Y_i)^3] = \sum_{i, j, k}\E[Y_iY_jY_k]$. Se algum índice aparece uma única vez, a independência e a média zero anulam o termo: por exemplo, $\E[Y_1Y_2^2] = \E[Y_1]\E[Y_2^2] = 0$. Só sobram os termos com $i = j = k$, de modo que $\E[(\sum_i Y_i)^3] = n\gamma$. Como a variância da soma é $n$, a assimetria é $n\gamma/n^{3/2} = \gamma/\sqrt n$. Padronizar a média dá a mesma variável que padronizar a soma; daí a assimetria $\gamma/\sqrt n$ de $Z_n$ que o laboratório e o interativo mostram.
+:::
+
+::: {#exr-est-g04-variancia-s2}
+Se $X_1, \dots, X_n \iid \Normal(\mu, \sigma^2)$, calcule $\Var(S_n^2)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Por (c) do @thm-est-g04-amostras-normais, $(n - 1)S_n^2/\sigma^2 \sim \chi^2_{n-1}$, com variância $2(n - 1)$ (@prp-est-g04-qui-quadrado). Logo $\Var(S_n^2) = \frac{\sigma^4}{(n-1)^2}\cdot 2(n - 1) = \frac{2\sigma^4}{n - 1}$. O laboratório confere o resultado; com dados de caudas pesadas, a variância de $S_n^2$ é bem maior, porque depende da curtose.
+:::
+
+::: {#exr-est-g04-t1}
+Mostre que a $t_1$ é a distribuição de Cauchy e que ela não tem esperança.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Com $k = 1$ na @eq-est-g04-densidade-t, $\Gamma(1) = 1$ e $\Gamma(1/2) = \sqrt\pi$, de modo que $f(t) = \frac{1}{\sqrt\pi\sqrt\pi}(1 + t^2)^{-1} = \frac{1}{\pi(1 + t^2)}$. Como $\int_0^T \frac{t}{\pi(1 + t^2)}\,\dd t = \frac{1}{2\pi}\log(1 + T^2) \to \infty$, a integral de $\abs t f(t)$ diverge. A $t_1$ é a razão de duas normais padrão independentes, $Z_1/\abs{Z_2}$ — uma razão cujo denominador fica perto de zero com frequência suficiente para destruir a média.
+:::
+
+::: {#exr-est-g04-f-t}
+Mostre que, se $T \sim t_k$, então $T^2 \sim F_{1,k}$, e que, se $F \sim F_{a,b}$, então $1/F \sim F_{b,a}$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Se $T = Z/\sqrt{V/k}$, então $T^2 = (Z^2/1)/(V/k)$, com $Z^2 \sim \chi^2_1$ independente de $V \sim \chi^2_k$: por definição, $F_{1,k}$. Se $F = (V_1/a)/(V_2/b)$, então $1/F = (V_2/b)/(V_1/a)$, que é $F_{b,a}$. Na regressão, o teste $F$ de uma única restrição equivale ao teste $t$ bilateral (@sec-ecm-g03).
+:::
+
+::: {#exr-est-g04-delta}
+Seja $\hat p$ a proporção de sucessos em $n$ ensaios de Bernoulli iid. Use o método delta para encontrar a distribuição aproximada das **chances** estimadas $\hat p/(1 - \hat p)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pelo TCL, $\sqrt n(\hat p - p) \dto \Normal(0, p(1 - p))$. Com $g(x) = x/(1 - x)$, $g'(x) = 1/(1 - x)^2$, e o método delta dá
+$$
+\sqrt n\Big(\frac{\hat p}{1 - \hat p} - \frac{p}{1 - p}\Big) \dto \Normal\Big(0,\ \frac{p(1 - p)}{(1 - p)^4}\Big) = \Normal\Big(0,\ \frac{p}{(1 - p)^3}\Big) .
+$$
+Quando $p$ se aproxima de 1, a variância explode: chances são muito imprecisas para eventos quase certos. Por isso se trabalha, em geral, com o logaritmo das chances, cuja variância assintótica, $1/(p(1 - p))$, é simétrica em $p$ — a escala do modelo logit (@sec-ecm-g09).
+:::
+
+## Flashcards {#sec-est-g04-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são a média e a variância de $\bar X_n$, e qual é a esperança de $S_n^2$?
+$\E\bar X_n = \mu$, $\Var\bar X_n = \sigma^2/n$, $\E S_n^2 = \sigma^2$ (dividindo por $n - 1$).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que dizem as desigualdades de Markov e Chebyshev?
+Markov: $\Prob(X \geq a) \leq \E X/a$ para $X \geq 0$. Chebyshev: $\Prob(\abs{X - \mu} \geq \varepsilon) \leq \sigma^2/\varepsilon^2$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a lei fraca dos grandes números, e como se prova?
+$\bar X_n \pto \mu$ para dados iid com média finita. Com variância finita, por Chebyshev: $\Prob(\abs{\bar X_n - \mu} \geq \varepsilon) \leq \sigma^2/(n\varepsilon^2)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que a média de observações de Cauchy não converge?
+A Cauchy não tem média; a média de $n$ observações iid de Cauchy tem a mesma distribuição de uma observação.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Funções contínuas preservam a convergência em probabilidade?
+Sim: se $Y_n \pto a$, $W_n \pto b$ e $g$ é contínua em $(a, b)$, então $g(Y_n, W_n) \pto g(a, b)$. Daí $S_n \pto \sigma$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema central do limite?
+Para iid com variância finita e positiva, $\sqrt n(\bar X_n - \mu)/\sigma \dto \Normal(0, 1)$, qualquer que seja a distribuição.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como a assimetria afeta a aproximação do TCL?
+A assimetria de $\bar X_n$ é a dos dados dividida por $\sqrt n$; dados mais assimétricos exigem $n$ maior.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o lema de Slutsky?
+Se $Y_n \dto Y$ e $W_n \pto c$, então $Y_n + W_n \dto Y + c$, $W_nY_n \dto cY$ e $Y_n/W_n \dto Y/c$ ($c \neq 0$). Daí $\sqrt n(\bar X_n - \mu)/S_n \dto \Normal(0, 1)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o método delta?
+Se $\sqrt n(Y_n - \theta) \dto \Normal(0, \tau^2)$ e $g$ é diferenciável em $\theta$, então $\sqrt n(g(Y_n) - g(\theta)) \dto \Normal(0, g'(\theta)^2\tau^2)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é a qui-quadrado com $k$ graus de liberdade?
+A soma dos quadrados de $k$ normais padrão independentes; é a $\text{Gama}(k/2, 1/2)$, com média $k$ e variância $2k$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se definem a $t_k$ e a $F_{a,b}$?
+$t_k = Z/\sqrt{V/k}$ e $F_{a,b} = (V_1/a)/(V_2/b)$, com componentes independentes. $t_k^2 = F_{1,k}$, $t_1$ = Cauchy, $t_k \to \Normal(0, 1)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são as distribuições de $\bar X_n$ e $S_n^2$ numa amostra normal?
+$\bar X_n \sim \Normal(\mu, \sigma^2/n)$, independente de $S_n^2$; $(n - 1)S_n^2/\sigma^2 \sim \chi^2_{n-1}$; $\sqrt n(\bar X_n - \mu)/S_n \sim t_{n-1}$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quantas observações garantem erro de 2 p.p. com 95% numa pesquisa?
+Pela normal, no pior caso $p = 1/2$: $n = (1{,}96 \times 0{,}5/0{,}02)^2 \approx 2401$. Chebyshev pediria 12 500.
+:::
+
+## Ficha-resumo {#sec-est-g04-ficha}
+
+::: {.ficha-resumo}
+**Amostra.** $X_1, \dots, X_n$ iid. $\bar X_n$, $S_n^2 = \frac{1}{n-1}\sum(X_i - \bar X_n)^2$, $\hat F_n$. $\E\bar X = \mu$, $\Var\bar X = \sigma^2/n$, $\E S^2 = \sigma^2$. $\sum(X_i - \bar X)^2 = \sum(X_i - \mu)^2 - n(\bar X - \mu)^2$.
+
+**Desigualdades.** Markov $\Prob(X \geq a) \leq \E X/a$; Chebyshev $\Prob(\abs{X - \mu} \geq \varepsilon) \leq \sigma^2/\varepsilon^2$; $\Var X = 0 \iff X = \mu$ q.c.
+
+**LGN.** $Y_n \pto c$: $\Prob(\abs{Y_n - c} > \varepsilon) \to 0$. $\bar X_n \pto \mu$ (Chebyshev; basta média finita). Frequências $\to$ probabilidades; Monte Carlo; Cauchy não converge. Contínuas preservam $\pto$; $S_n \pto \sigma$.
+
+**TCL.** $\dto$: $F_n \to F$ nos pontos de continuidade. Continuidade por FGM (admitido). $\sqrt n(\bar X - \mu)/\sigma \dto \Normal(0, 1)$ (FGM + Taylor + $(1 + a_n/n)^n \to e^a$). Assimetria $/\sqrt n$. De Moivre–Laplace; correção de continuidade.
+
+**Slutsky e delta.** $Y_n \dto Y$, $W_n \pto c$ $\Rightarrow$ somas, produtos e razões. $\sqrt n(\bar X - \mu)/S \dto \Normal(0, 1)$. Delta: variância $g'(\theta)^2\tau^2$.
+
+**$\chi^2$, $t$, $F$.** $\chi^2_k = \sum Z_i^2 = \text{Gama}(k/2, 1/2)$, média $k$, variância $2k$, aditiva. $t_k = Z/\sqrt{V/k}$: simétrica, caudas pesadas, $t_1$ Cauchy, $\to \Normal(0, 1)$. $F_{a,b} = (V_1/a)/(V_2/b)$; $t_k^2 = F_{1,k}$.
+
+**Amostra normal.** $\bar X \sim \Normal(\mu, \sigma^2/n)$; $\bar X \indep S^2$; $(n - 1)S^2/\sigma^2 \sim \chi^2_{n-1}$; $\sqrt n(\bar X - \mu)/S \sim t_{n-1}$; $\Var S^2 = 2\sigma^4/(n - 1)$.
+:::
+
+## Notas bibliográficas {#sec-est-g04-notas}
+
+@degroot2012 trata as desigualdades, a lei dos grandes números e o teorema central do limite com muitas ilustrações, e deriva as distribuições amostrais em amostras normais; @casella2002 apresenta os mesmos resultados com mais rigor, inclusive os modos de convergência, Slutsky e o método delta, e é a referência para os próximos dois capítulos. A demonstração do TCL por funções características, sem a hipótese de existência da função geradora, e a lei forte dos grandes números estão no @sec-est-m03.

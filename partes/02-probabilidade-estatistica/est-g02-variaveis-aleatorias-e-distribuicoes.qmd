@@ -390,8 +390,8 @@ for n in [10, 50, 200, 1000]:
     b = stats.binom.pmf(k, n, lam / n)
     p = stats.poisson.pmf(k, lam)
     dvt = 0.5 * (np.abs(b - p).sum() + stats.poisson.sf(n, lam))
-    print(f"n = {n:>4}: P(X = 0) binomial = {b[0]:.4f}, "
-          f"Poisson = {p[0]:.4f}; dist. variacao total = {dvt:.4f}")
+    print(f"n = {n:>4}: P(X = 0) binomial {b[0]:.4f}, "
+          f"Poisson {p[0]:.4f}; DVT = {dvt:.4f}")
 ```
 
 A distância cai aproximadamente como $1/n$: para $\lambda$ fixo, o erro da aproximação é da ordem de $p = \lambda/n$.
@@ -409,8 +409,8 @@ for nome, x, d in [("pareto(1, 3)", pareto, stats.pareto(b=3)),
     qs = np.quantile(x, [0.5, 0.9, 0.99])
     ks = stats.kstest(x, d.cdf).statistic
     teo = np.round(d.ppf([0.5, 0.9, 0.99]), 3)
-    print(f"{nome:>12}: quantis amostrais {np.round(qs, 3)}, "
-          f"teoricos {teo}, KS = {ks:.4f}")
+    print(f"{nome}: KS = {ks:.4f}")
+    print(f"   quantis amostrais {np.round(qs, 3)}, teoricos {teo}")
 ```
 
 ### Valor em risco e caudas pesadas
