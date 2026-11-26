@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Inferência bayesiana* (EST-M06); *Vetores autorregressivos (VAR)* (ECM-M11)
+**Pré-requisitos:** @sec-est-m06 (*Inferência bayesiana*); *Vetores autorregressivos (VAR)* (ECM-M11)
 :::
 
 **Leituras principais:** @koop2003, @gelman2013

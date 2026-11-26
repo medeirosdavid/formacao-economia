@@ -2,25 +2,825 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `EST-M02`
+[Mestrado]{.nivel .nivel-M} · [rascunho]{.status} · `EST-M02`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-est-m01 (*Probabilidade com teoria da medida*)
-:::
 
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Probabilidade com teoria da medida* (EST-M01)
-:::
-
-**Leituras principais:** @durrett2019, @billingsley1995
+**Leituras principais:** @williams1991, @durrett2019, @billingsley1995
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-m02-motivacao}
 
-1. Definição via Radon–Nikodym
-2. Propriedades e lei das expectativas iteradas
-3. Esperança condicional como projeção em $L^2$
-4. Independência condicional
+No @sec-est-g03, a esperança condicional $\E[Y \mid X = x]$ foi definida por uma soma ou por uma integral contra a densidade condicional $f(y \mid x) = f(x, y)/f_X(x)$. Essa definição deixa três lacunas.
+
+1. **Nem sempre há densidade.** Se $X$ é discreta e $Y$ contínua, ou se $(X, Y)$ tem uma parte singular, a fórmula não se aplica — e mesmo assim faz sentido perguntar pelo melhor previsor de $Y$ dado $X$.
+2. **Condicionar a eventos de probabilidade zero é ambíguo.** Se $X$ é contínua, $\{X = x\}$ tem probabilidade zero para cada $x$. O **paradoxo de Borel–Kolmogorov** (@sec-est-m02-borel-kolmogorov) mostra que a "distribuição condicional dado um evento nulo" depende de como o evento é aproximado.
+3. **A economia condiciona à informação, não a variáveis.** Quando um modelo escreve $\E_t[\pi_{t+1}]$ — a expectativa de inflação formada com tudo o que se sabe na data $t$ —, a informação é uma $\sigma$-álgebra $\mathcal F_t$ que inclui a história de muitas variáveis, e $\E_t[\pi_{t+1}] = \E[\pi_{t+1} \mid \mathcal F_t]$.
+
+A solução de Kolmogorov define $\E[Y \mid \mathcal G]$ para uma $\sigma$-álgebra $\mathcal G$ qualquer, como uma **variável aleatória** $\mathcal G$-mensurável, determinada a menos de conjuntos de probabilidade zero. Há duas construções equivalentes: pelo teorema de Radon–Nikodym e pela projeção ortogonal no espaço $L^2$. Seguimos a segunda, que é mais geométrica e mostra de imediato a interpretação econômica: $\E[Y \mid \mathcal G]$ é a **melhor previsão** de $Y$ com a informação $\mathcal G$, e o erro de previsão é ortogonal a tudo o que se sabe. Em troca, a projeção dá uma demonstração do teorema de Radon–Nikodym, enunciado no @sec-est-m01.
+
+O capítulo desenvolve:
+
+1. os espaços $L^p$ e sua completude;
+2. a esperança condicional como projeção em $L^2$ e sua extensão a $L^1$;
+3. as propriedades — linearidade, torre, "retirar o que é conhecido", Jensen condicional;
+4. o paradoxo de Borel–Kolmogorov;
+5. o teorema de Radon–Nikodym e a mudança de medida;
+6. distribuições condicionais regulares;
+7. independência condicional.
+
+## Os espaços $L^p$ {#sec-est-m02-lp}
+
+::: {#def-est-m02-lp}
+## Espaços $L^p$
+Seja $(\Omega, \mathcal F, \mu)$ um espaço de medida e $p \in [1, \infty)$. $L^p(\mu)$ é o conjunto das funções mensuráveis $f$ com $\int\abs f^p\,\dd\mu < \infty$, **identificando funções iguais em quase toda parte**, com
+$$
+\norm f_p = \Big(\int\abs f^p\,\dd\mu\Big)^{1/p} .
+$$
+$L^\infty(\mu)$ é o conjunto das funções essencialmente limitadas, com $\norm f_\infty = \inf\{c : \abs f \leq c\ \text{q.t.p.}\}$. Num espaço de probabilidade, $\norm X_p = (\E\abs X^p)^{1/p}$.
 :::
+
+A identificação é necessária para que $\norm\cdot_p$ seja uma norma: $\norm f_p = 0$ implica apenas $f = 0$ em quase toda parte (@prp-est-m01-qtp), e é preciso tratar como iguais variáveis que diferem num evento de probabilidade zero — o ponto deixado em aberto no @sec-mat-m10. Os elementos de $L^p$ são, a rigor, classes de equivalência; na prática, trabalha-se com representantes e escreve-se "$X = Y$ q.c.".
+
+::: {#thm-est-m02-holder}
+## Hölder e Minkowski
+Sejam $p, q \in [1, \infty]$ conjugados ($1/p + 1/q = 1$). Para $f, g$ mensuráveis,
+$$
+\int\abs{fg}\,\dd\mu \leq \norm f_p\,\norm g_q \qquad\text{e}\qquad \norm{f + g}_p \leq \norm f_p + \norm g_p .
+$$
+Com $p = q = 2$, a primeira é a desigualdade de Cauchy–Schwarz: $\abs{\E[XY]} \leq \sqrt{\E X^2\,\E Y^2}$.
+:::
+
+::: {.proof}
+Para Hölder, se $\norm f_p = 0$ ou $\norm g_q = 0$, então $fg = 0$ q.t.p. e não há o que provar; se uma das normas é infinita, também. Com $p = 1$ e $q = \infty$, basta integrar $\abs{fg} \leq \abs f\,\norm g_\infty$ q.t.p. No caso $1 < p < \infty$, aplique a desigualdade de Young (@lem-mat-m10-young) ponto a ponto a $a = \abs f/\norm f_p$ e $b = \abs g/\norm g_q$ e integre:
+$$
+\frac{\int\abs{fg}\,\dd\mu}{\norm f_p\norm g_q} \leq \frac1p\,\frac{\int\abs f^p}{\norm f_p^p} + \frac1q\,\frac{\int\abs g^q}{\norm g_q^q} = \frac1p + \frac1q = 1 .
+$$
+Para Minkowski com $1 < p < \infty$ (os casos $p = 1$ e $p = \infty$ saem da desigualdade triangular pontual), note primeiro que $f + g \in L^p$, pois a convexidade de $t \mapsto t^p$ dá $\abs{f + g}^p \leq 2^{p-1}(\abs f^p + \abs g^p)$. Então
+$$
+\int\abs{f + g}^p \leq \int\abs f\,\abs{f + g}^{p-1} + \int\abs g\,\abs{f + g}^{p-1} \leq \big(\norm f_p + \norm g_p\big)\norm{f + g}_p^{p-1},
+$$
+pela desigualdade de Hölder com expoentes $p$ e $q = p/(p - 1)$, já que $\norm{\abs{f + g}^{p-1}}_q = \norm{f + g}_p^{p-1}$. Divida por $\norm{f + g}_p^{p-1}$ (se for zero, não há o que provar).
+:::
+
+::: {#prp-est-m02-inclusao}
+## Inclusão dos espaços $L^p$ num espaço de probabilidade
+Se $1 \leq p \leq q \leq \infty$, então $\norm X_p \leq \norm X_q$; em particular, $L^q(\Prob) \subseteq L^p(\Prob)$.
+:::
+
+::: {.proof}
+Para $q < \infty$, aplique Hölder a $\abs X^p$ e à constante 1, com os expoentes conjugados $q/p$ e $q/(q - p)$: $\E\abs X^p \leq (\E\abs X^q)^{p/q}\cdot 1$. Eleve à potência $1/p$. O caso $q = \infty$ é imediato.
+:::
+
+A inclusão depende de a medida ser finita: na medida de Lebesgue em $[1, \infty)$, $f(x) = 1/x$ está em $L^2$, mas não em $L^1$. Em probabilidade, quem tem variância finita tem média finita, quem tem quarto momento finito tem variância finita, e assim por diante.
+
+::: {#thm-est-m02-riesz-fischer}
+## Riesz–Fischer: $L^p$ é completo
+Para $p \in [1, \infty)$, $L^p(\mu)$ é um espaço de Banach. Além disso, toda sequência convergente em $L^p$ tem uma subsequência que converge em quase toda parte.
+:::
+
+::: {.proof}
+Seja $(f_n)$ de Cauchy em $L^p$. Escolha $n_1 < n_2 < \cdots$ com $\norm{f_{n_{k+1}} - f_{n_k}}_p < 2^{-k}$ e defina
+$$
+g = \abs{f_{n_1}} + \sum_{k=1}^\infty\abs{f_{n_{k+1}} - f_{n_k}} .
+$$
+Pela desigualdade de Minkowski aplicada às somas parciais e pelo @thm-est-m01-tcm, $\norm g_p \leq \norm{f_{n_1}}_p + \sum_k 2^{-k} < \infty$; logo $g < \infty$ q.t.p. (@prp-est-m01-qtp). Nesses pontos, a série telescópica $f_{n_1} + \sum_k(f_{n_{k+1}} - f_{n_k})$ converge absolutamente, isto é, $f_{n_k}$ converge; chame de $f$ o limite (e $f = 0$ no conjunto nulo restante). Como $\abs f \leq g$, $f \in L^p$. Por fim, dado $\varepsilon > 0$, tome $N$ com $\norm{f_n - f_m}_p < \varepsilon$ para $n, m \geq N$. Para $m \geq N$, pelo @lem-est-m01-fatou,
+$$
+\int\abs{f - f_m}^p\,\dd\mu = \int\liminf_k\abs{f_{n_k} - f_m}^p\,\dd\mu \leq \liminf_k\norm{f_{n_k} - f_m}_p^p \leq \varepsilon^p .
+$$
+Logo $f_m \to f$ em $L^p$. Se a sequência original já convergia em $L^p$ para algum $h$, então $h = f$ q.t.p., e a subsequência $f_{n_k}$ converge q.t.p. para $h$.
+:::
+
+Assim, $L^2(\Prob)$, com o produto interno $\inner XY = \E[XY]$, é um espaço de Hilbert, e toda a geometria do @sec-mat-m10 — projeções, ortogonalidade, Pitágoras — vale para variáveis aleatórias com segundo momento finito. Também se mostra que as funções contínuas de suporte compacto são densas em $L^p(\lambda)$, de modo que $L^1[a, b]$ é o completamento de $C[a, b]$ com a métrica $d_1$, como antecipado no @sec-mat-m01; admitimos esse fato, demonstrado em @billingsley1995.
+
+## Esperança condicional como projeção {#sec-est-m02-projecao}
+
+Fixe um espaço de probabilidade $(\Omega, \mathcal F, \Prob)$ e uma sub-$\sigma$-álgebra $\mathcal G \subseteq \mathcal F$ — a informação disponível. Seja $L^2(\mathcal G)$ o conjunto das (classes de) variáveis em $L^2(\mathcal F)$ que têm um representante $\mathcal G$-mensurável. $L^2(\mathcal G)$ é um subespaço **fechado** de $L^2(\mathcal F)$: ele é o espaço $L^2$ do espaço de probabilidade $(\Omega, \mathcal G, \Prob)$, completo pelo @thm-est-m02-riesz-fischer, e um subespaço completo de um espaço métrico é fechado.
+
+Pelo teorema da projeção (@thm-mat-m10-projecao e @cor-mat-m10-subespaco), para cada $Y \in L^2(\mathcal F)$ existe um único $\hat Y \in L^2(\mathcal G)$ com
+$$
+\E\big[(Y - \hat Y)Z\big] = 0 \qquad\text{para todo } Z \in L^2(\mathcal G),
+$$ {#eq-est-m02-ortogonalidade}
+e $\hat Y$ é o elemento de $L^2(\mathcal G)$ mais próximo de $Y$: $\E[(Y - \hat Y)^2] \leq \E[(Y - Z)^2]$ para todo $Z \in L^2(\mathcal G)$. Em palavras, $\hat Y$ é a **melhor previsão de $Y$ em erro quadrático médio entre todas as que se podem calcular com a informação $\mathcal G$**, e o erro $Y - \hat Y$ é ortogonal a toda variável conhecida. Tomando $Z = \mathbf 1_G$, $G \in \mathcal G$:
+$$
+\E[Y\mathbf 1_G] = \E[\hat Y\mathbf 1_G] \qquad\text{para todo } G \in \mathcal G .
+$$ {#eq-est-m02-definicao}
+Essa identidade não envolve segundos momentos, e é ela que serve de definição geral.
+
+## Definição geral, existência e unicidade {#sec-est-m02-definicao}
+
+::: {#def-est-m02-esperanca-condicional}
+## Esperança condicional
+Seja $Y \in L^1(\Prob)$ e $\mathcal G \subseteq \mathcal F$ uma sub-$\sigma$-álgebra. Uma **esperança condicional** de $Y$ dada $\mathcal G$ é uma variável aleatória $\hat Y$ tal que
+
+(i) $\hat Y$ é $\mathcal G$-mensurável e integrável;
+(ii) $\E[Y\mathbf 1_G] = \E[\hat Y\mathbf 1_G]$ para todo $G \in \mathcal G$.
+
+Escreve-se $\hat Y = \E[Y \mid \mathcal G]$. Para uma variável ou vetor $X$, $\E[Y \mid X] = \E[Y \mid \sigma(X)]$; para um evento $A$, $\Prob(A \mid \mathcal G) = \E[\mathbf 1_A \mid \mathcal G]$.
+:::
+
+Pelo @thm-est-m01-doob-dynkin, $\E[Y \mid X] = h(X)$ para alguma função boreliana $h$, e $h(x)$ é o que se escreve $\E[Y \mid X = x]$ — determinada para quase todo $x$ segundo a distribuição de $X$, e não para cada $x$ individualmente.
+
+::: {#thm-est-m02-existencia}
+## Existência e unicidade
+Para $Y \in L^1$, a esperança condicional $\E[Y \mid \mathcal G]$ existe e é única quase certamente: duas versões coincidem fora de um evento de probabilidade zero. Se $Y \in L^2$, ela é a projeção ortogonal de $Y$ sobre $L^2(\mathcal G)$.
+:::
+
+::: {.proof}
+*Unicidade.* Se $\hat Y$ e $\tilde Y$ satisfazem (i) e (ii), o evento $G = \{\hat Y > \tilde Y\}$ está em $\mathcal G$, e $\E[(\hat Y - \tilde Y)\mathbf 1_G] = \E[Y\mathbf 1_G] - \E[Y\mathbf 1_G] = 0$. O integrando é positivo em $G$, logo $\Prob(G) = 0$ (@prp-est-m01-qtp). Por simetria, $\hat Y = \tilde Y$ q.c.
+
+*Caso $L^2$.* A projeção satisfaz (ii), como vimos, e é integrável porque $L^2 \subseteq L^1$. Ela é **monótona**: se $Y \geq 0$ e $G = \{\hat Y < 0\}$, então $0 \leq \E[Y\mathbf 1_G] = \E[\hat Y\mathbf 1_G] \leq 0$, logo $\hat Y\mathbf 1_G = 0$ q.c. e $\Prob(G) = 0$; pela linearidade da projeção, $Y \leq Y'$ implica $\hat Y \leq \hat Y'$ q.c.
+
+*Caso $Y \geq 0$ integrável.* As variáveis $Y_n = \min(Y, n)$ são limitadas, logo em $L^2$, e crescem para $Y$. Suas projeções $\hat Y_n$ crescem quase certamente; seja $\hat Y = \lim_n\hat Y_n$, que é $\mathcal G$-mensurável. Para $G \in \mathcal G$, $\E[Y_n\mathbf 1_G] = \E[\hat Y_n\mathbf 1_G]$, e o @thm-est-m01-tcm passa os dois lados ao limite: $\E[Y\mathbf 1_G] = \E[\hat Y\mathbf 1_G]$. Com $G = \Omega$, $\E[\hat Y] = \E[Y] < \infty$, logo $\hat Y$ é integrável (e finita q.c.).
+
+*Caso geral.* Escreva $Y = Y^+ - Y^-$ e tome a diferença das esperanças condicionais; a identidade (ii) é linear.
+:::
+
+A outra construção usa o @thm-est-m01-radon-nikodym: para $Y \geq 0$ integrável, $\nu(G) = \E[Y\mathbf 1_G]$ é uma medida finita em $(\Omega, \mathcal G)$, absolutamente contínua em relação a $\Prob$ restrita a $\mathcal G$, e $\E[Y \mid \mathcal G]$ é a derivada $\dd\nu/\dd\Prob|_{\mathcal G}$. As duas definições coincidem, porque (ii) é exatamente a propriedade que caracteriza a derivada.
+
+::: {#exm-est-m02-particao}
+## Informação dada por uma partição
+Se $\mathcal G$ é gerada por uma partição enumerável $\{B_1, B_2, \dots\}$ de $\Omega$, com $\Prob(B_i) > 0$, então
+$$
+\E[Y \mid \mathcal G] = \sum_i\frac{\E[Y\mathbf 1_{B_i}]}{\Prob(B_i)}\,\mathbf 1_{B_i} .
+$$
+O lado direito é constante em cada bloco, logo $\mathcal G$-mensurável (@exr-est-m01-particao), e, para $G = \bigcup_{i \in I}B_i$, $\E[\hat Y\mathbf 1_G] = \sum_{i \in I}\E[Y\mathbf 1_{B_i}] = \E[Y\mathbf 1_G]$. Em cada bloco, a esperança condicional é a média elementar $\E[Y \mid B_i]$ do @sec-est-g01: quem sabe em que bloco está $\omega$ prevê $Y$ pela média do bloco.
+:::
+
+::: {#exm-est-m02-densidade}
+## O caso com densidade
+Se $(X, Y)$ tem densidade conjunta $f(x, y)$, $Y$ é integrável e $h(x) = \int y\,f(x, y)\,\dd y/f_X(x)$ onde $f_X(x) > 0$ (e $h = 0$ no resto), então $h(X)$ é uma versão de $\E[Y \mid X]$. De fato, os eventos de $\sigma(X)$ são da forma $\{X \in B\}$, e pelo Fubini (@thm-est-m01-fubini)
+$$
+\E[h(X)\mathbf 1_B(X)] = \int_B h(x)f_X(x)\,\dd x = \int_B\int y\,f(x, y)\,\dd y\,\dd x = \E[Y\mathbf 1_B(X)] .
+$$
+A definição do @sec-est-g03 é, portanto, um caso particular — e a definição geral cobre os casos em que ela não se aplica.
+:::
+
+## Propriedades {#sec-est-m02-propriedades}
+
+::: {#thm-est-m02-propriedades}
+## Propriedades da esperança condicional
+Sejam $Y, Z \in L^1$ e $\mathcal H \subseteq \mathcal G \subseteq \mathcal F$. Quase certamente:
+
+(a) **Linearidade:** $\E[aY + bZ \mid \mathcal G] = a\E[Y \mid \mathcal G] + b\E[Z \mid \mathcal G]$.
+(b) **Monotonicidade:** se $Y \leq Z$, então $\E[Y \mid \mathcal G] \leq \E[Z \mid \mathcal G]$; e $\abs{\E[Y \mid \mathcal G]} \leq \E[\abs Y \mid \mathcal G]$.
+(c) **Esperanças iteradas:** $\E\big[\E[Y \mid \mathcal G]\big] = \E[Y]$.
+(d) Se $Y$ é $\mathcal G$-mensurável, $\E[Y \mid \mathcal G] = Y$.
+(e) **Retirar o que é conhecido:** se $W$ é $\mathcal G$-mensurável e $WY \in L^1$, então $\E[WY \mid \mathcal G] = W\,\E[Y \mid \mathcal G]$.
+(f) **Torre:** $\E\big[\E[Y \mid \mathcal G] \mid \mathcal H\big] = \E[Y \mid \mathcal H] = \E\big[\E[Y \mid \mathcal H] \mid \mathcal G\big]$.
+(g) **Independência:** se $\sigma(Y)$ e $\mathcal G$ são independentes, $\E[Y \mid \mathcal G] = \E[Y]$.
+(h) **Convergência:** se $0 \leq Y_n \uparrow Y$, então $\E[Y_n \mid \mathcal G] \uparrow \E[Y \mid \mathcal G]$; se $Y_n \to Y$ q.c. e $\abs{Y_n} \leq V \in L^1$, então $\E[Y_n \mid \mathcal G] \to \E[Y \mid \mathcal G]$ q.c.
+:::
+
+::: {.proof}
+Em cada caso, mostramos que o candidato satisfaz (i) e (ii) da @def-est-m02-esperanca-condicional e invocamos a unicidade.
+
+Para (a), o lado direito é $\mathcal G$-mensurável e integrável, e (ii) é linear. Para (b), seja $G = \{\E[Y \mid \mathcal G] > \E[Z \mid \mathcal G]\} \in \mathcal G$; então $\E[(\E[Y \mid \mathcal G] - \E[Z \mid \mathcal G])\mathbf 1_G] = \E[(Y - Z)\mathbf 1_G] \leq 0$ com integrando positivo em $G$, logo $\Prob(G) = 0$; a segunda afirmação vem de $-\abs Y \leq Y \leq \abs Y$. O item (c) é (ii) com $G = \Omega$, e (d) é imediato: o próprio $Y$ satisfaz a definição.
+
+Para (e), comece com $W = \mathbf 1_A$, $A \in \mathcal G$: $\mathbf 1_A\E[Y \mid \mathcal G]$ é $\mathcal G$-mensurável e, para $G \in \mathcal G$, $\E[\mathbf 1_A\E[Y \mid \mathcal G]\mathbf 1_G] = \E[\E[Y \mid \mathcal G]\mathbf 1_{A \cap G}] = \E[Y\mathbf 1_{A \cap G}] = \E[\mathbf 1_AY\mathbf 1_G]$. Por linearidade, vale para $W$ simples. Se $W, Y \geq 0$, tome simples $W_n \uparrow W$ e passe ao limite os dois lados de $\E[W_nY\mathbf 1_G] = \E[W_n\E[Y \mid \mathcal G]\mathbf 1_G]$ pelo @thm-est-m01-tcm (o fator $\E[Y \mid \mathcal G]$ é não negativo por (b)). Em particular, $\E[\abs W\,\E[\abs Y \mid \mathcal G]] = \E[\abs{WY}] < \infty$, o que, com (b), garante a integrabilidade de $W\E[Y \mid \mathcal G]$; o caso geral sai de $W = W^+ - W^-$ e $Y = Y^+ - Y^-$.
+
+Para (f), $\E[Y \mid \mathcal H]$ é $\mathcal H$-mensurável, logo $\mathcal G$-mensurável, e a segunda igualdade é (d). Para a primeira, se $H \in \mathcal H \subseteq \mathcal G$, então $\E[\E[Y \mid \mathcal G]\mathbf 1_H] = \E[Y\mathbf 1_H] = \E[\E[Y \mid \mathcal H]\mathbf 1_H]$: $\E[Y \mid \mathcal H]$ satisfaz a definição de $\E[\E[Y \mid \mathcal G] \mid \mathcal H]$.
+
+Para (g), a constante $\E[Y]$ é $\mathcal G$-mensurável e, pela independência de $Y$ e $\mathbf 1_G$, $\E[Y\mathbf 1_G] = \E[Y]\Prob(G) = \E[\E[Y]\mathbf 1_G]$.
+
+Para (h), as esperanças condicionais crescem por (b); seu limite é $\mathcal G$-mensurável, e o @thm-est-m01-tcm em (ii) mostra que é uma versão de $\E[Y \mid \mathcal G]$, como na demonstração do @thm-est-m02-existencia. Para a versão dominada, seja $W_n = \sup_{k \geq n}\abs{Y_k - Y}$, que decresce para zero com $W_n \leq 2V$. Por (b), $\abs{\E[Y_n \mid \mathcal G] - \E[Y \mid \mathcal G]} \leq \E[W_n \mid \mathcal G]$, que decresce para algum limite $L \geq 0$. Mas $\E[L] \leq \E[\E[W_n \mid \mathcal G]] = \E[W_n] \to 0$ pelo @thm-est-m01-tcd, logo $L = 0$ q.c.
+:::
+
+A propriedade (e) diz que, condicionalmente a $\mathcal G$, o que é conhecido se comporta como constante. A (f) é a **lei das expectativas iteradas** na sua forma mais útil: a previsão, feita hoje, da previsão que será feita amanhã com mais informação é a previsão de hoje. Em macroeconomia, $\E_t[\E_{t+1}[x_{t+2}]] = \E_t[x_{t+2}]$; num modelo de expectativas racionais, as revisões de previsão são imprevisíveis.
+
+::: {#thm-est-m02-jensen}
+## Jensen condicional
+Se $\varphi : \R \to \R$ é convexa e $Y$, $\varphi(Y)$ são integráveis, então $\varphi(\E[Y \mid \mathcal G]) \leq \E[\varphi(Y) \mid \mathcal G]$ q.c. Em particular, $\norm{\E[Y \mid \mathcal G]}_p \leq \norm Y_p$ para $p \geq 1$.
+:::
+
+::: {.proof}
+Uma função convexa em $\R$ é contínua e é o supremo das suas retas de suporte; pela continuidade, basta tomar as retas de suporte nos racionais: $\varphi(x) = \sup_n(a_n + b_nx)$ para uma sequência enumerável de pares $(a_n, b_n)$. Para cada $n$, $a_n + b_nY \leq \varphi(Y)$, e pelos itens (a), (b) e (d) do @thm-est-m02-propriedades, $a_n + b_n\E[Y \mid \mathcal G] \leq \E[\varphi(Y) \mid \mathcal G]$ fora de um evento nulo $N_n$. Fora de $\bigcup_nN_n$, que também é nulo, a desigualdade vale para todo $n$; tome o supremo. Com $\varphi(x) = \abs x^p$ e esperanças, $\E\abs{\E[Y \mid \mathcal G]}^p \leq \E\abs Y^p$.
+:::
+
+O operador $Y \mapsto \E[Y \mid \mathcal G]$ é, portanto, uma contração linear em cada $L^p$; em $L^2$, é a projeção ortogonal, com norma 1. A **variância condicional** é $\Var(Y \mid \mathcal G) = \E[(Y - \E[Y \mid \mathcal G])^2 \mid \mathcal G] = \E[Y^2 \mid \mathcal G] - \E[Y \mid \mathcal G]^2$, pelo item (e).
+
+::: {#cor-est-m02-variancia}
+## Decomposição da variância e valor da informação
+Seja $Y \in L^2$ e $\mathcal H \subseteq \mathcal G$. Então
+$$
+\Var(Y) = \E[\Var(Y \mid \mathcal G)] + \Var(\E[Y \mid \mathcal G])
+$$
+e
+$$
+\E\big[(Y - \E[Y \mid \mathcal G])^2\big] = \E\big[(Y - \E[Y \mid \mathcal H])^2\big] - \E\big[(\E[Y \mid \mathcal G] - \E[Y \mid \mathcal H])^2\big] .
+$$
+Mais informação nunca piora a melhor previsão, e o ganho é a variância da revisão de previsão.
+:::
+
+::: {.proof}
+$Y - \E[Y \mid \mathcal G]$ é ortogonal a $L^2(\mathcal G)$, que contém $\E[Y \mid \mathcal G] - \E[Y \mid \mathcal H]$ e $\E[Y \mid \mathcal G] - \E[Y]$. Pelo teorema de Pitágoras,
+$$
+\E(Y - \E[Y \mid \mathcal H])^2 = \E(Y - \E[Y \mid \mathcal G])^2 + \E(\E[Y \mid \mathcal G] - \E[Y \mid \mathcal H])^2,
+$$
+que é a segunda identidade. A primeira é o caso $\mathcal H = \{\emptyset, \Omega\}$, em que $\E[Y \mid \mathcal H] = \E[Y]$, com $\E[(Y - \E[Y \mid \mathcal G])^2] = \E[\Var(Y \mid \mathcal G)]$ pelo item (c).
+:::
+
+Esse é o @thm-est-g03-variancia-total, agora para informação arbitrária. A propriedade de ortogonalidade (@eq-est-m02-ortogonalidade) é o conteúdo empírico das **expectativas racionais**: se $\E_t[\pi_{t+1}]$ é a esperança condicional à informação de $t$, o erro de previsão $\pi_{t+1} - \E_t[\pi_{t+1}]$ é não correlacionado com qualquer variável conhecida em $t$ — uma hipótese testável por regressão (@sec-ecm-d09).
+
+## O paradoxo de Borel–Kolmogorov {#sec-est-m02-borel-kolmogorov}
+
+A esperança condicional é uma variável aleatória definida a menos de eventos nulos. Por isso, seu valor **num evento de probabilidade zero** não é determinado pelo evento: depende da $\sigma$-álgebra em relação à qual se condiciona.
+
+::: {#exm-est-m02-borel-kolmogorov}
+## Condicionar a $X = Y$
+Sejam $X, Y$ independentes e uniformes em $(0, 1)$. Qual é a distribuição de $X$ "dado $X = Y$"? O evento tem probabilidade zero, e há duas maneiras naturais de descrevê-lo.
+
+*Pela diferença $D = Y - X$.* O vetor $(X, D)$ tem densidade $1$ no conjunto $\{0 < x < 1,\ 0 < x + d < 1\}$ (a transformação $(x, y) \mapsto (x, y - x)$ tem jacobiano 1, @thm-est-m01-linear). A densidade condicional de $X$ dado $D = 0$ é constante em $(0, 1)$: **uniforme**.
+
+*Pela razão $R = Y/X$.* A transformação $(x, r) \mapsto (x, rx)$ tem jacobiano $x$, logo $(X, R)$ tem densidade $x$ no conjunto $\{0 < x < 1,\ 0 < rx < 1\}$, e a densidade condicional de $X$ dado $R = 1$ é proporcional a $x$: **densidade $2x$**, com média $2/3$.
+
+Os eventos $\{D = 0\}$ e $\{R = 1\}$ são o mesmo, mas as respostas diferem.
+:::
+
+Não há contradição: $\E[g(X) \mid D]$ e $\E[g(X) \mid R]$ são variáveis aleatórias bem definidas, cada uma determinada quase certamente, e seus valores no evento nulo $\{X = Y\}$ são o limite de condicionamentos a eventos vizinhos diferentes — uma faixa $\{\abs{Y - X} < \varepsilon\}$, de largura constante, no primeiro caso, e uma cunha $\{\abs{Y/X - 1} < \varepsilon\}$, mais larga longe da origem, no segundo. A cunha dá mais peso aos valores grandes de $X$; o interativo da @sec-est-m02-interativo mostra o efeito. A moral, segundo Kolmogorov, é que "a probabilidade condicional em relação a uma hipótese isolada de probabilidade zero é inadmissível": condiciona-se a uma $\sigma$-álgebra (uma variável, um experimento), não a um evento nulo isolado. Em econometria, o problema reaparece quando se interpreta $\E[Y \mid X = x]$ num ponto específico: o objeto bem definido é a função $h$ quase em toda parte, e propriedades pontuais exigem hipóteses de continuidade.
+
+## Radon–Nikodym e mudança de medida {#sec-est-m02-radon-nikodym}
+
+A geometria de $L^2$ também demonstra o teorema de Radon–Nikodym, enunciado no @sec-est-m01. Precisamos de um lema sobre espaços de Hilbert.
+
+::: {#lem-est-m02-riesz}
+## Representação de Riesz
+Seja $H$ um espaço de Hilbert real e $\phi : H \to \R$ linear e contínua. Existe um único $z \in H$ com $\phi(x) = \inner xz$ para todo $x$.
+:::
+
+::: {.proof}
+Se $\phi = 0$, tome $z = 0$. Caso contrário, o núcleo $N = \phi^{-1}(0)$ é um subespaço fechado próprio. Escolha $w \notin N$ e seja $z_0 = w - P_Nw$, que é não nulo e ortogonal a $N$ (@cor-mat-m10-subespaco); em particular, $\phi(z_0) \neq 0$. Para todo $x$, o vetor $x - \frac{\phi(x)}{\phi(z_0)}z_0$ está em $N$, logo é ortogonal a $z_0$: $\inner x{z_0} = \frac{\phi(x)}{\phi(z_0)}\norm{z_0}^2$. Assim, $z = \frac{\phi(z_0)}{\norm{z_0}^2}z_0$ serve. Se $z$ e $z'$ servem, $\inner x{z - z'} = 0$ para todo $x$, e com $x = z - z'$ obtém-se $z = z'$.
+:::
+
+::: {#thm-est-m02-radon-nikodym}
+## Demonstração do teorema de Radon–Nikodym
+Sejam $\mu$ e $\nu$ medidas $\sigma$-finitas em $(\Omega, \mathcal F)$ com $\nu \ll \mu$. Existe $h \geq 0$ mensurável com $\nu(A) = \int_Ah\,\dd\mu$ para todo $A \in \mathcal F$.
+:::
+
+::: {.proof}
+Suponha primeiro $\mu$ e $\nu$ finitas, e seja $\rho = \mu + \nu$. Em $L^2(\rho)$, o funcional $\phi(f) = \int f\,\dd\nu$ está bem definido (conjuntos $\rho$-nulos são $\nu$-nulos) e é contínuo, pois $\abs{\phi(f)} \leq \int\abs f\,\dd\rho \leq \rho(\Omega)^{1/2}\norm f_{L^2(\rho)}$ por Cauchy–Schwarz. Pelo @lem-est-m02-riesz, existe $g \in L^2(\rho)$ com
+$$
+\int f\,\dd\nu = \int fg\,\dd\rho \qquad\text{para toda } f \in L^2(\rho).
+$$ {#eq-est-m02-von-neumann}
+Com $f = \mathbf 1_A$, $\nu(A) = \int_Ag\,\dd\rho$. Como $0 \leq \nu(A) \leq \rho(A)$ para todo $A$, vale $0 \leq g \leq 1$ $\rho$-q.t.p.: se $A = \{g < 0\}$ tivesse $\rho(A) > 0$, $\nu(A)$ seria negativo; se $A = \{g > 1\}$ tivesse $\rho(A) > 0$, $\nu(A)$ seria maior que $\rho(A)$. Como $\dd\rho = \dd\mu + \dd\nu$, a @eq-est-m02-von-neumann se reescreve como
+$$
+\int f(1 - g)\,\dd\nu = \int fg\,\dd\mu .
+$$
+Com $f = \mathbf 1_B$, $B = \{g = 1\}$, obtém-se $\mu(B) = 0$, logo $\nu(B) = 0$ pela continuidade absoluta. Agora tome $f = \mathbf 1_A(1 + g + \dots + g^n)$, limitada:
+$$
+\int_A(1 - g^{n+1})\,\dd\nu = \int_A g(1 + g + \dots + g^n)\,\dd\mu .
+$$
+Fora de $B$, $0 \leq g < 1$, e quando $n \to \infty$ os integrandos crescem para $1$ e para $h = g/(1 - g)$, respectivamente. Pelo @thm-est-m01-tcm e porque $\mu(B) = \nu(B) = 0$, $\nu(A) = \int_Ah\,\dd\mu$ (com $h = 0$ em $B$). No caso $\sigma$-finito, particione $\Omega$ em conjuntos $\Omega_k$ de medida finita para $\mu$ e $\nu$, aplique o caso finito em cada um e some as densidades.
+:::
+
+Se $\Prob$ e $\mathbb Q$ são probabilidades com $\mathbb Q \ll \Prob$ e $L = \dd\mathbb Q/\dd\Prob$, a @eq-est-m01-mudanca-medida dá $\E_{\mathbb Q}[Y] = \E_\Prob[YL]$. A versão condicional é a **fórmula de Bayes abstrata**.
+
+::: {#prp-est-m02-bayes-abstrata}
+## Fórmula de Bayes abstrata
+Se $\mathbb Q \ll \Prob$, $L = \dd\mathbb Q/\dd\Prob$ e $Y$ é $\mathbb Q$-integrável, então, $\mathbb Q$-quase certamente,
+$$
+\E_{\mathbb Q}[Y \mid \mathcal G] = \frac{\E_\Prob[YL \mid \mathcal G]}{\E_\Prob[L \mid \mathcal G]} .
+$$
+:::
+
+::: {.proof}
+O conjunto $\{\E_\Prob[L \mid \mathcal G] = 0\}$ é $\mathcal G$-mensurável e tem $\mathbb Q$-probabilidade $\E_\Prob[L\mathbf 1\{\E_\Prob[L \mid \mathcal G] = 0\}] = \E_\Prob[\E_\Prob[L \mid \mathcal G]\mathbf 1\{\E_\Prob[L \mid \mathcal G] = 0\}] = 0$; fora dele, o quociente $V$ do lado direito está bem definido e é $\mathcal G$-mensurável. Para $G \in \mathcal G$, usando a mudança de medida, a torre e o item (e) do @thm-est-m02-propriedades,
+$$
+\E_{\mathbb Q}[V\mathbf 1_G] = \E_\Prob[LV\mathbf 1_G] = \E_\Prob\big[\E_\Prob[L \mid \mathcal G]\,V\mathbf 1_G\big] = \E_\Prob\big[\E_\Prob[YL \mid \mathcal G]\mathbf 1_G\big] = \E_\Prob[YL\mathbf 1_G] = \E_{\mathbb Q}[Y\mathbf 1_G] .
+$$
+:::
+
+Essa fórmula está por trás da inferência bayesiana (a posteriori é a priori reponderada pela verossimilhança, @sec-est-m06), dos filtros não lineares (@sec-ecm-d10) e do apreçamento sob a medida neutra ao risco, em que $L$ é o fator estocástico de desconto normalizado (@sec-fin-m02).
+
+## Distribuições condicionais regulares {#sec-est-m02-regulares}
+
+Para cada boreliano $B$, $\Prob(Y \in B \mid \mathcal G)$ é uma variável aleatória determinada a menos de um evento nulo $N_B$. Como há uma quantidade não enumerável de borelianos, a união dos $N_B$ pode não ser nula, e nada garante, à primeira vista, que exista uma escolha de versões que seja uma probabilidade em $B$ para cada $\omega$. Para variáveis reais, existe.
+
+::: {#def-est-m02-regular}
+## Distribuição condicional regular
+Uma **distribuição condicional regular** de $Y$ dada $\mathcal G$ é uma função $\kappa : \Omega \times \mathcal B(\R) \to [0, 1]$ tal que (i) para cada $\omega$, $\kappa(\omega, \cdot)$ é uma probabilidade em $\R$; (ii) para cada $B$, $\kappa(\cdot, B)$ é uma versão de $\Prob(Y \in B \mid \mathcal G)$.
+:::
+
+::: {#thm-est-m02-regular}
+## Existência para variáveis reais
+Toda variável aleatória real $Y$ tem uma distribuição condicional regular dada qualquer $\mathcal G$, e para toda $g$ boreliana com $g \geq 0$ ou $g(Y)$ integrável,
+$$
+\E[g(Y) \mid \mathcal G](\omega) = \int g(y)\,\kappa(\omega, \dd y) \qquad\text{q.c.}
+$$
+:::
+
+::: {.proof}
+Para cada racional $q$, fixe uma versão $F(q, \omega)$ de $\Prob(Y \leq q \mid \mathcal G)$. Pelos itens (b) e (h) do @thm-est-m02-propriedades, cada uma das seguintes afirmações vale fora de um evento nulo: $F(q, \cdot) \leq F(r, \cdot)$ para $q < r$; $F(r, \cdot) \to F(q, \cdot)$ quando $r \downarrow q$ ao longo dos racionais; $F(q, \cdot) \to 1$ quando $q \to \infty$ e $\to 0$ quando $q \to -\infty$. São enumeráveis afirmações, logo valem simultaneamente fora de um evento nulo $N \in \mathcal G$. Para $\omega \notin N$, defina $F(x, \omega) = \inf_{q > x,\ q \in \Q}F(q, \omega)$, que é uma função de distribuição; para $\omega \in N$, tome $F(\cdot, \omega) = \Phi$, uma função de distribuição fixa. Seja $\kappa(\omega, \cdot)$ a probabilidade com função de distribuição $F(\cdot, \omega)$ (@cor-est-m01-stieltjes). Para $x$ real e racionais $q_n \downarrow x$, $\kappa(\omega, (-\infty, x]) = \lim_nF(q_n, \omega)$ fora de $N$, enquanto $\Prob(Y \leq q_n \mid \mathcal G) \to \Prob(Y \leq x \mid \mathcal G)$ q.c. pelo item (h); logo $\kappa(\cdot, (-\infty, x])$ é uma versão de $\Prob(Y \leq x \mid \mathcal G)$, e é $\mathcal G$-mensurável. A família dos borelianos $B$ para os quais $\kappa(\cdot, B)$ é uma versão de $\Prob(Y \in B \mid \mathcal G)$ é uma classe $\lambda$ (diferenças por linearidade, limites crescentes pelo item (h)) que contém a classe $\pi$ das semirretas; pelo @thm-est-m01-pi-lambda, contém $\mathcal B(\R)$. A fórmula para $\E[g(Y) \mid \mathcal G]$ sai pela máquina padrão: vale para indicadoras por construção, para simples por linearidade e para $g \geq 0$ pelo item (h).
+:::
+
+Quando $\mathcal G = \sigma(X)$, o lema de Doob–Dynkin permite escrever $\kappa(\omega, B) = K(X(\omega), B)$: $K(x, \cdot)$ é a **distribuição condicional de $Y$ dado $X = x$**, determinada para quase todo $x$ segundo $\Prob_X$. A distribuição conjunta se decompõe em marginal vezes núcleo:
+$$
+\E[g(X, Y)] = \int\Big(\int g(x, y)\,K(x, \dd y)\Big)\Prob_X(\dd x) .
+$$ {#eq-est-m02-desintegracao}
+Para $g = \mathbf 1_{A \times B}$, os dois lados valem $\E[\mathbf 1_A(X)\Prob(Y \in B \mid X)] = \Prob(X \in A, Y \in B)$; os dois lados são medidas em $A \times B$ que coincidem nos retângulos, logo em todo boreliano de $\R^2$ (@cor-est-m01-unicidade), e a máquina padrão faz o resto. É a lei da probabilidade total sem densidades, e a base da construção de modelos hierárquicos e da inferência bayesiana: a distribuição conjunta de parâmetro e dados é a priori vezes a verossimilhança (@sec-est-m06). O resultado vale para vetores aleatórios e, mais geralmente, para variáveis com valores em espaços métricos completos e separáveis.
+
+## Independência condicional {#sec-est-m02-independencia}
+
+::: {#def-est-m02-independencia-condicional}
+## Independência condicional
+As sub-$\sigma$-álgebras $\mathcal A$ e $\mathcal B$ são **condicionalmente independentes dada $\mathcal G$** se
+$$
+\Prob(A \cap B \mid \mathcal G) = \Prob(A \mid \mathcal G)\,\Prob(B \mid \mathcal G) \quad\text{q.c., para todos } A \in \mathcal A,\ B \in \mathcal B .
+$$
+Para variáveis, escreve-se $X \indep Y \mid Z$ quando $\sigma(X)$ e $\sigma(Y)$ são condicionalmente independentes dada $\sigma(Z)$.
+:::
+
+::: {#prp-est-m02-independencia-condicional}
+## Caracterização: a informação extra é irrelevante
+$\mathcal A$ e $\mathcal B$ são condicionalmente independentes dada $\mathcal G$ se, e somente se,
+$$
+\Prob(A \mid \mathcal G \vee \mathcal B) = \Prob(A \mid \mathcal G) \quad\text{q.c., para todo } A \in \mathcal A,
+$$
+em que $\mathcal G \vee \mathcal B = \sigma(\mathcal G \cup \mathcal B)$. Conhecida $\mathcal G$, saber $\mathcal B$ não muda as previsões sobre $\mathcal A$.
+:::
+
+::: {.proof}
+Suponha a igualdade. Para $A \in \mathcal A$ e $B \in \mathcal B$, pela torre e pelo item (e) do @thm-est-m02-propriedades ($\mathbf 1_B$ é $\mathcal G \vee \mathcal B$-mensurável),
+$$
+\Prob(A \cap B \mid \mathcal G) = \E\big[\mathbf 1_B\,\Prob(A \mid \mathcal G \vee \mathcal B) \mid \mathcal G\big] = \E\big[\mathbf 1_B\,\Prob(A \mid \mathcal G) \mid \mathcal G\big] = \Prob(A \mid \mathcal G)\,\Prob(B \mid \mathcal G) .
+$$
+Reciprocamente, suponha a independência condicional e fixe $A \in \mathcal A$. A variável $\Prob(A \mid \mathcal G)$ é $\mathcal G \vee \mathcal B$-mensurável; resta verificar $\E[\mathbf 1_A\mathbf 1_D] = \E[\Prob(A \mid \mathcal G)\mathbf 1_D]$ para $D \in \mathcal G \vee \mathcal B$. Para $D = G \cap B$, com $G \in \mathcal G$ e $B \in \mathcal B$,
+$$
+\E[\mathbf 1_A\mathbf 1_G\mathbf 1_B] = \E\big[\mathbf 1_G\Prob(A \cap B \mid \mathcal G)\big] = \E\big[\mathbf 1_G\Prob(A \mid \mathcal G)\Prob(B \mid \mathcal G)\big] = \E\big[\Prob(A \mid \mathcal G)\mathbf 1_G\mathbf 1_B\big],
+$$
+a última pela torre, retirando $\mathbf 1_G\Prob(A \mid \mathcal G)$, que é $\mathcal G$-mensurável. Os conjuntos $G \cap B$ formam uma classe $\pi$ que gera $\mathcal G \vee \mathcal B$, e a família dos $D$ para os quais a identidade vale é uma classe $\lambda$; pelo @thm-est-m01-pi-lambda, vale para todo $D \in \mathcal G \vee \mathcal B$.
+:::
+
+Hipóteses de independência condicional estão entre as mais importantes da economia aplicada:
+
+- **Propriedade de Markov** (@sec-est-d01): o futuro é independente do passado dado o presente.
+- **Seleção nos observáveis** (@sec-ecm-m08): os resultados potenciais são independentes do tratamento dadas as covariáveis, $(Y(0), Y(1)) \indep D \mid X$.
+- **Exclusão** em variáveis instrumentais (@sec-ecm-g06) e **modelos de fatores** (@sec-ecm-d08), em que as séries são independentes dados os fatores comuns.
+
+Independência e independência condicional não se implicam: duas moedas independentes deixam de sê-lo quando se condiciona à sua soma (o "colisor"), e duas variáveis condicionalmente independentes dada uma causa comum são, em geral, correlacionadas (@exr-est-m02-colisor).
+
+## Pontes {#sec-est-m02-pontes}
+
+- **Martingais (@sec-est-d03).** Um martingal é um processo com $\E[M_{t+1} \mid \mathcal F_t] = M_t$; as propriedades deste capítulo são todo o cálculo necessário.
+- **Expectativas racionais e previsão (@sec-mac-m10, @sec-ecm-d09).** $\E_t$ é a esperança condicional à informação de $t$; erros de previsão ortogonais à informação; a torre em modelos com expectativas sobre expectativas.
+- **Apreçamento (@sec-fin-m03).** $p_t = \E_t[m_{t+1}x_{t+1}]$; a medida neutra ao risco pela fórmula de Bayes abstrata.
+- **Filtro de Kalman (@sec-ecm-d03).** Em modelos gaussianos, a esperança condicional é linear e se calcula recursivamente por projeções.
+- **Regressão (@sec-ecm-g01, @sec-ecm-m01).** A função de esperança condicional e a melhor previsão linear, sua projeção no subespaço das funções lineares.
+- **Inferência bayesiana (@sec-est-m06).** A posteriori é a distribuição condicional regular do parâmetro dados os dados.
+
+## Interativo {#sec-est-m02-interativo}
+
+::: {.content-visible when-format="html"}
+**Esperança condicional e informação.** Seja $U$ uniforme em $[0, 1]$ e $Y = f(U)$. A informação $\mathcal G_k$ revela em qual dos $2^k$ intervalos de mesmo comprimento está $U$, e $\E[Y \mid \mathcal G_k]$ é a média de $f$ em cada intervalo (degraus azuis). Mais informação reduz o erro quadrático médio; e a projeção dos degraus finos sobre a partição mais grossa $\mathcal G_j$ (linha tracejada, $j \leq k$) reproduz $\E[Y \mid \mathcal G_j]$ — a propriedade da torre.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof funcM02 = seletor("Y = f(U)", ["sen(2πU) + U", "U²", "salto em U = 1/3", "função irregular"], {valor: "função irregular"})
+viewof kM02 = controle("informação: 2ᵏ intervalos, k", [0, 8], {valor: 3, passo: 1, casas: 0})
+viewof jM02 = controle("partição grossa para a torre, j", [0, 8], {valor: 1, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`EQM de E[Y | Gₖ]: **${fmtM02(eqmM02(kM02), 4)}** (com k = 0, isto é, sem informação: ${fmtM02(eqmM02(0), 4)}). Var(Y) = ${fmtM02(eqmM02(0), 4)} = E[Var(Y | Gₖ)] + Var(E[Y | Gₖ]) = ${fmtM02(eqmM02(kM02), 4)} + ${fmtM02(eqmM02(0) - eqmM02(kM02), 4)}.${jM02 > kM02 ? " (Escolha j ≤ k para ver a torre.)" : ""}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 320, grid: true,
+  x: {label: "U", domain: [0, 1]}, y: {label: "Y"},
+  marks: [
+    Plot.line(gradeM02.map((u, i) => ({u, y: valM02[i]})), {x: "u", y: "y", stroke: "#9AA5B1", strokeWidth: 1}),
+    Plot.line(degrausM02(kM02), {x: "u", y: "y", stroke: "#2F5D8A", strokeWidth: 2.2, curve: "step-after"}),
+    ...(jM02 <= kM02 ? [Plot.line(degrausM02(jM02), {x: "u", y: "y", stroke: "#8C2F39", strokeWidth: 2, strokeDasharray: "6,4", curve: "step-after"})] : [])
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtM02 = (v, c) => v.toFixed(c).replace(".", ",")
+geradorM02 = semente => () => {
+  semente |= 0; semente = semente + 0x6D2B79F5 | 0
+  let t = Math.imul(semente ^ semente >>> 15, 1 | semente)
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+  return ((t ^ t >>> 14) >>> 0) / 4294967296
+}
+gradeM02 = d3.range(4096).map(i => (i + 0.5) / 4096)
+ruidoM02 = {
+  const r = geradorM02(11), v = []
+  let x = 0
+  for (let i = 0; i < 4096; i++) { x = 0.995 * x + 0.12 * (r() - 0.5); v.push(x) }
+  return v
+}
+valM02 = ({
+  "sen(2πU) + U": gradeM02.map(u => Math.sin(2 * Math.PI * u) + u),
+  "U²": gradeM02.map(u => u * u),
+  "salto em U = 1/3": gradeM02.map(u => (u < 1 / 3 ? 0 : 1)),
+  "função irregular": gradeM02.map((u, i) => Math.sin(6 * u) + 2 * ruidoM02[i] + (u > 0.6 ? 0.5 : 0))
+})[funcM02]
+mediasM02 = k => {
+  const m = 2 ** k, soma = new Array(m).fill(0), cont = new Array(m).fill(0)
+  gradeM02.forEach((u, i) => { const b = Math.min(m - 1, Math.floor(u * m)); soma[b] += valM02[i]; cont[b]++ })
+  return soma.map((s, b) => s / cont[b])
+}
+degrausM02 = k => {
+  const med = mediasM02(k), m = 2 ** k
+  return med.map((v, b) => ({u: b / m, y: v})).concat([{u: 1, y: med[m - 1]}])
+}
+eqmM02 = k => {
+  const med = mediasM02(k), m = 2 ** k
+  return d3.mean(gradeM02, (u, i) => (valM02[i] - med[Math.min(m - 1, Math.floor(u * m))]) ** 2)
+}
+```
+:::
+
+**O paradoxo de Borel–Kolmogorov.** Sorteamos pontos uniformes no quadrado e guardamos os que estão perto da diagonal $\{X = Y\}$ — numa faixa $\abs{Y - X} < \varepsilon$ ou numa cunha $\abs{Y/X - 1} < \varepsilon$. O histograma de $X$ entre os pontos guardados aproxima a "distribuição de $X$ dado $X = Y$": uniforme na faixa, densidade $2x$ na cunha, por menor que seja $\varepsilon$.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof vizM02 = seletor("vizinhança da diagonal", ["faixa |Y − X| < ε", "cunha |Y/X − 1| < ε"])
+viewof epsM02 = controle("ε", [0.005, 0.2], {valor: 0.05, passo: 0.005, casas: 3})
+```
+
+```{ojs}
+//| echo: false
+md`Pontos guardados: ${aceitosM02.length} de 40 000. Média de X entre eles: **${fmtM02(d3.mean(aceitosM02, p => p.x), 3)}** (uniforme: 0,500; densidade 2x: 0,667).`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 280, grid: true,
+  x: {label: "X entre os pontos guardados", domain: [0, 1]}, y: {label: "densidade", domain: [0, 2.3]},
+  marks: [
+    Plot.rectY(binsBKM02, {x1: "x1", x2: "x2", y: "y", fill: "#2F5D8A", fillOpacity: 0.55}),
+    Plot.line([{x: 0, y: 1}, {x: 1, y: 1}], {x: "x", y: "y", stroke: "#5B6770", strokeDasharray: "5,3"}),
+    Plot.line([{x: 0, y: 0}, {x: 1, y: 2}], {x: "x", y: "y", stroke: "#8C2F39", strokeDasharray: "5,3"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+pontosM02 = {
+  const r = geradorM02(2024), pts = []
+  for (let i = 0; i < 40000; i++) pts.push({x: r(), y: r()})
+  return pts
+}
+aceitosM02 = vizM02.startsWith("faixa")
+  ? pontosM02.filter(p => Math.abs(p.y - p.x) < epsM02)
+  : pontosM02.filter(p => Math.abs(p.y / p.x - 1) < epsM02)
+binsBKM02 = {
+  const k = 20, cont = new Array(k).fill(0)
+  for (const p of aceitosM02) cont[Math.min(k - 1, Math.floor(p.x * k))]++
+  return cont.map((c, j) => ({x1: j / k, x2: (j + 1) / k, y: aceitosM02.length ? c * k / aceitosM02.length : 0}))
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — a esperança condicional em partições cada vez mais finas, com a propriedade da torre, e o paradoxo de Borel–Kolmogorov por simulação — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-m02-laboratorio}
+
+### Normas $L^p$ crescem com $p$
+
+Para $X$ exponencial com média 1, $\E[X^p] = \Gamma(p + 1)$, e $\norm X_p = \Gamma(p + 1)^{1/p}$ cresce com $p$, como manda a @prp-est-m02-inclusao.
+
+```{python}
+import numpy as np
+from scipy import stats, special
+
+rng = np.random.default_rng(2)
+X = rng.exponential(size=1_000_000)
+for p in [1, 2, 3, 4, 6]:
+    exata = special.gamma(p + 1) ** (1 / p)
+    simulada = np.mean(X ** p) ** (1 / p)
+    print(f"p = {p}: ||X||_p exata {exata:.4f}, "
+          f"simulada {simulada:.4f}")
+```
+
+### Esperança condicional numa partição e ortogonalidade
+
+Com $U$ uniforme e $Y = \operatorname{sen}(2\pi U) + U + \varepsilon$, a esperança condicional dada a partição em 8 intervalos é a média de cada bloco. O erro $Y - \E[Y \mid \mathcal G]$ é ortogonal a qualquer função do bloco — por exemplo, ao quadrado do índice do bloco —, mas não a funções de $U$ que a partição não revela.
+
+```{python}
+n = 400_000
+U = rng.uniform(size=n)
+Y = np.sin(2 * np.pi * U) + U + rng.normal(0, 0.3, size=n)
+bloco = np.floor(U * 8).astype(int)
+medias = np.bincount(bloco, weights=Y) / np.bincount(bloco)
+Yhat = medias[bloco]
+erro = Y - Yhat
+print("E[erro * bloco^2] =", round(np.mean(erro * bloco ** 2), 4))
+print("E[erro * U]       =", round(np.mean(erro * U), 4))
+print(f"Var(Y) = {Y.var():.4f} = E[Var(Y|G)] {erro.var():.4f} "
+      f"+ Var(E[Y|G]) {Yhat.var():.4f}")
+```
+
+### Esperanças iteradas e sobredispersão
+
+Num modelo hierárquico com $\Lambda \sim$ Gama$(\alpha, \beta)$ e $X \mid \Lambda \sim$ Poisson$(\Lambda)$, a torre dá $\E[X] = \E[\Lambda] = \alpha/\beta$, e a decomposição da variância dá $\Var(X) = \E[\Lambda] + \Var(\Lambda) = \alpha/\beta + \alpha/\beta^2$ — maior que a média, ao contrário da Poisson. É a origem da binomial negativa em modelos de contagem.
+
+```{python}
+alfa, beta = 3.0, 1.5
+Lam = rng.gamma(alfa, 1 / beta, size=1_000_000)
+Xc = rng.poisson(Lam)
+print(f"E[X]: simulada {Xc.mean():.4f}, teorica {alfa / beta:.4f}")
+print(f"Var(X): simulada {Xc.var():.4f}, "
+      f"teorica {alfa / beta + alfa / beta ** 2:.4f}")
+```
+
+### O paradoxo de Borel–Kolmogorov por simulação
+
+```{python}
+pts = rng.uniform(size=(4_000_000, 2))
+x, y = pts[:, 0], pts[:, 1]
+for eps in [0.1, 0.02, 0.005]:
+    faixa = x[np.abs(y - x) < eps]
+    cunha = x[np.abs(y / x - 1) < eps]
+    print(f"eps = {eps:<5}: media de X na faixa {faixa.mean():.3f}, "
+          f"na cunha {cunha.mean():.3f}")
+```
+
+As médias não convergem para o mesmo número quando $\varepsilon \to 0$: na faixa, $1/2$; na cunha, $2/3$.
+
+### Mudança de medida: amostragem por importância
+
+Para estimar $\Prob(Z > 4) \approx 3{,}17 \times 10^{-5}$ com $Z \sim \Normal(0, 1)$, a simulação direta quase nunca vê o evento. Sorteando de $\mathbb Q = \Normal(4, 1)$ e reponderando pela razão de verossimilhança $\dd\Prob/\dd\mathbb Q = e^{-4X + 8}$, a estimativa fica precisa com poucas simulações — é a @eq-est-m01-mudanca-medida com os papéis de $\Prob$ e $\mathbb Q$ trocados.
+
+```{python}
+m = 100_000
+exato = stats.norm.sf(4)
+Z = rng.standard_normal(m)
+direta = np.mean(Z > 4)
+W = rng.normal(4, 1, size=m)
+pesos = np.exp(-4 * W + 8) * (W > 4)
+imp, ep = pesos.mean(), pesos.std() / np.sqrt(m)
+print(f"exato {exato:.3e}; direta {direta:.3e}")
+print(f"importancia {imp:.3e} (erro padrao {ep:.1e})")
+```
+
+## Aplicação: previsões do IPCA com conjuntos de informação crescentes {#sec-est-m02-aplicacao}
+
+Quanto vale a informação para prever a inflação do mês seguinte? Comparamos três conjuntos de informação aninhados: $\mathcal G_1$, que contém apenas o mês do ano (a sazonalidade); $\mathcal G_2$, que acrescenta a inflação do mês anterior; e $\mathcal G_3$, com as três últimas. Como a esperança condicional exata é a projeção em todas as funções da informação, usamos a projeção no subespaço das funções **lineares** nas defasagens, com uma constante por mês — a melhor previsão linear, estimada por mínimos quadrados (@sec-ecm-g02). As identidades deste capítulo valem exatamente na amostra, porque mínimos quadrados é uma projeção: os erros são ortogonais aos regressores, o erro quadrático médio cai com a informação, a variância se decompõe e a projeção da previsão mais informada sobre o conjunto menor devolve a previsão menos informada (a torre).
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import Markdown
+from formacao import dados, graficos
+
+graficos.estilo()
+try:
+    ipca = dados.sgs("ipca", inicio="1999-06-01")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+if disponivel:
+    df = pd.DataFrame({"y": ipca})
+    for k in [1, 2, 3]:
+        df[f"l{k}"] = df["y"].shift(k)
+    df = df.loc["2000-01-01":].dropna()
+    meses = pd.get_dummies(df.index.month, prefix="m", dtype=float)
+    meses.index = df.index
+    conjuntos = {
+        "G1: mes": meses,
+        "G2: mes + 1 defasagem": meses.join(df[["l1"]]),
+        "G3: mes + 3 defasagens": meses.join(df[["l1", "l2", "l3"]]),
+    }
+    y = df["y"].to_numpy()
+    dentro = df.index < "2019-01-01"
+    res, ajustes = {}, {}
+    for nome, Xd in conjuntos.items():
+        X = Xd.to_numpy()
+        b = np.linalg.lstsq(X, y, rcond=None)[0]
+        aj = X @ b
+        e = y - aj
+        ba = np.linalg.lstsq(X[dentro], y[dentro], rcond=None)[0]
+        fora = np.mean((y[~dentro] - X[~dentro] @ ba) ** 2)
+        res[nome] = (np.mean(e ** 2), fora, np.abs(X.T @ e).max())
+        ajustes[nome] = aj
+        print(f"{nome:<23} EQM na amostra {np.mean(e ** 2):.4f}; "
+              f"fora (desde 2019) {fora:.4f}")
+        print(f"   Var(y) {y.var():.4f} = Var(prev.) {aj.var():.4f}"
+              f" + Var(erro) {e.var():.4f}")
+    X1 = conjuntos["G1: mes"].to_numpy()
+    aj3 = ajustes["G3: mes + 3 defasagens"]
+    torre = X1 @ np.linalg.lstsq(X1, aj3, rcond=None)[0]
+    dif = np.abs(torre - ajustes["G1: mes"]).max()
+    ortog = max(r[2] for r in res.values())
+    print(f"torre: max |proj. de E[y|G3] em G1 - E[y|G1]| = {dif:.1e}")
+    print(f"ortogonalidade: max |X'e| = {ortog:.1e}")
+
+    fig, ax = plt.subplots(1, 2, figsize=(9.5, 3.4))
+    nomes = ["G1", "G2", "G3"]
+    eqm_in = [r[0] for r in res.values()]
+    eqm_out = [r[1] for r in res.values()]
+    pos = np.arange(3)
+    ax[0].bar(pos - 0.2, eqm_in, 0.4, label="na amostra",
+              color=graficos.PALETA["azul"])
+    ax[0].bar(pos + 0.2, eqm_out, 0.4, label="fora (desde 2019)",
+              color=graficos.PALETA["ambar"])
+    ax[0].set_xticks(pos, nomes)
+    ax[0].set_ylabel("erro quadrático médio")
+    ax[0].legend(frameon=False)
+    ult = df.index[-48:]
+    ax[1].plot(ult, y[-48:], color="black", lw=1.2, label="IPCA")
+    ax[1].plot(ult, ajustes["G1: mes"][-48:], ls="--",
+               color=graficos.PALETA["ambar"], label="previsão com G1")
+    ax[1].plot(ult, aj3[-48:], color=graficos.PALETA["azul"],
+               label="previsão com G3")
+    ax[1].set_ylabel("% ao mês")
+    ax[1].legend(frameon=False, fontsize=8)
+    graficos.fonte(ax[0], "IBGE (IPCA), via SGS/BCB, série 433.")
+    plt.tight_layout()
+    plt.show()
+
+    br = lambda v, c=3: f"{v:.{c}f}".replace(".", ",")
+    caiu_fora = eqm_out[0] > eqm_out[1] > eqm_out[2]
+    frase_fora = ("a ordenação se mantém" if caiu_fora else
+                  "a ordenação não se mantém inteiramente")
+    resumo = (f"Na amostra, o erro quadrático médio cai de "
+              f"{br(eqm_in[0])} (só a sazonalidade) para "
+              f"{br(eqm_in[1])} com a inflação do mês anterior e "
+              f"{br(eqm_in[2])} com três defasagens, como garante a "
+              "decomposição da variância; fora da amostra, desde "
+              f"2019, os erros são {br(eqm_out[0])}, "
+              f"{br(eqm_out[1])} e {br(eqm_out[2])}: {frase_fora}. "
+              "A teoria garante o "
+              "ganho para a projeção populacional; com coeficientes "
+              "estimados e um processo que muda ao longo do tempo, "
+              "o ganho fora da amostra é uma questão empírica.")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+A persistência da inflação — a inflação passada ajuda a prever a futura além da sazonalidade — é o fato que os modelos de curva de Phillips com inércia procuram explicar (@sec-mac-g06). As previsões deste exemplo usam apenas a história do próprio IPCA; acrescentar expectativas de mercado, câmbio ou preços de commodities aumenta o conjunto de informação e, pela mesma lógica, reduz o erro populacional — é o ponto de partida dos modelos de previsão do @sec-ecm-d09.
+
+## Exercícios resolvidos {#sec-est-m02-exercicios}
+
+::: {#exr-est-m02-soma-iid}
+Sejam $X_1, \dots, X_n$ iid e integráveis e $S = X_1 + \dots + X_n$. Mostre que $\E[X_1 \mid S] = S/n$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para cada $i$, o vetor $(X_i, S)$ tem a mesma distribuição que $(X_1, S)$, porque permutar as coordenadas de um vetor iid não muda sua distribuição e $S$ é simétrica. Logo, para todo boreliano $B$, $\E[X_i\mathbf 1_B(S)] = \E[X_1\mathbf 1_B(S)]$, e qualquer versão de $\E[X_1 \mid S]$ é também uma versão de $\E[X_i \mid S]$. Somando em $i$ e usando a linearidade e o item (d) do @thm-est-m02-propriedades, $n\,\E[X_1 \mid S] = \E[S \mid S] = S$. Note que não foi preciso calcular nenhuma distribuição condicional: o argumento de simetria vale para qualquer distribuição com média finita.
+:::
+
+::: {#exr-est-m02-hierarquia}
+Mostre que independência implica independência em média ($\E[Y \mid X] = \E[Y]$), que implica correlação nula, e que as recíprocas são falsas: (a) $X \sim \Normal(0, 1)$ e $Y = X^2$; (b) $Y = XZ$, com $Z = \pm 1$ equiprováveis e independente de $X \sim \Normal(0, 1)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Independência dá $\E[Y \mid X] = \E[Y]$ pelo item (g). Independência em média dá $\E[XY] = \E[X\,\E[Y \mid X]] = \E[X]\E[Y]$, pela torre e pelo item (e). Em (a), $\Cov(X, X^2) = \E[X^3] = 0$, mas $\E[Y \mid X] = X^2$ não é constante. Em (b), $\E[Y \mid X] = X\,\E[Z] = 0 = \E[Y]$, mas $Y$ não é independente de $X$: $\abs Y = \abs X$, e $\Var(Y \mid X) = X^2$ depende de $X$. O exemplo (b) é a **heterocedasticidade**: a hipótese $\E[u \mid X] = 0$ da regressão não impõe nada sobre a variância condicional do erro (@sec-ecm-g05).
+:::
+
+::: {#exr-est-m02-sinal}
+(Extração de sinal.) Sejam $X \sim \Normal(0, \sigma_X^2)$ e $\varepsilon \sim \Normal(0, \sigma_\varepsilon^2)$ independentes e $S = X + \varepsilon$. Mostre que $\E[X \mid S] = \frac{\sigma_X^2}{\sigma_X^2 + \sigma_\varepsilon^2}\,S$ e calcule o erro quadrático médio.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $k = \sigma_X^2/(\sigma_X^2 + \sigma_\varepsilon^2)$ e $W = X - kS$. O vetor $(W, S)$ é normal (combinação linear de normais independentes) com $\Cov(W, S) = \sigma_X^2 - k(\sigma_X^2 + \sigma_\varepsilon^2) = 0$, logo $W \indep S$ (@sec-est-g03). Então $\E[X \mid S] = \E[W \mid S] + kS = \E[W] + kS = kS$, pelos itens (g) e (d). O erro é $W$, com $\E[W^2] = \Var(X) - k^2\Var(S) = \sigma_X^2\sigma_\varepsilon^2/(\sigma_X^2 + \sigma_\varepsilon^2)$. É o problema do produtor no modelo de ilhas de Lucas: observando o próprio preço, ele atribui a fração $k$ da variação a choques relativos, e quanto mais volátil a política monetária ($\sigma_\varepsilon^2$ grande), menos responde (@sec-mac-d09).
+:::
+
+::: {#exr-est-m02-contracao}
+Mostre que $\E[Y \mid \mathcal G]^2 \leq \E[Y^2 \mid \mathcal G]$ e que $\E[\E[Y \mid \mathcal G]^2] = \E[Y^2]$ se, e somente se, $Y$ é $\mathcal G$-mensurável (q.c.).
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A primeira é o @thm-est-m02-jensen com $\varphi(x) = x^2$, ou, diretamente, $0 \leq \Var(Y \mid \mathcal G) = \E[Y^2 \mid \mathcal G] - \E[Y \mid \mathcal G]^2$. Para a segunda, por Pitágoras, $\E[Y^2] = \E[\E[Y \mid \mathcal G]^2] + \E[(Y - \E[Y \mid \mathcal G])^2]$, e a igualdade vale se, e somente se, $Y = \E[Y \mid \mathcal G]$ q.c., isto é, $Y$ tem uma versão $\mathcal G$-mensurável. A projeção preserva a norma apenas dos elementos do subespaço.
+:::
+
+::: {#exr-est-m02-poisson-gama}
+No modelo $\Lambda \sim$ Gama$(\alpha, \beta)$ (densidade $\propto \lambda^{\alpha-1}e^{-\beta\lambda}$) e $X \mid \Lambda \sim$ Poisson$(\Lambda)$, encontre a distribuição condicional de $\Lambda$ dado $X$ e $\E[\Lambda \mid X]$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela @eq-est-m02-desintegracao, a distribuição conjunta tem densidade (em relação a $\lambda \otimes \#$) $\frac{\beta^\alpha}{\Gamma(\alpha)}\lambda^{\alpha-1}e^{-\beta\lambda}\cdot e^{-\lambda}\lambda^x/x!$. Fixado $x$, como função de $\lambda$ ela é proporcional a $\lambda^{\alpha + x - 1}e^{-(\beta + 1)\lambda}$: a distribuição condicional de $\Lambda$ dado $X = x$ é Gama$(\alpha + x, \beta + 1)$, e $\E[\Lambda \mid X] = (\alpha + X)/(\beta + 1)$. Verifique a torre: $\E[\E[\Lambda \mid X]] = (\alpha + \alpha/\beta)/(\beta + 1) = \alpha/\beta = \E[\Lambda]$. É o primeiro exemplo de família conjugada (@sec-est-m06): a média a posteriori pondera a média a priori $\alpha/\beta$ e a observação $X$.
+:::
+
+::: {#exr-est-m02-girsanov}
+Seja $Z \sim \Normal(0, 1)$ sob $\Prob$ e defina $\mathbb Q$ por $\dd\mathbb Q/\dd\Prob = L = e^{\theta Z - \theta^2/2}$. Mostre que $\mathbb Q$ é uma probabilidade e que, sob $\mathbb Q$, $Z \sim \Normal(\theta, 1)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$L > 0$ e $\E_\Prob[L] = e^{-\theta^2/2}\E[e^{\theta Z}] = e^{-\theta^2/2}e^{\theta^2/2} = 1$, logo $\mathbb Q(\Omega) = 1$. Pela mudança de medida, a função geradora de $Z$ sob $\mathbb Q$ é
+$$
+\E_{\mathbb Q}[e^{tZ}] = \E_\Prob[e^{(t + \theta)Z - \theta^2/2}] = e^{(t + \theta)^2/2 - \theta^2/2} = e^{\theta t + t^2/2},
+$$
+a da $\Normal(\theta, 1)$; pela unicidade da função geradora (@sec-est-m03), $Z \sim \Normal(\theta, 1)$ sob $\mathbb Q$. Mudar a medida desloca a média sem mudar a variância: é a versão de um período do teorema de Girsanov, que no @sec-fin-d02 transforma o retorno esperado de uma ação na taxa livre de risco.
+:::
+
+::: {#exr-est-m02-colisor}
+(a) Sejam $X, Y$ independentes, com $\Prob(X = 1) = \Prob(Y = 1) = 1/2$ e valores em $\{0, 1\}$, e $Z = X + Y$. Mostre que $X$ e $Y$ não são condicionalmente independentes dado $Z$. (b) Seja $Z$ Bernoulli$(1/2)$ e, dado $Z$, $X$ e $Y$ independentes com $\Prob(X = 1 \mid Z) = \Prob(Y = 1 \mid Z) = 0{,}2 + 0{,}6Z$. Calcule $\Cov(X, Y)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Em (a), dado $Z = 1$, $\Prob(X = 1 \mid Z = 1) = \Prob(Y = 1 \mid Z = 1) = 1/2$, mas $\Prob(X = 1, Y = 1 \mid Z = 1) = 0 \neq 1/4$: saber $Z$ e $X$ determina $Y$. Condicionar a uma consequência comum (um "colisor") cria dependência — é o viés de seleção de amostras condicionadas a um resultado. Em (b), pela decomposição da covariância análoga à da variância, $\Cov(X, Y) = \E[\Cov(X, Y \mid Z)] + \Cov(\E[X \mid Z], \E[Y \mid Z]) = 0 + 0{,}36\,\Var(Z) = 0{,}09$: uma causa comum induz correlação entre variáveis condicionalmente independentes — o caso dos modelos de fatores.
+:::
+
+## Flashcards {#sec-est-m02-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que os elementos de $L^p$ são classes de equivalência?
+Porque $\norm f_p = 0$ só implica $f = 0$ q.t.p.; para $\norm\cdot_p$ ser norma, identificam-se funções iguais em quase toda parte.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema de Riesz–Fischer, e qual é o subproduto da demonstração?
+$L^p$ é completo para $1 \leq p < \infty$. Toda sequência convergente em $L^p$ tem subsequência convergente q.t.p. (escolhe-se $\norm{f_{n_{k+1}} - f_{n_k}}_p < 2^{-k}$).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se define $\E[Y \mid \mathcal G]$?
+É a variável $\mathcal G$-mensurável e integrável com $\E[Y\mathbf 1_G] = \E[\E[Y \mid \mathcal G]\mathbf 1_G]$ para todo $G \in \mathcal G$; única q.c.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a interpretação geométrica de $\E[Y \mid \mathcal G]$ em $L^2$?
+A projeção ortogonal de $Y$ no subespaço fechado $L^2(\mathcal G)$: a melhor previsão em EQM com a informação $\mathcal G$, com erro ortogonal a toda variável $\mathcal G$-mensurável.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se estende a esperança condicional de $L^2$ para $L^1$?
+Para $Y \geq 0$, projeta-se $\min(Y, n)$; as projeções crescem (monotonicidade) e o limite satisfaz a definição por convergência monótona. Em geral, $Y = Y^+ - Y^-$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que dizem "retirar o que é conhecido" e a torre?
+$\E[WY \mid \mathcal G] = W\E[Y \mid \mathcal G]$ se $W$ é $\mathcal G$-mensurável. Se $\mathcal H \subseteq \mathcal G$: $\E[\E[Y \mid \mathcal G] \mid \mathcal H] = \E[Y \mid \mathcal H]$ — prevalece a informação menor.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o valor da informação em erro quadrático?
+Se $\mathcal H \subseteq \mathcal G$: $\E(Y - \E[Y \mid \mathcal H])^2 - \E(Y - \E[Y \mid \mathcal G])^2 = \E(\E[Y \mid \mathcal G] - \E[Y \mid \mathcal H])^2 \geq 0$ (Pitágoras).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o Jensen condicional?
+$\varphi$ convexa: $\varphi(\E[Y \mid \mathcal G]) \leq \E[\varphi(Y) \mid \mathcal G]$. Consequência: $\norm{\E[Y \mid \mathcal G]}_p \leq \norm Y_p$ (contração).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o paradoxo de Borel–Kolmogorov?
+Para $X, Y$ uniformes independentes, "$X$ dado $X = Y$" é uniforme se o evento é visto como $\{Y - X = 0\}$ e tem densidade $2x$ se é visto como $\{Y/X = 1\}$. Não se condiciona a eventos nulos isolados, e sim a $\sigma$-álgebras.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como a projeção em $L^2$ prova o teorema de Radon–Nikodym?
+Com $\rho = \mu + \nu$, $f \mapsto \int f\,\dd\nu$ é contínuo em $L^2(\rho)$; Riesz dá $g$ com $0 \leq g \leq 1$, e $\dd\nu/\dd\mu = g/(1 - g)$ (von Neumann).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a fórmula de Bayes abstrata?
+Se $L = \dd\mathbb Q/\dd\Prob$: $\E_{\mathbb Q}[Y \mid \mathcal G] = \E_\Prob[YL \mid \mathcal G]/\E_\Prob[L \mid \mathcal G]$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é uma distribuição condicional regular, e quando existe?
+Um núcleo $\kappa(\omega, B)$, probabilidade em $B$ para cada $\omega$ e versão de $\Prob(Y \in B \mid \mathcal G)$ para cada $B$. Existe para $Y$ real (e em espaços poloneses); dá $\E[g(Y) \mid \mathcal G] = \int g\,\dd\kappa$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se caracteriza a independência condicional $\mathcal A \indep \mathcal B \mid \mathcal G$?
+$\Prob(A \mid \mathcal G \vee \mathcal B) = \Prob(A \mid \mathcal G)$ para todo $A \in \mathcal A$: dado $\mathcal G$, $\mathcal B$ não ajuda a prever $\mathcal A$. Não implica nem é implicada pela independência.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a hierarquia entre independência, independência em média e correlação nula?
+Independência $\Rightarrow$ $\E[Y \mid X] = \E Y$ $\Rightarrow$ $\Cov(X, Y) = 0$; recíprocas falsas ($Y = X^2$; $Y = XZ$ heterocedástico).
+:::
+
+## Ficha-resumo {#sec-est-m02-ficha}
+
+::: {.ficha-resumo}
+**$L^p$.** Classes q.t.p.; $\norm f_p = (\int\abs f^p)^{1/p}$. Hölder $\int\abs{fg} \leq \norm f_p\norm g_q$; Minkowski. Em probabilidade, $\norm X_p \uparrow$ em $p$, $L^q \subseteq L^p$ ($p \leq q$). Riesz–Fischer: $L^p$ completo; subsequência q.c. $L^2$ é Hilbert com $\E[XY]$.
+
+**Definição.** $\E[Y \mid \mathcal G]$: $\mathcal G$-mensurável, integrável, $\E[Y\mathbf 1_G] = \E[\hat Y\mathbf 1_G]$ $\forall G \in \mathcal G$; única q.c. Em $L^2$, projeção em $L^2(\mathcal G)$, melhor previsor, erro $\perp$ informação. $L^1$ por truncamento e TCM; ou Radon–Nikodym. Partição: médias dos blocos. Densidade: $\int y f(y \mid x)\,\dd y$. $\E[Y \mid X] = h(X)$.
+
+**Propriedades.** Linear, monótona, $\E\E[Y \mid \mathcal G] = \E Y$; mensurável sai; retirar o conhecido; torre (prevalece a menor); independência dá constante; TCM e TCD condicionais; Jensen condicional; contração em $L^p$. $\Var Y = \E\Var(Y \mid \mathcal G) + \Var\E[Y \mid \mathcal G]$; mais informação, menor EQM.
+
+**Borel–Kolmogorov.** Condicionar a evento nulo depende da $\sigma$-álgebra: $X \mid \{Y - X = 0\}$ uniforme; $X \mid \{Y/X = 1\}$ densidade $2x$.
+
+**Radon–Nikodym.** Riesz em Hilbert; $\rho = \mu + \nu$, $\int f\,\dd\nu = \int fg\,\dd\rho$, $0 \leq g \leq 1$, $h = g/(1 - g)$. Mudança de medida; Bayes abstrata $\E_{\mathbb Q}[Y \mid \mathcal G] = \E[YL \mid \mathcal G]/\E[L \mid \mathcal G]$.
+
+**Regulares e independência condicional.** $Y$ real tem núcleo $\kappa(\omega, \cdot)$ (racionais + Carathéodory + $\pi$-$\lambda$); $K(x, \cdot)$ dado $X = x$; conjunta = marginal $\times$ núcleo. $\mathcal A \indep \mathcal B \mid \mathcal G \iff \Prob(A \mid \mathcal G \vee \mathcal B) = \Prob(A \mid \mathcal G)$. Markov, seleção nos observáveis, exclusão, fatores; colisor e causa comum.
+:::
+
+## Notas bibliográficas {#sec-est-m02-notas}
+
+@williams1991 constrói a esperança condicional exatamente como aqui — pela projeção em $L^2$ e extensão a $L^1$ — e lista as propriedades com demonstrações curtas e uma discussão excelente da interpretação; é a melhor leitura para este capítulo. @durrett2019 parte do teorema de Radon–Nikodym, trata as distribuições condicionais regulares e prepara os martingais. @billingsley1995 discute em detalhe o paradoxo de Borel–Kolmogorov (com o exemplo clássico de pontos na esfera) e prova o teorema de Radon–Nikodym pela decomposição de Hahn. A definição de esperança condicional por uma $\sigma$-álgebra é de Kolmogorov (1933); a prova do teorema de Radon–Nikodym por espaços de Hilbert é de von Neumann (1940).

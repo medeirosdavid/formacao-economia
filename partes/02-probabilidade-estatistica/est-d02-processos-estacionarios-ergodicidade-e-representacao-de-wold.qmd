@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Modos de convergência e teoremas-limite* (EST-M03); *Espaços de funções e operadores* (MAT-D04)
+**Pré-requisitos:** @sec-est-m03 (*Modos de convergência e teoremas-limite*); *Espaços de funções e operadores* (MAT-D04)
 :::
 
 **Leituras principais:** @hamilton1994, @hansen2022

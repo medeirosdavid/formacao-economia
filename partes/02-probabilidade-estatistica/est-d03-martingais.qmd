@@ -4,13 +4,7 @@
 ::: {.cabecalho-capitulo}
 [Doutorado]{.nivel .nivel-D} · [planejado]{.status} · `EST-D03`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-est-m02 (*Esperança condicional*)
-:::
-
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Esperança condicional* (EST-M02)
-:::
 
 **Leituras principais:** @durrett2019, @shreve2004
 :::

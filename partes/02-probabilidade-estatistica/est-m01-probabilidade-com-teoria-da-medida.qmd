@@ -2,21 +2,1046 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `EST-M01`
+[Mestrado]{.nivel .nivel-M} · [rascunho]{.status} · `EST-M01`
 
 **Pré-requisitos:** @sec-est-g03 (*Esperança, momentos e distribuições conjuntas*); @sec-mat-m01 (*Análise real em $\mathbb{R}^n$ e espaços métricos*)
 
-**Leituras principais:** @billingsley1995, @durrett2019
+**Leituras principais:** @billingsley1995, @durrett2019, @williams1991
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-m01-motivacao}
 
-1. $\sigma$-álgebras e medidas
-2. Funções mensuráveis
-3. Integral de Lebesgue
-4. Convergência monótona e dominada
-5. Fubini
-6. Radon–Nikodym
+Os capítulos de graduação trabalharam com dois tipos de variável aleatória — discretas, com somas, e contínuas, com integrais de Riemann — e admitiram, pelo caminho, uma série de fatos: que a função de distribuição determina a distribuição, que $\E[g(X)] = \int g(x) f(x)\,\dd x$ para $g$ qualquer, que se pode trocar a ordem de integração e derivar sob o sinal de integral, que existem sequências infinitas de lançamentos independentes. A teoria da medida demonstra todos esses fatos com uma única construção e resolve quatro problemas que a abordagem elementar não alcança.
+
+1. **Nem todo conjunto pode ter probabilidade.** Não existe um "comprimento" definido para *todos* os subconjuntos de $[0, 1)$ que seja invariante por translação e enumeravelmente aditivo (@thm-est-m01-vitali). Por isso a probabilidade é definida numa $\sigma$-álgebra de eventos, e não em todos os subconjuntos de $\Omega$.
+2. **Uma única integral.** A esperança de uma variável discreta, contínua, mista ou de uma variável como a de Cantor — sem densidade e sem átomos — é sempre $\E[X] = \int X\,\dd\Prob$.
+3. **Limites.** Quando $X_n \to X$, vale $\E[X_n] \to \E[X]$? Nem sempre: se $U$ é uniforme em $(0, 1)$, $X_n = n\,\mathbf 1\{U < 1/n\}$ tende a zero, mas $\E[X_n] = 1$. Os teoremas de convergência monótona e dominada dizem quando o limite passa pela esperança — e são a ferramenta mais usada de toda a teoria assintótica.
+4. **Objetos infinitos.** Sequências iid, processos estocásticos, a esperança condicional em relação a um conjunto de informação (@sec-est-m02) e a mudança de medida das finanças exigem a teoria da medida.
+
+O capítulo desenvolve:
+
+1. $\sigma$-álgebras, medidas e a impossibilidade de medir todos os conjuntos;
+2. o teorema $\pi$-$\lambda$ e a unicidade de medidas;
+3. a extensão de Carathéodory e a medida de Lebesgue;
+4. funções mensuráveis, variáveis aleatórias e o lema de Doob–Dynkin;
+5. a integral de Lebesgue e os teoremas de convergência;
+6. distribuições, mudança de variáveis e densidades;
+7. medida produto, Fubini–Tonelli e a existência de sequências independentes;
+8. o teorema de Radon–Nikodym.
+
+## $\sigma$-álgebras e medidas {#sec-est-m01-medidas}
+
+::: {#def-est-m01-sigma-algebra}
+## $\sigma$-álgebra, espaço mensurável e $\sigma$-álgebra gerada
+Uma **$\sigma$-álgebra** em $\Omega$ é uma família $\mathcal F$ de subconjuntos de $\Omega$ que contém $\Omega$ e é fechada por complementos e uniões enumeráveis (@def-est-g01-sigma-algebra). O par $(\Omega, \mathcal F)$ é um **espaço mensurável**. Dada uma família $\mathcal C$ de subconjuntos, a **$\sigma$-álgebra gerada** $\sigma(\mathcal C)$ é a interseção de todas as $\sigma$-álgebras que contêm $\mathcal C$ — a menor delas. A **$\sigma$-álgebra de Borel** $\mathcal B(\R^n)$ é a gerada pelos abertos de $\R^n$.
 :::
+
+A interseção de qualquer família de $\sigma$-álgebras é uma $\sigma$-álgebra (as três propriedades passam à interseção), e a família de todos os subconjuntos de $\Omega$ é uma $\sigma$-álgebra que contém $\mathcal C$; logo $\sigma(\mathcal C)$ está bem definida. Os conjuntos de Borel incluem os abertos, os fechados, os pontos, os conjuntos enumeráveis e tudo o que se obtém deles por um número enumerável de operações — na prática, todo conjunto que aparece em estatística.
+
+::: {#prp-est-m01-borel}
+## Geradores da $\sigma$-álgebra de Borel
+$\mathcal B(\R)$ é gerada pelas semirretas $(-\infty, x]$, $x \in \R$, e também pelas semirretas $(-\infty, q]$ com $q$ racional. Em $\R^n$, $\mathcal B(\R^n)$ é gerada pelos ortantes $O(\vb x) = (-\infty, x_1] \times \dots \times (-\infty, x_n]$.
+:::
+
+::: {.proof}
+Seja $\mathcal C$ a família das semirretas. Cada semirreta é fechada, logo de Borel, e $\sigma(\mathcal C) \subseteq \mathcal B(\R)$. Reciprocamente, $(a, b] = (-\infty, b] \setminus (-\infty, a]$ e $(a, b) = \bigcup_n (a, b - 1/n]$ estão em $\sigma(\mathcal C)$. Todo aberto $G \subseteq \R$ é a união dos intervalos abertos de extremos racionais contidos em $G$ — cada ponto de $G$ está num deles —, e essa família é enumerável; logo $G \in \sigma(\mathcal C)$ e $\mathcal B(\R) \subseteq \sigma(\mathcal C)$. Com racionais, basta notar que $(-\infty, x] = \bigcap_n (-\infty, q_n]$ para racionais $q_n \downarrow x$. Em $\R^n$, as caixas $(\vb a, \vb b] = \prod_i (a_i, b_i]$ se obtêm dos ortantes por diferença: $(\vb a, \vb b] = O(\vb b) \setminus \bigcup_i O(\vb b^{(i)})$, em que $\vb b^{(i)}$ troca a $i$-ésima coordenada de $\vb b$ por $a_i$; as caixas abertas são uniões enumeráveis de caixas semiabertas, e todo aberto é a união enumerável das caixas abertas de vértices racionais que contém.
+:::
+
+::: {#def-est-m01-medida}
+## Medida
+Uma **medida** em $(\Omega, \mathcal F)$ é uma função $\mu : \mathcal F \to [0, \infty]$ com $\mu(\emptyset) = 0$ e **enumeravelmente aditiva**: $\mu(\bigcup_n A_n) = \sum_n \mu(A_n)$ para $A_n \in \mathcal F$ disjuntos. É **finita** se $\mu(\Omega) < \infty$, **$\sigma$-finita** se $\Omega = \bigcup_n \Omega_n$ com $\mu(\Omega_n) < \infty$, e uma **probabilidade** se $\mu(\Omega) = 1$. A tripla $(\Omega, \mathcal F, \mu)$ é um **espaço de medida**.
+:::
+
+Exemplos: a **medida de contagem** $\#(A)$ = número de elementos de $A$; a **massa de Dirac** $\delta_x(A) = \mathbf 1_A(x)$; as **distribuições discretas** $\sum_k p_k\,\delta_{x_k}$, com $p_k \geq 0$ e $\sum_k p_k = 1$; e a **medida de Lebesgue**, que atribui a cada intervalo o seu comprimento e cuja existência é o tema da @sec-est-m01-construcao. Em teoria da medida convenciona-se $0 \cdot \infty = 0$: um conjunto de medida infinita pesado por zero não contribui.
+
+As propriedades do @thm-est-g01-consequencias e do @thm-est-g01-continuidade valem para medidas quaisquer, com as mesmas demonstrações: monotonicidade, subaditividade enumerável $\mu(\bigcup_n A_n) \leq \sum_n \mu(A_n)$ e **continuidade por baixo**, $A_n \uparrow A \Rightarrow \mu(A_n) \uparrow \mu(A)$. A **continuidade por cima**, $A_n \downarrow A \Rightarrow \mu(A_n) \downarrow \mu(A)$, exige $\mu(A_1) < \infty$: com a medida de contagem em $\N$ e $A_n = \{n, n + 1, \dots\}$, temos $\mu(A_n) = \infty$ para todo $n$, mas $\bigcap_n A_n = \emptyset$.
+
+### Por que não medir todos os conjuntos
+
+::: {#thm-est-m01-vitali}
+## Conjunto de Vitali
+Não existe uma medida $\mu$ definida em **todos** os subconjuntos de $[0, 1)$ que seja invariante por translação módulo 1 — $\mu(A \oplus r) = \mu(A)$, em que $A \oplus r = \{(a + r) \bmod 1 : a \in A\}$ — e que dê $\mu([a, b)) = b - a$.
+:::
+
+::: {.proof}
+Diga que $x \sim y$ se $x - y \in \Q$; é uma relação de equivalência em $[0, 1)$. Pelo axioma da escolha, existe um conjunto $V$ com exatamente um representante de cada classe. Para cada racional $r \in [0, 1)$, seja $V_r = V \oplus r$. Os $V_r$ são disjuntos: se $(v + r) \bmod 1 = (v' + r') \bmod 1$, então $v - v' \in \Q$, logo $v$ e $v'$ estão na mesma classe e $v = v'$, donde $r = r'$. Eles cobrem $[0, 1)$: cada $x$ é equivalente a algum $v \in V$, e $x = (v + r) \bmod 1$ com $r = (x - v) \bmod 1 \in \Q \cap [0, 1)$. Pela invariância, $\mu(V_r) = \mu(V)$ para todo $r$, e a aditividade enumerável daria
+$$
+1 = \mu([0, 1)) = \sum_{r \in \Q \cap [0, 1)} \mu(V_r) = \sum_{r} \mu(V) ,
+$$
+uma soma de infinitos termos iguais, que vale $0$ ou $\infty$ — contradição.
+:::
+
+O conjunto $V$ não é construído explicitamente; sua existência depende do axioma da escolha, e nenhum conjunto que apareça numa aplicação tem essa patologia. A lição é que, para ter aditividade enumerável — indispensável para tomar limites —, é preciso abrir mão de medir todos os subconjuntos. Os eventos passam a ser os elementos de uma $\sigma$-álgebra, que em $\R^n$ será a de Borel. O mesmo argumento mostra que não existe uma distribuição "uniforme em $\N$": se cada inteiro tivesse a mesma probabilidade $p$, a soma enumerável daria $0$ ou $\infty$ (@exr-est-m01-uniforme-n).
+
+## Unicidade: o teorema $\pi$-$\lambda$ {#sec-est-m01-unicidade}
+
+Duas medidas que coincidem nos intervalos coincidem em todos os conjuntos de Borel? A ferramenta para responder a esse tipo de pergunta é o teorema $\pi$-$\lambda$ de Dynkin.
+
+::: {#def-est-m01-pi-lambda}
+## Classes $\pi$ e $\lambda$
+Uma família $\mathcal P$ de subconjuntos de $\Omega$ é uma **classe $\pi$** se é fechada por interseções finitas. Uma família $\mathcal L$ é uma **classe $\lambda$** se
+
+(i) $\Omega \in \mathcal L$;
+(ii) $A, B \in \mathcal L$ e $A \subseteq B$ implicam $B \setminus A \in \mathcal L$;
+(iii) $A_n \in \mathcal L$ e $A_n \uparrow A$ implicam $A \in \mathcal L$.
+:::
+
+As semirretas $(-\infty, x]$ formam uma classe $\pi$, pois $(-\infty, x] \cap (-\infty, y] = (-\infty, \min(x, y)]$; os ortantes também. Uma família que é ao mesmo tempo classe $\pi$ e classe $\lambda$ é uma $\sigma$-álgebra: contém os complementos $A^c = \Omega \setminus A$, as uniões finitas $A \cup B = (A^c \cap B^c)^c$ e, por (iii), as uniões enumeráveis, que são limites crescentes de uniões finitas.
+
+::: {#thm-est-m01-pi-lambda}
+## Teorema $\pi$-$\lambda$ de Dynkin
+Se $\mathcal P$ é uma classe $\pi$, $\mathcal L$ é uma classe $\lambda$ e $\mathcal P \subseteq \mathcal L$, então $\sigma(\mathcal P) \subseteq \mathcal L$.
+:::
+
+::: {.proof}
+Seja $\ell(\mathcal P)$ a menor classe $\lambda$ que contém $\mathcal P$ (a interseção de todas; interseções de classes $\lambda$ são classes $\lambda$). Basta provar que $\ell(\mathcal P)$ é uma classe $\pi$: então é uma $\sigma$-álgebra que contém $\mathcal P$, e $\sigma(\mathcal P) \subseteq \ell(\mathcal P) \subseteq \mathcal L$.
+
+Fixe $A \in \mathcal P$ e seja $\mathcal L_A = \{B : A \cap B \in \ell(\mathcal P)\}$. É uma classe $\lambda$: $A \cap \Omega = A \in \ell(\mathcal P)$; se $B \subseteq C$ estão em $\mathcal L_A$, então $A \cap (C \setminus B) = (A \cap C) \setminus (A \cap B) \in \ell(\mathcal P)$; e limites crescentes passam à interseção. Como $\mathcal P$ é classe $\pi$, $\mathcal P \subseteq \mathcal L_A$, logo $\ell(\mathcal P) \subseteq \mathcal L_A$: $A \cap B \in \ell(\mathcal P)$ para $A \in \mathcal P$ e $B \in \ell(\mathcal P)$. Agora fixe $B \in \ell(\mathcal P)$ e seja $\mathcal L^B = \{C : B \cap C \in \ell(\mathcal P)\}$. Pelo mesmo argumento, é uma classe $\lambda$, e pelo passo anterior contém $\mathcal P$; logo contém $\ell(\mathcal P)$. Assim $\ell(\mathcal P)$ é fechada por interseções.
+:::
+
+::: {#cor-est-m01-unicidade}
+## Unicidade de medidas
+Sejam $\mu$ e $\nu$ medidas em $\sigma(\mathcal P)$, com $\mathcal P$ classe $\pi$, que coincidem em $\mathcal P$. Se $\mu(\Omega) = \nu(\Omega) < \infty$, então $\mu = \nu$. O mesmo vale se $\mathcal P$ contém conjuntos $\Omega_n \uparrow \Omega$ com $\mu(\Omega_n) = \nu(\Omega_n) < \infty$.
+:::
+
+::: {.proof}
+No caso finito, $\mathcal L = \{A \in \sigma(\mathcal P) : \mu(A) = \nu(A)\}$ é uma classe $\lambda$: contém $\Omega$; se $A \subseteq B$ estão em $\mathcal L$, $\mu(B \setminus A) = \mu(B) - \mu(A) = \nu(B) - \nu(A) = \nu(B \setminus A)$ (aqui se usa a finitude); e limites crescentes passam pela continuidade por baixo. Pelo @thm-est-m01-pi-lambda, $\mathcal L = \sigma(\mathcal P)$. No caso $\sigma$-finito, aplique o caso finito às medidas $\mu(\cdot \cap \Omega_n)$ e $\nu(\cdot \cap \Omega_n)$, que coincidem na classe $\pi$ formada pelos $P \cap \Omega_n$, e faça $n \to \infty$.
+:::
+
+::: {#cor-est-m01-cdf}
+## A função de distribuição determina a distribuição
+Duas probabilidades em $\mathcal B(\R^n)$ com a mesma função de distribuição $F(\vb x) = \mu(O(\vb x))$ são iguais.
+:::
+
+::: {.proof}
+Os ortantes formam uma classe $\pi$ que gera $\mathcal B(\R^n)$ (@prp-est-m01-borel); aplique o @cor-est-m01-unicidade.
+:::
+
+Esse é o fato admitido no @sec-est-g02 ("variáveis com a mesma função de distribuição têm a mesma distribuição") e no @sec-est-g03: se $\Prob((X, Y) \in A) = \iint_A f$ para todo retângulo $A$, então vale para todo boreliano $A$, porque os dois lados são probabilidades que coincidem numa classe $\pi$ geradora.
+
+## Construção: Carathéodory e a medida de Lebesgue {#sec-est-m01-construcao}
+
+O comprimento está definido nos intervalos; queremos estendê-lo a $\mathcal B(\R)$. O procedimento é geral: parte-se de uma função aditiva numa álgebra e mede-se cada conjunto pelas coberturas mais econômicas.
+
+::: {#def-est-m01-pre-medida}
+## Álgebra, pré-medida e medida exterior
+Uma **álgebra** é uma família $\mathcal A$ que contém $\Omega$ e é fechada por complementos e uniões **finitas**. Uma **pré-medida** em $\mathcal A$ é uma função $\mu_0 : \mathcal A \to [0, \infty]$ com $\mu_0(\emptyset) = 0$ e $\mu_0(\bigcup_n A_n) = \sum_n \mu_0(A_n)$ sempre que os $A_n \in \mathcal A$ são disjuntos e a união **também está em $\mathcal A$**. A **medida exterior** associada é
+$$
+\mu^*(E) = \inf\Big\{\sum_{k} \mu_0(A_k) : A_k \in \mathcal A,\ E \subseteq \bigcup_k A_k\Big\}, \qquad E \subseteq \Omega .
+$$
+:::
+
+::: {#thm-est-m01-caratheodory}
+## Extensão de Carathéodory
+Seja $\mu_0$ uma pré-medida na álgebra $\mathcal A$. A família
+$$
+\mathcal M = \{E \subseteq \Omega : \mu^*(T) = \mu^*(T \cap E) + \mu^*(T \cap E^c)\ \text{para todo}\ T \subseteq \Omega\}
+$$
+é uma $\sigma$-álgebra que contém $\mathcal A$, e $\mu^*$ restrita a $\mathcal M$ é uma medida que coincide com $\mu_0$ em $\mathcal A$. Se $\mu_0$ é $\sigma$-finita, a extensão a $\sigma(\mathcal A)$ é única.
+:::
+
+::: {.proof}
+*Passo 1: $\mu^*$ é monótona e enumeravelmente subaditiva.* A monotonicidade é imediata: coberturas de $F \supseteq E$ cobrem $E$. Se $E = \bigcup_n E_n$ e $\varepsilon > 0$, escolha coberturas $(A_{n,k})_k$ de $E_n$ com $\sum_k \mu_0(A_{n,k}) \leq \mu^*(E_n) + \varepsilon 2^{-n}$; juntas, cobrem $E$, e $\mu^*(E) \leq \sum_n \mu^*(E_n) + \varepsilon$.
+
+*Passo 2: $\mu^* = \mu_0$ em $\mathcal A$.* Cobrindo $A$ por ele mesmo, $\mu^*(A) \leq \mu_0(A)$. Se $A \subseteq \bigcup_k A_k$, os conjuntos $B_k = A \cap A_k \setminus (A_1 \cup \dots \cup A_{k-1})$ estão em $\mathcal A$, são disjuntos e têm união $A$; pela aditividade enumerável de $\mu_0$ e pela sua monotonicidade em $\mathcal A$ (consequência da aditividade finita), $\mu_0(A) = \sum_k \mu_0(B_k) \leq \sum_k \mu_0(A_k)$. Tomando o ínfimo, $\mu_0(A) \leq \mu^*(A)$.
+
+*Passo 3: $\mathcal A \subseteq \mathcal M$.* Pela subaditividade, basta provar $\mu^*(T \cap A) + \mu^*(T \cap A^c) \leq \mu^*(T)$ quando $\mu^*(T) < \infty$. Dado $\varepsilon$, cubra $T$ por $A_k \in \mathcal A$ com $\sum_k \mu_0(A_k) \leq \mu^*(T) + \varepsilon$. Os $A_k \cap A$ cobrem $T \cap A$, os $A_k \cap A^c$ cobrem $T \cap A^c$, e $\mu_0(A_k) = \mu_0(A_k \cap A) + \mu_0(A_k \cap A^c)$; somando, $\mu^*(T \cap A) + \mu^*(T \cap A^c) \leq \mu^*(T) + \varepsilon$.
+
+*Passo 4: $\mathcal M$ é uma álgebra.* A definição é simétrica em $E$ e $E^c$. Se $E, F \in \mathcal M$, aplicando a definição de $E$ com o conjunto teste $T$ e depois a de $F$ com $T \cap E$ e $T \cap E^c$,
+$$
+\mu^*(T) = \mu^*(T \cap E \cap F) + \mu^*(T \cap E \cap F^c) + \mu^*(T \cap E^c \cap F) + \mu^*(T \cap E^c \cap F^c) .
+$$
+Os três primeiros conjuntos têm união $T \cap (E \cup F)$, e o último é $T \cap (E \cup F)^c$; pela subaditividade, $\mu^*(T) \geq \mu^*(T \cap (E \cup F)) + \mu^*(T \cap (E \cup F)^c)$, e a desigualdade contrária é a subaditividade. Logo $E \cup F \in \mathcal M$.
+
+*Passo 5: uniões enumeráveis e aditividade.* Sejam $E_n \in \mathcal M$ disjuntos, $S_n = E_1 \cup \dots \cup E_n$ e $S = \bigcup_n E_n$. Usando que $E_n \in \mathcal M$ com o conjunto teste $T \cap S_n$, $\mu^*(T \cap S_n) = \mu^*(T \cap E_n) + \mu^*(T \cap S_{n-1})$ e, por indução, $\mu^*(T \cap S_n) = \sum_{k \leq n} \mu^*(T \cap E_k)$. Como $S_n \in \mathcal M$ e $S_n^c \supseteq S^c$,
+$$
+\mu^*(T) = \mu^*(T \cap S_n) + \mu^*(T \cap S_n^c) \geq \sum_{k \leq n}\mu^*(T \cap E_k) + \mu^*(T \cap S^c) .
+$$
+Fazendo $n \to \infty$ e usando a subaditividade,
+$$
+\mu^*(T) \geq \sum_{k}\mu^*(T \cap E_k) + \mu^*(T \cap S^c) \geq \mu^*(T \cap S) + \mu^*(T \cap S^c) \geq \mu^*(T) .
+$$
+Todas são igualdades: $S \in \mathcal M$ e, com $T = S$, $\mu^*(S) = \sum_k \mu^*(E_k)$. Como numa álgebra toda união enumerável se escreve como união de conjuntos disjuntos, $\mathcal M$ é uma $\sigma$-álgebra e $\mu^*$ é enumeravelmente aditiva nela. A unicidade é o @cor-est-m01-unicidade, pois uma álgebra é uma classe $\pi$.
+:::
+
+Para obter a medida de Lebesgue, tome em $\R$ a álgebra $\mathcal A_0$ das uniões finitas disjuntas de intervalos $(a, b]$, com $-\infty \leq a < b \leq \infty$ (lendo $(a, \infty]$ como $(a, \infty)$), e $\lambda_0$ = soma dos comprimentos. A aditividade finita é elementar; a enumerável é onde entra a análise.
+
+::: {#prp-est-m01-comprimento}
+## O comprimento é enumeravelmente aditivo
+Se o intervalo limitado $(a, b]$ é a união disjunta enumerável dos intervalos $(a_k, b_k]$, então $b - a = \sum_k (b_k - a_k)$. Consequentemente, $\lambda_0$ é uma pré-medida em $\mathcal A_0$.
+:::
+
+::: {.proof}
+Para qualquer $n$, os intervalos $(a_1, b_1], \dots, (a_n, b_n]$ são disjuntos e contidos em $(a, b]$; ordenando-os da esquerda para a direita, vê-se que $\sum_{k \leq n}(b_k - a_k) \leq b - a$, e o mesmo vale para a série. Para a desigualdade contrária, fixe $\varepsilon \in (0, b - a)$. O intervalo compacto $[a + \varepsilon, b]$ está contido na união dos abertos $(a_k, b_k + \varepsilon 2^{-k})$, e pelo teorema de Heine–Borel (@thm-mat-m01-heine-borel) uma quantidade finita deles, digamos os $N$ primeiros, já o cobre. Uma cobertura finita de um intervalo $[c, d]$ por intervalos abertos $(\alpha_j, \beta_j)$ tem comprimento total pelo menos $d - c$: por indução em $N$, tome o intervalo $(\alpha, \beta)$ que contém $d$; se $\alpha < c$, acabou; se não, $[c, \alpha]$ é coberto pelos $N - 1$ restantes, e $d - c \leq (\beta - \alpha) + (\alpha - c)$. Logo
+$$
+b - a - \varepsilon \leq \sum_{k \leq N}\big(b_k - a_k + \varepsilon 2^{-k}\big) \leq \sum_{k}(b_k - a_k) + \varepsilon ,
+$$
+e basta fazer $\varepsilon \to 0$. Para elementos gerais de $\mathcal A_0$, aplica-se o resultado a cada intervalo limitado que os compõe (intervalos ilimitados se tratam pelas suas partes limitadas, cujo comprimento cresce sem limite).
+:::
+
+::: {#thm-est-m01-lebesgue}
+## Medida de Lebesgue
+Existe uma única medida $\lambda$ em $\mathcal B(\R)$ com $\lambda((a, b]) = b - a$ para todos $a < b$. Ela é invariante por translação: $\lambda(B + t) = \lambda(B)$.
+:::
+
+::: {.proof}
+A existência é o @thm-est-m01-caratheodory aplicado a $\lambda_0$ (@prp-est-m01-comprimento), e $\mathcal B(\R) = \sigma(\mathcal A_0) \subseteq \mathcal M$. A unicidade vem do @cor-est-m01-unicidade, com $\Omega_n = (-n, n]$. A medida $B \mapsto \lambda(B + t)$ também dá a cada $(a, b]$ o seu comprimento; pela unicidade, é $\lambda$.
+:::
+
+Pontos têm medida zero ($\lambda(\{x\}) = \lim_n \lambda((x - 1/n, x]) = 0$), logo também os conjuntos enumeráveis: $\lambda(\Q) = 0$. A $\sigma$-álgebra $\mathcal M$ de Carathéodory, chamada de **$\sigma$-álgebra de Lebesgue**, é um pouco maior que a de Borel: contém todos os subconjuntos de conjuntos de medida exterior nula, isto é, a medida de Lebesgue é **completa**. A medida de Lebesgue $\lambda_n$ em $\R^n$, com $\lambda_n(\prod_i (a_i, b_i]) = \prod_i (b_i - a_i)$, se obtém do mesmo modo ou como medida produto (@sec-est-m01-fubini).
+
+A partir de $\lambda$, toda distribuição em $\R$ pode ser construída — é o caminho do método da inversa (@thm-est-g02-pit), agora com toda a justificação.
+
+::: {#cor-est-m01-stieltjes}
+## Toda função de distribuição define uma probabilidade
+Para cada função de distribuição $F$ (não decrescente, contínua à direita, com limites 0 e 1) existe uma única probabilidade $\mu_F$ em $\mathcal B(\R)$ com $\mu_F((-\infty, x]) = F(x)$.
+:::
+
+::: {.proof}
+Seja $Q$ a função quantil de $F$ (@def-est-g02-quantil) e $\lambda_{(0,1)}$ a medida de Lebesgue restrita a $(0, 1)$, que é uma probabilidade. Pela @prp-est-g02-quantil, $\{u \in (0, 1) : Q(u) \leq x\} = (0, F(x)] \cap (0, 1)$, um boreliano; logo $Q$ é mensurável (@prp-est-m01-criterio, adiante), e $\mu_F(B) = \lambda_{(0,1)}(Q^{-1}(B))$ é uma probabilidade com $\mu_F((-\infty, x]) = \lambda((0, F(x)]) = F(x)$. A unicidade é o @cor-est-m01-cdf.
+:::
+
+## Funções mensuráveis e variáveis aleatórias {#sec-est-m01-mensuraveis}
+
+::: {#def-est-m01-mensuravel}
+## Função mensurável e variável aleatória
+Uma função $f : (\Omega, \mathcal F) \to (S, \mathcal S)$ é **mensurável** se $f^{-1}(B) \in \mathcal F$ para todo $B \in \mathcal S$. Uma **variável aleatória** é uma função mensurável $X : (\Omega, \mathcal F) \to (\R, \mathcal B(\R))$; um **vetor aleatório** toma valores em $(\R^n, \mathcal B(\R^n))$. A **$\sigma$-álgebra gerada** por $X$ é $\sigma(X) = \{X^{-1}(B) : B \in \mathcal B(\R^n)\}$.
+:::
+
+A $\sigma$-álgebra $\sigma(X)$ é a **informação** contida em $X$: os eventos cuja ocorrência se decide observando $X$. Funções $\mathcal F$-mensuráveis são as que se podem calcular com a informação $\mathcal F$; essa leitura é central na esperança condicional (@sec-est-m02) e nos processos adaptados a uma filtração (@sec-est-d03).
+
+::: {#prp-est-m01-criterio}
+## Critérios de mensurabilidade
+
+(a) Se $\mathcal S = \sigma(\mathcal C)$, basta que $f^{-1}(C) \in \mathcal F$ para todo $C \in \mathcal C$.
+(b) $X : \Omega \to \R$ é variável aleatória se, e somente se, $\{X \leq x\} \in \mathcal F$ para todo $x$.
+(c) Funções contínuas entre espaços métricos são borelianas, e compostas de funções mensuráveis são mensuráveis.
+(d) $\vb X = (X_1, \dots, X_n)$ é um vetor aleatório se, e somente se, cada $X_i$ é variável aleatória.
+(e) Somas, produtos, máximos e mínimos de variáveis aleatórias são variáveis aleatórias; $\sup_n X_n$, $\inf_n X_n$, $\limsup_n X_n$ e $\liminf_n X_n$ são mensuráveis (com valores na reta estendida), e o conjunto em que $\lim_n X_n$ existe é um evento.
+:::
+
+::: {.proof}
+Para (a), a família $\{B \in \mathcal S : f^{-1}(B) \in \mathcal F\}$ é uma $\sigma$-álgebra, porque a pré-imagem comuta com complementos e uniões, e contém $\mathcal C$; logo contém $\sigma(\mathcal C) = \mathcal S$. O item (b) é (a) com a @prp-est-m01-borel. Para (c), pré-imagens de abertos por funções contínuas são abertas, e $(g \circ f)^{-1}(B) = f^{-1}(g^{-1}(B))$. Para (d), as projeções coordenadas são contínuas; reciprocamente, $\{\vb X \in O(\vb x)\} = \bigcap_i \{X_i \leq x_i\}$, e vale (a) com os ortantes. Para (e), $X + Y$ é a composta do vetor $(X, Y)$ com a função contínua $(x, y) \mapsto x + y$, e o mesmo para produtos, máximos e mínimos; $\{\sup_n X_n \leq x\} = \bigcap_n \{X_n \leq x\}$, $\inf_n X_n = -\sup_n(-X_n)$, $\limsup_n X_n = \inf_n \sup_{k \geq n} X_k$ e $\liminf$ é análogo. Por fim, o limite existe onde $\limsup = \liminf$, e o conjunto em que duas funções mensuráveis $f, g$ diferem é $\bigcup_{q \in \Q}(\{f < q < g\} \cup \{g < q < f\})$, um evento.
+:::
+
+Uma **função simples** é uma combinação linear finita de indicadoras de conjuntos mensuráveis, $\varphi = \sum_{i=1}^k a_i \mathbf 1_{A_i}$. Toda função mensurável não negativa é limite crescente de funções simples — é o que permite definir a integral e estender resultados "das indicadoras para tudo".
+
+::: {#lem-est-m01-aproximacao}
+## Aproximação por funções simples
+Se $f \geq 0$ é mensurável (podendo valer $+\infty$), as funções simples
+$$
+\varphi_n = \min\big(n,\ 2^{-n}\lfloor 2^n f\rfloor\big)
+$$
+satisfazem $0 \leq \varphi_n \uparrow f$ em todo ponto, e a convergência é uniforme se $f$ é limitada.
+:::
+
+::: {.proof}
+$\varphi_n$ assume os valores $k2^{-n}$, $0 \leq k \leq n2^n$, nos conjuntos mensuráveis $\{k2^{-n} \leq f < (k + 1)2^{-n}\}$ e $\{f \geq n\}$. É crescente em $n$ porque $\lfloor 2y\rfloor \geq 2\lfloor y\rfloor$, logo $2^{-(n+1)}\lfloor 2^{n+1} f\rfloor \geq 2^{-n}\lfloor 2^n f\rfloor$, e o teto $n$ também cresce. Se $f(\omega) < \infty$, para $n > f(\omega)$ vale $0 \leq f(\omega) - \varphi_n(\omega) < 2^{-n}$; se $f(\omega) = \infty$, $\varphi_n(\omega) = n \to \infty$.
+:::
+
+::: {#thm-est-m01-doob-dynkin}
+## Lema de Doob–Dynkin
+Seja $\vb X$ um vetor aleatório em $\R^n$. Uma variável aleatória $Y$ é $\sigma(\vb X)$-mensurável se, e somente se, $Y = g(\vb X)$ para alguma função boreliana $g : \R^n \to \R$.
+:::
+
+::: {.proof}
+Se $Y = g(\vb X)$, então $\{Y \in B\} = \{\vb X \in g^{-1}(B)\} \in \sigma(\vb X)$. Reciprocamente, se $Y = \mathbf 1_A$ com $A \in \sigma(\vb X)$, então $A = \{\vb X \in B\}$ para algum boreliano $B$, e $Y = \mathbf 1_B(\vb X)$; por linearidade, toda função simples $\sigma(\vb X)$-mensurável é da forma $g(\vb X)$. Em geral, aplique o @lem-est-m01-aproximacao a $Y^+$ e $Y^-$ para obter funções simples $\sigma(\vb X)$-mensuráveis $\psi_n = g_n(\vb X) \to Y$ em todo ponto. Defina $g = \limsup_n g_n$ onde esse limite superior é finito e $g = 0$ no resto; $g$ é boreliana (@prp-est-m01-criterio), e em cada ponto $\omega$ a sequência $g_n(\vb X(\omega))$ converge para $Y(\omega)$, logo $g(\vb X(\omega)) = Y(\omega)$. (O $\limsup$ é necessário porque $g_n(\vb x)$ pode não convergir em pontos $\vb x$ fora da imagem de $\vb X$.)
+:::
+
+Esse lema dá sentido rigoroso à frase "$\E[Y \mid X]$ é uma função de $X$": tudo o que é mensurável em relação à informação gerada por $X$ é uma função de $X$.
+
+## A integral de Lebesgue {#sec-est-m01-integral}
+
+A integral de Riemann fatia o **domínio** em intervalos; a de Lebesgue fatia a **imagem** em níveis e mede o conjunto em que a função está em cada nível. Por isso não precisa de nenhuma estrutura no domínio além de uma medida — serve para $\Omega$ abstrato, para $\N$ e para $\R^n$.
+
+::: {#def-est-m01-integral}
+## Integral de Lebesgue
+Seja $(\Omega, \mathcal F, \mu)$ um espaço de medida.
+
+(i) Para $\varphi = \sum_{i} a_i \mathbf 1_{A_i}$ simples e não negativa, $\int \varphi\,\dd\mu = \sum_i a_i\,\mu(A_i)$ (com $0 \cdot \infty = 0$).
+(ii) Para $f \geq 0$ mensurável, $\int f\,\dd\mu = \sup\{\int \varphi\,\dd\mu : \varphi\ \text{simples},\ 0 \leq \varphi \leq f\} \in [0, \infty]$.
+(iii) $f$ é **integrável** se $\int \abs f\,\dd\mu < \infty$; nesse caso, $\int f\,\dd\mu = \int f^+\,\dd\mu - \int f^-\,\dd\mu$, com $f^\pm = \max(\pm f, 0)$.
+
+Escreve-se também $\int f(\omega)\,\mu(\dd\omega)$ e $\int_A f\,\dd\mu = \int f\mathbf 1_A\,\dd\mu$. Num espaço de probabilidade, a **esperança** é $\E[X] = \int X\,\dd\Prob$.
+:::
+
+Em (i), o valor não depende da representação de $\varphi$: escrevendo duas representações sobre a partição comum gerada pelos conjuntos envolvidos, as duas somas coincidem; pelo mesmo argumento, a integral de funções simples é linear e monótona. Em (ii), a monotonicidade é imediata: se $0 \leq f \leq g$, toda simples abaixo de $f$ está abaixo de $g$, logo $\int f \leq \int g$.
+
+Dois exemplos mostram o alcance da definição. Com a medida de contagem em $\N$, $\int f\,\dd\# = \sum_n f(n)$: séries são integrais. Com uma distribuição discreta $\mu = \sum_k p_k\delta_{x_k}$, $\int g\,\dd\mu = \sum_k g(x_k)\,p_k$. E a função de Dirichlet $\mathbf 1_{\Q}$, que não é integrável à Riemann em $[0, 1]$ (@sec-mat-g04), é uma função simples com $\int_{[0,1]} \mathbf 1_\Q\,\dd\lambda = \lambda(\Q \cap [0, 1]) = 0$.
+
+## Os teoremas de convergência {#sec-est-m01-convergencia}
+
+Uma propriedade vale **em quase toda parte** (q.t.p.), ou **quase certamente** (q.c.) num espaço de probabilidade, se vale fora de um conjunto de medida nula.
+
+::: {#thm-est-m01-tcm}
+## Convergência monótona
+Se $0 \leq f_n \uparrow f$ q.t.p., então $\int f_n\,\dd\mu \uparrow \int f\,\dd\mu$.
+:::
+
+::: {.proof}
+Alterando as funções num conjunto de medida nula, o que não muda nenhuma integral, podemos supor convergência em todo ponto. As integrais $\int f_n$ crescem e são limitadas por $\int f$; seja $L$ o limite. Basta mostrar que $L \geq \int\varphi$ para cada simples $0 \leq \varphi = \sum_i a_i\mathbf 1_{A_i} \leq f$. Fixe $c \in (0, 1)$ e seja $E_n = \{f_n \geq c\varphi\}$. Os $E_n$ crescem e cobrem $\Omega$: onde $\varphi = 0$, todo ponto está em $E_n$; onde $\varphi > 0$, $f \geq \varphi > c\varphi$ e, como $f_n \uparrow f$, eventualmente $f_n \geq c\varphi$. Então
+$$
+\int f_n\,\dd\mu \geq \int f_n\mathbf 1_{E_n}\,\dd\mu \geq c\int\varphi\mathbf 1_{E_n}\,\dd\mu = c\sum_i a_i\,\mu(A_i \cap E_n) \longrightarrow c\sum_i a_i\,\mu(A_i) = c\int\varphi\,\dd\mu ,
+$$
+pela continuidade por baixo de $\mu$. Logo $L \geq c\int\varphi$ para todo $c < 1$.
+:::
+
+::: {#cor-est-m01-linearidade}
+## Linearidade e séries
+(a) Se $f, g \geq 0$ e $a, b \geq 0$, então $\int (af + bg) = a\int f + b\int g$; a integral é linear no espaço das funções integráveis.
+(b) Se $f_n \geq 0$, então $\int \sum_n f_n\,\dd\mu = \sum_n \int f_n\,\dd\mu$. Em particular, $\E[\sum_n X_n] = \sum_n \E[X_n]$ para $X_n \geq 0$.
+:::
+
+::: {.proof}
+Para (a), tome simples $\varphi_n \uparrow f$ e $\psi_n \uparrow g$ (@lem-est-m01-aproximacao); $a\varphi_n + b\psi_n \uparrow af + bg$, a linearidade vale para simples, e o @thm-est-m01-tcm passa ao limite. O caso integrável sai escrevendo $f = f^+ - f^-$ e rearranjando os termos. Para (b), aplique (a) às somas parciais, que crescem para $\sum_n f_n$, e o @thm-est-m01-tcm.
+:::
+
+::: {#prp-est-m01-qtp}
+## Integrais e conjuntos de medida nula
+Sejam $f, g$ mensuráveis.
+
+(a) **Markov:** se $f \geq 0$ e $a > 0$, $\mu(f \geq a) \leq \frac1a\int f\,\dd\mu$.
+(b) Se $f \geq 0$, $\int f\,\dd\mu = 0$ se, e somente se, $f = 0$ q.t.p.
+(c) Se $f \geq 0$ e $\int f\,\dd\mu < \infty$, então $f < \infty$ q.t.p.
+(d) Se $f = g$ q.t.p. e uma das integrais existe, as duas coincidem.
+:::
+
+::: {.proof}
+Para (a), $a\mathbf 1_{\{f \geq a\}} \leq f$; integre. Para (b), se $f = 0$ fora de um conjunto nulo $N$, toda simples $\varphi \leq f$ se anula fora de $N$ e tem integral zero; reciprocamente, por (a), $\mu(f \geq 1/n) \leq n\int f = 0$, e $\{f > 0\} = \bigcup_n\{f \geq 1/n\}$. Para (c), $\mu(f = \infty) \leq \mu(f \geq n) \leq \frac1n\int f \to 0$. Para (d), aplique (b) a $\abs{f - g}$ e use a linearidade.
+:::
+
+::: {#lem-est-m01-fatou}
+## Lema de Fatou
+Se $f_n \geq 0$, então $\int \liminf_n f_n\,\dd\mu \leq \liminf_n \int f_n\,\dd\mu$.
+:::
+
+::: {.proof}
+Seja $g_n = \inf_{k \geq n} f_k$. Então $g_n \uparrow \liminf_n f_n$ e $g_n \leq f_k$ para $k \geq n$, logo $\int g_n \leq \inf_{k \geq n}\int f_k$. Pelo @thm-est-m01-tcm, $\int \liminf f_n = \lim\int g_n \leq \liminf\int f_n$.
+:::
+
+A desigualdade pode ser estrita: com $f_n = n\mathbf 1_{(0, 1/n)}$ na medida de Lebesgue em $(0, 1)$, $f_n \to 0$ em todo ponto, mas $\int f_n = 1$. A massa se concentra num intervalo cada vez menor e "desaparece" no limite — exatamente o exemplo da motivação.
+
+::: {#thm-est-m01-tcd}
+## Convergência dominada
+Se $f_n \to f$ q.t.p. e $\abs{f_n} \leq g$ com $g$ integrável, então $f$ é integrável e
+$$
+\int\abs{f_n - f}\,\dd\mu \to 0, \qquad\text{em particular}\qquad \int f_n\,\dd\mu \to \int f\,\dd\mu .
+$$
+:::
+
+::: {.proof}
+No limite, $\abs f \leq g$, logo $f$ é integrável. As funções $h_n = 2g - \abs{f_n - f}$ são não negativas e tendem a $2g$ q.t.p. Pelo @lem-est-m01-fatou,
+$$
+\int 2g\,\dd\mu \leq \liminf_n\int\big(2g - \abs{f_n - f}\big)\,\dd\mu = \int 2g\,\dd\mu - \limsup_n\int\abs{f_n - f}\,\dd\mu .
+$$
+Como $\int 2g < \infty$, podemos cancelá-la: $\limsup_n \int\abs{f_n - f} \leq 0$. Por fim, $\abs{\int f_n - \int f} \leq \int\abs{f_n - f}$.
+:::
+
+Num espaço de probabilidade, as constantes são integráveis, e o caso particular $\abs{X_n} \leq c$ é o **teorema da convergência limitada**. No exemplo do pulso, a menor dominante possível é $\sup_n f_n(x) \approx 1/x$, que não é integrável em $(0, 1)$ — por isso o teorema não se aplica. Na medida de Lebesgue em $\R$, $f_n = \mathbf 1_{(n, n+1)}$ tende a zero com $\int f_n = 1$: a massa escapa para o infinito, e nenhuma função integrável domina a sequência. O interativo da @sec-est-m01-interativo mostra os quatro casos.
+
+Uma consequência usada em toda parte é a derivação sob o sinal de integral, admitida no @sec-est-g03 e no @sec-est-g05.
+
+::: {#prp-est-m01-derivacao}
+## Derivação sob o sinal de integral
+Seja $f(x, t)$, $t \in (a, b)$, integrável em $x$ para cada $t$ e derivável em $t$ para cada $x$, com $\abs{\partial_t f(x, t)} \leq g(x)$ para todo $t$, em que $g$ é integrável. Então $F(t) = \int f(x, t)\,\mu(\dd x)$ é derivável, e
+$$
+F'(t) = \int \frac{\partial f}{\partial t}(x, t)\,\mu(\dd x) .
+$$
+:::
+
+::: {.proof}
+Fixe $t$ e $h_n \to 0$, $h_n \neq 0$. Os quocientes $q_n(x) = [f(x, t + h_n) - f(x, t)]/h_n$ são mensuráveis e tendem a $\partial_t f(x, t)$, que é portanto mensurável. Pelo teorema do valor médio, $q_n(x) = \partial_t f(x, \xi_n)$ para algum $\xi_n$ entre $t$ e $t + h_n$, logo $\abs{q_n} \leq g$. Pelo @thm-est-m01-tcd, $[F(t + h_n) - F(t)]/h_n = \int q_n\,\dd\mu \to \int\partial_t f(x, t)\,\mu(\dd x)$; como a sequência $h_n$ é arbitrária, $F$ é derivável.
+:::
+
+::: {#exm-est-m01-fgm}
+## Momentos pela função geradora
+Se $M(t) = \E[e^{tX}]$ é finita em $(-\delta, \delta)$, então $M^{(k)}(0) = \E[X^k]$ para todo $k$, como afirmado na @prp-est-g03-fgm. Para $\abs t \leq \delta/2$, a desigualdade $y \leq e^y$ com $y = \delta\abs x/2$ dá $\abs x \leq (2/\delta)\,e^{\delta\abs x/2}$, logo
+$$
+\abs{x\,e^{tx}} \leq \tfrac2\delta\,e^{\delta\abs x} \leq \tfrac2\delta\,\big(e^{\delta x} + e^{-\delta x}\big),
+$$
+que é integrável porque $M(\pm\delta) < \infty$. A @prp-est-m01-derivacao dá $M'(t) = \E[Xe^{tX}]$; as derivadas de ordem superior saem do mesmo argumento com $\abs x^k \leq c_k e^{\delta\abs x/2}$.
+:::
+
+Por fim, a integral de Lebesgue estende a de Riemann. Se $f$ é limitada e integrável à Riemann em $[a, b]$, tome partições sucessivamente refinadas cujas somas inferior e superior convergem para a integral (@sec-mat-g04); as funções escada correspondentes, $\ell_k \leq f \leq u_k$, são simples, crescem e decrescem, respectivamente, e suas integrais de Lebesgue são as somas de Darboux. Pelos teoremas de convergência, $\ell = \lim\ell_k$ e $u = \lim u_k$ satisfazem $\int(u - \ell)\,\dd\lambda = \lim\int(u_k - \ell_k)\,\dd\lambda = 0$, logo $\ell = f = u$ q.t.p. (@prp-est-m01-qtp), e $\int_{[a,b]} f\,\dd\lambda = \lim\int\ell_k\,\dd\lambda$ é a integral de Riemann. (Com a medida completa, $f$ é mensurável; a função de Dirichlet mostra que a recíproca é falsa.)
+
+## Distribuições e mudança de variáveis {#sec-est-m01-distribuicoes}
+
+::: {#def-est-m01-distribuicao}
+## Distribuição (medida imagem)
+Se $X : (\Omega, \mathcal F, \Prob) \to (S, \mathcal S)$ é mensurável, a **distribuição** de $X$ é a probabilidade $\Prob_X(B) = \Prob(X \in B) = \Prob(X^{-1}(B))$ em $(S, \mathcal S)$.
+:::
+
+$\Prob_X$ é de fato uma probabilidade, porque pré-imagens de conjuntos disjuntos são disjuntas. O teorema seguinte é a versão geral do @thm-est-g03-lotus, admitida no @sec-est-g03.
+
+::: {#thm-est-m01-mudanca}
+## Mudança de variáveis
+Seja $g : S \to \R$ mensurável, com $g \geq 0$ ou $g(X)$ integrável. Então
+$$
+\E[g(X)] = \int_\Omega g(X(\omega))\,\Prob(\dd\omega) = \int_S g(s)\,\Prob_X(\dd s) .
+$$ {#eq-est-m01-mudanca}
+:::
+
+::: {.proof}
+Para $g = \mathbf 1_B$, os dois lados valem $\Prob(X \in B) = \Prob_X(B)$. Por linearidade, a identidade vale para funções simples. Para $g \geq 0$, tome simples $\varphi_n \uparrow g$; então $\varphi_n(X) \uparrow g(X)$, e o @thm-est-m01-tcm passa os dois lados ao limite. No caso integrável, aplique o caso anterior a $g^+$ e $g^-$.
+:::
+
+O argumento — indicadoras, simples, não negativas por convergência monótona, integráveis por diferença — é chamado de **máquina padrão** e se repete em quase todas as demonstrações deste capítulo. Uma consequência: $\E[g(X)]$ depende apenas da distribuição de $X$.
+
+::: {#def-est-m01-densidade}
+## Densidade em relação a uma medida
+Uma distribuição $\Prob_X$ em $S$ tem **densidade** $f \geq 0$ em relação a uma medida $\sigma$-finita $\mu$ se $\Prob_X(B) = \int_B f\,\dd\mu$ para todo $B \in \mathcal S$. Nesse caso, pela máquina padrão,
+$$
+\E[g(X)] = \int_S g\,f\,\dd\mu .
+$$ {#eq-est-m01-densidade}
+:::
+
+Os casos do curso de graduação são todos casos particulares. Se $\mu$ é a medida de contagem num conjunto enumerável, $f$ é a função de probabilidade e a integral é uma soma; se $\mu = \lambda$, $f$ é a densidade usual. Uma variável **mista** tem densidade em relação a $\lambda + \sum_j\delta_{a_j}$, em que os $a_j$ são os átomos: se $X = \max(Z, 0)$ com $Z \sim \Normal(0, 1)$, há um átomo de massa $1/2$ em zero e densidade $\phi$ em $(0, \infty)$, e
+$$
+\E[X] = 0 \cdot \tfrac12 + \int_0^\infty x\,\phi(x)\,\dd x = \frac{1}{\sqrt{2\pi}} ,
+$$
+como afirmado no @sec-est-g03: a esperança soma a parte discreta e integra a contínua.
+
+## Medida produto e Fubini {#sec-est-m01-fubini}
+
+Sejam $(X, \mathcal F_1, \mu)$ e $(Y, \mathcal F_2, \nu)$ espaços de medida $\sigma$-finitos. A **$\sigma$-álgebra produto** $\mathcal F_1 \otimes \mathcal F_2$ é a gerada pelos retângulos $A \times B$, $A \in \mathcal F_1$, $B \in \mathcal F_2$, que formam uma classe $\pi$. Para $E \subseteq X \times Y$, as **seções** são $E_x = \{y : (x, y) \in E\}$ e $E^y = \{x : (x, y) \in E\}$.
+
+::: {#lem-est-m01-secoes}
+## Seções são mensuráveis
+Se $E \in \mathcal F_1 \otimes \mathcal F_2$, então $E_x \in \mathcal F_2$ para todo $x$, e $x \mapsto \nu(E_x)$ é $\mathcal F_1$-mensurável.
+:::
+
+::: {.proof}
+A família dos $E$ com todas as seções em $\mathcal F_2$ é uma $\sigma$-álgebra (seções comutam com complementos e uniões) que contém os retângulos, pois $(A \times B)_x$ é $B$ ou $\emptyset$. Para a segunda afirmação, suponha primeiro $\nu$ finita e seja $\mathcal L$ a família dos $E$ para os quais $x \mapsto \nu(E_x)$ é mensurável. Ela contém os retângulos ($\nu((A \times B)_x) = \mathbf 1_A(x)\,\nu(B)$) e é uma classe $\lambda$: se $E \subseteq F$, $\nu((F \setminus E)_x) = \nu(F_x) - \nu(E_x)$, e limites crescentes de funções mensuráveis são mensuráveis. Pelo @thm-est-m01-pi-lambda, $\mathcal L \supseteq \mathcal F_1 \otimes \mathcal F_2$. Se $\nu$ é $\sigma$-finita, com $Y = \bigcup_m Y_m$ disjuntos de medida finita, $\nu(E_x) = \sum_m \nu(E_x \cap Y_m)$ é uma soma de funções mensuráveis.
+:::
+
+::: {#thm-est-m01-produto}
+## Medida produto
+Existe uma única medida $\mu \otimes \nu$ em $\mathcal F_1 \otimes \mathcal F_2$ com $(\mu \otimes \nu)(A \times B) = \mu(A)\,\nu(B)$, e para todo $E \in \mathcal F_1 \otimes \mathcal F_2$
+$$
+(\mu \otimes \nu)(E) = \int_X \nu(E_x)\,\mu(\dd x) = \int_Y \mu(E^y)\,\nu(\dd y) .
+$$
+:::
+
+::: {.proof}
+Pelo @lem-est-m01-secoes, $\pi_1(E) = \int\nu(E_x)\,\mu(\dd x)$ está bem definida, e é uma medida: a aditividade enumerável vem do @cor-est-m01-linearidade (b), porque as seções de conjuntos disjuntos são disjuntas. Ela dá $\mu(A)\nu(B)$ aos retângulos, e o mesmo vale para $\pi_2(E) = \int\mu(E^y)\,\nu(\dd y)$. Os retângulos formam uma classe $\pi$ que gera o produto e contém $X_m \times Y_m \uparrow X \times Y$ com medida finita; pelo @cor-est-m01-unicidade, $\pi_1 = \pi_2$, e essa é a única medida com a propriedade.
+:::
+
+A medida de Lebesgue em $\R^2$ é $\lambda \otimes \lambda$, e em $\R^n$ é o produto de $n$ cópias de $\lambda$.
+
+::: {#thm-est-m01-fubini}
+## Tonelli e Fubini
+Seja $f$ mensurável em $(X \times Y, \mathcal F_1 \otimes \mathcal F_2)$.
+
+(a) **Tonelli.** Se $f \geq 0$, a função $x \mapsto \int f(x, y)\,\nu(\dd y)$ é mensurável e
+$$
+\int f\,\dd(\mu \otimes \nu) = \int_X\Big(\int_Y f(x, y)\,\nu(\dd y)\Big)\mu(\dd x) = \int_Y\Big(\int_X f(x, y)\,\mu(\dd x)\Big)\nu(\dd y) .
+$$
+(b) **Fubini.** Se $\int\abs f\,\dd(\mu \otimes \nu) < \infty$, as mesmas identidades valem, com as integrais internas finitas para quase todo $x$ (e quase todo $y$).
+:::
+
+::: {.proof}
+Para $f = \mathbf 1_E$, (a) é o @thm-est-m01-produto; por linearidade, vale para simples. Para $f \geq 0$, tome simples $\varphi_n \uparrow f$: para cada $x$, $\int\varphi_n(x, y)\,\nu(\dd y) \uparrow \int f(x, y)\,\nu(\dd y)$ pelo @thm-est-m01-tcm — o que mostra a mensurabilidade —, e uma nova aplicação do teorema às integrais externas conclui. Para (b), aplique (a) a $f^+$ e $f^-$: as integrais iteradas de $\abs f$ são finitas, logo $\int\abs{f(x, y)}\,\nu(\dd y) < \infty$ para quase todo $x$ (@prp-est-m01-qtp); nesses pontos, a integral interna de $f$ é a diferença das de $f^+$ e $f^-$, e basta subtrair.
+:::
+
+Sem integrabilidade, a troca pode falhar. Na medida de contagem em $\N \times \N$, seja $a_{mn} = 1$ se $n = m$, $a_{mn} = -1$ se $n = m + 1$ e $0$ nos demais casos. Cada linha tem soma $1 - 1 = 0$, logo $\sum_m\sum_n a_{mn} = 0$; a primeira coluna tem soma $1$ e as demais, $-1 + 1 = 0$, logo $\sum_n\sum_m a_{mn} = 1$. O Fubini não se aplica porque $\sum_{m,n}\abs{a_{mn}} = \infty$.
+
+Duas consequências imediatas, admitidas no @sec-est-g03:
+
+- **Fórmula da cauda.** Se $X \geq 0$, então $X = \int_0^\infty \mathbf 1\{t < X\}\,\dd t$ e, por Tonelli, $\E[X] = \int_0^\infty\Prob(X > t)\,\dd t$ (@prp-est-g03-cauda), qualquer que seja o tipo de distribuição.
+- **Independência.** Variáveis $X_1, \dots, X_n$ são independentes se $\Prob(X_1 \in B_1, \dots, X_n \in B_n) = \prod_i\Prob(X_i \in B_i)$ para todos os borelianos $B_i$, isto é, se a distribuição conjunta coincide com $\Prob_{X_1} \otimes \dots \otimes \Prob_{X_n}$ nos retângulos — e então em tudo, pela unicidade. Pelo Fubini, se $X \indep Y$ e $g(X)$, $h(Y)$ são integráveis, $\E[g(X)h(Y)] = \E[g(X)]\,\E[h(Y)]$.
+
+### Mudança de variáveis linear
+
+::: {#thm-est-m01-linear}
+## A medida de Lebesgue sob transformações lineares
+Seja $\vb A$ uma matriz $n \times n$ invertível e $\vb b \in \R^n$. Para todo boreliano $B$, $\lambda_n(\vb AB + \vb b) = \abs{\det\vb A}\,\lambda_n(B)$. Consequentemente, se $\vb X$ tem densidade $f$, então $\vb Y = \vb A\vb X + \vb b$ tem densidade
+$$
+f_{\vb Y}(\vb y) = \frac{f\big(\vb A^{-1}(\vb y - \vb b)\big)}{\abs{\det\vb A}} .
+$$
+:::
+
+::: {.proof}
+*Invariância por translação.* $B \mapsto \lambda_n(B + \vb b)$ é uma medida que coincide com $\lambda_n$ nas caixas, logo é $\lambda_n$ (@cor-est-m01-unicidade).
+
+*Medidas invariantes são múltiplos de $\lambda_n$.* Seja $\nu$ uma medida invariante por translação e finita nos limitados, e $c = \nu((0, 1]^n)$. O cubo unitário é a união disjunta de $m^n$ translados de $(0, 1/m]^n$, logo $\nu((0, 1/m]^n) = cm^{-n}$, e $\nu = c\lambda_n$ em todas as caixas de vértices em $2^{-k}\Z^n$, que são uniões finitas desses cubos com $m = 2^k$. Essas caixas formam uma classe $\pi$ que gera $\mathcal B(\R^n)$ — todo aberto é a união enumerável dos cubos diádicos que contém — e inclui os cubos $(-k, k]^n$. Pelo @cor-est-m01-unicidade, $\nu = c\lambda_n$.
+
+*O fator é $\abs{\det\vb A}$.* $\nu(B) = \lambda_n(\vb AB)$ é invariante por translação, pois $\vb A(B + \vb c) = \vb AB + \vb A\vb c$, e finita nos limitados; logo $\lambda_n(\vb AB) = c(\vb A)\,\lambda_n(B)$, e $c(\vb A\vb B) = c(\vb A)\,c(\vb B)$. Toda matriz invertível é produto de matrizes elementares (@sec-mat-g05), e basta calcular $c$ nelas: uma permutação de coordenadas leva o cubo unitário nele mesmo ($c = 1$); multiplicar uma coordenada por $a \neq 0$ o leva numa caixa de volume $\abs a$; o cisalhamento $x_1 \mapsto x_1 + x_2$ o leva no conjunto $\{x_2 < x_1 \leq x_2 + 1,\ 0 < x_2 \leq 1, \dots\}$, cujas seções em $x_2$ fixo têm comprimento 1, logo volume 1 por Tonelli. Esses são exatamente os valores absolutos dos determinantes, que também são multiplicativos; logo $c(\vb A) = \abs{\det\vb A}$.
+
+*Densidade.* Pela máquina padrão, a primeira parte dá $\int h(\vb A^{-1}(\vb y - \vb b))\,\dd\vb y = \abs{\det\vb A}\int h(\vb x)\,\dd\vb x$ para $h \geq 0$. Com $h = \mathbf 1_{\vb A^{-1}(B - \vb b)}\,f$,
+$$
+\Prob(\vb Y \in B) = \int\mathbf 1_{\vb A^{-1}(B - \vb b)}(\vb x)\,f(\vb x)\,\dd\vb x = \int_B \frac{f(\vb A^{-1}(\vb y - \vb b))}{\abs{\det\vb A}}\,\dd\vb y .
+$$
+:::
+
+Esse é o resultado usado no @sec-est-g03 para obter a densidade da normal multivariada: se $\vb Z$ tem coordenadas $\Normal(0, 1)$ independentes, sua densidade é o produto das marginais (pelo Fubini), e $\vb X = \vb\mu + \vb\Sigma^{1/2}\vb Z$ tem a densidade da fórmula, com $\abs{\det\vb\Sigma^{1/2}} = (\det\vb\Sigma)^{1/2}$. A versão não linear — para difeomorfismos, com o jacobiano no lugar do determinante — se demonstra aproximando a transformação localmente pela sua derivada; admitimo-la, com referência em @billingsley1995 [Teorema 17.2].
+
+### Sequências independentes
+
+O @sec-est-g01 admitiu que existe um espaço de probabilidade com infinitos lançamentos independentes. A construção mais simples usa os dígitos binários de uma uniforme.
+
+::: {#thm-est-m01-digitos}
+## Os dígitos binários de uma uniforme são independentes
+Em $((0, 1), \mathcal B, \lambda)$, sejam $D_k(u) = \lfloor 2^k u\rfloor \bmod 2$ os dígitos binários de $u = \sum_k D_k(u)\,2^{-k}$. Então $D_1, D_2, \dots$ são independentes, com $\Prob(D_k = 1) = 1/2$.
+:::
+
+::: {.proof}
+Para $n$ fixo e $(d_1, \dots, d_n) \in \{0, 1\}^n$, o evento $\{D_1 = d_1, \dots, D_n = d_n\}$ é o intervalo $[k2^{-n}, (k + 1)2^{-n})$ com $k = \sum_j d_j 2^{n-j}$, cuja medida é $2^{-n} = \prod_{j=1}^n \tfrac12$. Logo, para qualquer coleção finita de dígitos, a probabilidade conjunta é o produto das marginais.
+:::
+
+::: {#cor-est-m01-iid}
+## Existência de sequências independentes
+Dadas funções de distribuição $F_1, F_2, \dots$ quaisquer, existem variáveis aleatórias independentes $X_1, X_2, \dots$ em $((0, 1), \mathcal B, \lambda)$ com $X_k \sim F_k$.
+:::
+
+::: {.proof}
+Particione $\N$ em infinitos conjuntos infinitos $N_j = \{2^{j-1}(2m - 1) : m \geq 1\}$ e seja $n_{j,m}$ o $m$-ésimo elemento de $N_j$. Defina $U_j = \sum_m D_{n_{j,m}}2^{-m}$. Os dígitos de $U_j$ são independentes com probabilidade $1/2$, como os de $u$; como as leis das duas sequências de dígitos coincidem nos cilindros $\{d_1, \dots, d_n\ \text{fixos}\}$, que formam uma classe $\pi$, coincidem na $\sigma$-álgebra que eles geram (@cor-est-m01-unicidade), e as imagens pela mesma função $(d_m) \mapsto \sum_m d_m 2^{-m}$ têm a mesma lei: $U_j \sim U(0, 1)$. As $\sigma$-álgebras $\sigma(D_n : n \in N_j)$ são independentes, porque eventos que envolvem finitos dígitos de blocos disjuntos são independentes (@thm-est-m01-digitos) e esses eventos formam classes $\pi$ geradoras; pelo @thm-est-m01-pi-lambda, aplicado um bloco de cada vez, a independência passa às $\sigma$-álgebras geradas. Logo os $U_j$ são independentes, e $X_j = Q_j(U_j)$, com $Q_j$ a função quantil de $F_j$, resolve (@cor-est-m01-stieltjes).
+:::
+
+Para sequências dependentes — cadeias de Markov, processos gaussianos —, o resultado geral é o **teorema da extensão de Kolmogorov**: distribuições finito-dimensionais consistentes entre si determinam uma única probabilidade no espaço das trajetórias. Admitimo-lo, com demonstração em @billingsley1995 [Seção 36] e @durrett2019; ele é a base dos processos estocásticos do @sec-est-d01 ao @sec-est-d04.
+
+## Densidades e Radon–Nikodym {#sec-est-m01-radon-nikodym}
+
+Quando uma distribuição tem densidade? A resposta é geral e envolve apenas os conjuntos de medida nula.
+
+::: {#def-est-m01-continuidade-absoluta}
+## Continuidade absoluta e singularidade
+Sejam $\mu$ e $\nu$ medidas em $(\Omega, \mathcal F)$. $\nu$ é **absolutamente contínua** em relação a $\mu$, $\nu \ll \mu$, se $\mu(A) = 0$ implica $\nu(A) = 0$. $\nu$ e $\mu$ são **mutuamente singulares** se existe $A$ com $\mu(A) = 0$ e $\nu(A^c) = 0$.
+:::
+
+Se $\nu(A) = \int_A f\,\dd\mu$, então obviamente $\nu \ll \mu$. O teorema de Radon–Nikodym diz que a recíproca vale.
+
+::: {#thm-est-m01-radon-nikodym}
+## Radon–Nikodym
+Sejam $\mu$ e $\nu$ medidas $\sigma$-finitas com $\nu \ll \mu$. Existe $f \geq 0$ mensurável com
+$$
+\nu(A) = \int_A f\,\dd\mu \qquad\text{para todo } A \in \mathcal F ,
+$$
+única a menos de conjuntos $\mu$-nulos. Escreve-se $f = \dd\nu/\dd\mu$, a **derivada de Radon–Nikodym**.
+:::
+
+A demonstração, devida a von Neumann, usa a geometria do espaço $L^2$ e é feita no @thm-est-m02-radon-nikodym. A unicidade é simples: se $f$ e $g$ servem e $\nu$ é finita, tome $A = \{f > g\}$; então $\int_A(f - g)\,\dd\mu = 0$ com integrando positivo em $A$, logo $\mu(A) = 0$ (@prp-est-m01-qtp); por simetria, $f = g$ q.t.p.
+
+::: {#prp-est-m01-cadeia}
+## Regra da cadeia
+Se $\nu \ll \mu$ e $g \geq 0$ (ou $g$ é $\nu$-integrável), então $\int g\,\dd\nu = \int g\,\frac{\dd\nu}{\dd\mu}\,\dd\mu$. Se $\nu \ll \mu \ll \rho$, então $\frac{\dd\nu}{\dd\rho} = \frac{\dd\nu}{\dd\mu}\,\frac{\dd\mu}{\dd\rho}$.
+:::
+
+::: {.proof}
+A primeira afirmação é a definição para indicadoras, e a máquina padrão faz o resto. A segunda vem da primeira, aplicada a $g = \mathbf 1_A\,\dd\nu/\dd\mu$ e à medida $\mu$ com densidade $\dd\mu/\dd\rho$: $\nu(A) = \int_A \frac{\dd\nu}{\dd\mu}\,\dd\mu = \int_A\frac{\dd\nu}{\dd\mu}\,\frac{\dd\mu}{\dd\rho}\,\dd\rho$.
+:::
+
+Três exemplos esclarecem o alcance. Uma distribuição discreta tem derivada em relação à contagem (a função de probabilidade), mas não em relação a $\lambda$, pois dá massa positiva a pontos, que têm medida de Lebesgue nula. Uma distribuição com densidade é absolutamente contínua em relação a $\lambda$, e sua função de distribuição é derivável quase em toda parte, com $F' = f$ (teorema da diferenciação de Lebesgue, que admitimos). E existe uma terceira possibilidade:
+
+::: {#exm-est-m01-cantor}
+## A distribuição de Cantor
+Sejam $D_1, D_2, \dots$ iid com $\Prob(D_k = 1) = 1/2$ (@thm-est-m01-digitos) e $X = \sum_k 2D_k\,3^{-k}$ — o número cuja expansão ternária tem os dígitos $2D_k \in \{0, 2\}$. A distribuição de $X$ não tem átomos: como a expansão ternária com dígitos em $\{0, 2\}$ é única, $\Prob(X = x) \leq \Prob(D_1, \dots, D_k\ \text{fixados}) = 2^{-k}$ para todo $k$. Mas está concentrada no **conjunto de Cantor** $C$, que tem medida de Lebesgue nula: $C$ está contido na união dos $2^k$ intervalos de comprimento $3^{-k}$ que sobram após $k$ etapas de remoção dos terços centrais, cuja medida é $(2/3)^k \to 0$. Logo $\Prob_X$ é singular em relação a $\lambda$ — não tem densidade — e, sem átomos, também não tem função de probabilidade. Sua função de distribuição é a **escada do diabo**: contínua, crescente de 0 a 1, com derivada zero em quase todo ponto.
+:::
+
+O **teorema da decomposição de Lebesgue** (que admitimos) diz que toda distribuição em $\R$ é uma mistura de uma parte discreta, uma parte absolutamente contínua e uma parte singular contínua como a de Cantor. Na prática, as duas primeiras bastam; a terceira serve para lembrar que "ter densidade" é uma hipótese.
+
+A derivada de Radon–Nikodym é também uma **mudança de medida**: se $\mathbb Q \ll \Prob$ e $L = \dd\mathbb Q/\dd\Prob$, então
+$$
+\E_{\mathbb Q}[Y] = \E_{\Prob}[Y L] .
+$$ {#eq-est-m01-mudanca-medida}
+Com densidades $q$ e $p$ em relação a uma mesma medida, $L = q/p$ é a **razão de verossimilhança**: ela aparece no lema de Neyman–Pearson (@sec-est-m05), na amostragem por importância (@sec-cmp-m03) e na medida neutra ao risco das finanças (@sec-fin-m02), em que $L$ é o fator estocástico de desconto normalizado.
+
+## Pontes {#sec-est-m01-pontes}
+
+- **Esperança condicional (@sec-est-m02).** Definida pelo teorema de Radon–Nikodym ou pela projeção em $L^2$; o lema de Doob–Dynkin garante que $\E[Y \mid X]$ é uma função de $X$.
+- **Teoria assintótica (@sec-est-m03).** Convergência monótona e dominada, Fatou e Borel–Cantelli são as ferramentas de todas as leis dos grandes números e dos teoremas-limite.
+- **Inferência (@sec-est-m04, @sec-est-m05).** A verossimilhança é uma derivada de Radon–Nikodym em relação a uma medida dominante; suficiência e testes ótimos se escrevem em termos de razões de verossimilhança.
+- **Processos estocásticos (@sec-est-d01 a @sec-est-d04).** O teorema de Kolmogorov constrói cadeias de Markov e o movimento browniano; filtrações são sequências crescentes de $\sigma$-álgebras.
+- **Finanças (@sec-fin-m02, @sec-fin-d02).** A medida neutra ao risco é uma mudança de medida, e o preço de um ativo é uma esperança sob ela.
+- **Espaços de funções (@sec-mat-d04).** Os espaços $L^p$ e o completamento de $C[a, b]$ (@sec-mat-m01).
+
+## Interativo {#sec-est-m01-interativo}
+
+::: {.content-visible when-format="html"}
+**Riemann contra Lebesgue.** A integral de Riemann fatia o domínio em $2^n$ faixas verticais e usa o mínimo de $f$ em cada uma; a de Lebesgue fatia a imagem em $2^n$ níveis e usa a função simples $\varphi_n = 2^{-n}\lfloor 2^n f\rfloor$. As duas convergem para as funções desta lista; a escada de Cantor é contínua e crescente, mas tem derivada zero em quase todo ponto.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof funcM01 = seletor("função", ["x²", "√x", "|sen 5x|", "escada de Cantor"], {valor: "escada de Cantor"})
+viewof modoM01 = seletor("aproximação", ["Lebesgue: fatiar a imagem", "Riemann: fatiar o domínio"])
+viewof nM01 = controle("n (2ⁿ níveis ou faixas)", [1, 8], {valor: 3, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Integral da aproximação: **${fmtM01(intAproxM01, 4)}**; integral de f: ${fmtM01(intFM01, 4)}; diferença: ${fmtM01(intFM01 - intAproxM01, 4)}${modoM01.startsWith("Lebesgue") ? " (no máximo 2⁻ⁿ = " + fmtM01(2 ** -nM01, 4) + ")" : ""}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 320, grid: true,
+  x: {label: "x", domain: [0, 1]}, y: {label: "f(x)", domain: [0, 1.02]},
+  marks: [
+    ...(modoM01.startsWith("Lebesgue")
+      ? [Plot.ruleY(d3.range(1, 2 ** nM01).map(k => k / 2 ** nM01), {stroke: "#9AA5B1", strokeOpacity: nM01 > 5 ? 0.25 : 0.6})]
+      : [Plot.ruleX(d3.range(1, 2 ** nM01).map(k => k / 2 ** nM01), {stroke: "#9AA5B1", strokeOpacity: nM01 > 5 ? 0.25 : 0.6})]),
+    Plot.areaY(aproxM01, {x: "x", y: "y", curve: "step-after", fill: "#2F5D8A", fillOpacity: 0.35}),
+    Plot.line(curvaM01, {x: "x", y: "y", stroke: "#8C2F39", strokeWidth: 2})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtM01 = (v, c) => v.toFixed(c).replace(".", ",")
+cantorM01 = x0 => {
+  if (x0 >= 1) return 1
+  let x = x0, y = 0, esc = 0.5
+  for (let k = 0; k < 40; k++) {
+    x *= 3
+    const d = Math.floor(x)
+    x -= d
+    if (d === 1) return y + esc
+    if (d === 2) y += esc
+    esc /= 2
+  }
+  return y
+}
+fM01 = ({
+  "x²": x => x * x,
+  "√x": x => Math.sqrt(x),
+  "|sen 5x|": x => Math.abs(Math.sin(5 * x)),
+  "escada de Cantor": cantorM01
+})[funcM01]
+gradeM01 = d3.range(4096).map(i => (i + 0.5) / 4096)
+curvaM01 = d3.range(801).map(i => ({x: i / 800, y: fM01(i / 800)}))
+valoresAproxM01 = {
+  if (modoM01.startsWith("Lebesgue")) {
+    return gradeM01.map(x => Math.floor(2 ** nM01 * fM01(x)) / 2 ** nM01)
+  }
+  const m = 2 ** nM01, minimos = new Array(m).fill(Infinity)
+  gradeM01.forEach(x => {
+    const j = Math.min(m - 1, Math.floor(x * m))
+    minimos[j] = Math.min(minimos[j], fM01(x), fM01(j / m), fM01((j + 1) / m))
+  })
+  return gradeM01.map(x => minimos[Math.min(m - 1, Math.floor(x * m))])
+}
+aproxM01 = gradeM01.map((x, i) => ({x: x - 0.5 / 4096, y: valoresAproxM01[i]})).concat([{x: 1, y: valoresAproxM01[4095]}])
+intAproxM01 = d3.mean(valoresAproxM01)
+intFM01 = d3.mean(gradeM01, fM01)
+```
+:::
+
+**Quando o limite passa pela integral.** Em cada exemplo, $f_n$ converge em todo ponto para a função tracejada. Compare $\int f_n$ com a integral do limite: o teorema da convergência dominada exige uma dominante integrável, e o da convergência monótona, sequências crescentes.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof seqM01 = seletor("sequência", ["pulso: n·1(0, 1/n) em [0, 1]", "massa que escapa: 1(n, n+1) em [0, ∞)", "xⁿ em [0, 1]", "(1 − x/n)ⁿ·1(x < n) em [0, ∞)"])
+viewof nSeqM01 = controle("n", [1, 40], {valor: 4, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`∫ fₙ = **${fmtM01(espSeqM01.integral(nSeqM01), 4)}**; integral do limite = ${fmtM01(espSeqM01.integralLimite, 4)}. ${espSeqM01.veredito}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "x", domain: [0, espSeqM01.xmax]}, y: {label: "fₙ(x)", domain: [0, espSeqM01.ymax(nSeqM01)]},
+  marks: [
+    Plot.line(espSeqM01.pontos(nSeqM01), {x: "x", y: "y", stroke: "#2F5D8A", strokeWidth: 2, clip: true}),
+    Plot.line(d3.range(601).map(i => ({x: i * espSeqM01.xmax / 600, y: espSeqM01.limite(i * espSeqM01.xmax / 600)})), {x: "x", y: "y", stroke: "#8C2F39", strokeDasharray: "5,3", strokeWidth: 1.5})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+espSeqM01 = ({
+  "pulso: n·1(0, 1/n) em [0, 1]": {
+    xmax: 1, ymax: n => n * 1.1, limite: x => 0, integral: n => 1, integralLimite: 0,
+    pontos: n => [{x: 0, y: 0}, {x: 0, y: n}, {x: 1 / n, y: n}, {x: 1 / n, y: 0}, {x: 1, y: 0}],
+    veredito: "O limite é zero, mas a integral vale 1 para todo n. A menor dominante, sup fₙ(x) ≈ 1/x, não é integrável: nem o TCD nem o TCM se aplicam, e o lema de Fatou vale com desigualdade estrita."
+  },
+  "massa que escapa: 1(n, n+1) em [0, ∞)": {
+    xmax: 45, ymax: n => 1.2, limite: x => 0, integral: n => 1, integralLimite: 0,
+    pontos: n => [{x: 0, y: 0}, {x: n, y: 0}, {x: n, y: 1}, {x: n + 1, y: 1}, {x: n + 1, y: 0}, {x: 45, y: 0}],
+    veredito: "Cada fₙ tem integral 1, mas a massa foge para o infinito. A medida de Lebesgue em [0, ∞) é infinita, e nenhuma função integrável domina a sequência."
+  },
+  "xⁿ em [0, 1]": {
+    xmax: 1, ymax: n => 1.05, limite: x => (x < 1 ? 0 : 1), integral: n => 1 / (n + 1), integralLimite: 0,
+    pontos: n => d3.range(401).map(i => ({x: i / 400, y: (i / 400) ** n})),
+    veredito: "A sequência é dominada pela constante 1, integrável em [0, 1]: o TCD se aplica e ∫ xⁿ = 1/(n + 1) → 0. (O limite vale 1 em x = 1, um conjunto de medida nula.)"
+  },
+  "(1 − x/n)ⁿ·1(x < n) em [0, ∞)": {
+    xmax: 8, ymax: n => 1.05, limite: x => Math.exp(-x), integral: n => n / (n + 1), integralLimite: 1,
+    pontos: n => d3.range(601).map(i => { const x = i * 8 / 600; return {x, y: x < n ? (1 - x / n) ** n : 0} }),
+    veredito: "A sequência cresce com n em cada ponto e converge para e^(−x): o TCM se aplica, e ∫ fₙ = n/(n + 1) → 1."
+  }
+})[seqM01]
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — integrais de Riemann e de Lebesgue lado a lado, e quatro sequências que testam os teoremas de convergência — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-m01-laboratorio}
+
+### Funções simples e convergência monótona
+
+Para $f(x) = x^2$ em $[0, 1]$, a função simples $\varphi_n = 2^{-n}\lfloor 2^n f\rfloor$ vale $k2^{-n}$ no conjunto $\{k2^{-n} \leq x^2 < (k + 1)2^{-n}\}$, um intervalo de extremos $\sqrt{k2^{-n}}$ e $\sqrt{(k + 1)2^{-n}}$. A integral de Lebesgue de $\varphi_n$ é uma soma finita, e o erro é menor que $2^{-n}$.
+
+```{python}
+import numpy as np
+from scipy import stats, integrate
+
+rng = np.random.default_rng(1)
+
+def integral_simples(n):
+    k = np.arange(2 ** n)
+    a = np.sqrt(k / 2 ** n)
+    b = np.sqrt(np.minimum((k + 1) / 2 ** n, 1.0))
+    return np.sum(k / 2 ** n * (b - a))
+
+for n in [1, 2, 4, 8, 12, 16]:
+    I = integral_simples(n)
+    print(f"n = {n:>2}: integral = {I:.6f}, erro = {1 / 3 - I:.6f}")
+```
+
+### Convergência dominada e derivação sob a integral
+
+Se $X \sim$ exponencial(1), $0 \leq n\log(1 + X/n) \leq X$ e $n\log(1 + X/n) \to X$; pelo TCD, $\E[n\log(1 + X/n)] \to \E[X] = 1$. Para a gama com forma 2, $M(t) = (1 - t)^{-2}$, e a derivada de $M$ coincide com $\E[Xe^{tX}]$.
+
+```{python}
+f = lambda x, n: n * np.log1p(x / n) * np.exp(-x)
+for n in [1, 2, 5, 10, 100, 1000]:
+    val, _ = integrate.quad(f, 0, np.inf, args=(n,))
+    print(f"n = {n:>4}: E[n log(1 + X/n)] = {val:.5f}")
+
+logdens = stats.gamma(a=2).logpdf
+
+def E_exp(t, k=0):
+    # E[X^k e^(tX)], somando os expoentes para evitar overflow
+    f = lambda x: x ** k * np.exp(t * x + logdens(x))
+    return integrate.quad(f, 0, np.inf)[0]
+
+h = 1e-4
+for t in [0.0, 0.2, 0.4]:
+    deriv = (E_exp(t + h) - E_exp(t - h)) / (2 * h)
+    dentro = E_exp(t, k=1)
+    print(f"t = {t}: dif. finita {deriv:.5f}  E[X e^(tX)] "
+          f"{dentro:.5f}  exato {2 / (1 - t) ** 3:.5f}")
+```
+
+### Dígitos binários: lançamentos independentes a partir de uma uniforme
+
+Sorteamos inteiros de 52 bits — os dígitos binários de uma uniforme — e verificamos que cada dígito é 1 com frequência 1/2 e que os trios $(D_1, D_2, D_3)$ são equiprováveis. Depois, separamos os dígitos ímpares e pares para obter duas uniformes independentes, como na demonstração do @cor-est-m01-iid.
+
+```{python}
+m = 200_000
+inteiros = rng.integers(0, 2 ** 52, size=m, dtype=np.int64)
+D = (inteiros[:, None] >> (51 - np.arange(52))) & 1
+print("frequencia de 1 nos digitos 1 a 6:")
+print("  ", D[:, :6].mean(axis=0).round(3))
+trios, cont = np.unique(D[:, :3], axis=0, return_counts=True)
+for t, c in zip(trios, cont):
+    print("  (D1, D2, D3) =", tuple(int(v) for v in t),
+          f"freq. {c / m:.4f}")
+
+pesos = 2.0 ** -np.arange(1, 27)
+U1 = D[:, 0::2] @ pesos     # digitos 1, 3, 5, ...
+U2 = D[:, 1::2] @ pesos     # digitos 2, 4, 6, ...
+print("correlacao entre U1 e U2:", round(np.corrcoef(U1, U2)[0, 1], 4))
+print("valores-p do teste KS contra U(0, 1):",
+      round(stats.kstest(U1, "uniform").pvalue, 3),
+      round(stats.kstest(U2, "uniform").pvalue, 3))
+```
+
+### A distribuição de Cantor
+
+A média é $\sum_k 2\cdot\frac12\cdot 3^{-k} = 1/2$ e a variância é $\sum_k 4\cdot\frac14\cdot 9^{-k} = 1/8$ (@exr-est-m01-cantor). A função de distribuição empírica desenha a escada do diabo.
+
+```{python}
+import matplotlib.pyplot as plt
+from formacao import graficos
+
+graficos.estilo()
+k = np.arange(1, 41)
+bits = rng.integers(0, 2, size=(100_000, 40))
+X = bits @ (2 / 3.0 ** k)
+print(f"media {X.mean():.4f} (exata 0,5); "
+      f"variancia {X.var():.4f} (exata 0,125)")
+print("valores distintos:", len(np.unique(X)), "de", len(X))
+
+xs = np.sort(X)
+fig, ax = plt.subplots(figsize=(6, 3.2))
+ax.plot(xs, np.arange(1, len(xs) + 1) / len(xs),
+        color=graficos.PALETA["azul"])
+ax.set_xlabel("x")
+ax.set_ylabel("F(x)")
+ax.set_title("Distribuição de Cantor: contínua, sem densidade")
+plt.show()
+```
+
+### Quando o Fubini falha, e uma distribuição mista
+
+```{python}
+N = 8
+a = np.zeros((N, N + 1))
+for i in range(N):
+    a[i, i], a[i, i + 1] = 1, -1
+print("somas das linhas:     ", a.sum(axis=1))
+print("somas das colunas 1-N:", a[:, :N].sum(axis=0))
+
+Z = rng.standard_normal(1_000_000)
+X = np.maximum(Z, 0)
+atomo = 0.0 * 0.5
+dens, _ = integrate.quad(lambda x: x * stats.norm.pdf(x), 0, np.inf)
+print(f"E[max(Z, 0)]: atomo {atomo} + parte continua {dens:.5f}; "
+      f"simulacao {X.mean():.5f}")
+```
+
+As linhas somam zero e as colunas somam $1, 0, 0, \dots$: as duas somas iteradas da matriz infinita dão 0 e 1.
+
+## Aplicação: as decisões do Copom como distribuição discreta {#sec-est-m01-aplicacao}
+
+A meta para a taxa Selic é definida pelo Copom em reuniões periódicas e, desde a adoção do regime de metas para a inflação, em 1999, varia em múltiplos de 0,25 ponto percentual. A variação mensal da meta tem, portanto, uma distribuição **discreta**: um átomo grande em zero (os meses sem mudança) e átomos em $\pm 0{,}25$, $\pm 0{,}50$ etc. Ela tem densidade em relação à medida de contagem nessa grade, mas não em relação à medida de Lebesgue, e sua esperança é uma soma. Contraste com a variação mensal do IPCA, que modelamos com uma densidade: registrada com duas casas decimais, ela também é discreta, mas tão fina que a aproximação contínua é natural.
+
+```{python}
+import pandas as pd
+from IPython.display import Markdown
+from formacao import dados
+
+try:
+    selic = dados.sgs("selic_meta", inicio="1999-03-05")
+    ipca = dados.sgs("ipca", inicio="1999-03-01")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+if disponivel:
+    mensal = selic.groupby(selic.index.to_period("M")).last()
+    dS = mensal.diff().dropna().round(2)
+    fp = dS.value_counts(normalize=True).sort_index()
+    media_soma = float((fp.index.to_numpy() * fp.to_numpy()).sum())
+    mud = selic.diff()
+    mud = mud[mud.abs() > 1e-9]
+    mult = np.isclose(mud / 0.25, (mud / 0.25).round())
+    p0 = float(fp.get(0.0, 0.0))
+    print(f"{len(dS)} meses; a variacao mensal da meta assume "
+          f"{len(fp)} valores distintos")
+    print(f"P(sem mudanca) = {p0:.3f}")
+    print(f"media pela soma = {media_soma:.4f}; "
+          f"media amostral = {dS.mean():.4f}")
+    print(f"{len(mud)} mudancas da meta; multiplos de 0,25: "
+          f"{mult.mean():.0%}")
+    print(f"IPCA: {ipca.nunique()} valores distintos "
+          f"em {len(ipca)} meses")
+
+    fig, ax = plt.subplots(1, 2, figsize=(9, 3.4))
+    ax[0].vlines(fp.index, 0, fp.to_numpy(),
+                 color=graficos.PALETA["azul"], lw=2)
+    ax[0].plot(fp.index, fp.to_numpy(), "o", ms=4,
+               color=graficos.PALETA["azul"])
+    ax[0].set_title("Meta Selic: variação mensal (p.p.)")
+    ax[0].set_ylabel("frequência relativa")
+    ax[1].hist(ipca, bins=40, density=True, alpha=0.75,
+               color=graficos.PALETA["vinho"])
+    ax[1].set_title("IPCA: variação mensal (%)")
+    ax[1].set_ylabel("densidade (histograma)")
+    graficos.fonte(ax[0], "BCB/SGS, séries 432 e 433.")
+    plt.tight_layout()
+    plt.show()
+
+    br = lambda v, c=2: f"{v:.{c}f}".replace(".", ",")
+    resumo = (f"Em {br(100 * p0, 0)}% dos meses a meta não mudou, e "
+              f"as variações mensais ocupam apenas {len(fp)} valores. "
+              f"A média calculada como integral em relação à medida "
+              f"de contagem, $\\sum_x x\\,p(x) = {br(media_soma, 3)}$ "
+              "p.p. por mês, é a própria média amostral. Já o IPCA "
+              f"assume {ipca.nunique()} valores distintos em "
+              f"{len(ipca)} meses: tratá-lo com uma densidade em "
+              "relação à medida de Lebesgue é uma aproximação "
+              "conveniente de uma distribuição que, registrada, "
+              "também é discreta.")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+A mesma variável pode ter densidade em relação a uma medida e não em relação a outra: o que muda é a medida de referência, e a esperança é sempre a mesma integral $\int x\,\Prob_X(\dd x)$. Modelos de decisões de política monetária tratam a variação da meta como uma variável discreta ordenada (@sec-ecm-g09); um modelo que lhe atribuísse uma densidade daria probabilidade zero a "manter a taxa", a decisão mais frequente.
+
+## Exercícios resolvidos {#sec-est-m01-exercicios}
+
+::: {#exr-est-m01-particao}
+Seja $\{B_1, B_2, \dots\}$ uma partição enumerável de $\Omega$ e $\mathcal G$ a $\sigma$-álgebra que ela gera. Mostre que $\mathcal G$ é formada pelas uniões $\bigcup_{i \in I}B_i$, $I \subseteq \N$, e que uma variável aleatória é $\mathcal G$-mensurável se, e somente se, é constante em cada $B_i$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A família das uniões $\bigcup_{i \in I}B_i$ contém cada $B_i$, contém $\Omega$ ($I = \N$), é fechada por complementos (o complemento de $\bigcup_{i \in I}B_i$ é $\bigcup_{i \notin I}B_i$, porque os $B_i$ particionam $\Omega$) e por uniões enumeráveis (união dos índices). É, portanto, uma $\sigma$-álgebra que contém a partição; e toda $\sigma$-álgebra que contém os $B_i$ contém essas uniões, que são enumeráveis. Logo é $\mathcal G$. Se $Y$ é $\mathcal G$-mensurável e $\omega, \omega' \in B_i$, o evento $\{Y = Y(\omega)\} \in \mathcal G$ é uma união de blocos que contém $\omega$, logo contém $B_i$ inteiro, e $Y(\omega') = Y(\omega)$. Reciprocamente, se $Y = \sum_i y_i\mathbf 1_{B_i}$, então $\{Y \leq x\} = \bigcup_{i : y_i \leq x}B_i \in \mathcal G$. Interpretação: quem sabe apenas em qual bloco está $\omega$ conhece exatamente as variáveis constantes nos blocos — a informação $\mathcal G$.
+:::
+
+::: {#exr-est-m01-borel-cantelli}
+(Primeiro lema de Borel–Cantelli.) Mostre que, se $\sum_n\Prob(A_n) < \infty$, então $\Prob(A_n\ \text{infinitas vezes}) = 0$, em que $\{A_n\ \text{i.v.}\} = \bigcap_n\bigcup_{k \geq n}A_k$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $N = \sum_n\mathbf 1_{A_n}$ o número de eventos que ocorrem. Pelo @cor-est-m01-linearidade (b), $\E[N] = \sum_n\Prob(A_n) < \infty$, logo $N < \infty$ quase certamente (@prp-est-m01-qtp). Mas $\{A_n\ \text{i.v.}\} = \{N = \infty\}$. O resultado — e o segundo lema, para eventos independentes — é a base da lei forte dos grandes números (@sec-est-m03).
+:::
+
+::: {#exr-est-m01-aberto-denso}
+Mostre que, para todo $\varepsilon > 0$, existe um aberto $G \subseteq \R$ que contém todos os racionais e tem $\lambda(G) < \varepsilon$. Conclua que o fechado $F = [0, 1] \setminus G$ tem medida positiva se $\varepsilon < 1$, mas não contém nenhum intervalo.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Enumere os racionais, $q_1, q_2, \dots$, e seja $G = \bigcup_k(q_k - \varepsilon 2^{-k-1}, q_k + \varepsilon 2^{-k-1})$. É aberto, contém $\Q$ e, pela subaditividade, $\lambda(G) \leq \sum_k\varepsilon 2^{-k} = \varepsilon$ (com desigualdade estrita, pois os intervalos se sobrepõem). Então $\lambda(F) \geq 1 - \varepsilon > 0$, e $F$ é fechado; se contivesse um intervalo, conteria um racional, que está em $G$. Assim, "grande em medida" e "grande em topologia" são noções distintas: $G$ é denso e pequeno, $F$ é magro e grande.
+:::
+
+::: {#exr-est-m01-limites}
+Calcule (a) $\lim_n\int_0^n(1 - x/n)^n\,\dd x$ e (b) $\lim_n\E[n(1 - e^{-X/n})]$ para $X \geq 0$ integrável, justificando a troca do limite com a integral.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para (a), $f_n(x) = (1 - x/n)^n\mathbf 1\{x < n\}$ é crescente em $n$: para $0 \leq x < n$, $n\log(1 - x/n) = -x\sum_{j \geq 1}(x/n)^{j-1}/j$, e cada termo $(x/n)^{j-1}$ decresce com $n$, logo $n\log(1 - x/n)$ cresce. Como $f_n \uparrow e^{-x}$, o @thm-est-m01-tcm dá $\int_0^\infty f_n \to \int_0^\infty e^{-x}\,\dd x = 1$ (de fato, $\int f_n = n/(n + 1)$). Para (b), $0 \leq 1 - e^{-y} \leq y$ dá $0 \leq n(1 - e^{-X/n}) \leq X$, integrável, e $n(1 - e^{-X/n}) \to X$ (a derivada de $1 - e^{-u}$ em zero é 1). Pelo @thm-est-m01-tcd, o limite é $\E[X]$.
+:::
+
+::: {#exr-est-m01-cauda-geral}
+Mostre que, para $X$ integrável, $\E[X] = \int_0^\infty\Prob(X > t)\,\dd t - \int_0^\infty\Prob(X < -t)\,\dd t$ e que, para $X \geq 0$ e $p > 0$, $\E[X^p] = \int_0^\infty p\,t^{p-1}\,\Prob(X > t)\,\dd t$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para $Y \geq 0$, $Y = \int_0^\infty\mathbf 1\{t < Y\}\,\dd t$, e a função $(\omega, t) \mapsto \mathbf 1\{t < Y(\omega)\}$ é mensurável no produto (o conjunto $\{(\omega, t) : t < Y(\omega)\}$ é a união sobre racionais $q$ de $\{Y > q\} \times [0, q)$). Por Tonelli, $\E[Y] = \int_0^\infty\Prob(Y > t)\,\dd t$. Aplicando a $X^+$ e $X^-$, com $\Prob(X^+ > t) = \Prob(X > t)$ e $\Prob(X^- > t) = \Prob(X < -t)$ para $t \geq 0$, sai a primeira fórmula. Para a segunda, $X^p = \int_0^X p\,t^{p-1}\,\dd t = \int_0^\infty p\,t^{p-1}\mathbf 1\{t < X\}\,\dd t$, e Tonelli de novo. Para $p = 2$, $\E[X^2] = 2\int_0^\infty t\,\Prob(X > t)\,\dd t$: caudas que decaem mais devagar que $t^{-2}$ podem dar variância infinita.
+:::
+
+::: {#exr-est-m01-cantor}
+Para a distribuição de Cantor do @exm-est-m01-cantor, calcule $\E[X]$ e $\Var(X)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pelo @cor-est-m01-linearidade (b), aplicado à série de termos não negativos, $\E[X] = \sum_k 2\,\E[D_k]\,3^{-k} = \sum_k 3^{-k} = 1/2$. Para o segundo momento, $X^2 = \sum_j\sum_k 4D_jD_k3^{-j-k}$ é uma série dupla de termos não negativos, e Tonelli (com a contagem em $\N^2$) permite integrar termo a termo: $\E[D_jD_k] = 1/4$ se $j \neq k$ e $1/2$ se $j = k$. Então
+$$
+\E[X^2] = \sum_{j,k}4\cdot\tfrac14\,3^{-j-k} + \sum_k 4\big(\tfrac12 - \tfrac14\big)9^{-k} = \Big(\sum_k 3^{-k}\Big)^2 + \sum_k 9^{-k} = \tfrac14 + \tfrac18 ,
+$$
+e $\Var(X) = 3/8 - 1/4 = 1/8$. Compare com a uniforme em $[0, 1]$, de variância $1/12$: a de Cantor joga a massa para longe do centro, já que o terço do meio é sempre removido.
+:::
+
+::: {#exr-est-m01-scheffe}
+(Lema de Scheffé.) Sejam $f_n$ e $f$ densidades de probabilidade em relação a $\mu$, com $f_n \to f$ q.t.p. Mostre que $\int\abs{f_n - f}\,\dd\mu \to 0$ e que $\sup_A\abs{P_n(A) - P(A)} \to 0$, em que $P_n$ e $P$ são as distribuições correspondentes.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Como $\int(f - f_n)\,\dd\mu = 1 - 1 = 0$, as partes positiva e negativa de $f - f_n$ têm a mesma integral, e $\int\abs{f - f_n} = 2\int(f - f_n)^+$. Mas $0 \leq (f - f_n)^+ \leq f$, integrável, e $(f - f_n)^+ \to 0$ q.t.p.; pelo @thm-est-m01-tcd, $\int(f - f_n)^+ \to 0$. Por fim, $\abs{P_n(A) - P(A)} = \abs{\int_A(f_n - f)} \leq \int\abs{f_n - f}$, uniformemente em $A$. Exemplo: as densidades $t_k$ convergem para a normal em cada ponto, logo $\Prob(T_k \in A) \to \Prob(Z \in A)$ uniformemente em $A$ — convergência em **variação total**, mais forte que a convergência em distribuição (@sec-est-m03).
+:::
+
+::: {#exr-est-m01-uniforme-n}
+Mostre que não existe uma probabilidade em $(\N, 2^{\N})$ que dê a mesma probabilidade a todos os inteiros. A "densidade natural" $d(A) = \lim_n\#(A \cap \{1, \dots, n\})/n$, definida quando o limite existe, dá $d(\text{pares}) = 1/2$; por que ela não é uma probabilidade?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Se $\Prob(\{n\}) = p$ para todo $n$, a aditividade enumerável dá $1 = \Prob(\N) = \sum_n p$, que vale $0$ se $p = 0$ e $\infty$ se $p > 0$. A densidade natural é finitamente aditiva (quando definida) e dá $d(\{n\}) = 0$ a cada inteiro, mas $d(\N) = 1 \neq \sum_n d(\{n\}) = 0$: falta a aditividade enumerável. Por isso, numa "loteria uniforme em $\N$", ou num argumento de "escolha um inteiro ao acaso", a teoria da probabilidade de Kolmogorov não se aplica — o que, em economia, aparece nas dificuldades com prioris impróprias (@sec-est-m06) e com jogos com infinitos jogadores.
+:::
+
+## Flashcards {#sec-est-m01-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que a probabilidade é definida numa $\sigma$-álgebra, e não em todos os subconjuntos?
+Porque não existe medida enumeravelmente aditiva e invariante por translação em todos os subconjuntos de $[0, 1)$ com $\mu([a, b)) = b - a$ (conjunto de Vitali, via axioma da escolha).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema $\pi$-$\lambda$, e para que serve?
+Se uma classe $\pi$ está contida numa classe $\lambda$, a $\sigma$-álgebra gerada pela classe $\pi$ também está. Serve para unicidade: medidas finitas que coincidem numa classe $\pi$ geradora coincidem em tudo (ex.: a função de distribuição determina a distribuição).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que garante a extensão de Carathéodory?
+Uma pré-medida numa álgebra se estende a uma medida na $\sigma$-álgebra gerada, via medida exterior $\mu^*(E) = \inf\sum\mu_0(A_k)$ e conjuntos que "cortam bem" todo $T$; a extensão é única se $\mu_0$ é $\sigma$-finita.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Onde entra a compacidade na construção da medida de Lebesgue?
+Na aditividade enumerável do comprimento: para mostrar $b - a \leq \sum(b_k - a_k)$, cobre-se $[a + \varepsilon, b]$ por abertos ligeiramente maiores e usa-se Heine–Borel para passar a uma subcobertura finita.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o lema de Doob–Dynkin?
+$Y$ é $\sigma(\vb X)$-mensurável se, e somente se, $Y = g(\vb X)$ para alguma $g$ boreliana. "Ser calculável com a informação de $\vb X$" = "ser função de $\vb X$".
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se define a integral de Lebesgue?
+Simples: $\int\sum a_i\mathbf 1_{A_i} = \sum a_i\mu(A_i)$. Não negativas: supremo das integrais de simples abaixo. Integráveis: $\int f^+ - \int f^-$. Fatia-se a imagem, não o domínio.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Enuncie o teorema da convergência monótona e o lema de Fatou.
+TCM: $0 \leq f_n \uparrow f \Rightarrow \int f_n \uparrow \int f$. Fatou: $f_n \geq 0 \Rightarrow \int\liminf f_n \leq \liminf\int f_n$ (estrita para $n\mathbf 1_{(0,1/n)}$).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Enuncie o teorema da convergência dominada e dê um contraexemplo sem dominação.
+$f_n \to f$ q.t.p., $\abs{f_n} \leq g$ integrável $\Rightarrow \int\abs{f_n - f} \to 0$. Contraexemplos: $n\mathbf 1_{(0,1/n)}$ (dominante $\approx 1/x$ não integrável) e $\mathbf 1_{(n,n+1)}$ em $\R$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando se pode derivar sob o sinal de integral?
+Se $\abs{\partial_t f(x, t)} \leq g(x)$ integrável para todo $t$ (valor médio + TCD). Ex.: $M^{(k)}(0) = \E X^k$ se a FGM é finita perto de zero.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é a "máquina padrão"?
+Provar uma identidade para indicadoras, estender a simples por linearidade, a não negativas por convergência monótona e a integráveis por $f = f^+ - f^-$. Ex.: $\E g(X) = \int g\,\dd\Prob_X$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que dizem Tonelli e Fubini, e o que pode dar errado?
+Tonelli: para $f \geq 0$, as integrais iteradas coincidem com a do produto. Fubini: o mesmo se $\int\abs f < \infty$. Sem isso, $a_{mm} = 1$, $a_{m,m+1} = -1$ dá somas iteradas 0 e 1.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como construir uma sequência iid com distribuições dadas a partir de uma uniforme?
+Os dígitos binários de $U$ são iid Bernoulli(1/2); separando-os em infinitos blocos infinitos obtêm-se uniformes independentes $U_j$, e $X_j = Q_j(U_j)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema de Radon–Nikodym?
+Se $\nu \ll \mu$ ($\sigma$-finitas), existe $f = \dd\nu/\dd\mu \geq 0$, única q.t.p., com $\nu(A) = \int_A f\,\dd\mu$. Densidades, funções de probabilidade e razões de verossimilhança são derivadas de Radon–Nikodym.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que tem de especial a distribuição de Cantor?
+Não tem átomos (F contínua) nem densidade: está concentrada no conjunto de Cantor, de medida de Lebesgue nula. Média 1/2, variância 1/8; F é a escada do diabo.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como fica $\E[X]$ numa distribuição mista?
+É a integral em relação a $\lambda + \sum_j\delta_{a_j}$: soma nos átomos mais integral da parte contínua. Ex.: $\E\max(Z, 0) = 0\cdot\frac12 + \int_0^\infty x\phi(x)\,\dd x = 1/\sqrt{2\pi}$.
+:::
+
+## Ficha-resumo {#sec-est-m01-ficha}
+
+::: {.ficha-resumo}
+**Medidas.** $\sigma$-álgebra; $\sigma(\mathcal C)$; Borel = gerada por abertos = por semirretas/ortantes. Medida: $\mu(\emptyset) = 0$, enumeravelmente aditiva; finita, $\sigma$-finita, probabilidade. Continuidade por cima exige $\mu(A_1) < \infty$. Vitali: não se mede todo subconjunto.
+
+**Unicidade e existência.** $\pi$-$\lambda$: classe $\pi \subseteq$ classe $\lambda \Rightarrow \sigma(\pi) \subseteq \lambda$. Medidas finitas iguais numa classe $\pi$ geradora são iguais; $F$ determina a distribuição. Carathéodory: pré-medida numa álgebra $\to$ medida (medida exterior). Lebesgue: comprimento + Heine–Borel; invariante por translação. Toda $F$ define $\mu_F = \lambda \circ Q^{-1}$.
+
+**Mensurabilidade.** $f^{-1}(B) \in \mathcal F$; basta checar geradores; contínuas, compostas, somas, sup, lim sup. Simples $\varphi_n = \min(n, 2^{-n}\lfloor 2^nf\rfloor) \uparrow f$. Doob–Dynkin: $\sigma(\vb X)$-mensurável $\iff g(\vb X)$.
+
+**Integral.** Simples $\to$ sup $\to f^+ - f^-$; $0\cdot\infty = 0$. Markov; $\int f = 0 \iff f = 0$ q.t.p. TCM: $0 \leq f_n \uparrow f$. Fatou: $\int\liminf \leq \liminf\int$. TCD: $\abs{f_n} \leq g$ integrável. Derivação sob a integral com dominante da derivada. Riemann $\subset$ Lebesgue.
+
+**Distribuições.** $\Prob_X = \Prob \circ X^{-1}$; $\E g(X) = \int g\,\dd\Prob_X$ (máquina padrão). Densidade em relação a $\mu$: contagem (discreta), $\lambda$ (contínua), $\lambda + \sum\delta_{a_j}$ (mista). $\lambda_n(\vb AB + \vb b) = \abs{\det\vb A}\lambda_n(B)$; densidade de $\vb A\vb X + \vb b$.
+
+**Produto.** $\mu \otimes \nu(E) = \int\nu(E_x)\,\mu(\dd x)$. Tonelli ($f \geq 0$), Fubini ($\int\abs f < \infty$). Cauda: $\E X = \int_0^\infty\Prob(X > t)\,\dd t$. Independência = lei conjunta produto. Dígitos binários de $U$ iid $\Rightarrow$ sequências iid quaisquer; Kolmogorov (admitido).
+
+**Radon–Nikodym.** $\nu \ll \mu \Rightarrow \nu(A) = \int_A\frac{\dd\nu}{\dd\mu}\dd\mu$ (prova no EST-M02). Cadeia; $\E_{\mathbb Q}Y = \E_\Prob[YL]$. Cantor: sem átomos, sem densidade. Decomposição de Lebesgue: discreta + absolutamente contínua + singular.
+:::
+
+## Notas bibliográficas {#sec-est-m01-notas}
+
+@billingsley1995 é a referência principal: constrói a medida de Lebesgue pela extensão de Carathéodory, desenvolve o teorema $\pi$-$\lambda$, a integral, a medida produto, o teorema de Radon–Nikodym e a mudança de variáveis em $\R^n$ (Teorema 17.2), sempre com a probabilidade em vista, e prova o teorema de extensão de Kolmogorov. @durrett2019 cobre o mesmo material de forma mais concisa, no primeiro capítulo, e serve de ponte para o restante da teoria da probabilidade. @williams1991 é a introdução mais agradável: a "máquina padrão", o lema das classes monótonas e a construção de sequências independentes aparecem com muita clareza, e o livro prepara diretamente a esperança condicional e os martingais dos próximos capítulos. A axiomatização da probabilidade pela teoria da medida é de Kolmogorov (1933); o conjunto não mensurável é de Vitali (1905).

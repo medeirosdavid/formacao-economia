@@ -10,13 +10,13 @@ Legenda de status: ○ planejado · ◔ rascunho · ◑ em revisão · ● compl
 | Parte | Capítulos | G | M | D | Escritos | Completos |
 |:--|--:|--:|--:|--:|--:|--:|
 | Matemática | 22 | 8 | 10 | 4 | 10 | 0 |
-| Probabilidade e Estatística | 16 | 6 | 6 | 4 | 6 | 0 |
+| Probabilidade e Estatística | 16 | 6 | 6 | 4 | 12 | 0 |
 | Computação | 11 | 3 | 4 | 4 | 0 | 0 |
 | Microfundamentos | 12 | 5 | 6 | 1 | 0 | 0 |
 | Econometria | 30 | 9 | 11 | 10 | 1 | 0 |
 | Macroeconomia | 33 | 10 | 13 | 10 | 0 | 0 |
 | Finanças | 24 | 8 | 9 | 7 | 0 | 0 |
-| **Total** | **148** | 49 | 59 | 40 | 17 | 0 |
+| **Total** | **148** | 49 | 59 | 40 | 23 | 0 |
 
 ## Trilhas de leitura
 
@@ -44,8 +44,8 @@ Matemática, probabilidade e computação até o nível de mestrado — o mínim
 18. ○ [Conjuntos convexos e separação](partes/01-matematica/mat-m08-conjuntos-convexos-e-separacao.qmd) `MAT-M08`
 19. ○ [Funções convexas e subdiferencial](partes/01-matematica/mat-m09-funcoes-convexas-e-subdiferencial.qmd) `MAT-M09`
 20. ○ [Otimização com restrições de desigualdade e dualidade](partes/01-matematica/mat-m03-convexidade-e-otimizacao-com-restricoes-de-desigualdade.qmd) `MAT-M03`
-21. ○ [Esperança condicional](partes/02-probabilidade-estatistica/est-m02-esperanca-condicional.qmd) `EST-M02`
-22. ○ [Modos de convergência e teoremas-limite](partes/02-probabilidade-estatistica/est-m03-modos-de-convergencia-e-teoremas-limite.qmd) `EST-M03`
+21. ◔ [Esperança condicional](partes/02-probabilidade-estatistica/est-m02-esperanca-condicional.qmd) `EST-M02`
+22. ◔ [Modos de convergência e teoremas-limite](partes/02-probabilidade-estatistica/est-m03-modos-de-convergencia-e-teoremas-limite.qmd) `EST-M03`
 
 ### Graduação completa
 
@@ -146,12 +146,12 @@ Da probabilidade elementar à teoria da medida, inferência estatística e proce
 | EST-G04 | G | [Amostragem e teoremas-limite](partes/02-probabilidade-estatistica/est-g04-amostragem-e-teoremas-limite.qmd) | EST-G03 | ◔ rascunho |
 | EST-G05 | G | [Estimação pontual e intervalar](partes/02-probabilidade-estatistica/est-g05-estimacao-pontual-e-intervalar.qmd) | EST-G04 | ◔ rascunho |
 | EST-G06 | G | [Testes de hipóteses](partes/02-probabilidade-estatistica/est-g06-testes-de-hipoteses.qmd) | EST-G05 | ◔ rascunho |
-| EST-M01 | M | [Probabilidade com teoria da medida](partes/02-probabilidade-estatistica/est-m01-probabilidade-com-teoria-da-medida.qmd) | EST-G03, MAT-M01 | ○ planejado |
-| EST-M02 | M | [Esperança condicional](partes/02-probabilidade-estatistica/est-m02-esperanca-condicional.qmd) | EST-M01 | ○ planejado |
-| EST-M03 | M | [Modos de convergência e teoremas-limite](partes/02-probabilidade-estatistica/est-m03-modos-de-convergencia-e-teoremas-limite.qmd) | EST-M01 | ○ planejado |
-| EST-M04 | M | [Inferência estatística: suficiência, verossimilhança e eficiência](partes/02-probabilidade-estatistica/est-m04-inferencia-estatistica-suficiencia-verossimilhanca-e.qmd) | EST-G05, EST-M03 | ○ planejado |
-| EST-M05 | M | [Testes ótimos e regiões de confiança](partes/02-probabilidade-estatistica/est-m05-testes-otimos-e-regioes-de-confianca.qmd) | EST-M04 | ○ planejado |
-| EST-M06 | M | [Inferência bayesiana](partes/02-probabilidade-estatistica/est-m06-inferencia-bayesiana.qmd) | EST-M04 | ○ planejado |
+| EST-M01 | M | [Probabilidade com teoria da medida](partes/02-probabilidade-estatistica/est-m01-probabilidade-com-teoria-da-medida.qmd) | EST-G03, MAT-M01 | ◔ rascunho |
+| EST-M02 | M | [Esperança condicional](partes/02-probabilidade-estatistica/est-m02-esperanca-condicional.qmd) | EST-M01 | ◔ rascunho |
+| EST-M03 | M | [Modos de convergência e teoremas-limite](partes/02-probabilidade-estatistica/est-m03-modos-de-convergencia-e-teoremas-limite.qmd) | EST-M01 | ◔ rascunho |
+| EST-M04 | M | [Inferência estatística: suficiência, verossimilhança e eficiência](partes/02-probabilidade-estatistica/est-m04-inferencia-estatistica-suficiencia-verossimilhanca-e.qmd) | EST-G05, EST-M03 | ◔ rascunho |
+| EST-M05 | M | [Testes ótimos e regiões de confiança](partes/02-probabilidade-estatistica/est-m05-testes-otimos-e-regioes-de-confianca.qmd) | EST-M04 | ◔ rascunho |
+| EST-M06 | M | [Inferência bayesiana](partes/02-probabilidade-estatistica/est-m06-inferencia-bayesiana.qmd) | EST-M04 | ◔ rascunho |
 | EST-D01 | D | [Cadeias de Markov](partes/02-probabilidade-estatistica/est-d01-cadeias-de-markov.qmd) | EST-G03, MAT-M02 | ○ planejado |
 | EST-D02 | D | [Processos estacionários, ergodicidade e representação de Wold](partes/02-probabilidade-estatistica/est-d02-processos-estacionarios-ergodicidade-e-representacao-de-wold.qmd) | EST-M03, MAT-D04 | ○ planejado |
 | EST-D03 | D | [Martingais](partes/02-probabilidade-estatistica/est-d03-martingais.qmd) | EST-M02 | ○ planejado |

@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Teoria assintótica do MQO e inferência robusta* (ECM-M02); *Inferência estatística: suficiência, verossimilhança e eficiência* (EST-M04)
+**Pré-requisitos:** *Teoria assintótica do MQO e inferência robusta* (ECM-M02); @sec-est-m04 (*Inferência estatística: suficiência, verossimilhança e eficiência*)
 :::
 
 **Leituras principais:** @hayashi2000, @hansen2022

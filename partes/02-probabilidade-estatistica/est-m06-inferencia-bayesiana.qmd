@@ -2,17 +2,11 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `EST-M06`
+[Mestrado]{.nivel .nivel-M} · [rascunho]{.status} · `EST-M06`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-est-m04 (*Inferência estatística: suficiência, verossimilhança e eficiência*)
-:::
 
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Inferência estatística: suficiência, verossimilhança e eficiência* (EST-M04)
-:::
-
-**Leituras principais:** @gelman2013, @koop2003
+**Leituras principais:** @gelman2013, @robert2007, @koop2003
 :::
 <!-- cabecalho:fim -->
 
@@ -20,8 +14,13 @@
 Roteiro planejado:
 
 1. Priori, verossimilhança e posteriori
-2. Famílias conjugadas
-3. Estimadores de Bayes e funções perda
-4. Intervalos de credibilidade
-5. Comparação de modelos e fator de Bayes
+2. Famílias conjugadas e preditiva a posteriori
+3. Estimadores de Bayes, risco e admissibilidade
+4. Intervalos de credibilidade e HPD
+5. Prioris de Jeffreys
+6. Fator de Bayes e o paradoxo de Lindley
+7. Bernstein–von Mises
+8. Encolhimento e o estimador de James–Stein
+9. Metropolis–Hastings e Gibbs
+10. Aplicação: a persistência da inflação num AR(1) bayesiano
 :::

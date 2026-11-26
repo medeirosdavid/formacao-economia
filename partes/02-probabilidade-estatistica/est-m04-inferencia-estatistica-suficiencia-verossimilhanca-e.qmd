@@ -2,25 +2,25 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `EST-M04`
+[Mestrado]{.nivel .nivel-M} · [rascunho]{.status} · `EST-M04`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-est-g05 (*Estimação pontual e intervalar*); @sec-est-m03 (*Modos de convergência e teoremas-limite*)
-:::
 
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** @sec-est-g05 (*Estimação pontual e intervalar*); *Modos de convergência e teoremas-limite* (EST-M03)
-:::
-
-**Leituras principais:** @casella2002
+**Leituras principais:** @casella2002, @lehmann1998, @vandervaart1998
 :::
 <!-- cabecalho:fim -->
 
 ::: {.callout-note title="Capítulo em construção"}
 Roteiro planejado:
 
-1. Suficiência e fatoração
-2. Completude e Rao–Blackwell
-3. Informação de Fisher e Cramér–Rao
-4. Propriedades assintóticas do EMV
+1. Suficiência e o teorema da fatoração
+2. Suficiência mínima
+3. Famílias exponenciais
+4. Completude, estatísticas ancilares e o teorema de Basu
+5. Rao–Blackwell e Lehmann–Scheffé
+6. Informação de Fisher e Cramér–Rao multivariado
+7. Consistência do EMV (Wald)
+8. Normalidade assintótica e eficiência do EMV
+9. EMV sob má especificação e a matriz sanduíche
+10. Aplicação: a distribuição $t$ para o crescimento do IBC-Br
 :::

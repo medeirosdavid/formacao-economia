@@ -13,12 +13,12 @@ Da probabilidade elementar à teoria da medida, inferência estatística e proce
 | EST-G04 | G | [Amostragem e teoremas-limite](est-g04-amostragem-e-teoremas-limite.qmd) | ◔ rascunho |
 | EST-G05 | G | [Estimação pontual e intervalar](est-g05-estimacao-pontual-e-intervalar.qmd) | ◔ rascunho |
 | EST-G06 | G | [Testes de hipóteses](est-g06-testes-de-hipoteses.qmd) | ◔ rascunho |
-| EST-M01 | M | [Probabilidade com teoria da medida](est-m01-probabilidade-com-teoria-da-medida.qmd) | ○ planejado |
-| EST-M02 | M | [Esperança condicional](est-m02-esperanca-condicional.qmd) | ○ planejado |
-| EST-M03 | M | [Modos de convergência e teoremas-limite](est-m03-modos-de-convergencia-e-teoremas-limite.qmd) | ○ planejado |
-| EST-M04 | M | [Inferência estatística: suficiência, verossimilhança e eficiência](est-m04-inferencia-estatistica-suficiencia-verossimilhanca-e.qmd) | ○ planejado |
-| EST-M05 | M | [Testes ótimos e regiões de confiança](est-m05-testes-otimos-e-regioes-de-confianca.qmd) | ○ planejado |
-| EST-M06 | M | [Inferência bayesiana](est-m06-inferencia-bayesiana.qmd) | ○ planejado |
+| EST-M01 | M | [Probabilidade com teoria da medida](est-m01-probabilidade-com-teoria-da-medida.qmd) | ◔ rascunho |
+| EST-M02 | M | [Esperança condicional](est-m02-esperanca-condicional.qmd) | ◔ rascunho |
+| EST-M03 | M | [Modos de convergência e teoremas-limite](est-m03-modos-de-convergencia-e-teoremas-limite.qmd) | ◔ rascunho |
+| EST-M04 | M | [Inferência estatística: suficiência, verossimilhança e eficiência](est-m04-inferencia-estatistica-suficiencia-verossimilhanca-e.qmd) | ◔ rascunho |
+| EST-M05 | M | [Testes ótimos e regiões de confiança](est-m05-testes-otimos-e-regioes-de-confianca.qmd) | ◔ rascunho |
+| EST-M06 | M | [Inferência bayesiana](est-m06-inferencia-bayesiana.qmd) | ◔ rascunho |
 | EST-D01 | D | [Cadeias de Markov](est-d01-cadeias-de-markov.qmd) | ○ planejado |
 | EST-D02 | D | [Processos estacionários, ergodicidade e representação de Wold](est-d02-processos-estacionarios-ergodicidade-e-representacao-de-wold.qmd) | ○ planejado |
 | EST-D03 | D | [Martingais](est-d03-martingais.qmd) | ○ planejado |

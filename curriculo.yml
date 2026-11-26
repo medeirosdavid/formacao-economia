@@ -256,38 +256,44 @@ partes:
         titulo: "Probabilidade com teoria da medida"
         nivel: M
         prereq: [EST-G03, MAT-M01]
-        leituras: [billingsley1995, durrett2019]
-        topicos: ["$\\sigma$-álgebras e medidas", "Funções mensuráveis", "Integral de Lebesgue", "Convergência monótona e dominada", "Fubini", "Radon–Nikodym"]
+        status: rascunho
+        leituras: [billingsley1995, durrett2019, williams1991]
+        topicos: ["$\\sigma$-álgebras, medidas e o conjunto de Vitali", "Classes $\\pi$ e $\\lambda$ e unicidade de medidas", "Extensão de Carathéodory e medida de Lebesgue", "Funções mensuráveis e variáveis aleatórias", "Integral de Lebesgue e esperança", "Convergência monótona, Fatou e convergência dominada", "Distribuições e mudança de variáveis", "Medida produto, Fubini–Tonelli e sequências independentes", "Densidades e Radon–Nikodym", "Aplicação: as decisões do Copom como distribuição discreta"]
       - id: EST-M02
         titulo: "Esperança condicional"
         nivel: M
         prereq: [EST-M01]
-        leituras: [durrett2019, billingsley1995]
-        topicos: ["Definição via Radon–Nikodym", "Propriedades e lei das expectativas iteradas", "Esperança condicional como projeção em $L^2$", "Independência condicional"]
+        status: rascunho
+        leituras: [williams1991, durrett2019, billingsley1995]
+        topicos: ["Espaços $L^p$: Hölder, Minkowski e completude", "Esperança condicional como projeção em $L^2$", "Definição geral, existência e unicidade", "Propriedades e lei das expectativas iteradas", "O paradoxo de Borel–Kolmogorov", "Radon–Nikodym e mudança de medida", "Distribuições condicionais regulares", "Independência condicional", "Aplicação: previsões do IPCA com conjuntos de informação crescentes"]
       - id: EST-M03
         titulo: "Modos de convergência e teoremas-limite"
         nivel: M
         prereq: [EST-M01]
-        leituras: [durrett2019, hansen2022]
-        topicos: ["Convergência quase certa, em probabilidade, em $L^p$ e em distribuição", "Teorema do mapeamento contínuo e Slutsky", "LGN forte e fraca", "TCL de Lindeberg–Lévy e Lindeberg–Feller", "Método delta"]
+        status: rascunho
+        leituras: [durrett2019, vandervaart1998, hansen2022]
+        topicos: ["Convergência quase certa, em probabilidade, em $L^p$ e em distribuição", "Lemas de Borel–Cantelli", "Lei forte dos grandes números de Etemadi", "Representação de Skorokhod, Portmanteau e mapeamento contínuo", "Funções características: inversão e unicidade", "Teorema da continuidade de Lévy", "TCL de Lindeberg–Lévy e de Lindeberg–Feller", "Cramér–Wold, Slutsky e método delta", "Integrabilidade uniforme e notação $O_p$, $o_p$", "Glivenko–Cantelli", "Aplicação: a distribuição empírica do IPCA e a banda de DKW"]
       - id: EST-M04
         titulo: "Inferência estatística: suficiência, verossimilhança e eficiência"
         nivel: M
         prereq: [EST-G05, EST-M03]
-        leituras: [casella2002]
-        topicos: ["Suficiência e fatoração", "Completude e Rao–Blackwell", "Informação de Fisher e Cramér–Rao", "Propriedades assintóticas do EMV"]
+        status: rascunho
+        leituras: [casella2002, lehmann1998, vandervaart1998]
+        topicos: ["Suficiência e o teorema da fatoração", "Suficiência mínima", "Famílias exponenciais", "Completude, estatísticas ancilares e o teorema de Basu", "Rao–Blackwell e Lehmann–Scheffé", "Informação de Fisher e Cramér–Rao multivariado", "Consistência do EMV (Wald)", "Normalidade assintótica e eficiência do EMV", "EMV sob má especificação e a matriz sanduíche", "Aplicação: a distribuição $t$ para o crescimento do IBC-Br"]
       - id: EST-M05
         titulo: "Testes ótimos e regiões de confiança"
         nivel: M
         prereq: [EST-M04]
-        leituras: [casella2002]
-        topicos: ["Lema de Neyman–Pearson", "Testes uniformemente mais poderosos", "Razão de verossimilhança", "Inversão de testes"]
+        status: rascunho
+        leituras: [casella2002, lehmann2005, vandervaart1998]
+        topicos: ["Testes aleatorizados e o lema de Neyman–Pearson", "Razão de verossimilhança monótona e Karlin–Rubin", "Testes não viesados", "Razão de verossimilhança, Wald e escore", "Teorema de Wilks e poder local", "Regiões de confiança por inversão de testes", "Testes múltiplos: Holm e Benjamini–Hochberg", "Aplicação: a persistência das quedas do PIB pela trindade de testes"]
       - id: EST-M06
         titulo: "Inferência bayesiana"
         nivel: M
         prereq: [EST-M04]
-        leituras: [gelman2013, koop2003]
-        topicos: ["Priori, verossimilhança e posteriori", "Famílias conjugadas", "Estimadores de Bayes e funções perda", "Intervalos de credibilidade", "Comparação de modelos e fator de Bayes"]
+        status: rascunho
+        leituras: [gelman2013, robert2007, koop2003]
+        topicos: ["Priori, verossimilhança e posteriori", "Famílias conjugadas e preditiva a posteriori", "Estimadores de Bayes, risco e admissibilidade", "Intervalos de credibilidade e HPD", "Prioris de Jeffreys", "Fator de Bayes e o paradoxo de Lindley", "Bernstein–von Mises", "Encolhimento e o estimador de James–Stein", "Metropolis–Hastings e Gibbs", "Aplicação: a persistência da inflação num AR(1) bayesiano"]
       - id: EST-D01
         titulo: "Cadeias de Markov"
         nivel: D

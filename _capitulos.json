@@ -170,38 +170,38 @@
  "EST-M01": {
   "titulo": "Probabilidade com teoria da medida",
   "nivel": "M",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-M02": {
   "titulo": "Esperança condicional",
   "nivel": "M",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-M03": {
   "titulo": "Modos de convergência e teoremas-limite",
   "nivel": "M",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-M04": {
   "titulo": "Inferência estatística: suficiência, verossimilhança e eficiência",
   "nivel": "M",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-M05": {
   "titulo": "Testes ótimos e regiões de confiança",
   "nivel": "M",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-M06": {
   "titulo": "Inferência bayesiana",
   "nivel": "M",
-  "status": "planejado",
-  "no_pdf": false
+  "status": "rascunho",
+  "no_pdf": true
  },
  "EST-D01": {
   "titulo": "Cadeias de Markov",

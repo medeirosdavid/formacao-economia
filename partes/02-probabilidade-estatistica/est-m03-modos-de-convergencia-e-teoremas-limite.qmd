@@ -2,26 +2,967 @@
 
 <!-- cabecalho:inicio — gerado por scripts/gerar_estrutura.py a partir de curriculo.yml; não edite à mão -->
 ::: {.cabecalho-capitulo}
-[Mestrado]{.nivel .nivel-M} · [planejado]{.status} · `EST-M03`
+[Mestrado]{.nivel .nivel-M} · [rascunho]{.status} · `EST-M03`
 
-::: {.content-visible when-format="html"}
 **Pré-requisitos:** @sec-est-m01 (*Probabilidade com teoria da medida*)
-:::
 
-::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *Probabilidade com teoria da medida* (EST-M01)
-:::
-
-**Leituras principais:** @durrett2019, @hansen2022
+**Leituras principais:** @durrett2019, @vandervaart1998, @hansen2022
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-m03-motivacao}
 
-1. Convergência quase certa, em probabilidade, em $L^p$ e em distribuição
-2. Teorema do mapeamento contínuo e Slutsky
-3. LGN forte e fraca
-4. TCL de Lindeberg–Lévy e Lindeberg–Feller
-5. Método delta
+Quase todo resultado de econometria tem a forma "quando $n \to \infty$, o estimador converge para o parâmetro e, multiplicado por $\sqrt n$, tem distribuição aproximadamente normal". O @sec-est-g04 apresentou a lei fraca dos grandes números com variância finita e o teorema central do limite supondo que a função geradora de momentos existe, e admitiu o lema de Slutsky e o teorema de continuidade. Este capítulo completa a teoria, com as ferramentas do @sec-est-m01.
+
+Há quatro modos de convergência de variáveis aleatórias, e eles não são equivalentes. A convergência **quase certa** fala de cada trajetória: com probabilidade 1, a sequência de números $X_n(\omega)$ converge. A convergência **em probabilidade** fala de cada $n$ separadamente: a chance de um erro maior que $\varepsilon$ vai a zero. A convergência **em média** controla o tamanho esperado do erro. E a convergência **em distribuição** não fala das variáveis, só das suas leis. A diferença importa: um estimador pode convergir em probabilidade e ter variância que não converge; uma média pode convergir quase certamente sem ter segundo momento.
+
+O capítulo desenvolve:
+
+1. os modos de convergência, suas relações e contraexemplos;
+2. os lemas de Borel–Cantelli e a lei forte dos grandes números, supondo apenas média finita;
+3. a representação de Skorokhod, o teorema do mapeamento contínuo e o lema de Slutsky;
+4. integrabilidade uniforme: quando a convergência em distribuição leva os momentos junto;
+5. funções características, a fórmula de inversão e o teorema da continuidade de Lévy;
+6. o teorema central do limite de Lindeberg–Feller, o caso vetorial e o método delta;
+7. o teorema de Glivenko–Cantelli, sobre a convergência uniforme da distribuição empírica.
+
+## Modos de convergência {#sec-est-m03-modos}
+
+::: {#def-est-m03-modos}
+## Modos de convergência
+Sejam $X_n$ e $X$ vetores aleatórios em $\R^k$.
+
+(a) $X_n \to X$ **quase certamente** ($X_n \qcto X$) se $\Prob(\{\omega : X_n(\omega) \to X(\omega)\}) = 1$.
+(b) $X_n \to X$ **em probabilidade** ($X_n \pto X$) se $\Prob(\norm{X_n - X} > \varepsilon) \to 0$ para todo $\varepsilon > 0$.
+(c) $X_n \to X$ **em $L^p$**, $p \geq 1$, se $\E\norm{X_n - X}^p \to 0$.
+(d) $X_n \to X$ **em distribuição** ($X_n \dto X$) se $\E[g(X_n)] \to \E[g(X)]$ para toda $g : \R^k \to \R$ contínua e limitada.
 :::
+
+Os três primeiros modos exigem que as variáveis estejam definidas no mesmo espaço de probabilidade; o quarto, não. Em $\R$, a definição (d) equivale à do @sec-est-g04 — convergência das funções de distribuição nos pontos de continuidade —, como mostra o @thm-est-m03-portmanteau.
+
+::: {#prp-est-m03-relacoes}
+## Relações entre os modos
+
+(a) Convergência quase certa implica convergência em probabilidade.
+(b) Convergência em $L^p$ implica convergência em $L^q$ para $1 \leq q \leq p$ e em probabilidade.
+(c) Convergência em probabilidade implica convergência em distribuição.
+(d) Se $X_n \dto c$, constante, então $X_n \pto c$.
+(e) $X_n \pto X$ se, e somente se, toda subsequência de $(X_n)$ tem uma subsequência que converge quase certamente para $X$.
+:::
+
+::: {.proof}
+Para (a), se $X_n \to X$ q.c., o evento $\{\norm{X_k - X} > \varepsilon\ \text{para infinitos}\ k\}$ tem probabilidade zero; mas ele é o limite decrescente de $\bigcup_{k \geq n}\{\norm{X_k - X} > \varepsilon\}$, e pela continuidade por cima $\Prob(\norm{X_n - X} > \varepsilon) \leq \Prob(\bigcup_{k \geq n}\{\norm{X_k - X} > \varepsilon\}) \to 0$. Para (b), $\norm Y_q \leq \norm Y_p$ (@prp-est-m02-inclusao) e, pela desigualdade de Markov, $\Prob(\norm{X_n - X} > \varepsilon) \leq \E\norm{X_n - X}^p/\varepsilon^p$.
+
+Para (e), suponha $X_n \pto X$ e tome uma subsequência; ela ainda converge em probabilidade, e podemos escolher índices $n_1 < n_2 < \cdots$ nela com $\Prob(\norm{X_{n_k} - X} > 2^{-k}) < 2^{-k}$. Pelo primeiro lema de Borel–Cantelli (@exr-est-m01-borel-cantelli), quase certamente $\norm{X_{n_k} - X} \leq 2^{-k}$ para todo $k$ grande, e $X_{n_k} \to X$ q.c. Reciprocamente, se $X_n$ não converge em probabilidade, existem $\varepsilon, \delta > 0$ e uma subsequência com $\Prob(\norm{X_{n_k} - X} > \varepsilon) > \delta$; nenhuma subsequência dela converge em probabilidade, logo, por (a), nenhuma converge quase certamente.
+
+Para (c), seja $g$ contínua e limitada. Toda subsequência de $(X_n)$ tem, por (e), uma subsequência que converge q.c.; ao longo dela, $g(X_{n_k}) \to g(X)$ q.c., e pelo teorema da convergência limitada $\E[g(X_{n_k})] \to \E[g(X)]$. Uma sequência de números em que toda subsequência tem uma subsequência convergindo para o mesmo limite converge para esse limite. Para (d), seja $g$ contínua com $\mathbf 1\{\norm{x - c} \geq \varepsilon\} \leq g(x) \leq 1$ e $g(c) = 0$ — por exemplo, $g(x) = \min(1, \norm{x - c}/\varepsilon)$. Então $\Prob(\norm{X_n - c} \geq \varepsilon) \leq \E[g(X_n)] \to g(c) = 0$.
+:::
+
+As recíprocas são falsas. Seja $U$ uniforme em $(0, 1)$.
+
+- **A máquina de escrever.** Escreva $n = 2^k + j$, com $0 \leq j < 2^k$, e seja $X_n = \mathbf 1\{j2^{-k} \leq U < (j + 1)2^{-k}\}$: o indicador de um intervalo de comprimento $2^{-k}$ que varre $(0, 1)$ da esquerda para a direita, cada vez mais estreito. Como $\E[X_n^p] = 2^{-k} \to 0$, $X_n \to 0$ em $L^p$ e em probabilidade. Mas cada $\omega$ é coberto uma vez em cada varredura, logo $X_n(\omega) = 1$ infinitas vezes: a sequência não converge em nenhum ponto.
+- **O pulso.** $X_n = n\,\mathbf 1\{U < 1/n\}$ converge para zero quase certamente (para $U > 0$, $X_n = 0$ a partir de $n > 1/U$), mas $\E[X_n] = 1$: não converge em $L^1$.
+- **Só a distribuição.** Se $X \sim \Normal(0, 1)$ e $X_n = -X$, então $X_n \dto X$ (as distribuições são todas iguais), mas $\abs{X_n - X} = 2\abs X$ não vai a zero.
+
+O interativo da @sec-est-m03-interativo mostra a máquina de escrever.
+
+## Borel–Cantelli e a lei forte dos grandes números {#sec-est-m03-lgn}
+
+::: {#lem-est-m03-borel-cantelli}
+## Lemas de Borel–Cantelli
+Sejam $A_1, A_2, \dots$ eventos e $\{A_n\ \text{i.v.}\} = \bigcap_n\bigcup_{k \geq n}A_k$ o evento "infinitos $A_n$ ocorrem".
+
+(a) Se $\sum_n\Prob(A_n) < \infty$, então $\Prob(A_n\ \text{i.v.}) = 0$.
+(b) Se os $A_n$ são independentes e $\sum_n\Prob(A_n) = \infty$, então $\Prob(A_n\ \text{i.v.}) = 1$.
+:::
+
+::: {.proof}
+O item (a) é o @exr-est-m01-borel-cantelli. Para (b), pela independência e por $1 - x \leq e^{-x}$,
+$$
+\Prob\Big(\bigcap_{k = n}^mA_k^c\Big) = \prod_{k = n}^m\big(1 - \Prob(A_k)\big) \leq \exp\Big(-\sum_{k = n}^m\Prob(A_k)\Big) \xrightarrow[m \to \infty]{} 0 .
+$$
+Logo $\Prob(\bigcup_{k \geq n}A_k) = 1$ para todo $n$, e a interseção sobre $n$ tem probabilidade 1.
+:::
+
+A lei forte dos grandes números diz que a média amostral converge **quase certamente** — cada trajetória de médias se estabiliza — supondo apenas que a média existe. A demonstração abaixo, de Etemadi, nem sequer usa independência completa: basta independência dois a dois.
+
+::: {#thm-est-m03-lgn-forte}
+## Lei forte dos grandes números (Etemadi)
+Sejam $X_1, X_2, \dots$ identicamente distribuídas, independentes duas a duas, e $\bar X_n = \frac1n\sum_{i \leq n}X_i$.
+
+(a) Se $\E\abs{X_1} < \infty$, então $\bar X_n \to \mu = \E[X_1]$ quase certamente.
+(b) Se $\E\abs{X_1} = \infty$ e as $X_i$ são independentes, então $\bar X_n$ diverge quase certamente.
+:::
+
+::: {.proof}
+Para (a), como $X_i = X_i^+ - X_i^-$ e as partes positivas (e negativas) também são identicamente distribuídas e independentes duas a duas, basta tratar $X_i \geq 0$.
+
+*Truncamento.* Seja $Y_k = X_k\mathbf 1\{X_k \leq k\}$ e $T_n = Y_1 + \dots + Y_n$. Pelo @exr-est-m01-cauda-geral,
+$$
+\sum_k\Prob(X_k \neq Y_k) = \sum_k\Prob(X_1 > k) \leq \int_0^\infty\Prob(X_1 > t)\,\dd t = \E[X_1] < \infty ,
+$$
+e pelo @lem-est-m03-borel-cantelli (a), quase certamente $X_k = Y_k$ para todo $k$ grande. Basta, portanto, mostrar que $T_n/n \to \mu$ q.c.
+
+*Ao longo de uma subsequência geométrica.* Fixe $\alpha > 1$ e $k(n) = \lfloor\alpha^n\rfloor$. As $Y_m$ são independentes duas a duas, logo $\Var(T_n) = \sum_{m \leq n}\Var(Y_m)$. Por Chebyshev e Tonelli,
+$$
+\sum_n\Prob\big(\abs{T_{k(n)} - \E T_{k(n)}} > \varepsilon k(n)\big) \leq \frac1{\varepsilon^2}\sum_n\frac{1}{k(n)^2}\sum_{m \leq k(n)}\E[Y_m^2] = \frac{1}{\varepsilon^2}\sum_m\E[Y_m^2]\sum_{n : k(n) \geq m}\frac{1}{k(n)^2} .
+$$
+Como $\lfloor y\rfloor \geq y/2$ para $y \geq 1$, a soma interna é no máximo $4\sum_{n : \alpha^n \geq m}\alpha^{-2n} \leq 4(1 - \alpha^{-2})^{-1}m^{-2}$. Resta ver que $\sum_m\E[Y_m^2]/m^2 < \infty$. Pelo @exr-est-m01-cauda-geral, $\E[Y_m^2] = \int_0^\infty 2y\,\Prob(Y_m > y)\,\dd y \leq \int_0^m 2y\,\Prob(X_1 > y)\,\dd y$, e por Tonelli
+$$
+\sum_m\frac{\E[Y_m^2]}{m^2} \leq \int_0^\infty\Big(2y\sum_{m > y}\frac{1}{m^2}\Big)\Prob(X_1 > y)\,\dd y \leq 4\,\E[X_1] ,
+$$
+porque $2y\sum_{m > y}m^{-2} \leq 4$ para todo $y \geq 0$: se $y < 1$, a soma é no máximo $\pi^2/6 < 2$; se $y \geq 1$, a soma começa em $m_0 = \lfloor y\rfloor + 1 \geq 2$ e é no máximo $\int_{m_0 - 1}^\infty x^{-2}\,\dd x = 1/\lfloor y\rfloor \leq 2/y$. Pelo @lem-est-m03-borel-cantelli (a), aplicado com $\varepsilon = 1/j$ para cada $j$, $(T_{k(n)} - \E T_{k(n)})/k(n) \to 0$ q.c. Além disso, $\E[Y_m] = \E[X_1\mathbf 1\{X_1 \leq m\}] \to \mu$ pela convergência monótona, e médias de Cesàro de uma sequência convergente convergem para o mesmo limite, logo $\E[T_{k(n)}]/k(n) \to \mu$. Assim, $T_{k(n)}/k(n) \to \mu$ q.c.
+
+*Interpolação.* Como $Y_m \geq 0$, $T_m$ é crescente em $m$. Se $k(n) \leq m < k(n + 1)$,
+$$
+\frac{k(n)}{k(n + 1)}\cdot\frac{T_{k(n)}}{k(n)} \leq \frac{T_m}{m} \leq \frac{T_{k(n+1)}}{k(n + 1)}\cdot\frac{k(n + 1)}{k(n)},
+$$
+e $k(n + 1)/k(n) \to \alpha$. Logo $\mu/\alpha \leq \liminf_m T_m/m \leq \limsup_m T_m/m \leq \alpha\mu$ q.c. Fazendo $\alpha \downarrow 1$ ao longo de uma sequência enumerável, $T_m/m \to \mu$ q.c.
+
+Para (b), para cada $C > 0$, $\sum_n\Prob(\abs{X_n} > Cn) = \sum_n\Prob(\abs{X_1}/C > n) = \infty$, pela fórmula da cauda; pelo @lem-est-m03-borel-cantelli (b), $\abs{X_n} > Cn$ infinitas vezes, q.c. Se $\bar X_n$ convergisse para um número finito, $X_n/n = \bar X_n - \frac{n - 1}{n}\bar X_{n-1}$ tenderia a zero — contradição.
+:::
+
+::: {#cor-est-m03-khinchin}
+## Lei fraca de Khinchin
+Se $X_1, X_2, \dots$ são iid com $\E\abs{X_1} < \infty$, então $\bar X_n \pto \mu$.
+:::
+
+O corolário — consequência da lei forte e da @prp-est-m03-relacoes (a) — dispensa a variância finita exigida no @thm-est-g04-lgn. A parte (b) explica o comportamento da média de variáveis de Cauchy vista no @sec-est-g04: sem média finita, não há estabilização. A lei forte justifica a interpretação frequentista da probabilidade — a frequência relativa de um evento, ao longo de uma única sequência infinita de repetições, converge para a sua probabilidade — e a simulação de Monte Carlo (@sec-cmp-m03).
+
+## Skorokhod, mapeamento contínuo e Slutsky {#sec-est-m03-slutsky}
+
+A convergência em distribuição não fala das variáveis, mas pode ser "realizada" por variáveis que convergem quase certamente. Em $\R$, a construção usa as funções quantil (@def-est-g02-quantil).
+
+::: {#thm-est-m03-skorokhod}
+## Representação de Skorokhod
+Sejam $F_n$ e $F$ funções de distribuição em $\R$, com $F_n(x) \to F(x)$ em todo ponto de continuidade de $F$, e $Q_n$, $Q$ as funções quantil. Se $U \sim U(0, 1)$, então $Y_n = Q_n(U)$ tem distribuição $F_n$, $Y = Q(U)$ tem distribuição $F$ e $Y_n \to Y$ quase certamente.
+:::
+
+::: {.proof}
+As distribuições vêm do @thm-est-g02-pit. Como $Q$ é monótona, seus pontos de descontinuidade são enumeráveis, logo têm probabilidade zero sob $U$; basta mostrar que $Q_n(u) \to Q(u)$ em cada $u \in (0, 1)$ em que $Q$ é contínua. Usaremos a @prp-est-g02-quantil, $Q(u) \leq x \iff u \leq F(x)$, e o fato de que os pontos de continuidade de $F$ são densos (as descontinuidades são enumeráveis).
+
+Fixe $\varepsilon > 0$. Tome $x$ ponto de continuidade de $F$ com $Q(u) - \varepsilon < x < Q(u)$. Como $x < Q(u)$, temos $F(x) < u$; como $F_n(x) \to F(x)$, vale $F_n(x) < u$ para $n$ grande, isto é, $Q_n(u) > x > Q(u) - \varepsilon$. Logo $\liminf_nQ_n(u) \geq Q(u)$. Para a outra desigualdade, tome $v \in (u, 1)$ e $y$ ponto de continuidade de $F$ com $Q(v) < y < Q(v) + \varepsilon$. Então $u < v \leq F(Q(v)) \leq F(y)$, logo $F_n(y) > u$ para $n$ grande, e $Q_n(u) \leq y < Q(v) + \varepsilon$. Assim, $\limsup_nQ_n(u) \leq Q(v) + \varepsilon$; fazendo $v \downarrow u$ e usando a continuidade de $Q$ em $u$, $\limsup_nQ_n(u) \leq Q(u) + \varepsilon$.
+:::
+
+O teorema vale também em $\R^k$ (e em espaços métricos separáveis), com outra construção; admitimos essa versão, demonstrada em @billingsley1995.
+
+::: {#thm-est-m03-portmanteau}
+## Caracterizações da convergência em distribuição
+(a) Em $\R$, $X_n \dto X$ (no sentido da @def-est-m03-modos) se, e somente se, $F_{X_n}(x) \to F_X(x)$ em todo ponto de continuidade de $F_X$.
+(b) Em $\R^k$, $X_n \dto X$ se $\E[g(X_n)] \to \E[g(X)]$ para toda $g$ **lipschitziana** e limitada.
+:::
+
+::: {.proof}
+Para (a), se as funções de distribuição convergem, o @thm-est-m03-skorokhod dá $Y_n \to Y$ q.c. com as mesmas distribuições, e para $g$ contínua e limitada $\E[g(X_n)] = \E[g(Y_n)] \to \E[g(Y)] = \E[g(X)]$ pelo teorema da convergência limitada. Reciprocamente, seja $x$ ponto de continuidade de $F_X$ e $\delta > 0$. Tome $g$ contínua com $\mathbf 1_{(-\infty, x]} \leq g \leq \mathbf 1_{(-\infty, x + \delta]}$: então $\limsup_nF_{X_n}(x) \leq \lim_n\E[g(X_n)] = \E[g(X)] \leq F_X(x + \delta)$. Com $h$ contínua e $\mathbf 1_{(-\infty, x - \delta]} \leq h \leq \mathbf 1_{(-\infty, x]}$, $\liminf_nF_{X_n}(x) \geq F_X(x - \delta)$. Faça $\delta \to 0$.
+
+Para (b), seja $F$ fechado e $g_m(x) = \max(0, 1 - m\,d(x, F))$, lipschitziana, limitada e decrescendo para $\mathbf 1_F$. Então $\limsup_n\Prob(X_n \in F) \leq \lim_n\E[g_m(X_n)] = \E[g_m(X)]$, que tende a $\Prob(X \in F)$; passando aos complementos, $\liminf_n\Prob(X_n \in G) \geq \Prob(X \in G)$ para $G$ aberto. Se $g$ é contínua, limitada e (somando uma constante) não negativa, com $g \leq c$, os conjuntos $\{g > t\}$ são abertos, e pela fórmula da cauda e pelo lema de Fatou
+$$
+\liminf_n\E[g(X_n)] = \liminf_n\int_0^c\Prob(g(X_n) > t)\,\dd t \geq \int_0^c\Prob(g(X) > t)\,\dd t = \E[g(X)] .
+$$
+Aplicado a $c - g$, dá $\limsup_n\E[g(X_n)] \leq \E[g(X)]$.
+:::
+
+::: {#thm-est-m03-mapeamento}
+## Mapeamento contínuo
+Seja $g : \R^k \to \R^m$ mensurável e contínua em todos os pontos de um conjunto $C$ com $\Prob(X \in C) = 1$. Se $X_n \to X$ quase certamente, em probabilidade ou em distribuição, então $g(X_n) \to g(X)$ no mesmo modo.
+:::
+
+::: {.proof}
+O caso quase certo é imediato: fora de um evento nulo, $X_n(\omega) \to X(\omega) \in C$ e $g$ é contínua em $X(\omega)$. O caso em probabilidade sai do quase certo pela @prp-est-m03-relacoes (e): toda subsequência tem uma subsequência ao longo da qual $X_n \to X$ q.c., logo $g(X_n) \to g(X)$ q.c. Para distribuição em $\R$, o @thm-est-m03-skorokhod dá $Y_n \to Y$ q.c. com as mesmas distribuições; pelo caso quase certo, $g(Y_n) \to g(Y)$ q.c., logo em distribuição, e $g(Y_n)$ tem a distribuição de $g(X_n)$. Em $\R^k$, o argumento é o mesmo com a representação de Skorokhod vetorial; se $g$ é contínua em todo ponto, nem é preciso dela, porque $h \circ g$ é contínua e limitada para toda $h$ contínua e limitada.
+:::
+
+::: {#thm-est-m03-slutsky}
+## Lema de Slutsky
+Se $X_n \dto X$ em $\R^k$ e $Y_n \pto c$, constante em $\R^m$, então $(X_n, Y_n) \dto (X, c)$. Em particular, $X_n + Y_n \dto X + c$, $Y_nX_n \dto cX$ e, se $c \neq 0$ (escalar), $X_n/Y_n \dto X/c$.
+:::
+
+::: {.proof}
+Pelo @thm-est-m03-portmanteau (b), basta considerar $g$ limitada por $B$ e lipschitziana com constante $L$. Para $\varepsilon > 0$,
+$$
+\abs{\E g(X_n, Y_n) - \E g(X, c)} \leq \E\abs{g(X_n, Y_n) - g(X_n, c)} + \abs{\E g(X_n, c) - \E g(X, c)} \leq L\varepsilon + 2B\,\Prob(\norm{Y_n - c} > \varepsilon) + \abs{\E g(X_n, c) - \E g(X, c)} .
+$$
+O segundo termo vai a zero porque $Y_n \pto c$, e o terceiro porque $x \mapsto g(x, c)$ é contínua e limitada. Logo o $\limsup$ é no máximo $L\varepsilon$, para todo $\varepsilon$. As consequências vêm do @thm-est-m03-mapeamento aplicado a $(x, y) \mapsto x + y$, $yx$ e $x/y$, contínuas nos pontos $(x, c)$.
+:::
+
+Esse é o @thm-est-g04-slutsky, admitido no @sec-est-g04. A hipótese de que o limite de $Y_n$ é **constante** é essencial: se $Z \sim \Normal(0, 1)$, $X_n = Z$ e $Y_n = -Z$ têm, cada uma, limite $\Normal(0, 1)$ em distribuição, mas $X_n + Y_n = 0$, e não uma $\Normal(0, 2)$ — a distribuição conjunta importa (@exr-est-m03-slutsky).
+
+## Integrabilidade uniforme {#sec-est-m03-ui}
+
+Convergência em distribuição não leva os momentos junto: no exemplo do pulso, $X_n \to 0$, mas $\E[X_n] = 1$. O que falta é que as caudas sejam uniformemente pequenas.
+
+::: {#def-est-m03-ui}
+## Integrabilidade uniforme
+Uma família $(X_n)$ é **uniformemente integrável** se $\lim_{M \to \infty}\sup_n\E\big[\abs{X_n}\mathbf 1\{\abs{X_n} > M\}\big] = 0$.
+:::
+
+Uma condição suficiente é $\sup_n\E\abs{X_n}^{1 + \delta} < \infty$ para algum $\delta > 0$, porque $\E[\abs X\mathbf 1\{\abs X > M\}] \leq \E\abs X^{1+\delta}/M^\delta$. Outra é $\abs{X_n} \leq Y$ com $Y$ integrável.
+
+::: {#thm-est-m03-ui}
+## Convergência de momentos
+Se $X_n \dto X$ em $\R$ e $(X_n)$ é uniformemente integrável, então $X$ é integrável e $\E[X_n] \to \E[X]$.
+:::
+
+::: {.proof}
+Pelo @thm-est-m03-skorokhod, podemos supor $X_n \to X$ q.c. (a integrabilidade uniforme só depende das distribuições). A integrabilidade uniforme dá $\sup_n\E\abs{X_n} < \infty$, e pelo lema de Fatou $\E\abs X \leq \liminf_n\E\abs{X_n} < \infty$. Seja $h_M(x) = x\,\mathbf 1\{\abs x \leq M\}$, com $M$ escolhido entre os valores (todos, exceto uma quantidade enumerável) para os quais $\Prob(\abs X = M) = 0$. Então $h_M$ é contínua num conjunto de probabilidade 1 sob $X$, logo $h_M(X_n) \to h_M(X)$ q.c. e, pela convergência limitada, $\E[h_M(X_n)] \to \E[h_M(X)]$. Finalmente,
+$$
+\abs{\E X_n - \E X} \leq \sup_k\E\big[\abs{X_k}\mathbf 1\{\abs{X_k} > M\}\big] + \abs{\E h_M(X_n) - \E h_M(X)} + \E\big[\abs X\mathbf 1\{\abs X > M\}\big],
+$$
+e o primeiro e o terceiro termos ficam pequenos com $M$ grande, uniformemente em $n$.
+:::
+
+Em econometria, a distinção aparece entre a **variância assintótica** — a variância da distribuição limite de $\sqrt n(\hat\theta_n - \theta)$ — e o limite das variâncias de $\sqrt n(\hat\theta_n - \theta)$, que pode nem existir: o estimador de mínimos quadrados em dois estágios com um instrumento tem distribuição limite normal, mas não tem variância finita em nenhuma amostra (@sec-ecm-m04).
+
+## Funções características {#sec-est-m03-caracteristicas}
+
+A função geradora de momentos pode não existir; a função característica existe sempre, porque $\abs{e^{ix}} = 1$.
+
+::: {#def-est-m03-caracteristica}
+## Função característica
+A **função característica** de um vetor aleatório $X$ em $\R^k$ é $\varphi_X(\vb t) = \E[e^{i\vb t\T X}] = \E[\cos(\vb t\T X)] + i\,\E[\operatorname{sen}(\vb t\T X)]$, $\vb t \in \R^k$.
+:::
+
+Integrais de funções complexas são definidas pelas partes real e imaginária, e valem a linearidade, os teoremas de convergência e a desigualdade $\abs{\E Z} \leq \E\abs Z$ (escrevendo $\E Z = re^{i\theta}$, $\abs{\E Z} = \E[\operatorname{Re}(e^{-i\theta}Z)] \leq \E\abs Z$).
+
+::: {#prp-est-m03-caracteristica}
+## Propriedades da função característica
+
+(a) $\varphi(0) = 1$, $\abs{\varphi(t)} \leq 1$ e $\varphi$ é uniformemente contínua.
+(b) $\varphi_{aX + b}(t) = e^{itb}\varphi_X(at)$; se $X \indep Y$, $\varphi_{X + Y} = \varphi_X\varphi_Y$.
+(c) Se $\E\abs X^k < \infty$, $\varphi$ é $k$ vezes derivável e $\varphi^{(k)}(0) = i^k\E[X^k]$.
+(d) Se $Z \sim \Normal(0, 1)$, $\varphi_Z(t) = e^{-t^2/2}$.
+:::
+
+::: {.proof}
+Em (a), $\abs{\varphi(t + h) - \varphi(t)} \leq \E\abs{e^{ihX} - 1}$, que não depende de $t$ e tende a zero com $h$ pela convergência limitada. (b) é direto, com $\E[e^{itX}e^{itY}] = \E[e^{itX}]\E[e^{itY}]$ pela independência (@sec-est-m01-fubini). (c) é a @prp-est-m01-derivacao, com $\abs{\partial_t^k e^{itx}} = \abs x^k$ integrável. Para (d), por (c) e integrando por partes com $\phi'(x) = -x\phi(x)$,
+$$
+\varphi_Z'(t) = i\int xe^{itx}\phi(x)\,\dd x = -i\int e^{itx}\phi'(x)\,\dd x = i\int(it)e^{itx}\phi(x)\,\dd x = -t\,\varphi_Z(t),
+$$
+e a única solução com $\varphi_Z(0) = 1$ é $e^{-t^2/2}$.
+:::
+
+Outros exemplos: a Poisson$(\lambda)$ tem $\varphi(t) = e^{\lambda(e^{it} - 1)}$; a uniforme em $(-1, 1)$, $\operatorname{sen}(t)/t$; a Cauchy, $e^{-\abs t}$ (@exr-est-m03-cauchy); a $\Normal(\vb\mu, \vb\Sigma)$, $e^{i\vb t\T\vb\mu - \vb t\T\vb\Sigma\vb t/2}$.
+
+::: {#lem-est-m03-taylor}
+## Resto de Taylor da exponencial complexa
+Para $x$ real e $n \geq 1$,
+$$
+\Big|e^{ix} - \sum_{k=0}^n\frac{(ix)^k}{k!}\Big| \leq \min\Big(\frac{\abs x^{n+1}}{(n + 1)!},\ \frac{2\abs x^n}{n!}\Big) .
+$$
+:::
+
+::: {.proof}
+Integrando por partes, $\int_0^x(x - s)^ne^{is}\,\dd s = \frac{x^{n+1}}{n + 1} + \frac{i}{n + 1}\int_0^x(x - s)^{n+1}e^{is}\,\dd s$. Partindo de $e^{ix} = 1 + i\int_0^xe^{is}\,\dd s$ e aplicando essa identidade sucessivamente, obtém-se por indução
+$$
+e^{ix} = \sum_{k=0}^n\frac{(ix)^k}{k!} + \frac{i^{n+1}}{n!}\int_0^x(x - s)^ne^{is}\,\dd s,
+$$
+cujo resto tem módulo no máximo $\abs x^{n+1}/(n + 1)!$. A mesma identidade com $n - 1$ no lugar de $n$, junto com $\int_0^x(x - s)^{n-1}\,\dd s = x^n/n$, permite reescrever o resto como $\frac{i^n}{(n - 1)!}\int_0^x(x - s)^{n-1}(e^{is} - 1)\,\dd s$, de módulo no máximo $\frac{2}{(n - 1)!}\cdot\frac{\abs x^n}{n}$.
+:::
+
+::: {#thm-est-m03-inversao}
+## Fórmula de inversão
+Seja $X$ real com distribuição $\mu$ e função característica $\varphi$. Para $a < b$,
+$$
+\lim_{T \to \infty}\frac{1}{2\pi}\int_{-T}^T\frac{e^{-ita} - e^{-itb}}{it}\,\varphi(t)\,\dd t = \mu((a, b)) + \frac{\mu(\{a\}) + \mu(\{b\})}{2} .
+$$
+Se $\int\abs\varphi < \infty$, então $X$ tem densidade contínua $f(x) = \frac{1}{2\pi}\int e^{-itx}\varphi(t)\,\dd t$.
+:::
+
+::: {.proof}
+O integrando é limitado: $\abs{(e^{-ita} - e^{-itb})/(it)} = \abs{\int_a^be^{-ity}\,\dd y} \leq b - a$. Pelo Fubini no produto de $[-T, T]$ (comprimento finito) com $\mu$,
+$$
+I_T = \int\Big(\frac{1}{2\pi}\int_{-T}^T\frac{e^{it(x - a)} - e^{it(x - b)}}{it}\,\dd t\Big)\mu(\dd x) .
+$$
+Na integral interna, a parte $\cos(tc)/(it)$ é ímpar em $t$ e se cancela, e $\operatorname{sen}(tc)/t$ é par; com $S(T) = \int_0^T\frac{\operatorname{sen}u}{u}\,\dd u$ e $\int_0^T\frac{\operatorname{sen}(ct)}{t}\,\dd t = \operatorname{sinal}(c)\,S(T\abs c)$, a integral interna vale $\frac1\pi[\operatorname{sinal}(x - a)S(T\abs{x - a}) - \operatorname{sinal}(x - b)S(T\abs{x - b})]$. A função $S$ é limitada e $S(T) \to \pi/2$ (a integral de Dirichlet, um fato de cálculo que admitimos). Logo a integral interna é limitada e converge para $1$ se $a < x < b$, para $1/2$ se $x \in \{a, b\}$ e para $0$ fora de $[a, b]$; a convergência limitada conclui. Se $\varphi$ é integrável, a integral converge absolutamente e o lado esquerdo é no máximo $\frac{b - a}{2\pi}\int\abs\varphi$: não há átomos, e $\mu((a, b)) = \int_a^bf(x)\,\dd x$ pelo Fubini, com $f$ contínua pela convergência dominada.
+:::
+
+::: {#cor-est-m03-unicidade}
+## A função característica determina a distribuição
+Se $\varphi_X = \varphi_Y$, então $X$ e $Y$ têm a mesma distribuição. O mesmo vale em $\R^k$.
+:::
+
+::: {.proof}
+Em $\R$, a fórmula de inversão determina $\mu((a, b])$ sempre que $a$ e $b$ não são átomos de $X$ nem de $Y$, o que exclui uma quantidade enumerável de pontos; esses intervalos formam uma classe $\pi$ que gera $\mathcal B(\R)$, e o @cor-est-m01-unicidade conclui. Em $\R^k$, a demonstração é a mesma, com caixas no lugar de intervalos.
+:::
+
+::: {#cor-est-m03-fgm}
+## Unicidade da função geradora de momentos
+Se $M_X(t) = M_Y(t) < \infty$ para $\abs t < \delta$, então $X$ e $Y$ têm a mesma distribuição.
+:::
+
+::: {.proof}
+Para $z$ complexo com $\abs{\operatorname{Re}z} < \delta$, $\Psi_X(z) = \E[e^{zX}]$ está bem definida, porque $\abs{e^{zX}} = e^{\operatorname{Re}(z)X} \leq e^{\delta' X} + e^{-\delta' X}$ com $\abs{\operatorname{Re} z} \leq \delta' < \delta$. Pelo mesmo argumento da @prp-est-m01-derivacao (com a dominante do @exm-est-m01-fgm), $\Psi_X$ é derivável no sentido complexo na faixa, isto é, analítica. $\Psi_X$ e $\Psi_Y$ coincidem no segmento real $(-\delta, \delta)$, e pelo princípio da identidade das funções analíticas (que admitimos, da análise complexa) coincidem em toda a faixa — em particular no eixo imaginário, onde valem $\varphi_X$ e $\varphi_Y$. O @cor-est-m03-unicidade conclui.
+:::
+
+Esse é o @thm-est-g03-unicidade-fgm, admitido no @sec-est-g03.
+
+### O teorema da continuidade de Lévy
+
+::: {#lem-est-m03-helly}
+## Seleção de Helly
+Toda sequência de funções de distribuição $F_n$ tem uma subsequência $F_{n_k}$ e uma função $G$ não decrescente, contínua à direita e com valores em $[0, 1]$, tais que $F_{n_k}(x) \to G(x)$ em todo ponto de continuidade de $G$.
+:::
+
+::: {.proof}
+Enumere os racionais, $q_1, q_2, \dots$. A sequência $F_n(q_1)$ é limitada e tem uma subsequência convergente (@cor-mat-m01-bolzano); dela, extraia uma subsequência ao longo da qual $F_n(q_2)$ converge; e assim por diante. A subsequência diagonal $n_k$ (o $k$-ésimo termo da $k$-ésima subsequência) satisfaz $F_{n_k}(q) \to H(q)$ para todo racional $q$, com $H$ não decrescente. Defina $G(x) = \inf\{H(q) : q > x\}$, não decrescente e contínua à direita. Se $x$ é ponto de continuidade de $G$ e $r < x < s$ são racionais, então $H(r) \leq \liminf_kF_{n_k}(x) \leq \limsup_kF_{n_k}(x) \leq H(s)$. Quando $s \downarrow x$, $H(s) \to G(x)$; e $H(r) \geq G(r')$ para todo $r' < r$, com $G(r') \to G(x)$ quando $r' \uparrow x$, pela continuidade.
+:::
+
+O limite $G$ pode não ser uma função de distribuição: se $X_n = n$, $F_n \to 0$ em todo ponto, e a massa escapou para o infinito. Uma família $(X_n)$ é **apertada** (*tight*) se para todo $\varepsilon > 0$ existe $M$ com $\Prob(\abs{X_n} > M) < \varepsilon$ para todo $n$; nesse caso, $G(x) \geq 1 - \varepsilon$ para $x \geq M$ e $G(x) \leq \varepsilon$ para $x < -M$, e $G$ é uma função de distribuição. Toda sequência que converge em distribuição é apertada.
+
+::: {#lem-est-m03-cauda}
+## Cauda controlada pela função característica
+Para $u > 0$, $\Prob(\abs X > 2/u) \leq \frac1u\int_{-u}^u\big(1 - \varphi_X(t)\big)\,\dd t$.
+:::
+
+::: {.proof}
+Pelo Fubini, e porque $\frac1u\int_{-u}^u(1 - e^{itx})\,\dd t = 2 - \frac{2\operatorname{sen}(ux)}{ux}$ (a parte imaginária é ímpar),
+$$
+\frac1u\int_{-u}^u(1 - \varphi_X(t))\,\dd t = \E\Big[2 - \frac{2\operatorname{sen}(uX)}{uX}\Big] \geq \E\Big[\Big(2 - \frac{2}{\abs{uX}}\Big)\mathbf 1\{\abs{uX} > 2\}\Big] \geq \Prob(\abs{uX} > 2),
+$$
+porque $2 - 2\operatorname{sen}(y)/y \geq 0$ sempre e $\geq 2 - 2/\abs y \geq 1$ quando $\abs y > 2$.
+:::
+
+::: {#thm-est-m03-levy}
+## Teorema da continuidade de Lévy
+Sejam $X_n$ variáveis aleatórias reais com funções características $\varphi_n$.
+
+(a) Se $X_n \dto X$, então $\varphi_n(t) \to \varphi_X(t)$ para todo $t$.
+(b) Se $\varphi_n(t) \to \varphi(t)$ para todo $t$ e $\varphi$ é contínua em $0$, então $\varphi$ é a função característica de alguma variável $X$, e $X_n \dto X$.
+:::
+
+::: {.proof}
+(a) vem da definição, pois $\cos(tx)$ e $\operatorname{sen}(tx)$ são contínuas e limitadas. Para (b), mostramos primeiro que $(X_n)$ é apertada. Como $\varphi(0) = \lim\varphi_n(0) = 1$ e $\varphi$ é contínua em zero, dado $\varepsilon$ existe $u$ com $\frac1u\int_{-u}^u\abs{1 - \varphi(t)}\,\dd t < \varepsilon$. Pela convergência dominada ($\abs{1 - \varphi_n} \leq 2$), $\frac1u\int_{-u}^u(1 - \varphi_n) \to \frac1u\int_{-u}^u(1 - \varphi)$, e pelo @lem-est-m03-cauda $\Prob(\abs{X_n} > 2/u) < 2\varepsilon$ para $n$ grande; os finitos $n$ restantes se acomodam aumentando a constante. Pelo @lem-est-m03-helly e pela tensão, toda subsequência tem uma subsequência que converge em distribuição para alguma variável $Y$; por (a), $\varphi_Y = \varphi$. Pelo @cor-est-m03-unicidade, todos esses limites têm a mesma distribuição, a de uma variável $X$ com $\varphi_X = \varphi$. Se $X_n$ não convergisse em distribuição para $X$, haveria um ponto de continuidade $x$, um $\varepsilon > 0$ e uma subsequência com $\abs{F_{n_k}(x) - F_X(x)} > \varepsilon$; uma subsequência dela convergiria para $X$ — contradição.
+:::
+
+A versão vetorial — convergência de $\varphi_{X_n}(\vb t)$ para todo $\vb t \in \R^k$, com limite contínuo em zero — tem a mesma demonstração, aplicando o @lem-est-m03-cauda a cada coordenada para obter a tensão. A hipótese de continuidade em zero não é supérflua: se $X_n \sim \Normal(0, n)$, $\varphi_n(t) = e^{-nt^2/2}$ converge para $\mathbf 1\{t = 0\}$, descontínua, e a massa escapa.
+
+::: {#cor-est-m03-levy-fgm}
+## Continuidade pela função geradora
+Se $M_{X_n}(t) \to M_X(t) < \infty$ para todo $\abs t < \delta$, então $X_n \dto X$.
+:::
+
+::: {.proof}
+Fixe $0 < s < \delta$. Pela desigualdade de Markov com $e^{s\abs x} \leq e^{sx} + e^{-sx}$, $\Prob(\abs{X_n} > a) \leq e^{-sa}(M_{X_n}(s) + M_{X_n}(-s))$, que é uniformemente pequena para $n$ grande e $a$ grande: $(X_n)$ é apertada. Seja $Y$ o limite em distribuição de uma subsequência. Para $\abs t < s$, as variáveis $e^{tX_{n_k}}$ são uniformemente integráveis, pois $\sup_k\E[(e^{tX_{n_k}})^{s/\abs t}] \leq \sup_k(M_{X_{n_k}}(s) + M_{X_{n_k}}(-s)) < \infty$; pelo @thm-est-m03-mapeamento e pelo @thm-est-m03-ui, $M_{X_{n_k}}(t) \to M_Y(t)$. Assim, $M_Y = M_X$ em $(-s, s)$ e, pelo @cor-est-m03-fgm, $Y$ tem a distribuição de $X$. Como no teorema, a sequência inteira converge.
+:::
+
+Esse é o @thm-est-g04-levy, admitido no @sec-est-g04, que completa a demonstração do TCL lá apresentada.
+
+## Teoremas centrais do limite {#sec-est-m03-tcl}
+
+::: {#thm-est-m03-lindeberg}
+## Teorema central do limite de Lindeberg–Feller
+Para cada $n$, sejam $X_{n,1}, \dots, X_{n,n}$ independentes, com $\E[X_{n,m}] = 0$, e suponha que
+
+(i) $\sum_{m=1}^n\E[X_{n,m}^2] \to \sigma^2 > 0$;
+(ii) **condição de Lindeberg:** para todo $\varepsilon > 0$, $\sum_{m=1}^n\E\big[X_{n,m}^2\mathbf 1\{\abs{X_{n,m}} > \varepsilon\}\big] \to 0$.
+
+Então $S_n = X_{n,1} + \dots + X_{n,n} \dto \Normal(0, \sigma^2)$.
+:::
+
+::: {.proof}
+Sejam $\varphi_{n,m}$ as funções características e $\sigma_{n,m}^2 = \E[X_{n,m}^2]$. Usaremos duas desigualdades elementares: para números complexos com $\abs{z_m}, \abs{w_m} \leq 1$, $\abs{\prod_mz_m - \prod_mw_m} \leq \sum_m\abs{z_m - w_m}$ (por indução, escrevendo $z_1z' - w_1w' = z_1(z' - w') + (z_1 - w_1)w'$); e $\abs{e^{-a} - (1 - a)} \leq a^2$ para $0 \leq a \leq 1$ (série alternada).
+
+Primeiro, $\max_m\sigma_{n,m}^2 \to 0$: para todo $\varepsilon$, $\sigma_{n,m}^2 \leq \varepsilon^2 + \E[X_{n,m}^2\mathbf 1\{\abs{X_{n,m}} > \varepsilon\}]$, e a soma dos segundos termos vai a zero por (ii). Fixe $t$; para $n$ grande, $t^2\sigma_{n,m}^2 \leq 1$ para todo $m$, e os números $1 - t^2\sigma_{n,m}^2/2$ estão em $[0, 1]$. Pelo @lem-est-m03-taylor com $n = 2$,
+$$
+\Big|\varphi_{n,m}(t) - \Big(1 - \frac{t^2\sigma_{n,m}^2}{2}\Big)\Big| \leq \E\min\Big(\frac{\abs{tX_{n,m}}^3}{6},\ \abs{tX_{n,m}}^2\Big) \leq \frac{\varepsilon\abs t^3}{6}\sigma_{n,m}^2 + t^2\,\E\big[X_{n,m}^2\mathbf 1\{\abs{X_{n,m}} > \varepsilon\}\big],
+$$
+separando os eventos $\{\abs{X_{n,m}} \leq \varepsilon\}$ e $\{\abs{X_{n,m}} > \varepsilon\}$. Somando em $m$ e usando a primeira desigualdade elementar,
+$$
+\limsup_n\Big|\prod_m\varphi_{n,m}(t) - \prod_m\Big(1 - \frac{t^2\sigma_{n,m}^2}{2}\Big)\Big| \leq \frac{\varepsilon\abs t^3\sigma^2}{6},
+$$
+e, como $\varepsilon$ é arbitrário, o limite é zero. Pela segunda desigualdade elementar,
+$$
+\Big|\prod_m\Big(1 - \frac{t^2\sigma_{n,m}^2}{2}\Big) - \prod_me^{-t^2\sigma_{n,m}^2/2}\Big| \leq \sum_m\frac{t^4\sigma_{n,m}^4}{4} \leq \frac{t^4}{4}\max_m\sigma_{n,m}^2\sum_m\sigma_{n,m}^2 \to 0,
+$$
+e $\prod_me^{-t^2\sigma_{n,m}^2/2} = e^{-t^2\sum_m\sigma_{n,m}^2/2} \to e^{-t^2\sigma^2/2}$. Logo $\varphi_{S_n}(t) = \prod_m\varphi_{n,m}(t) \to e^{-t^2\sigma^2/2}$, e o @thm-est-m03-levy conclui.
+:::
+
+Feller provou a recíproca: se $\max_m\sigma_{n,m}^2 \to 0$ e $S_n \dto \Normal(0, \sigma^2)$, a condição de Lindeberg vale. A condição diz que nenhuma parcela isolada pesa na soma; quando uma delas domina, o limite herda a sua distribuição (@sec-est-m03-laboratorio).
+
+::: {#cor-est-m03-lindeberg-levy}
+## Lindeberg–Lévy e Lyapunov
+(a) Se $X_1, X_2, \dots$ são iid com média $\mu$ e variância $\sigma^2 \in (0, \infty)$, então $\sqrt n(\bar X_n - \mu) \dto \Normal(0, \sigma^2)$.
+(b) Se, para algum $\delta > 0$, $\sum_m\E\abs{X_{n,m}}^{2+\delta} \to 0$ (condição de Lyapunov), a condição de Lindeberg vale.
+:::
+
+::: {.proof}
+Para (a), tome $X_{n,m} = (X_m - \mu)/\sqrt n$. Então $\sum_m\E[X_{n,m}^2] = \sigma^2$ e
+$$
+\sum_m\E\big[X_{n,m}^2\mathbf 1\{\abs{X_{n,m}} > \varepsilon\}\big] = \E\big[(X_1 - \mu)^2\mathbf 1\{\abs{X_1 - \mu} > \varepsilon\sqrt n\}\big] \to 0
+$$
+pela convergência dominada, com dominante $(X_1 - \mu)^2$. Para (b), $\E[X^2\mathbf 1\{\abs X > \varepsilon\}] \leq \E\abs X^{2+\delta}/\varepsilon^\delta$.
+:::
+
+Esse é o TCL do @thm-est-g04-tcl sem a hipótese da função geradora. A versão de Lindeberg–Feller é a que se usa com observações heterogêneas: médias ponderadas, regressões com regressores fixos e dados independentes mas não identicamente distribuídos (@exr-est-m03-ponderadas).
+
+### Vetores, método delta e ordens de grandeza
+
+::: {#thm-est-m03-cramer-wold}
+## Dispositivo de Cramér–Wold
+$X_n \dto X$ em $\R^k$ se, e somente se, $\vb t\T X_n \dto \vb t\T X$ para todo $\vb t \in \R^k$.
+:::
+
+::: {.proof}
+A ida é o @thm-est-m03-mapeamento. Para a volta, $\varphi_{X_n}(\vb t) = \E[e^{i\vb t\T X_n}] = \varphi_{\vb t\T X_n}(1) \to \varphi_{\vb t\T X}(1) = \varphi_X(\vb t)$ para todo $\vb t$, e a versão vetorial do @thm-est-m03-levy conclui.
+:::
+
+::: {#cor-est-m03-tcl-vetorial}
+## TCL multivariado
+Se $X_1, X_2, \dots$ são vetores iid em $\R^k$ com média $\vb\mu$ e matriz de covariâncias $\vb\Sigma$ finita, então $\sqrt n(\bar X_n - \vb\mu) \dto \Normal(\vb 0, \vb\Sigma)$.
+:::
+
+::: {.proof}
+Para cada $\vb t$, as variáveis $\vb t\T X_i$ são iid com média $\vb t\T\vb\mu$ e variância $\vb t\T\vb\Sigma\vb t$. Se a variância é positiva, o @cor-est-m03-lindeberg-levy dá $\vb t\T\sqrt n(\bar X_n - \vb\mu) \dto \Normal(0, \vb t\T\vb\Sigma\vb t)$; se é nula, a variável é constante e o limite é degenerado em zero. Em ambos os casos, o limite é a distribuição de $\vb t\T Z$ com $Z \sim \Normal(\vb 0, \vb\Sigma)$; aplique o @thm-est-m03-cramer-wold.
+:::
+
+::: {#def-est-m03-op}
+## Ordens de grandeza estocásticas
+$X_n = o_p(1)$ se $X_n \pto 0$. $X_n = O_p(1)$ se $(X_n)$ é apertada: para todo $\varepsilon$, existe $M$ com $\Prob(\norm{X_n} > M) < \varepsilon$ para todo $n$. Para $r_n > 0$, $X_n = o_p(r_n)$ e $X_n = O_p(r_n)$ significam $X_n/r_n = o_p(1)$ e $X_n/r_n = O_p(1)$.
+:::
+
+As regras de cálculo são as esperadas: $o_p(1) + o_p(1) = o_p(1)$, $O_p(1) + o_p(1) = O_p(1)$, $O_p(1)\,o_p(1) = o_p(1)$, e $X_n \dto X$ implica $X_n = O_p(1)$. As três primeiras saem de $\Prob(\norm{X_n + Y_n} > \varepsilon) \leq \Prob(\norm{X_n} > \varepsilon/2) + \Prob(\norm{Y_n} > \varepsilon/2)$ e, para o produto, de $\Prob(\norm{X_nY_n} > \varepsilon) \leq \Prob(\norm{X_n} > M) + \Prob(\norm{Y_n} > \varepsilon/M)$. A quarta, de $\limsup_n\Prob(\norm{X_n} \geq M) \leq \Prob(\norm X \geq M)$ (@thm-est-m03-portmanteau) e de um ajuste finito para os primeiros $n$. Assim, se $\sqrt n(\hat\theta_n - \theta) \dto Z$, então $\hat\theta_n - \theta = O_p(n^{-1/2})$: o estimador é **$\sqrt n$-consistente**.
+
+::: {#thm-est-m03-delta}
+## Método delta multivariado
+Suponha $\sqrt n(T_n - \vb\theta) \dto Z$ em $\R^k$ e seja $g : \R^k \to \R^m$ diferenciável em $\vb\theta$, com matriz jacobiana $\vb G$. Então $\sqrt n\big(g(T_n) - g(\vb\theta)\big) \dto \vb GZ$. Em particular, se $Z \sim \Normal(\vb 0, \vb\Sigma)$, o limite é $\Normal(\vb 0, \vb G\vb\Sigma\vb G\T)$.
+:::
+
+::: {.proof}
+A diferenciabilidade dá $g(\vb\theta + \vb h) = g(\vb\theta) + \vb G\vb h + \norm{\vb h}\,r(\vb h)$, com $r(\vb h) \to 0 = r(\vb 0)$ quando $\vb h \to \vb 0$. Então
+$$
+\sqrt n\big(g(T_n) - g(\vb\theta)\big) = \vb G\sqrt n(T_n - \vb\theta) + \norm{\sqrt n(T_n - \vb\theta)}\,r(T_n - \vb\theta) .
+$$
+Como $\sqrt n(T_n - \vb\theta) = O_p(1)$, $T_n - \vb\theta = O_p(n^{-1/2}) = o_p(1)$, e $r(T_n - \vb\theta) = o_p(1)$ pelo @thm-est-m03-mapeamento ($r$ é contínua em zero). O segundo termo é $O_p(1)\,o_p(1) = o_p(1)$, e o primeiro converge para $\vb GZ$ pelo mapeamento contínuo; o @thm-est-m03-slutsky conclui.
+:::
+
+## O teorema de Glivenko–Cantelli {#sec-est-m03-glivenko-cantelli}
+
+A lei forte aplicada a indicadoras dá, para cada $x$ fixo, $\hat F_n(x) \to F(x)$ quase certamente. O resultado seguinte, às vezes chamado de **teorema fundamental da estatística**, diz que a convergência é uniforme em $x$: a função de distribuição empírica aproxima a verdadeira em toda a reta ao mesmo tempo.
+
+::: {#thm-est-m03-glivenko-cantelli}
+## Glivenko–Cantelli
+Se $X_1, X_2, \dots$ são iid com função de distribuição $F$ e $\hat F_n(x) = \frac1n\sum_{i \leq n}\mathbf 1\{X_i \leq x\}$, então
+$$
+\sup_{x \in \R}\abs{\hat F_n(x) - F(x)} \to 0 \qquad\text{quase certamente.}
+$$
+:::
+
+::: {.proof}
+Fixe $k$ e sejam $x_j = Q(j/k)$ para $0 < j < k$, $x_0 = -\infty$ e $x_k = +\infty$, com $F(-\infty) = 0$ e $F(+\infty^-) = 1$. Pela @prp-est-g02-quantil, $F(x_j^-) \leq j/k \leq F(x_j)$, logo $F(x_j^-) - F(x_{j-1}) \leq 1/k$. Pela lei forte, aplicada às indicadoras $\mathbf 1\{X_i \leq x_j\}$ e $\mathbf 1\{X_i < x_j\}$, quase certamente $\hat F_n(x_j) \to F(x_j)$ e $\hat F_n(x_j^-) \to F(x_j^-)$ para todo $j$ (são finitos eventos de probabilidade 1). Para $x \in [x_{j-1}, x_j)$, a monotonicidade dá
+$$
+\hat F_n(x) - F(x) \leq \hat F_n(x_j^-) - F(x_{j-1}) \leq \hat F_n(x_j^-) - F(x_j^-) + \tfrac1k
+$$
+e, analogamente, $\hat F_n(x) - F(x) \geq \hat F_n(x_{j-1}) - F(x_{j-1}) - \frac1k$. Logo $\sup_x\abs{\hat F_n(x) - F(x)}$ é no máximo $\frac1k$ mais o maior dos $2k$ erros nos pontos $x_j$, que vão a zero. Assim, $\limsup_n\sup_x\abs{\hat F_n - F} \leq 1/k$ q.c., para todo $k$.
+:::
+
+A velocidade é dada pela **desigualdade de Dvoretzky–Kiefer–Wolfowitz**, com a constante ótima obtida por Massart: para todo $\varepsilon > 0$,
+$$
+\Prob\Big(\sup_x\abs{\hat F_n(x) - F(x)} > \varepsilon\Big) \leq 2e^{-2n\varepsilon^2} .
+$$ {#eq-est-m03-dkw}
+Admitimos o resultado (@vandervaart1998). Com $\varepsilon_n = \sqrt{\log(2/\alpha)/(2n)}$, a faixa $\hat F_n \pm \varepsilon_n$ contém a verdadeira $F$ inteira com probabilidade pelo menos $1 - \alpha$ — uma **banda de confiança** para a função de distribuição, usada na aplicação. A distribuição limite de $\sqrt n\sup_x\abs{\hat F_n - F}$, quando $F$ é contínua, é a de Kolmogorov, base do teste de Kolmogorov–Smirnov.
+
+## Pontes {#sec-est-m03-pontes}
+
+- **Inferência assintótica (@sec-est-m04, @sec-est-m05).** Consistência do estimador de máxima verossimilhança pela lei forte, normalidade assintótica pelo TCL, Slutsky e método delta; o teorema de Wilks.
+- **Econometria (@sec-ecm-m02).** A assintótica do MQO: $\hat\beta - \beta = (\frac1n\vb X\T\vb X)^{-1}\frac1n\vb X\T\vb u$, lei dos grandes números no primeiro fator, TCL de Lindeberg no segundo, Slutsky no produto; o erro padrão robusto.
+- **Dados dependentes (@sec-est-d02).** Leis dos grandes números ergódicas e TCLs para martingais e processos com dependência fraca, que substituem a independência.
+- **Bootstrap e simulação (@sec-ecm-d07, @sec-cmp-m03).** Glivenko–Cantelli justifica reamostrar da distribuição empírica; a lei forte justifica o Monte Carlo.
+- **Alta dimensão (@sec-ecm-d08).** Quando o número de parâmetros cresce com $n$, a teoria clássica deste capítulo deixa de valer; desigualdades de concentração como a DKW tomam o seu lugar.
+
+## Interativo {#sec-est-m03-interativo}
+
+::: {.content-visible when-format="html"}
+**A máquina de escrever.** Com $n = 2^k + j$, $X_n$ é o indicador de que $U$ cai no intervalo $[j2^{-k}, (j + 1)2^{-k})$. À esquerda da figura de cima, o intervalo da vez; embaixo, a trajetória $X_1(\omega), \dots, X_n(\omega)$ para o $\omega = U$ escolhido. A probabilidade de $X_n = 1$ vai a zero, mas cada trajetória volta a 1 uma vez em cada varredura: convergência em probabilidade sem convergência quase certa. Multiplicando por $2^k$, a média fica em 1 e a convergência em $L^1$ também falha.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof nM03 = controle("n", [1, 255], {valor: 13, passo: 1, casas: 0})
+viewof omegaM03 = controle("ω = valor de U", [0.001, 0.999], {valor: 0.37, passo: 0.001, casas: 3})
+viewof escalaM03 = alternador("multiplicar por 2ᵏ (média sempre 1)")
+```
+
+```{ojs}
+//| echo: false
+md`n = ${nM03} = 2${sobrescritoM03(kM03)} + ${jM03}. Intervalo: [${fmtM03(jM03 / 2 ** kM03, 4)}; ${fmtM03((jM03 + 1) / 2 ** kM03, 4)}). P(Xₙ ≠ 0) = ${fmtM03(2 ** -kM03, 4)}; E[Xₙ] = ${fmtM03(escalaM03 ? 1 : 2 ** -kM03, 4)}. Vezes em que Xₘ(ω) ≠ 0 para m ≤ n: **${trajM03.filter(p => p.v > 0).length}**.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 170, grid: true,
+  x: {label: "u", domain: [0, 1]}, y: {label: "Xₙ(u)", domain: [0, escalaM03 ? 2 ** kM03 * 1.1 : 1.1]},
+  marks: [
+    Plot.line([{u: 0, y: 0}, {u: jM03 / 2 ** kM03, y: 0}, {u: jM03 / 2 ** kM03, y: altM03}, {u: (jM03 + 1) / 2 ** kM03, y: altM03}, {u: (jM03 + 1) / 2 ** kM03, y: 0}, {u: 1, y: 0}], {x: "u", y: "y", stroke: "#2F5D8A", strokeWidth: 2}),
+    Plot.ruleX([omegaM03], {stroke: "#8C2F39", strokeDasharray: "4,3"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 190, grid: true,
+  x: {label: "m", domain: [0, nM03 + 1]}, y: {label: "Xₘ(ω)"},
+  marks: [
+    Plot.ruleX(trajM03, {x: "m", y1: 0, y2: "v", stroke: "#2F5D8A", strokeOpacity: 0.5}),
+    Plot.dot(trajM03, {x: "m", y: "v", r: 2.5, fill: d => d.v > 0 ? "#8C2F39" : "#9AA5B1", stroke: null})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtM03 = (v, c) => v.toFixed(c).replace(".", ",")
+sobrescritoM03 = k => String(k).split("").map(c => "⁰¹²³⁴⁵⁶⁷⁸⁹"[+c]).join("")
+kM03 = Math.floor(Math.log2(nM03))
+jM03 = nM03 - 2 ** kM03
+altM03 = escalaM03 ? 2 ** kM03 : 1
+trajM03 = d3.range(1, nM03 + 1).map(m => {
+  const k = Math.floor(Math.log2(m)), j = m - 2 ** k
+  const dentro = omegaM03 >= j / 2 ** k && omegaM03 < (j + 1) / 2 ** k
+  return {m, v: dentro ? (escalaM03 ? 2 ** k : 1) : 0}
+})
+```
+:::
+
+**Glivenko–Cantelli e a banda de DKW.** A escada azul é a função de distribuição empírica de $n$ observações simuladas; a curva vinho, a verdadeira; a faixa cinza, a banda $\hat F_n \pm \varepsilon_n$ de 95% da desigualdade de Dvoretzky–Kiefer–Wolfowitz, que contém a curva inteira em pelo menos 95% das amostras.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof distM03 = seletor("distribuição", ["normal padrão", "exponencial (média 1)", "t com 3 graus de liberdade", "mistura de duas normais"])
+viewof nGCM03 = controle("n (escala log₁₀)", [1, 3.7], {valor: 2, passo: 0.05, casas: 2})
+viewof sementeM03 = controle("semente", [1, 50], {valor: 1, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`n = ${nAmM03}. Distância máxima sup |F̂ₙ − F| = **${fmtM03(supM03, 4)}**; meia-largura da banda de 95%: ε = ${fmtM03(epsDKWM03, 4)}. ${supM03 <= epsDKWM03 ? "A curva verdadeira está dentro da banda." : "Desta vez a curva sai da banda — o que deve ocorrer em no máximo 5% das amostras."}`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "x", domain: espM03.dom}, y: {label: "F(x)", domain: [0, 1]},
+  marks: [
+    Plot.areaY(bandaM03, {x: "x", y1: "lo", y2: "hi", fill: "#9AA5B1", fillOpacity: 0.35, curve: "step-after"}),
+    Plot.line(bandaM03, {x: "x", y: "f", stroke: "#2F5D8A", strokeWidth: 1.5, curve: "step-after"}),
+    Plot.line(d3.range(301).map(i => { const x = espM03.dom[0] + i * (espM03.dom[1] - espM03.dom[0]) / 300; return {x, y: espM03.F(x)} }), {x: "x", y: "y", stroke: "#8C2F39", strokeWidth: 2})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+geradorM03 = semente => () => {
+  semente |= 0; semente = semente + 0x6D2B79F5 | 0
+  let t = Math.imul(semente ^ semente >>> 15, 1 | semente)
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+  return ((t ^ t >>> 14) >>> 0) / 4294967296
+}
+qnormM03 = p => {
+  const a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00]
+  const b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01]
+  const c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00]
+  const d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00]
+  const pl = 0.02425
+  if (p < pl) { const q = Math.sqrt(-2 * Math.log(p)); return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1) }
+  if (p > 1 - pl) { const q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) / ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1) }
+  const q = p - 0.5, r = q * q
+  return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q / (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1)
+}
+PhiM03 = x => {
+  const t = 1 / (1 + 0.3275911 * Math.abs(x) / Math.SQRT2)
+  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-(x * x) / 2)
+  return x >= 0 ? 0.5 * (1 + y) : 0.5 * (1 - y)
+}
+espM03 = ({
+  "normal padrão": {dom: [-3.5, 3.5], F: x => PhiM03(x), Q: u => qnormM03(u)},
+  "exponencial (média 1)": {dom: [0, 5], F: x => (x <= 0 ? 0 : 1 - Math.exp(-x)), Q: u => -Math.log(1 - u)},
+  "t com 3 graus de liberdade": {dom: [-5, 5], F: x => { const th = Math.atan(x / Math.sqrt(3)); return 0.5 + (th + Math.sin(th) * Math.cos(th)) / Math.PI }, Q: null},
+  "mistura de duas normais": {dom: [-4, 6], F: x => 0.6 * PhiM03(x) + 0.4 * PhiM03((x - 3) / 0.7), Q: null}
+})[distM03]
+nAmM03 = Math.round(10 ** nGCM03)
+amostraM03 = {
+  const r = geradorM03(sementeM03 * 7919), xs = []
+  for (let i = 0; i < nAmM03; i++) {
+    const u = Math.min(1 - 1e-12, Math.max(1e-12, r()))
+    if (espM03.Q) { xs.push(espM03.Q(u)); continue }
+    if (distM03.startsWith("t")) {
+      const z = qnormM03(u)
+      let v = 0
+      for (let j = 0; j < 3; j++) { const w = qnormM03(Math.min(1 - 1e-12, Math.max(1e-12, r()))); v += w * w }
+      xs.push(z / Math.sqrt(v / 3))
+    } else {
+      xs.push(r() < 0.6 ? qnormM03(u) : 3 + 0.7 * qnormM03(u))
+    }
+  }
+  return xs.sort((a, b) => a - b)
+}
+epsDKWM03 = Math.sqrt(Math.log(2 / 0.05) / (2 * nAmM03))
+supM03 = d3.max(amostraM03, (x, i) => Math.max(Math.abs((i + 1) / nAmM03 - espM03.F(x)), Math.abs(i / nAmM03 - espM03.F(x))))
+bandaM03 = {
+  const pts = [{x: espM03.dom[0], f: 0}]
+  amostraM03.forEach((x, i) => { if (x > espM03.dom[0] && x < espM03.dom[1]) pts.push({x, f: (i + 1) / nAmM03}) })
+  pts[0].f = amostraM03.filter(x => x <= espM03.dom[0]).length / nAmM03
+  pts.push({x: espM03.dom[1], f: amostraM03.filter(x => x <= espM03.dom[1]).length / nAmM03})
+  return pts.map(p => ({...p, lo: Math.max(0, p.f - epsDKWM03), hi: Math.min(1, p.f + epsDKWM03)}))
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — a máquina de escrever, que converge em probabilidade mas não quase certamente, e a função de distribuição empírica com a banda de DKW — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-m03-laboratorio}
+
+### Borel–Cantelli: eventos que se repetem e eventos que param
+
+Com eventos independentes de probabilidade $1/n$, a soma diverge, e o número de ocorrências até $N$ cresce como $\log N$ — infinitas, mas cada vez mais raras. Com probabilidade $1/n^2$, a soma converge, e as ocorrências param.
+
+```{python}
+import numpy as np
+from scipy import stats
+from scipy.integrate import trapezoid
+
+rng = np.random.default_rng(3)
+N = 1_000_000
+n = np.arange(1, N + 1)
+for nome, p in [("1/n  ", 1 / n), ("1/n^2", 1 / n ** 2)]:
+    ocorre = rng.uniform(size=N) < p
+    ult = n[ocorre].max()
+    conta = [int(ocorre[:m].sum()) for m in [10, 1000, N]]
+    print(f"P(A_n) = {nome}: ocorrencias ate 10, 10^3, 10^6: "
+          f"{conta}")
+    print(f"                ultima ocorrencia em n = {ult}")
+print(f"log(10^6) = {np.log(N):.1f}")
+```
+
+### A lei forte com e sem média
+
+Pareto com $\alpha = 1{,}5$ tem média $3$ e variância infinita: a trajetória das médias converge, devagar. Com $\alpha = 0{,}9$, não há média, e as médias crescem sem limite (@thm-est-m03-lgn-forte (b)).
+
+```{python}
+pontos = [10 ** k for k in range(1, 7)]
+for alfa in [1.5, 0.9]:
+    X = (1 - rng.uniform(size=pontos[-1])) ** (-1 / alfa)
+    medias = np.cumsum(X)[np.array(pontos) - 1] / np.array(pontos)
+    print(f"alfa = {alfa}: " + "  ".join(f"{m:.2f}" for m in medias))
+```
+
+### Funções características: o TCL visto pelas frequências
+
+A função característica empírica de $Z_n = \sqrt n(\bar X_n - 1)$, com $X_i$ exponenciais, se aproxima de $e^{-t^2/2}$; a parte imaginária, que mede a assimetria, desaparece. Também recuperamos a densidade normal em alguns pontos pela fórmula de inversão.
+
+```{python}
+t = np.linspace(-3, 3, 61)
+for nn in [1, 5, 30, 200]:
+    medias = rng.exponential(size=(20_000, nn)).mean(axis=1)
+    Z = np.sqrt(nn) * (medias - 1)
+    phi = np.exp(1j * np.outer(t, Z)).mean(axis=1)
+    desvio = np.abs(phi - np.exp(-t ** 2 / 2)).max()
+    print(f"n = {nn:>3}: max |phi_n(t) - exp(-t^2/2)| = {desvio:.4f}")
+
+tt = np.linspace(-40, 40, 80_001)
+for x in [0.0, 1.0, 2.0]:
+    integrando = np.exp(-1j * tt * x) * np.exp(-tt ** 2 / 2)
+    f = np.real(trapezoid(integrando, tt)) / (2 * np.pi)
+    print(f"inversao em x = {x}: {f:.6f}  "
+          f"(densidade {stats.norm.pdf(x):.6f})")
+```
+
+### Quando a condição de Lindeberg falha
+
+Seja $S_n = \varepsilon_1/\sqrt 2 + \sum_{m=2}^n\varepsilon_m/\sqrt{2(n - 1)}$, com $\varepsilon_m = \pm 1$ equiprováveis. A variância é 1, mas a primeira parcela não encolhe, e o limite é a mistura de $\Normal(\pm 0{,}71;\ 0{,}5)$, não a normal padrão: a curtose fica em $2{,}5$ em vez de $3$.
+
+```{python}
+nn, R = 400, 200_000
+eps1 = rng.choice([-1, 1], size=R)
+resto = 2 * rng.binomial(nn - 1, 0.5, size=R) - (nn - 1)
+S = eps1 / np.sqrt(2) + resto / np.sqrt(2 * (nn - 1))
+curt = stats.kurtosis(S, fisher=False)
+print(f"variancia {S.var():.3f}; curtose {curt:.3f}")
+p_normal = stats.norm.cdf(0.2) - stats.norm.cdf(-0.2)
+print(f"P(|S| < 0,2) = {np.mean(np.abs(S) < 0.2):.3f} "
+      f"(normal padrao: {p_normal:.3f})")
+```
+
+### Método delta: a razão de médias
+
+Para $R = \bar Y/\bar X$, o método delta com $g(x, y) = y/x$ dá a variância assintótica $\nabla g\T\vb\Sigma\nabla g$. Verificamos a cobertura do intervalo resultante.
+
+```{python}
+def cobertura_razao(n, R=20_000):
+    X = rng.gamma(4, 1, size=(R, n))
+    Y = 2 * X + rng.normal(0, 2, size=(R, n))   # E[Y]/E[X] = 2
+    mx, my = X.mean(axis=1), Y.mean(axis=1)
+    razao = my / mx
+    vx, vy = X.var(axis=1, ddof=1), Y.var(axis=1, ddof=1)
+    cxy = ((X - mx[:, None]) * (Y - my[:, None])).sum(axis=1) / (n - 1)
+    gx, gy = -my / mx ** 2, 1 / mx
+    ep = np.sqrt((gx ** 2 * vx + 2 * gx * gy * cxy + gy ** 2 * vy) / n)
+    return np.mean(np.abs(razao - 2) <= 1.96 * ep)
+
+for n in [10, 30, 100, 1000]:
+    cob = cobertura_razao(n)
+    print(f"n = {n:>4}: cobertura do IC de 95% = {cob:.3f}")
+```
+
+## Aplicação: a distribuição empírica do IPCA e a banda de DKW {#sec-est-m03-aplicacao}
+
+Tratamos a variação mensal do IPCA desde 2000 como uma amostra de uma distribuição $F$ e construímos a banda de confiança de 95% da @eq-est-m03-dkw. Em seguida, perguntamos se as duas metades da amostra — 2000 a 2012 e 2013 em diante — parecem vir da mesma distribuição, comparando a distância máxima entre as funções empíricas com o valor crítico de Kolmogorov–Smirnov. Os dois procedimentos supõem observações independentes, o que a inflação, persistente, não satisfaz: com dependência, a amostra contém menos informação do que $n$ observações independentes, e as bandas e os valores-p ficam otimistas (@sec-est-d02).
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import Markdown
+from formacao import dados, graficos
+
+graficos.estilo()
+try:
+    ipca = dados.sgs("ipca", inicio="2000-01-01")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+def fde(amostra, pontos):
+    ordenada = np.sort(amostra)
+    posicoes = np.searchsorted(ordenada, pontos, side="right")
+    return posicoes / len(ordenada)
+
+if disponivel:
+    x = ipca.to_numpy()
+    n = len(x)
+    eps = np.sqrt(np.log(2 / 0.05) / (2 * n))
+    a = ipca.loc[:"2012-12-31"].to_numpy()
+    b = ipca.loc["2013-01-01":].to_numpy()
+    pts = np.sort(x)
+    D = np.abs(fde(a, pts) - fde(b, pts)).max()
+    crit = 1.358 * np.sqrt((len(a) + len(b)) / (len(a) * len(b)))
+    ks = stats.ks_2samp(a, b)
+    print(f"n = {n} meses; banda DKW de 95%: +/- {eps:.3f}")
+    print(f"metades: {len(a)} e {len(b)} meses; medianas "
+          f"{np.median(a):.2f} e {np.median(b):.2f}")
+    print(f"D = sup|F_a - F_b| = {D:.3f}; valor critico KS (5%) = "
+          f"{crit:.3f}")
+    print(f"valor-p do teste KS = {ks.pvalue:.3g}")
+
+    grade = np.linspace(x.min() - 0.2, x.max() + 0.2, 800)
+    F = fde(x, grade)
+    fig, ax = plt.subplots(1, 2, figsize=(9.5, 3.5), sharey=True)
+    ax[0].fill_between(grade, np.clip(F - eps, 0, 1),
+                       np.clip(F + eps, 0, 1), step="post",
+                       color=graficos.PALETA["cinza"], alpha=0.5,
+                       label="banda DKW de 95%")
+    ax[0].step(grade, F, where="post", color=graficos.PALETA["azul"],
+               label="empírica, 2000 em diante")
+    ax[0].set_xlabel("IPCA, % ao mês")
+    ax[0].set_ylabel("F(x)")
+    ax[0].legend(frameon=False, fontsize=8)
+    ax[1].step(grade, fde(a, grade), where="post",
+               color=graficos.PALETA["ambar"], label="2000-2012")
+    ax[1].step(grade, fde(b, grade), where="post",
+               color=graficos.PALETA["vinho"], label="2013 em diante")
+    ax[1].set_xlabel("IPCA, % ao mês")
+    ax[1].legend(frameon=False, fontsize=8)
+    graficos.fonte(ax[0], "IBGE (IPCA), via SGS/BCB, série 433.")
+    plt.tight_layout()
+    plt.show()
+
+    br = lambda v, c=3: f"{v:.{c}f}".replace(".", ",")
+    acima = D > crit
+    resumo = (f"Com {n} meses, a banda de 95% tem meia-largura "
+              f"{br(eps)}: com probabilidade de pelo menos 95%, a "
+              "verdadeira função de distribuição está, em toda a "
+              "reta, a menos dessa distância da empírica. A distância "
+              f"máxima entre as metades é {br(D)}, "
+              f"{'acima' if acima else 'abaixo'} do valor crítico de "
+              f"{br(crit)}; "
+              + ("as duas metades parecem vir de distribuições "
+                 "diferentes, e o valor-p, já otimista sob "
+                 "dependência, não deixa dúvida. "
+                 if acima else
+                 "a diferença entre as metades não é estatisticamente "
+                 "significativa a 5%, mesmo com o otimismo de tratar "
+                 "os meses como independentes. ")
+              + f"As medianas são {br(np.median(a), 2)}% e "
+              f"{br(np.median(b), 2)}% ao mês.")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+A comparação ilustra um uso comum de Glivenko–Cantelli: a função de distribuição empírica é um estimador consistente de toda a distribuição, não só da média, e permite comparar distribuições inteiras — de rendimentos entre grupos, de retornos entre períodos, de inflação entre regimes. Para dados dependentes, versões em blocos do bootstrap (@sec-ecm-d07) corrigem a banda.
+
+## Exercícios resolvidos {#sec-est-m03-exercicios}
+
+::: {#exr-est-m03-maximo}
+Sejam $X_1, X_2, \dots$ iid exponenciais com média 1 e $M_n = \max_{i \leq n}X_i$. Mostre que $M_n/\log n \to 1$ quase certamente.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Fixe $\varepsilon > 0$. Como $\Prob(X_n > (1 + \varepsilon)\log n) = n^{-(1+\varepsilon)}$ é somável, pelo primeiro lema de Borel–Cantelli $X_n \leq (1 + \varepsilon)\log n$ para todo $n \geq N(\omega)$; então $M_n \leq \max(M_{N}, (1 + \varepsilon)\log n)$ e $\limsup M_n/\log n \leq 1 + \varepsilon$. Para a cota inferior, $\Prob(M_n \leq (1 - \varepsilon)\log n) = (1 - n^{-(1-\varepsilon)})^n \leq \exp(-n^\varepsilon)$, também somável; logo $M_n > (1 - \varepsilon)\log n$ para $n$ grande, e $\liminf M_n/\log n \geq 1 - \varepsilon$. A versão mais fina, $M_n - \log n \dto$ Gumbel, é o ponto de partida da teoria de valores extremos usada em risco de cauda.
+:::
+
+::: {#exr-est-m03-slutsky}
+Mostre com um exemplo que, se $X_n \dto X$ e $Y_n \dto Y$ com $Y$ não constante, $X_n + Y_n$ pode não convergir para $X + Y$ — e que a pergunta nem faz sentido sem a distribuição conjunta.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $Z \sim \Normal(0, 1)$, $X_n = Z$ para todo $n$, e $Y_n = -Z$ para $n$ par, $Y_n = Z$ para $n$ ímpar. Então $X_n \dto \Normal(0, 1)$ e $Y_n \dto \Normal(0, 1)$, mas $X_n + Y_n$ alterna entre $0$ e $2Z \sim \Normal(0, 4)$ e não converge. A soma depende da distribuição **conjunta** de $(X_n, Y_n)$, que as marginais não determinam. O lema de Slutsky funciona porque, quando $Y_n \pto c$, a conjunta de $(X_n, Y_n)$ fica determinada no limite.
+:::
+
+::: {#exr-est-m03-cauchy}
+Use a fórmula de inversão para mostrar que a função característica da Cauchy padrão, de densidade $1/(\pi(1 + x^2))$, é $e^{-\abs t}$. Conclua que a média de $n$ variáveis de Cauchy iid é Cauchy.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A densidade de Laplace $g(x) = \frac12e^{-\abs x}$ tem função característica $\int\frac12e^{-\abs x}e^{itx}\,\dd x = \int_0^\infty e^{-x}\cos(tx)\,\dd x = \frac{1}{1 + t^2}$ (integrando por partes duas vezes). Essa função é integrável, e o @thm-est-m03-inversao dá $\frac12e^{-\abs x} = \frac{1}{2\pi}\int e^{-itx}\frac{1}{1 + t^2}\,\dd t$. Trocando os papéis de $x$ e $t$ (e $t$ por $-t$), $\int e^{itx}\frac{1}{\pi(1 + x^2)}\,\dd x = e^{-\abs t}$. Pela @prp-est-m03-caracteristica (b), a média $\bar X_n$ tem função característica $(e^{-\abs{t}/n})^n = e^{-\abs t}$, e pelo @cor-est-m03-unicidade é Cauchy padrão: a média de $n$ observações tem a mesma dispersão que uma só, como no @thm-est-m03-lgn-forte (b).
+:::
+
+::: {#exr-est-m03-poisson}
+Mostre, por funções características, que se $X_\lambda \sim$ Poisson$(\lambda)$, então $(X_\lambda - \lambda)/\sqrt\lambda \dto \Normal(0, 1)$ quando $\lambda \to \infty$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela @prp-est-m03-caracteristica (b), a função característica de $Z_\lambda = (X_\lambda - \lambda)/\sqrt\lambda$ é
+$$
+\varphi_\lambda(t) = \exp\big(\lambda(e^{it/\sqrt\lambda} - 1) - it\sqrt\lambda\big) .
+$$
+Pelo @lem-est-m03-taylor, $e^{it/\sqrt\lambda} = 1 + it/\sqrt\lambda - t^2/(2\lambda) + r_\lambda$, com $\abs{r_\lambda} \leq \abs t^3/(6\lambda^{3/2})$. O expoente é $-t^2/2 + \lambda r_\lambda \to -t^2/2$, e o @thm-est-m03-levy conclui. (Para $\lambda$ inteiro, $X_\lambda$ é a soma de $\lambda$ Poisson(1) independentes, e o resultado é o TCL; a função característica trata $\lambda$ real.)
+:::
+
+::: {#exr-est-m03-ponderadas}
+Sejam $\varepsilon_1, \varepsilon_2, \dots$ iid com média 0 e variância 1, e $a_{n,1}, \dots, a_{n,n}$ constantes com $\sum_ma_{n,m}^2 = 1$. Mostre que, se $\max_m\abs{a_{n,m}} \to 0$, então $\sum_ma_{n,m}\varepsilon_m \dto \Normal(0, 1)$. Aplique ao estimador de mínimos quadrados com regressor fixo.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Com $X_{n,m} = a_{n,m}\varepsilon_m$, a soma das variâncias é 1, e para $\varepsilon > 0$, sendo $\delta_n = \max_m\abs{a_{n,m}}$,
+$$
+\sum_m\E\big[a_{n,m}^2\varepsilon_m^2\mathbf 1\{\abs{a_{n,m}\varepsilon_m} > \varepsilon\}\big] \leq \sum_ma_{n,m}^2\,\E\big[\varepsilon_1^2\mathbf 1\{\abs{\varepsilon_1} > \varepsilon/\delta_n\}\big] = \E\big[\varepsilon_1^2\mathbf 1\{\abs{\varepsilon_1} > \varepsilon/\delta_n\}\big] \to 0,
+$$
+pela convergência dominada, porque $\varepsilon/\delta_n \to \infty$. O @thm-est-m03-lindeberg conclui. Na regressão $y_i = \beta x_i + u_i$ com $x_i$ fixos e $u_i$ iid $(0, \sigma^2)$, $(\hat\beta - \beta)\sqrt{\sum_ix_i^2}/\sigma = \sum_ia_{n,i}(u_i/\sigma)$ com $a_{n,i} = x_i/\sqrt{\sum_jx_j^2}$; a normalidade assintótica vale se nenhuma observação domina, $\max_ix_i^2/\sum_jx_j^2 \to 0$ — falha, por exemplo, com $x_i = 2^i$.
+:::
+
+::: {#exr-est-m03-delta-variancia}
+Seja $X_1, X_2, \dots$ iid com $\E X_1^4 < \infty$, média $\mu$, variância $\sigma^2$ e $\mu_4 = \E(X_1 - \mu)^4$. Mostre que $\sqrt n(S_n^2 - \sigma^2) \dto \Normal(0, \mu_4 - \sigma^4)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Sem perda de generalidade, $\mu = 0$. Pelo @cor-est-m03-tcl-vetorial, $\sqrt n\big((\bar X_n, \overline{X^2}_n) - (0, \sigma^2)\big) \dto \Normal(\vb 0, \vb\Sigma)$, com $\vb\Sigma = \begin{pmatrix}\sigma^2 & \mu_3 \\ \mu_3 & \mu_4 - \sigma^4\end{pmatrix}$. A variância amostral com divisor $n$ é $g(\bar X, \overline{X^2}) = \overline{X^2} - \bar X^2$, com gradiente $(0, 1)$ no ponto $(0, \sigma^2)$; pelo @thm-est-m03-delta, o limite é $\Normal(0, \mu_4 - \sigma^4)$. O divisor $n - 1$ muda a estatística por $O_p(1/n)$, desprezível depois de multiplicar por $\sqrt n$ (Slutsky). Na normal, $\mu_4 = 3\sigma^4$ e a variância assintótica é $2\sigma^4$; com caudas pesadas, $\mu_4$ é grande e a variância amostral é muito imprecisa.
+:::
+
+::: {#exr-est-m03-ui}
+Seja $X_n = n\,\mathbf 1\{U < 1/n\}$ com $U$ uniforme. Mostre que $(X_n)$ não é uniformemente integrável. Mostre também que, se $\sup_n\E[X_n^2] < \infty$, a família é uniformemente integrável, e dê um exemplo de estimador em que isso garante a convergência da média.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para $M$ fixo e $n > M$, $\E[X_n\mathbf 1\{X_n > M\}] = n\cdot\frac1n = 1$, logo $\sup_n\E[X_n\mathbf 1\{X_n > M\}] = 1$ para todo $M$. Se $\sup_n\E X_n^2 = c < \infty$, então $\E[\abs{X_n}\mathbf 1\{\abs{X_n} > M\}] \leq \E[X_n^2]/M \leq c/M \to 0$. Exemplo: se $\sqrt n(\bar X_n - \mu) \dto \Normal(0, \sigma^2)$ e $\E[n(\bar X_n - \mu)^2] = \sigma^2$ para todo $n$, então $\E[\sqrt n\abs{\bar X_n - \mu}] \to \sigma\sqrt{2/\pi}$, o erro absoluto médio da normal, pelo @thm-est-m03-ui aplicado a $\sqrt n\abs{\bar X_n - \mu}$, cujo quadrado tem média limitada.
+:::
+
+::: {#exr-est-m03-variacao-total}
+Mostre que $X_n \dto X$ não implica $\Prob(X_n \in A) \to \Prob(X \in A)$ para todo boreliano $A$, mesmo quando $X$ tem densidade.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $X_n$ uniforme no conjunto $\{1/n, 2/n, \dots, n/n\}$. Para $x \in (0, 1)$, $F_n(x) = \lfloor nx\rfloor/n \to x$, logo $X_n \dto U(0, 1)$. Mas, com $A = \Q$, $\Prob(X_n \in \Q) = 1$ para todo $n$ e $\Prob(U \in \Q) = 0$. A convergência em distribuição só controla conjuntos cuja fronteira tem probabilidade zero sob o limite; $\Q$ tem fronteira $\R$. A convergência uniforme sobre todos os borelianos é a convergência em variação total, que vale, por exemplo, quando as densidades convergem (lema de Scheffé, @exr-est-m01-scheffe).
+:::
+
+## Flashcards {#sec-est-m03-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são as implicações entre os modos de convergência?
+Quase certa $\Rightarrow$ em probabilidade $\Rightarrow$ em distribuição; $L^p \Rightarrow L^q$ ($q \leq p$) $\Rightarrow$ em probabilidade; em distribuição para constante $\Rightarrow$ em probabilidade. Em probabilidade $\iff$ toda subsequência tem subsequência q.c.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Dê contraexemplos para as recíprocas.
+Máquina de escrever: em $L^p$ e em probabilidade, não q.c. Pulso $n\mathbf 1\{U < 1/n\}$: q.c., não em $L^1$. $X_n = -X$ com $X$ normal: em distribuição, não em probabilidade.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que dizem os lemas de Borel–Cantelli?
+(a) $\sum\Prob(A_n) < \infty \Rightarrow \Prob(A_n\ \text{i.v.}) = 0$. (b) Independentes com $\sum\Prob(A_n) = \infty \Rightarrow \Prob(A_n\ \text{i.v.}) = 1$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são as hipóteses e os passos da lei forte de Etemadi?
+Identicamente distribuídas, independentes duas a duas, $\E\abs X < \infty$. Truncar em $k$ (Borel–Cantelli), Chebyshev ao longo de $\lfloor\alpha^n\rfloor$, interpolar pela monotonicidade ($X \geq 0$). Sem média finita, $\bar X_n$ diverge q.c.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é a representação de Skorokhod em $\R$?
+Se $F_n \to F$ nos pontos de continuidade, $Q_n(U) \to Q(U)$ q.c., com $Q_n(U) \sim F_n$. Transforma convergência em distribuição em convergência q.c. e prova o mapeamento contínuo.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Por que o lema de Slutsky exige limite constante?
+Com $Y_n \pto c$, a conjunta de $(X_n, Y_n)$ converge para a de $(X, c)$. Com limite aleatório, as marginais não determinam a conjunta: $Z + (-Z) = 0$, não $\Normal(0, 2)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando a convergência em distribuição leva a média junto?
+Com integrabilidade uniforme: $\sup_n\E[\abs{X_n}\mathbf 1\{\abs{X_n} > M\}] \to 0$ (basta $\sup\E\abs{X_n}^{1+\delta} < \infty$). Sem ela, $n\mathbf 1\{U < 1/n\}$: limite 0, média 1.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são as propriedades básicas da função característica?
+Existe sempre; $\abs\varphi \leq 1$; uniformemente contínua; $\varphi_{X+Y} = \varphi_X\varphi_Y$ (independentes); $\varphi^{(k)}(0) = i^k\E X^k$; normal $e^{-t^2/2}$; Cauchy $e^{-\abs t}$; determina a distribuição (inversão).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema da continuidade de Lévy?
+$X_n \dto X \Rightarrow \varphi_n \to \varphi_X$. Se $\varphi_n \to \varphi$ pontualmente e $\varphi$ é contínua em 0, então $\varphi$ é função característica e $X_n \dto X$. Prova: tensão pelo controle da cauda + Helly + unicidade.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Enuncie a condição de Lindeberg e o TCL de Lindeberg–Feller.
+Arranjo triangular independente, média 0, $\sum_m\E X_{n,m}^2 \to \sigma^2$ e $\sum_m\E[X_{n,m}^2\mathbf 1\{\abs{X_{n,m}} > \varepsilon\}] \to 0$ $\Rightarrow$ $S_n \dto \Normal(0, \sigma^2)$. Nenhuma parcela domina.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Para que serve o dispositivo de Cramér–Wold?
+Reduz a convergência em distribuição de vetores à de todas as combinações lineares $\vb t\T X_n$; dá o TCL multivariado a partir do escalar.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Enuncie o método delta multivariado.
+$\sqrt n(T_n - \vb\theta) \dto Z$, $g$ diferenciável em $\vb\theta$ com jacobiana $\vb G$ $\Rightarrow$ $\sqrt n(g(T_n) - g(\vb\theta)) \dto \vb GZ$; normal: $\Normal(\vb 0, \vb G\vb\Sigma\vb G\T)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que dizem Glivenko–Cantelli e DKW?
+$\sup_x\abs{\hat F_n(x) - F(x)} \to 0$ q.c. (iid, qualquer $F$). DKW–Massart: $\Prob(\sup\abs{\hat F_n - F} > \varepsilon) \leq 2e^{-2n\varepsilon^2}$; banda de 95% com $\varepsilon = \sqrt{\log 40/(2n)}$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são as regras de $O_p$ e $o_p$?
+$o_p(1) + o_p(1) = o_p(1)$; $O_p(1)o_p(1) = o_p(1)$; $X_n \dto X \Rightarrow X_n = O_p(1)$; $\sqrt n(\hat\theta - \theta) \dto Z \Rightarrow \hat\theta - \theta = O_p(n^{-1/2})$.
+:::
+
+## Ficha-resumo {#sec-est-m03-ficha}
+
+::: {.ficha-resumo}
+**Modos.** q.c.: $\Prob(X_n \to X) = 1$. Probabilidade: $\Prob(\norm{X_n - X} > \varepsilon) \to 0$. $L^p$: $\E\norm{X_n - X}^p \to 0$. Distribuição: $\E g(X_n) \to \E g(X)$, $g$ contínua limitada (em $\R$: $F_n \to F$ nos pontos de continuidade; basta $g$ lipschitziana). q.c. $\Rightarrow$ prob. $\Rightarrow$ dist.; $L^p \Rightarrow$ prob.; dist. para constante $\Rightarrow$ prob.; prob. $\iff$ subsequências q.c. Contraexemplos: máquina de escrever, pulso, $-X$.
+
+**LGN forte.** Borel–Cantelli (a) somável $\Rightarrow$ finitas vezes; (b) independentes e soma infinita $\Rightarrow$ infinitas vezes. Etemadi: id. distribuídas, independentes 2 a 2, $\E\abs X < \infty$ $\Rightarrow \bar X_n \qcto \mu$ (truncar, subsequência geométrica, interpolar). Sem média: diverge. Khinchin.
+
+**Ferramentas.** Skorokhod: $Q_n(U) \to Q(U)$ q.c. Mapeamento contínuo nos três modos. Slutsky: $X_n \dto X$, $Y_n \pto c \Rightarrow (X_n, Y_n) \dto (X, c)$. UI + dist. $\Rightarrow$ médias convergem.
+
+**Funções características.** $\varphi(t) = \E e^{itX}$; produto para somas independentes; $\varphi^{(k)}(0) = i^k\E X^k$; $\abs{e^{ix} - \sum_{k \leq n}(ix)^k/k!} \leq \min(\abs x^{n+1}/(n+1)!, 2\abs x^n/n!)$. Inversão $\Rightarrow$ unicidade; FGM em intervalo $\Rightarrow$ unicidade (analiticidade). Helly + tensão ($\Prob(\abs X > 2/u) \leq \frac1u\int_{-u}^u(1 - \varphi)$) $\Rightarrow$ Lévy: $\varphi_n \to \varphi$ contínua em 0 $\Rightarrow$ convergência.
+
+**TCL.** Lindeberg–Feller: $\sum\E X_{n,m}^2 \to \sigma^2$ e $\sum\E[X_{n,m}^2\mathbf 1\{\abs{X_{n,m}} > \varepsilon\}] \to 0$. Lindeberg–Lévy (iid, $\sigma^2 < \infty$); Lyapunov. Cramér–Wold; $\sqrt n(\bar X - \vb\mu) \dto \Normal(\vb 0, \vb\Sigma)$. Delta: $\vb G\vb\Sigma\vb G\T$. $O_p$, $o_p$.
+
+**Glivenko–Cantelli.** $\sup\abs{\hat F_n - F} \qcto 0$; DKW $2e^{-2n\varepsilon^2}$; Kolmogorov–Smirnov.
+:::
+
+## Notas bibliográficas {#sec-est-m03-notas}
+
+@durrett2019 é a referência principal: a lei forte de Etemadi, os lemas de Borel–Cantelli, Helly, o teorema da continuidade e o TCL de Lindeberg–Feller seguem de perto os seus capítulos 2 e 3, com muitos exemplos e exercícios. @vandervaart1998 organiza a teoria assintótica para a estatística — modos de convergência, Portmanteau, Slutsky, $O_p$, método delta, Glivenko–Cantelli — e é a ponte para os próximos dois capítulos. @hansen2022 apresenta os mesmos resultados com a notação e as aplicações da econometria. A demonstração da lei forte com independência dois a dois é de Etemadi (1981); a constante ótima da desigualdade de Dvoretzky–Kiefer–Wolfowitz é de Massart (1990).

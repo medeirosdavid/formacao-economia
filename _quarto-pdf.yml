@@ -23,6 +23,12 @@ book:
     - partes/02-probabilidade-estatistica/est-g04-amostragem-e-teoremas-limite.qmd
     - partes/02-probabilidade-estatistica/est-g05-estimacao-pontual-e-intervalar.qmd
     - partes/02-probabilidade-estatistica/est-g06-testes-de-hipoteses.qmd
+    - partes/02-probabilidade-estatistica/est-m01-probabilidade-com-teoria-da-medida.qmd
+    - partes/02-probabilidade-estatistica/est-m02-esperanca-condicional.qmd
+    - partes/02-probabilidade-estatistica/est-m03-modos-de-convergencia-e-teoremas-limite.qmd
+    - partes/02-probabilidade-estatistica/est-m04-inferencia-estatistica-suficiencia-verossimilhanca-e.qmd
+    - partes/02-probabilidade-estatistica/est-m05-testes-otimos-e-regioes-de-confianca.qmd
+    - partes/02-probabilidade-estatistica/est-m06-inferencia-bayesiana.qmd
   - part: partes/05-econometria/index.qmd
     chapters:
     - partes/05-econometria/ecm-g01-regressao-linear-simples.qmd

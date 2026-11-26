@@ -9,7 +9,7 @@
 :::
 
 ::: {.content-visible unless-format="html"}
-**Pré-requisitos:** *O modelo linear em forma matricial* (ECM-M01); *Modos de convergência e teoremas-limite* (EST-M03)
+**Pré-requisitos:** *O modelo linear em forma matricial* (ECM-M01); @sec-est-m03 (*Modos de convergência e teoremas-limite*)
 :::
 
 **Leituras principais:** @hayashi2000, @hansen2022
