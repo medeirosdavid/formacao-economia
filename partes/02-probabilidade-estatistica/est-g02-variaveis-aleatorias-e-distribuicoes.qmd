@@ -10,14 +10,671 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-g02-motivacao}
 
-1. Variáveis aleatórias e funções de distribuição
-2. Variáveis discretas e contínuas
-3. Quantis e valor em risco
-4. Distribuições discretas usuais
-5. Distribuições contínuas usuais
-6. Transformações de variáveis e transformação integral de probabilidade
-7. Aplicação: a distribuição da inflação mensal
+Os objetos da economia empírica são números: a inflação do mês, o número de empréstimos inadimplentes numa carteira, o tempo até um desempregado encontrar emprego, o retorno de uma ação, a renda de um domicílio sorteado. Uma **variável aleatória** é um número cujo valor depende do resultado de um experimento aleatório, e sua **distribuição** diz tudo o que se pode saber sobre ele antes de observá-lo: quão provável é cada valor ou intervalo de valores.
+
+A escolha de uma distribuição é uma afirmação substantiva. Modelar o número de inadimplências como binomial supõe que os tomadores não pagam de forma independente; modelar retornos como normais subestima a frequência de quedas bruscas; modelar rendas altas por uma distribuição de Pareto produz a concentração observada no topo. Saber de onde cada distribuição vem — que hipóteses a geram — é tão importante quanto conhecer sua fórmula.
+
+O capítulo desenvolve:
+
+1. variáveis aleatórias e funções de distribuição, com suas propriedades;
+2. variáveis discretas, contínuas e mistas;
+3. quantis, a mediana e o valor em risco;
+4. as distribuições discretas usuais — Bernoulli, binomial, geométrica, Poisson, hipergeométrica — e a aproximação de Poisson;
+5. as distribuições contínuas usuais — uniforme, exponencial, normal, gama, log-normal e Pareto;
+6. transformações de variáveis e a transformação integral de probabilidade, base da simulação.
+
+## Variáveis aleatórias e funções de distribuição {#sec-est-g02-va}
+
+::: {#def-est-g02-variavel-aleatoria}
+## Variável aleatória e função de distribuição
+Uma **variável aleatória** num espaço de probabilidade $(\Omega, \mathcal F, \Prob)$ é uma função $X: \Omega \to \R$ tal que $\{X \leq x\} \defeq \{\omega : X(\omega) \leq x\}$ é um evento para todo $x \in \R$. Sua **função de distribuição** (acumulada) é
+$$
+F_X(x) \defeq \Prob(X \leq x), \qquad x \in \R .
+$$
 :::
+
+A exigência sobre $\{X \leq x\}$ garante que as perguntas naturais — "qual a probabilidade de $X$ estar entre $a$ e $b$?" — tenham resposta; ela é automática quando $\Omega$ é enumerável. Escrevemos $\Prob(X \in B)$ para $\Prob(\{\omega : X(\omega) \in B\})$, e a função $B \mapsto \Prob(X \in B)$ é a **distribuição** de $X$. Duas variáveis com a mesma função de distribuição têm a mesma distribuição (@sec-est-m01) e são ditas **identicamente distribuídas**, mesmo que sejam funções diferentes em $\Omega$: o resultado de um dado e "7 menos o resultado do dado" são identicamente distribuídos.
+
+::: {#thm-est-g02-propriedades-cdf}
+## Propriedades da função de distribuição
+Seja $F = F_X$.
+
+(a) $F$ é não decrescente.
+(b) $F$ é contínua à direita: $F(x) = \lim_{y \to x^+} F(y)$.
+(c) $\lim_{x \to -\infty} F(x) = 0$ e $\lim_{x \to \infty} F(x) = 1$.
+(d) $\Prob(a < X \leq b) = F(b) - F(a)$ para $a < b$.
+(e) $\Prob(X < x) = F(x^-) \defeq \lim_{y \to x^-} F(y)$ e $\Prob(X = x) = F(x) - F(x^-)$.
+(f) O conjunto dos $x$ com $\Prob(X = x) > 0$ é enumerável.
+:::
+
+::: {.proof}
+Para (a), se $x \leq y$, então $\{X \leq x\} \subseteq \{X \leq y\}$. Para (d), $\{X \leq b\}$ é a união disjunta de $\{X \leq a\}$ e $\{a < X \leq b\}$. Pelo @thm-mat-g03-monotonas, como $F$ é monótona, os limites laterais existem e podem ser calculados ao longo de qualquer sequência. Para (b), se $x_n \downarrow x$, os eventos $\{X \leq x_n\}$ decrescem e sua interseção é $\{X \leq x\}$; pela continuidade da probabilidade (@thm-est-g01-continuidade), $F(x_n) \to F(x)$. Para (c), $\{X \leq -n\}$ decresce para $\emptyset$ e $\{X \leq n\}$ cresce para $\Omega$. Para (e), $\{X \leq x - 1/n\}$ cresce para $\{X < x\}$, e $\{X = x\} = \{X \leq x\} \setminus \{X < x\}$. O item (f) é o (c) do @thm-mat-g03-monotonas: os saltos de uma função monótona são enumeráveis.
+:::
+
+A recíproca também vale: toda função com as propriedades (a)–(c) é a função de distribuição de alguma variável aleatória. A construção usa a transformação integral de probabilidade (@thm-est-g02-pit), a partir de uma única variável uniforme.
+
+## Variáveis discretas, contínuas e mistas {#sec-est-g02-tipos}
+
+::: {#def-est-g02-discreta}
+## Variável discreta
+$X$ é **discreta** se existe um conjunto enumerável $\{x_1, x_2, \dots\}$ com $\sum_i \Prob(X = x_i) = 1$. A **função de probabilidade** é $p_X(x) \defeq \Prob(X = x)$, e então $F_X(x) = \sum_{x_i \leq x} p_X(x_i)$: uma função em escada, com saltos de altura $p_X(x_i)$ nos pontos $x_i$.
+:::
+
+::: {#def-est-g02-continua}
+## Variável contínua
+$X$ é **contínua** se existe uma função $f_X \geq 0$, a **densidade**, com
+$$
+F_X(x) = \int_{-\infty}^x f_X(t)\,\dd t \qquad \text{para todo } x \in \R .
+$$ {#eq-est-g02-densidade}
+:::
+
+Para uma variável contínua: $\int_{-\infty}^\infty f_X = 1$, pelo item (c) do @thm-est-g02-propriedades-cdf; $\Prob(a < X \leq b) = \int_a^b f_X$; $F_X$ é contínua, de modo que $\Prob(X = x) = 0$ para todo $x$ e as desigualdades podem ser estritas ou não; e, pelo teorema fundamental do cálculo (@thm-mat-g04-tfc1), $F_X' = f_X$ nos pontos de continuidade de $f_X$. A densidade **não** é uma probabilidade — a de uma uniforme em $[0, 1/2]$ vale 2 —, mas $f_X(x)\,\Delta$ aproxima $\Prob(x < X \leq x + \Delta)$ para $\Delta$ pequeno. As integrais são as de Riemann, próprias ou impróprias (@sec-mat-g04); a teoria geral usa a integral de Lebesgue (@sec-est-m01).
+
+Há variáveis que não são nem discretas nem contínuas. A perda de um empréstimo, como fração do valor emprestado, é zero com probabilidade alta (o tomador paga) e, em caso de inadimplência, distribui-se continuamente entre 0 e 1: sua função de distribuição tem um salto em zero e é contínua no resto (@exr-est-g02-mista). O mesmo vale para horas trabalhadas, gastos com saúde ou indenizações de seguro.
+
+## Quantis e valor em risco {#sec-est-g02-quantis}
+
+A função de distribuição responde "qual a probabilidade de $X$ ficar abaixo de $x$?". A pergunta inversa — "abaixo de que valor $X$ fica com probabilidade $u$?" — é respondida pela função quantil.
+
+::: {#def-est-g02-quantil}
+## Função quantil
+A **função quantil** de $X$ é $Q_X(u) \defeq \inf\{x \in \R : F_X(x) \geq u\}$, para $u \in (0, 1)$. $Q_X(1/2)$ é a **mediana**; $Q_X(1/4)$ e $Q_X(3/4)$ são os quartis.
+:::
+
+::: {#prp-est-g02-quantil}
+## Propriedade fundamental do quantil
+Para $u \in (0, 1)$ e $x \in \R$:
+$$
+Q_X(u) \leq x \iff u \leq F_X(x) .
+$$ {#eq-est-g02-quantil}
+Em particular, $Q_X$ é não decrescente, $F_X(Q_X(u)) \geq u$ e, se $F_X$ é contínua e estritamente crescente, $Q_X = F_X^{-1}$.
+:::
+
+::: {.proof}
+O conjunto $A_u = \{x : F(x) \geq u\}$ é não vazio, pois $F \to 1$ e $u < 1$, e limitado inferiormente, pois $F \to 0$ e $u > 0$; logo $Q(u) = \inf A_u$ é um número real. Como $F$ é não decrescente, $A_u$ é um intervalo ilimitado à direita. Ele contém seu ínfimo: há $x_n \in A_u$ com $x_n \downarrow Q(u)$ e, pela continuidade à direita, $F(Q(u)) = \lim F(x_n) \geq u$. Logo $A_u = [Q(u), \infty)$, que é a @eq-est-g02-quantil. Se $u \leq v$, então $A_v \subseteq A_u$ e $Q(u) \leq Q(v)$. Se $F$ é contínua e estritamente crescente, $F(x) \geq u$ equivale a $x \geq F^{-1}(u)$.
+:::
+
+Em finanças, o quantil de uma distribuição de perdas tem nome próprio. Se $R$ é o retorno de uma carteira num horizonte, o **valor em risco** (*value at risk*) ao nível $\alpha$ — tipicamente 1% ou 5% — é $\text{VaR}_\alpha \defeq -Q_R(\alpha)$: com probabilidade $1 - \alpha$, a perda não passa de $\text{VaR}_\alpha$. O VaR é um quantil, não uma média, e por isso nada diz sobre o tamanho das perdas além dele; a perda esperada nas piores situações é estudada no @sec-est-g03 (@exr-est-g02-var).
+
+## Distribuições discretas usuais {#sec-est-g02-discretas}
+
+**Bernoulli e binomial.** Uma variável de **Bernoulli** com parâmetro $p \in [0, 1]$ vale 1 ("sucesso") com probabilidade $p$ e 0 com probabilidade $1 - p$. O número $X$ de sucessos em $n$ ensaios independentes de Bernoulli com o mesmo $p$ tem distribuição **binomial**, $X \sim \text{Bin}(n, p)$:
+$$
+p_X(k) = \binom nk p^k (1 - p)^{n-k}, \qquad k = 0, 1, \dots, n .
+$$ {#eq-est-g02-binomial}
+O evento $\{X = k\}$ é a união disjunta das $\binom nk$ sequências de resultados com $k$ sucessos, e cada uma tem probabilidade $p^k(1 - p)^{n-k}$ (@exm-est-g01-ensaios). As probabilidades somam $(p + 1 - p)^n = 1$, pelo binômio de Newton (@prp-est-g01-contagem).
+
+**Geométrica.** O número $X$ de ensaios independentes até o primeiro sucesso tem distribuição **geométrica**, $X \sim \text{Geo}(p)$: $\Prob(X = k) = (1 - p)^{k-1}p$, para $k = 1, 2, \dots$ — os $k - 1$ primeiros ensaios fracassam e o $k$-ésimo dá certo. Como $\{X > k\}$ significa "os $k$ primeiros ensaios fracassam", $\Prob(X > k) = (1 - p)^k$. A geométrica descreve durações em tempo discreto com chance constante de término: meses de desemprego, trimestres até uma inadimplência.
+
+::: {#prp-est-g02-sem-memoria-geo}
+## A geométrica não tem memória
+Se $X \sim \text{Geo}(p)$, então $\Prob(X > m + k \mid X > m) = \Prob(X > k)$ para todos $m, k \in \{0, 1, 2, \dots\}$.
+:::
+
+::: {.proof}
+Como $\{X > m + k\} \subseteq \{X > m\}$, $\Prob(X > m + k \mid X > m) = (1 - p)^{m+k}/(1 - p)^m = (1 - p)^k$.
+:::
+
+Quem está desempregado há um ano tem, nesse modelo, a mesma chance de encontrar emprego no próximo mês que quem acabou de perder o emprego. Os dados costumam rejeitar isso — a chance de saída do desemprego cai com a duração —, e a **função de risco** (*hazard*), a probabilidade de término no período seguinte dado que a duração chegou até ali, é o objeto que se estima em modelos de duração; a geométrica é o caso de risco constante.
+
+**Poisson.** $X \sim \text{Poisson}(\lambda)$, com $\lambda > 0$, se $\Prob(X = k) = e^{-\lambda}\lambda^k/k!$ para $k = 0, 1, 2, \dots$; as probabilidades somam $e^{-\lambda}e^{\lambda} = 1$ pela série da exponencial (@exm-mat-g03-series-taylor). A Poisson descreve contagens de eventos raros: inadimplências numa carteira grande, falências de bancos num ano, chegadas de ordens a um livro de ofertas. O teorema a seguir explica por quê.
+
+::: {#lem-est-g02-limite-exp}
+## Um limite exponencial
+Se $a_n \to a$, então $(1 + a_n/n)^n \to e^a$.
+:::
+
+::: {.proof}
+Para $n$ grande, $x_n \defeq a_n/n \in (-1/2, 1/2)$. Pela @prp-mat-g03-log, $0 \leq x_n - \log(1 + x_n) \leq x_n^2/(1 + x_n) \leq 2x_n^2$, de modo que $\abs{n\log(1 + a_n/n) - a_n} \leq 2a_n^2/n \to 0$. Logo $n\log(1 + a_n/n) \to a$, e, pela continuidade da exponencial, $(1 + a_n/n)^n \to e^a$.
+:::
+
+::: {#thm-est-g02-poisson}
+## Aproximação de Poisson
+Se $n \to \infty$ e $p_n \to 0$ com $np_n \to \lambda > 0$, então, para cada $k$ fixo,
+$$
+\binom nk p_n^k (1 - p_n)^{n-k} \;\longrightarrow\; e^{-\lambda}\frac{\lambda^k}{k!} .
+$$
+:::
+
+::: {.proof}
+Escreva
+$$
+\binom nk p_n^k(1 - p_n)^{n-k} = \frac{n(n-1)\cdots(n-k+1)}{n^k}\cdot\frac{(np_n)^k}{k!}\cdot\Big(1 - \frac{np_n}{n}\Big)^n \cdot (1 - p_n)^{-k} .
+$$
+O primeiro fator é um produto de $k$ termos $(n - j)/n \to 1$; o segundo tende a $\lambda^k/k!$; o terceiro tende a $e^{-\lambda}$ pelo @lem-est-g02-limite-exp, com $a_n = -np_n$; o último tende a 1, pois $k$ está fixo.
+:::
+
+Numa carteira de 1000 empréstimos independentes, cada um com probabilidade 0,2% de inadimplência, o número de inadimplências é praticamente $\text{Poisson}(2)$ (@exr-est-g02-poisson); o primeiro interativo mostra a qualidade da aproximação.
+
+**Hipergeométrica.** Uma urna tem $N$ bolas, $K$ delas "marcadas"; retiram-se $n$ sem reposição. O número $X$ de bolas marcadas na amostra tem distribuição **hipergeométrica**:
+$$
+\Prob(X = k) = \frac{\binom Kk\binom{N-K}{n-k}}{\binom Nn} .
+$$
+O número de acertos numa aposta simples da Mega-Sena é hipergeométrico com $N = 60$, $K = 6$ e $n = 6$ (@exm-est-g01-mega-sena). Quando $N$ é grande em relação a $n$, retirar sem reposição quase não difere de retirar com reposição, e a hipergeométrica se aproxima da binomial com $p = K/N$ — é por isso que pesquisas por amostragem em populações grandes podem usar o modelo binomial.
+
+## Distribuições contínuas usuais {#sec-est-g02-continuas}
+
+**Uniforme.** $X \sim U(a, b)$ tem densidade $1/(b - a)$ em $[a, b]$ e zero fora, e $F(x) = (x - a)/(b - a)$ em $[a, b]$. A $U(0, 1)$ é o ponto de partida de toda simulação (@thm-est-g02-pit).
+
+**Exponencial.** $X \sim \text{Exp}(\lambda)$, com taxa $\lambda > 0$, tem densidade $\lambda e^{-\lambda x}$ para $x \geq 0$, de modo que $F(x) = 1 - e^{-\lambda x}$ e $\Prob(X > x) = e^{-\lambda x}$. É a versão em tempo contínuo da geométrica: $\Prob(X > s + t \mid X > s) = e^{-\lambda(s+t)}/e^{-\lambda s} = \Prob(X > t)$, e é a **única** distribuição contínua sem memória (@exr-est-g02-exponencial). Sua função de risco, $f(x)/(1 - F(x)) = \lambda$, é constante. Se eventos ocorrem com taxa constante $\lambda$ e de forma independente ao longo do tempo, o tempo de espera até o próximo evento é exponencial e o número de eventos num intervalo de comprimento $t$ é $\text{Poisson}(\lambda t)$ — o **processo de Poisson**, que reaparece em modelos de busca no mercado de trabalho (@sec-mac-m08).
+
+**Normal.** $X \sim \Normal(\mu, \sigma^2)$, com $\mu \in \R$ e $\sigma > 0$, tem densidade
+$$
+f(x) = \frac{1}{\sigma\sqrt{2\pi}}\exp\Big(-\frac{(x - \mu)^2}{2\sigma^2}\Big), \qquad x \in \R .
+$$ {#eq-est-g02-normal}
+A densidade integra 1: com a substituição $z = (x - \mu)/\sigma$, a integral vira $\frac{1}{\sqrt{2\pi}}\int e^{-z^2/2}\,\dd z = 1$, pela integral gaussiana (@exm-mat-g04-gauss). A **normal padrão** $\Normal(0, 1)$ tem densidade $\varphi(z) = e^{-z^2/2}/\sqrt{2\pi}$ e função de distribuição $\Phi$, que não tem fórmula em termos de funções elementares e é calculada numericamente. Pela simetria de $\varphi$, $\Phi(-z) = 1 - \Phi(z)$. Pelo @exm-est-g02-transformacoes (a), $Z = (X - \mu)/\sigma \sim \Normal(0, 1)$, de modo que $\Prob(X \leq x) = \Phi((x - \mu)/\sigma)$; e $\Prob(\abs{X - \mu} \leq c\sigma) = 2\Phi(c) - 1$, que vale cerca de 68%, 95% e 99,7% para $c = 1, 2, 3$ (exatamente 95% para $c = 1{,}96$). A normal deve sua centralidade ao teorema central do limite (@sec-est-g04).
+
+**Gama.** Com $\alpha, \beta > 0$, $X \sim \text{Gama}(\alpha, \beta)$ tem densidade
+$$
+f(x) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha - 1}e^{-\beta x}, \qquad x > 0 ,
+$$ {#eq-est-g02-gama}
+em que $\Gamma(\alpha) = \int_0^\infty t^{\alpha-1}e^{-t}\,\dd t$ é a função gama (@exm-mat-g04-gama); a substituição $t = \beta x$ mostra que a densidade integra 1. Com $\alpha = 1$, é a exponencial; com $\alpha = k/2$ e $\beta = 1/2$, é a **qui-quadrado** com $k$ graus de liberdade, central na inferência (@sec-est-g04). Um valor de $\Gamma$ será útil: $\Gamma(1/2) = \int_0^\infty t^{-1/2}e^{-t}\,\dd t = 2\int_0^\infty e^{-x^2}\,\dd x = \sqrt\pi$, pela substituição $t = x^2$ e pela integral gaussiana.
+
+**Log-normal.** $Y$ é **log-normal** se $\log Y \sim \Normal(\mu, \sigma^2)$, isto é, $Y = e^X$ com $X$ normal. É positiva e assimétrica à direita, e serve de primeira aproximação para rendas, preços de ativos e tamanhos de empresas: se uma quantidade cresce por fatores aleatórios multiplicativos, seu logaritmo é uma soma, e o teorema central do limite sugere normalidade do logaritmo. Sua densidade é obtida no @exm-est-g02-transformacoes.
+
+**Pareto.** Com $x_m > 0$ e $\alpha > 0$, $X \sim \text{Pareto}(x_m, \alpha)$ se $\Prob(X > x) = (x_m/x)^\alpha$ para $x \geq x_m$; a densidade é $\alpha x_m^\alpha/x^{\alpha + 1}$. O logaritmo da probabilidade de cauda é linear em $\log x$, com inclinação $-\alpha$ — uma **lei de potência**. A cauda cai muito mais devagar que a da normal ou da exponencial, e é a forma que se observa no topo das distribuições de renda e de riqueza: quanto menor $\alpha$, maior a concentração (@exr-est-g02-pareto).
+
+## Transformações de variáveis {#sec-est-g02-transformacoes}
+
+Se $X$ tem distribuição conhecida e $Y = g(X)$, qual é a distribuição de $Y$? Para $X$ discreta, basta somar: $p_Y(y) = \sum_{x : g(x) = y} p_X(x)$. Em geral, o **método da função de distribuição** calcula $F_Y(y) = \Prob(g(X) \leq y)$ diretamente. Quando $g$ é monótona, isso dá uma fórmula.
+
+::: {#thm-est-g02-transformacao}
+## Transformação monótona de uma densidade
+Seja $X$ contínua com densidade $f_X$ contínua num intervalo aberto $I$ e nula fora dele, e seja $g: I \to \R$ diferenciável, com $g' > 0$ em todo $I$ ou $g' < 0$ em todo $I$. Então $Y = g(X)$ é contínua, com densidade
+$$
+f_Y(y) = f_X\big(g^{-1}(y)\big)\,\Big|\big(g^{-1}\big)'(y)\Big| = \frac{f_X\big(g^{-1}(y)\big)}{\big|g'\big(g^{-1}(y)\big)\big|}, \qquad y \in g(I),
+$$ {#eq-est-g02-transformacao}
+e $f_Y(y) = 0$ fora de $g(I)$.
+:::
+
+::: {.proof}
+Como $g'$ não muda de sinal, $g$ é estritamente monótona, $J = g(I)$ é um intervalo aberto e $g^{-1}: J \to I$ é diferenciável, com $(g^{-1})'(y) = 1/g'(g^{-1}(y))$ (@thm-mat-g03-inversa). Se $g$ é crescente, para $y \in J$, $F_Y(y) = \Prob(X \leq g^{-1}(y)) = F_X(g^{-1}(y))$; pela regra da cadeia e porque $F_X' = f_X$ nos pontos de continuidade de $f_X$, $F_Y'(y) = f_X(g^{-1}(y))\,(g^{-1})'(y)$. Se $g$ é decrescente, $F_Y(y) = \Prob(X \geq g^{-1}(y)) = 1 - F_X(g^{-1}(y))$, e a derivada é $-f_X(g^{-1}(y))(g^{-1})'(y)$, positiva. Em ambos os casos, $F_Y$ é a integral da função da @eq-est-g02-transformacao (@thm-mat-g04-tfc2), que é, portanto, uma densidade de $Y$.
+:::
+
+O fator $\abs{(g^{-1})'}$ corrige a densidade pela deformação da escala: onde $g$ estica o eixo, a densidade de $Y$ fica mais baixa.
+
+::: {#exm-est-g02-transformacoes}
+## Transformações usuais
+(a) **Afim.** Se $Y = a + bX$ com $b \neq 0$, então $f_Y(y) = f_X((y - a)/b)/\abs b$. Em particular, se $X \sim \Normal(\mu, \sigma^2)$, então $a + bX \sim \Normal(a + b\mu, b^2\sigma^2)$ (substitua na @eq-est-g02-normal), e $Z = (X - \mu)/\sigma \sim \Normal(0, 1)$.
+(b) **Log-normal.** Se $X \sim \Normal(\mu, \sigma^2)$ e $Y = e^X$, então $g^{-1}(y) = \log y$ e $(g^{-1})'(y) = 1/y$, de modo que
+$$
+f_Y(y) = \frac{1}{y\,\sigma\sqrt{2\pi}}\exp\Big(-\frac{(\log y - \mu)^2}{2\sigma^2}\Big), \qquad y > 0 .
+$$
+(c) **Uma transformação não monótona.** Se $Z \sim \Normal(0, 1)$ e $Y = Z^2$, o teorema não se aplica diretamente, mas o método da função de distribuição sim: para $y > 0$, $F_Y(y) = \Prob(-\sqrt y \leq Z \leq \sqrt y) = 2\Phi(\sqrt y) - 1$, e, derivando, $f_Y(y) = \varphi(\sqrt y)/\sqrt y = \frac{1}{\sqrt{2\pi}}y^{-1/2}e^{-y/2}$. Como $\Gamma(1/2) = \sqrt\pi$, essa é a densidade $\text{Gama}(1/2, 1/2)$: o quadrado de uma normal padrão é uma qui-quadrado com 1 grau de liberdade.
+:::
+
+O resultado a seguir é o fundamento da simulação: a partir de números uniformes, obtém-se qualquer distribuição.
+
+::: {#thm-est-g02-pit}
+## Transformação integral de probabilidade
+(a) Se $U \sim U(0, 1)$ e $F$ é uma função de distribuição qualquer, com função quantil $Q$, então $Q(U)$ tem função de distribuição $F$.
+(b) Se $X$ tem função de distribuição $F$ contínua, então $F(X) \sim U(0, 1)$.
+:::
+
+::: {.proof}
+Para (a), pela @eq-est-g02-quantil, $\Prob(Q(U) \leq x) = \Prob(U \leq F(x)) = F(x)$, pois $\Prob(U \leq v) = v$ para $v \in [0, 1]$. Para (b), fixe $u \in (0, 1)$. Pela @eq-est-g02-quantil, $F(X) < u$ equivale a $X < Q(u)$, de modo que $\Prob(F(X) < u) = F(Q(u)^-)$. Como $F$ é contínua, $F(Q(u)^-) = F(Q(u))$; e $F(Q(u)) = u$, porque $F(Q(u)) \geq u$ (@prp-est-g02-quantil) e $F(y) < u$ para $y < Q(u)$, logo $F(Q(u)) = F(Q(u)^-) \leq u$. Assim, $\Prob(F(X) < u) = u$ para todo $u \in (0, 1)$, e, pela continuidade da probabilidade, também $\Prob(F(X) \leq u) = \lim_n \Prob(F(X) < u + 1/n) = u$.
+:::
+
+O item (a) dá o **método da inversão**: para simular uma $\text{Exp}(\lambda)$, gere $U$ uniforme e calcule $Q(U) = -\log(1 - U)/\lambda$; para uma Pareto, $x_m(1 - U)^{-1/\alpha}$. Ele também prova a recíproca anunciada depois do @thm-est-g02-propriedades-cdf: dada qualquer $F$ com as propriedades (a)–(c), $Q(U)$ é uma variável com função de distribuição $F$. O item (b) é usado para avaliar previsões de densidade: se a distribuição prevista estiver correta, os valores $F(\text{observado})$ devem parecer uniformes (@sec-ecm-d09).
+
+## Pontes {#sec-est-g02-pontes}
+
+- **Esperança e momentos (@sec-est-g03).** Média, variância e funções geradoras de cada distribuição deste capítulo; vetores aleatórios e a normal multivariada.
+- **Teoremas-limite (@sec-est-g04).** Qui-quadrado, $t$ e $F$; o teorema central do limite explica a onipresença da normal.
+- **Teoria da medida (@sec-est-m01).** Distribuições como medidas em $\R$; variáveis que não são nem discretas nem contínuas.
+- **Simulação (@sec-cmp-m03).** O método da inversão e suas alternativas.
+- **Escolha binária (@sec-ecm-g09).** Os modelos probit e logit usam funções de distribuição ($\Phi$ e a logística) para transformar índices em probabilidades.
+- **Finanças e desigualdade (@sec-fin-g04, @sec-mac-d01).** Caudas pesadas em retornos; caudas de Pareto nas distribuições de riqueza dos modelos de agentes heterogêneos.
+- **Avaliação de previsões (@sec-ecm-d09).** A transformação integral de probabilidade testa previsões de densidade.
+
+## Interativo {#sec-est-g02-interativo}
+
+::: {.content-visible when-format="html"}
+**Binomial e Poisson.** As barras azuis são a $\text{Bin}(n, \lambda/n)$ e as vinho, a $\text{Poisson}(\lambda)$. Aumente $n$ mantendo $\lambda$ e veja as duas distribuições se aproximarem, como afirma o @thm-est-g02-poisson; a distância de variação total, $\frac12\sum_k\abs{p_{\text{bin}}(k) - p_{\text{Pois}}(k)}$, é a maior diferença possível entre as probabilidades que as duas atribuem a um mesmo evento.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof nPois = controle("número de ensaios n", [10, 500], {valor: 20, passo: 1, casas: 0})
+viewof lambdaPois = controle("λ = n p", [0.5, 8], {valor: 3, passo: 0.1, casas: 1})
+```
+
+```{ojs}
+//| echo: false
+md`p = λ/n = ${fmtG02(lambdaPois / nPois, 4)}. Distância de variação total: **${fmtG02(dvt, 4)}**. P(X = 0): binomial ${fmtG02(binPois[0], 4)}, Poisson ${fmtG02(poisPois[0], 4)}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 280, grid: true,
+  x: {label: "k", domain: [-0.6, kMax + 0.6]}, y: {label: "probabilidade"},
+  color: {domain: ["binomial", "Poisson"], range: ["#2F5D8A", "#8C2F39"], legend: true},
+  marks: [
+    Plot.rectY(d3.range(kMax + 1), {x1: k => k - 0.4, x2: k => k, y: k => binPois[k], fill: () => "binomial"}),
+    Plot.rectY(d3.range(kMax + 1), {x1: k => k, x2: k => k + 0.4, y: k => poisPois[k], fill: () => "Poisson"}),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtG02 = (v, c) => v.toFixed(c).replace(".", ",")
+kMax = Math.min(nPois, Math.ceil(lambdaPois + 4 * Math.sqrt(lambdaPois) + 3))
+binPois = {
+  const p = lambdaPois / nPois, v = [Math.pow(1 - p, nPois)]
+  for (let k = 0; k < nPois; k++) v.push(v[k] * (nPois - k) / (k + 1) * p / (1 - p))
+  return v
+}
+poisPois = {
+  const v = [Math.exp(-lambdaPois)]
+  for (let k = 0; k < nPois + 40; k++) v.push(v[k] * lambdaPois / (k + 1))
+  return v
+}
+dvt = {
+  let s = 0
+  for (let k = 0; k <= nPois; k++) s += Math.abs(binPois[k] - poisPois[k])
+  return (s + Math.max(0, 1 - d3.sum(poisPois.slice(0, nPois + 1)))) / 2
+}
+```
+:::
+
+**O método da inversão.** Geramos $N$ números uniformes $U_i$ e calculamos $Q(U_i)$ para a distribuição escolhida. O histograma (normalizado para ter área 1) se aproxima da densidade teórica, em vinho, à medida que $N$ cresce — é o @thm-est-g02-pit em ação. Mude a semente para ver outra amostra.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof distInv = seletor("distribuição", ["Exponencial (λ = 1)", "Normal padrão", "Pareto (xₘ = 1, α = 3)", "Log-normal (μ = 0, σ = 0,5)"], {valor: "Exponencial (λ = 1)"})
+viewof nInv = controle("tamanho da amostra N", [10, 5000], {valor: 500, passo: 10, casas: 0})
+viewof sementeInv = controle("semente", [1, 50], {valor: 1, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Mediana teórica: ${fmtG02(espInv.Q(0.5), 3)}; mediana da amostra: ${fmtG02(d3.median(amostraInv), 3)}. Quantil de 90%: teórico ${fmtG02(espInv.Q(0.9), 3)}, amostral ${fmtG02(d3.quantile(amostraInv, 0.9), 3)}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 280, grid: true,
+  x: {label: "x", domain: espInv.dominio}, y: {label: "densidade"},
+  marks: [
+    Plot.rectY(binsInv, {x1: "x1", x2: "x2", y: "y", fill: "#2F5D8A", fillOpacity: 0.55, inset: 0.5}),
+    Plot.line(d3.range(espInv.dominio[0], espInv.dominio[1], (espInv.dominio[1] - espInv.dominio[0]) / 300).map(x => ({x, y: espInv.f(x)})),
+              {x: "x", y: "y", stroke: "#8C2F39", strokeWidth: 2}),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+geradorG02 = semente => () => {
+  semente |= 0; semente = semente + 0x6D2B79F5 | 0
+  let t = Math.imul(semente ^ semente >>> 15, 1 | semente)
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+  return ((t ^ t >>> 14) >>> 0) / 4294967296
+}
+qnormG02 = p => {
+  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239]
+  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572]
+  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783]
+  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416]
+  const cauda = r => (((((c[0] * r + c[1]) * r + c[2]) * r + c[3]) * r + c[4]) * r + c[5]) / ((((d[0] * r + d[1]) * r + d[2]) * r + d[3]) * r + 1)
+  if (p < 0.02425) return cauda(Math.sqrt(-2 * Math.log(p)))
+  if (p > 1 - 0.02425) return -cauda(Math.sqrt(-2 * Math.log(1 - p)))
+  const s = p - 0.5, r = s * s
+  return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * s / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1)
+}
+espInv = ({
+  "Exponencial (λ = 1)": {Q: u => -Math.log(1 - u), f: x => x >= 0 ? Math.exp(-x) : 0, dominio: [0, 6]},
+  "Normal padrão": {Q: qnormG02, f: x => Math.exp(-x * x / 2) / Math.sqrt(2 * Math.PI), dominio: [-4, 4]},
+  "Pareto (xₘ = 1, α = 3)": {Q: u => Math.pow(1 - u, -1 / 3), f: x => x >= 1 ? 3 / Math.pow(x, 4) : 0, dominio: [1, 5]},
+  "Log-normal (μ = 0, σ = 0,5)": {Q: u => Math.exp(0.5 * qnormG02(u)),
+     f: x => x > 0 ? Math.exp(-Math.log(x) ** 2 / 0.5) / (x * 0.5 * Math.sqrt(2 * Math.PI)) : 0, dominio: [0, 4]}
+})[distInv]
+amostraInv = {
+  const u = geradorG02(sementeInv * 7919)
+  return d3.range(nInv).map(() => espInv.Q(u()))
+}
+binsInv = {
+  const [lo, hi] = espInv.dominio, k = 40, w = (hi - lo) / k
+  const cont = new Array(k).fill(0)
+  for (const x of amostraInv) { const j = Math.floor((x - lo) / w); if (j >= 0 && j < k) cont[j]++ }
+  return cont.map((c, j) => ({x1: lo + j * w, x2: lo + (j + 1) * w, y: c / (nInv * w)}))
+}
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — a aproximação de Poisson e o método da inversão — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-g02-laboratorio}
+
+### Distribuições no `scipy.stats`
+
+Cada distribuição do `scipy.stats` oferece a função de probabilidade ou densidade (`pmf`, `pdf`), a função de distribuição (`cdf`) e a função quantil (`ppf`, de *percent point function*). Conferimos que as probabilidades somam 1 e que $Q(F(x)) = x$.
+
+```{python}
+import numpy as np
+from scipy import stats, integrate
+
+rng = np.random.default_rng(2)
+binom = stats.binom(n=20, p=0.3)
+soma = binom.pmf(np.arange(21)).sum()
+print("binomial: soma das probabilidades =", soma)
+dists = {"normal(0, 1)": stats.norm(),
+         "exponencial(1)": stats.expon(),
+         "gama(2, 1)": stats.gamma(a=2),
+         "pareto(1, 3)": stats.pareto(b=3)}
+for nome, d in dists.items():
+    area = integrate.quad(d.pdf, *d.support())[0]
+    x = d.ppf(0.3)
+    print(f"{nome:>15}: area = {area:.6f}, Q(0.3) = {x:.4f},"
+          f" F(Q(0.3)) = {d.cdf(x):.4f}")
+```
+
+### A aproximação de Poisson
+
+```{python}
+lam = 2
+for n in [10, 50, 200, 1000]:
+    k = np.arange(n + 1)
+    b = stats.binom.pmf(k, n, lam / n)
+    p = stats.poisson.pmf(k, lam)
+    dvt = 0.5 * (np.abs(b - p).sum() + stats.poisson.sf(n, lam))
+    print(f"n = {n:>4}: P(X = 0) binomial = {b[0]:.4f}, "
+          f"Poisson = {p[0]:.4f}; dist. variacao total = {dvt:.4f}")
+```
+
+A distância cai aproximadamente como $1/n$: para $\lambda$ fixo, o erro da aproximação é da ordem de $p = \lambda/n$.
+
+### O método da inversão e uma transformação
+
+Simulamos uma Pareto pelo método da inversão e uma log-normal como $e^X$ com $X$ normal, e comparamos quantis amostrais e teóricos. A estatística de Kolmogorov–Smirnov, a maior distância entre a função de distribuição empírica e a teórica, deve ser pequena.
+
+```{python}
+u = rng.uniform(size=100_000)
+pareto = (1 - u) ** (-1 / 3)                  # Q(U) para Pareto(1, 3)
+lognormal = np.exp(rng.normal(0, 0.5, 100_000))
+for nome, x, d in [("pareto(1, 3)", pareto, stats.pareto(b=3)),
+                   ("log-normal", lognormal, stats.lognorm(s=0.5))]:
+    qs = np.quantile(x, [0.5, 0.9, 0.99])
+    ks = stats.kstest(x, d.cdf).statistic
+    teo = np.round(d.ppf([0.5, 0.9, 0.99]), 3)
+    print(f"{nome:>12}: quantis amostrais {np.round(qs, 3)}, "
+          f"teoricos {teo}, KS = {ks:.4f}")
+```
+
+### Valor em risco e caudas pesadas
+
+Comparamos o VaR de 1% de um retorno diário normal com o de um retorno com distribuição $t$ de Student com 4 graus de liberdade (@sec-est-g04), reescalado para ter a mesma variância. A $t$ tem caudas mais pesadas: com a mesma variância, atribui probabilidade maior a perdas extremas.
+
+```{python}
+sigma = 0.015                                  # desvio padrao diario
+t4 = stats.t(df=4, scale=sigma / np.sqrt(4 / (4 - 2)))
+normal = stats.norm(scale=sigma)
+for alfa in [0.05, 0.01, 0.001]:
+    print(f"VaR {alfa:.1%}: normal = {-normal.ppf(alfa):.4f}, "
+          f"t(4) = {-t4.ppf(alfa):.4f}")
+print(f"P(R < -5 sigma): normal = {normal.cdf(-5 * sigma):.2e}, "
+      f"t(4) = {t4.cdf(-5 * sigma):.2e}")
+```
+
+Com 5%, a normal dá até um VaR maior; nos níveis extremos, a $t$ domina. Um evento de "cinco desvios padrão" é virtualmente impossível sob a normal e apenas raro sob a $t$ — e quedas desse tamanho aparecem nas séries de retornos com frequência muito maior do que a normal prevê.
+
+## Aplicação: a distribuição da inflação mensal {#sec-est-g02-aplicacao}
+
+A variação mensal do IPCA (série 433 do SGS) desde 2000 é uma amostra de uma variável aleatória? Não exatamente — os meses não são independentes nem identicamente distribuídos, como os capítulos seguintes vão mostrar —, mas a distribuição empírica dos valores observados resume bem o comportamento da inflação no período. Comparamos essa distribuição com uma normal de mesma média e desvio padrão.
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import Markdown
+from formacao import dados, graficos
+
+graficos.estilo()
+try:
+    ipca = dados.sgs("ipca", inicio="2000-01-01")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+if disponivel:
+    x = ipca.to_numpy()
+    m, s = x.mean(), x.std(ddof=1)
+    q10, q50, q90 = np.quantile(x, [0.1, 0.5, 0.9])
+    print(f"amostra: {ipca.index[0]:%m/%Y} a {ipca.index[-1]:%m/%Y}"
+          f" ({len(x)} meses)")
+    print(f"media = {m:.3f}%, desvio padrao = {s:.3f} p.p.")
+    print(f"quantis de 10%, 50% e 90%: {q10:.2f}, {q50:.2f}, {q90:.2f}")
+    print(f"meses com deflacao: {(x < 0).mean():.1%}")
+    for k in [1, 2]:
+        acima = (x > m + k * s).mean()
+        abaixo = (x < m - k * s).mean()
+        teo = stats.norm.sf(k)
+        print(f"alem de {k} dp: acima {acima:.3f}, abaixo {abaixo:.3f}"
+              f" (normal: {teo:.3f} de cada lado)")
+```
+
+```{python}
+if disponivel:
+    az, vi = graficos.PALETA["azul"], graficos.PALETA["vinho"]
+    fig, ax = plt.subplots(1, 2, figsize=(9, 3.4))
+    grade = np.linspace(x.min() - 0.3, x.max() + 0.3, 300)
+    ax[0].hist(x, bins=30, density=True, color=az, alpha=0.6)
+    ax[0].plot(grade, stats.norm.pdf(grade, m, s), color=vi)
+    ax[0].set_xlabel("IPCA, variação mensal (%)")
+    ax[0].set_ylabel("densidade")
+    xs = np.sort(x)
+    ax[1].step(xs, np.arange(1, len(xs) + 1) / len(xs), where="post",
+               color=az, label="empírica")
+    ax[1].plot(grade, stats.norm.cdf(grade, m, s), color=vi,
+               label="normal")
+    ax[1].set_xlabel("IPCA, variação mensal (%)")
+    ax[1].set_ylabel("função de distribuição")
+    ax[1].legend(frameon=False)
+    graficos.fonte(ax[0], "IBGE (IPCA), via SGS/BCB, série 433.")
+    fig.tight_layout()
+    plt.show()
+```
+
+A distribuição tem **assimetria à direita**: a cauda superior — meses de choques de alimentos, energia ou câmbio — é mais longa que a inferior, e a frequência de valores muito acima da média tende a superar a da normal, enquanto a de valores muito abaixo fica aquém dela. Um segundo exercício testa o modelo binomial. Se os meses fossem ensaios independentes com a mesma probabilidade $p$ de a inflação passar de 0,5%, o número de meses "altos" em cada ano seria $\text{Bin}(12, p)$.
+
+```{python}
+if disponivel:
+    anos = ipca.groupby(ipca.index.year)
+    completos = anos.count() == 12
+    contagens = anos.apply(lambda v: (v > 0.5).sum())[completos]
+    p_hat = (ipca[ipca.index.year.isin(contagens.index)] > 0.5).mean()
+    freq = contagens.value_counts(normalize=True).sort_index()
+    k = np.arange(13)
+    modelo = stats.binom.pmf(k, 12, p_hat)
+    print(f"{len(contagens)} anos completos; p estimado = {p_hat:.3f}")
+    print(" k  observada  binomial")
+    for kk in k:
+        print(f"{kk:>2}  {freq.get(kk, 0):9.3f}  {modelo[kk]:8.3f}")
+    extremos = lambda k: (k <= 3) | (k >= 9)
+    f_obs = extremos(contagens.to_numpy()).mean()
+    f_bin = modelo[extremos(k)].sum()
+    pct = lambda v: f"{100 * v:.0f}%".replace(".", ",")
+    resumo = (f"Anos extremos — com no máximo 3 ou pelo menos 9 meses "
+              f"altos — ocorreram em {pct(f_obs)} dos anos; a binomial "
+              f"lhes atribui probabilidade {pct(f_bin)}. ")
+    if f_obs > 1.5 * f_bin:
+        resumo += ("A distribuição observada é muito mais espalhada "
+                   "que a binomial: os meses não são ensaios "
+                   "independentes com a mesma probabilidade, e a "
+                   "inflação alta vem em ondas que duram vários meses.")
+    else:
+        resumo += ("Nesta amostra, a diferença em relação à binomial é "
+                   "pequena.")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+A comparação formal entre uma distribuição observada e um modelo — o teste qui-quadrado de aderência — e a medida da dispersão pela variância vêm nos próximos capítulos (@sec-est-g03, @sec-est-g06). A dependência entre meses consecutivos é o tema da aplicação do @sec-est-g03.
+
+## Exercícios resolvidos {#sec-est-g02-exercicios}
+
+::: {#exr-est-g02-mista}
+A perda $X$ de um empréstimo, como fração do valor emprestado, tem função de distribuição $F(x) = 0$ para $x < 0$, $F(x) = 0{,}96 + 0{,}04x$ para $0 \leq x < 1$ e $F(x) = 1$ para $x \geq 1$. Calcule $\Prob(X = 0)$, $\Prob(X > 0{,}5)$ e $\Prob(X = 1)$. Interprete.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pelo item (e) do @thm-est-g02-propriedades-cdf, $\Prob(X = 0) = F(0) - F(0^-) = 0{,}96 - 0 = 0{,}96$: o tomador paga com probabilidade 96%. $\Prob(X > 0{,}5) = 1 - F(0{,}5) = 1 - 0{,}98 = 0{,}02$. $\Prob(X = 1) = F(1) - F(1^-) = 1 - 1 = 0$. A inadimplência ocorre com probabilidade 4% e, nesse caso, a perda é uniforme em $(0, 1)$: $F$ combina um salto (parte discreta) com um trecho linear (parte contínua, com densidade $0{,}04$).
+:::
+
+::: {#exr-est-g02-geometrica}
+Seja $X$ uma variável com valores em $\{1, 2, \dots\}$, com $\Prob(X > 1) = q \in (0, 1)$, tal que $\Prob(X > m + k) = \Prob(X > m)\Prob(X > k)$ para todos $m, k \geq 0$ inteiros. Mostre que $X \sim \text{Geo}(1 - q)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Por indução, $\Prob(X > k) = q^k$: vale para $k = 0$ e $k = 1$, e $\Prob(X > k + 1) = \Prob(X > k)\Prob(X > 1) = q^{k+1}$. Logo $\Prob(X = k) = \Prob(X > k - 1) - \Prob(X > k) = q^{k-1}(1 - q)$, a geométrica com $p = 1 - q$. A propriedade de ausência de memória **caracteriza** a geométrica entre as distribuições com valores em $\{1, 2, \dots\}$.
+:::
+
+::: {#exr-est-g02-exponencial}
+Seja $X > 0$ contínua, com $S(t) \defeq \Prob(X > t)$ satisfazendo $S(s + t) = S(s)S(t)$ para todos $s, t \geq 0$. Mostre que $X \sim \text{Exp}(\lambda)$ para algum $\lambda > 0$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Seja $q = S(1)$. Por indução, $S(n) = q^n$ e, como $S(1) = S(1/n)^n$, $S(1/n) = q^{1/n}$; logo $S(m/n) = q^{m/n}$ para racionais positivos. Se $q = 0$, então $S(1/n) = 0$ para todo $n$, e, pela continuidade à direita da função de distribuição em 0, $S(0) = \lim S(1/n) = 0$, o que contradiz $\Prob(X > 0) = 1$. Se $q = 1$, então $S = 1$ nos racionais, e $\Prob(X > n) = 1$ para todo $n$, contradizendo $\Prob(X > n) \to 0$. Logo $q \in (0, 1)$; seja $\lambda = -\log q > 0$. Para $t$ real, tome racionais $r < t < r'$; como $S$ é não crescente, $e^{-\lambda r'} \leq S(t) \leq e^{-\lambda r}$, e, fazendo $r, r' \to t$, $S(t) = e^{-\lambda t}$.
+:::
+
+::: {#exr-est-g02-poisson}
+Uma carteira tem 1000 empréstimos independentes, cada um com probabilidade 0,2% de inadimplência. Calcule, pela binomial e pela aproximação de Poisson, a probabilidade de nenhuma inadimplência e a de pelo menos 3.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Binomial: $\Prob(X = 0) = 0{,}998^{1000} = e^{1000\log 0{,}998} \approx e^{-2{,}002} \approx 0{,}1351$. Poisson com $\lambda = 2$: $e^{-2} \approx 0{,}1353$. Para pelo menos 3, pela Poisson, $1 - e^{-2}(1 + 2 + 2^2/2) = 1 - 5e^{-2} \approx 0{,}323$; a binomial dá praticamente o mesmo valor. O ponto fraco do modelo não é a aproximação, mas a hipótese de independência: numa recessão, as inadimplências sobem juntas, e a distribuição do número de inadimplências fica muito mais espalhada — o que é central na regulação do capital dos bancos.
+:::
+
+::: {#exr-est-g02-pareto}
+Seja $X \sim \text{Pareto}(x_m, \alpha)$. (a) Encontre a função quantil e a razão entre o percentil 99 e a mediana. (b) Mostre que, condicionalmente a $X > c$ (com $c \geq x_m$), $X/c \sim \text{Pareto}(1, \alpha)$. (c) Mostre que, se $U \sim U(0, 1)$, então $U^{-1/\alpha} \sim \text{Pareto}(1, \alpha)$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para (a), $F(x) = 1 - (x_m/x)^\alpha = u$ dá $Q(u) = x_m(1 - u)^{-1/\alpha}$, e $Q(0{,}99)/Q(0{,}5) = (0{,}01/0{,}5)^{-1/\alpha} = 50^{1/\alpha}$; com $\alpha = 1{,}5$, cerca de 13,6. Para (b), para $t \geq 1$, $\Prob(X > tc \mid X > c) = (x_m/(tc))^\alpha/(x_m/c)^\alpha = t^{-\alpha}$: a distribuição relativa acima de qualquer patamar é sempre a mesma, o que explica por que a razão entre a renda média dos que estão acima de um nível e esse nível é constante no topo da distribuição. Para (c), $1 - U$ também é uniforme, e pelo método da inversão $(1 - U)^{-1/\alpha} \sim \text{Pareto}(1, \alpha)$; logo $U^{-1/\alpha}$ também.
+:::
+
+::: {#exr-est-g02-lognormal}
+Seja $Y$ log-normal com $\log Y \sim \Normal(\mu, \sigma^2)$. Encontre a mediana e a função quantil de $Y$ e mostre que $cY$, para $c > 0$, também é log-normal.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Como $y \mapsto \log y$ é crescente, $\Prob(Y \leq y) = \Phi((\log y - \mu)/\sigma)$, e resolvendo $\Phi((\log y - \mu)/\sigma) = u$ obtemos $Q_Y(u) = \exp(\mu + \sigma\Phi^{-1}(u))$. A mediana é $e^\mu$ (pois $\Phi^{-1}(1/2) = 0$). Como $\log(cY) = \log c + \log Y \sim \Normal(\mu + \log c, \sigma^2)$, $cY$ é log-normal: mudar a unidade de medida (reais para dólares, por exemplo) só desloca $\mu$. A família log-normal é fechada por multiplicação por constantes, como a normal o é por translação.
+:::
+
+::: {#exr-est-g02-var}
+O retorno diário de uma carteira é $R \sim \Normal(0{,}0005;\ 0{,}015^2)$. Calcule o VaR de 1% e explique por que a hipótese de normalidade tende a subestimá-lo. Use $\Phi^{-1}(0{,}01) \approx -2{,}326$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$Q_R(0{,}01) = 0{,}0005 + 0{,}015 \times (-2{,}326) \approx -0{,}0344$, de modo que $\text{VaR}_{1\%} \approx 3{,}44\%$ do valor da carteira: em 99% dos dias, a perda não passa disso. Retornos diários têm caudas mais pesadas que a normal — o laboratório compara com a $t$ de Student —, e a volatilidade muda ao longo do tempo (@sec-ecm-d06); nos dias de estresse, o quantil verdadeiro fica bem abaixo do normal, e o VaR normal subestima o risco justamente quando ele importa.
+:::
+
+::: {#exr-est-g02-quantil-desigualdades}
+Mostre que, para toda função de distribuição $F$ com quantil $Q$, $Q(F(x)) \leq x$ para todo $x$ com $0 < F(x) < 1$, e dê um exemplo em que a desigualdade é estrita.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Pela @eq-est-g02-quantil, com $u = F(x)$: $Q(F(x)) \leq x$ equivale a $F(x) \leq F(x)$, que é verdade. Para a desigualdade estrita, tome $X$ uniforme em $[0, 1] \cup [2, 3]$ (densidade $1/2$ em cada intervalo). Então $F(1{,}5) = 1/2$, e $Q(1/2) = \inf\{x : F(x) \geq 1/2\} = 1 < 1{,}5$: num trecho plano de $F$, o quantil escolhe o ponto mais à esquerda.
+:::
+
+## Flashcards {#sec-est-g02-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são as propriedades de uma função de distribuição?
+Não decrescente, contínua à direita, com limites 0 em $-\infty$ e 1 em $+\infty$; $\Prob(a < X \leq b) = F(b) - F(a)$ e $\Prob(X = x) = F(x) - F(x^-)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que distingue uma variável contínua, e quanto vale $\Prob(X = x)$ para ela?
+Existe densidade $f \geq 0$ com $F(x) = \int_{-\infty}^x f$. Então $\Prob(X = x) = 0$, e $F' = f$ onde $f$ é contínua. A densidade pode passar de 1.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se define a função quantil, e qual é sua propriedade fundamental?
+$Q(u) = \inf\{x : F(x) \geq u\}$, e $Q(u) \leq x \iff u \leq F(x)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o valor em risco?
+$\text{VaR}_\alpha = -Q_R(\alpha)$: a perda que só é superada com probabilidade $\alpha$. É um quantil e nada diz sobre perdas além dele.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a função de probabilidade da binomial, e de onde ela vem?
+$\binom nk p^k(1 - p)^{n-k}$: número de sucessos em $n$ ensaios de Bernoulli independentes com o mesmo $p$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais distribuições não têm memória?
+A geométrica (discreta) e a exponencial (contínua) — e só elas. Têm função de risco constante.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando a binomial se aproxima da Poisson?
+Quando $n \to \infty$ e $p \to 0$ com $np \to \lambda$: $\text{Bin}(n, p) \approx \text{Poisson}(\lambda)$. Eventos raros em muitos ensaios.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quando se usa a hipergeométrica?
+Amostragem sem reposição: $\Prob(X = k) = \binom Kk\binom{N-K}{n-k}/\binom Nn$. Ex.: acertos na Mega-Sena. Para $N$ grande, aproxima a binomial.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se padroniza uma normal, e que probabilidades convém lembrar?
+$Z = (X - \mu)/\sigma \sim \Normal(0, 1)$. $\Prob(\abs{X - \mu} \leq c\sigma)$ é cerca de 68%, 95% e 99,7% para $c = 1, 2, 3$; 95% exatos com $c = 1{,}96$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a relação entre gama, exponencial e qui-quadrado?
+$\text{Exp}(\lambda) = \text{Gama}(1, \lambda)$ e $\chi^2_k = \text{Gama}(k/2, 1/2)$. Ex.: $Z^2 \sim \chi^2_1$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que caracteriza a distribuição de Pareto?
+Cauda de lei de potência: $\Prob(X > x) = (x_m/x)^\alpha$. É invariante por escala: acima de qualquer patamar $c$, $X/c$ é $\text{Pareto}(1, \alpha)$. Descreve o topo das rendas.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é a densidade de $Y = g(X)$ para $g$ monótona?
+$f_Y(y) = f_X(g^{-1}(y))\,\abs{(g^{-1})'(y)}$. Ex.: log-normal, $f_Y(y) = \varphi((\log y - \mu)/\sigma)/(\sigma y)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz a transformação integral de probabilidade?
+Se $U \sim U(0, 1)$, então $Q(U) \sim F$ (método da inversão); se $F$ é contínua, $F(X) \sim U(0, 1)$.
+:::
+
+## Ficha-resumo {#sec-est-g02-ficha}
+
+::: {.ficha-resumo}
+**Variável aleatória.** $X: \Omega \to \R$ com $\{X \leq x\}$ evento. $F(x) = \Prob(X \leq x)$: não decrescente, contínua à direita, $F(-\infty) = 0$, $F(\infty) = 1$; $\Prob(X = x) = F(x) - F(x^-)$; saltos enumeráveis. Toda $F$ assim é distribuição de alguma $X$.
+
+**Tipos.** Discreta: $p(x) = \Prob(X = x)$, $F$ em escada. Contínua: $F = \int f$, $\Prob(X = x) = 0$, $F' = f$. Mista: saltos e partes contínuas (perdas de crédito).
+
+**Quantis.** $Q(u) = \inf\{x : F(x) \geq u\}$; $Q(u) \leq x \iff u \leq F(x)$; mediana $Q(1/2)$; $\text{VaR}_\alpha = -Q_R(\alpha)$.
+
+**Discretas.** Bernoulli; $\text{Bin}(n, p)$: $\binom nk p^k(1 - p)^{n-k}$; $\text{Geo}(p)$: $(1 - p)^{k-1}p$, sem memória; $\text{Poisson}(\lambda)$: $e^{-\lambda}\lambda^k/k!$, limite da binomial com $np \to \lambda$; hipergeométrica (sem reposição).
+
+**Contínuas.** $U(a, b)$; $\text{Exp}(\lambda)$: $\lambda e^{-\lambda x}$, sem memória, risco constante; $\Normal(\mu, \sigma^2)$, $\Phi(-z) = 1 - \Phi(z)$, 1,96; $\text{Gama}(\alpha, \beta)$, $\Gamma(1/2) = \sqrt\pi$, $\chi^2_k = \text{Gama}(k/2, 1/2)$; log-normal $= e^{\Normal}$; Pareto: $(x_m/x)^\alpha$, lei de potência.
+
+**Transformações.** Discreta: somar. Geral: $F_Y(y) = \Prob(g(X) \leq y)$. Monótona: $f_Y = f_X(g^{-1})\abs{(g^{-1})'}$. Afim de normal é normal; $Z^2 \sim \chi^2_1$. Inversão: $Q(U) \sim F$; $F(X) \sim U(0, 1)$ se $F$ contínua.
+:::
+
+## Notas bibliográficas {#sec-est-g02-notas}
+
+@degroot2012 trata variáveis aleatórias, funções de distribuição e as distribuições usuais com cuidado e muitos exemplos; @casella2002 é mais conciso, com ênfase em transformações e nas famílias de distribuições que a inferência estatística usa. Para as distribuições de renda e riqueza — log-normal, Pareto e suas misturas — e sua estimação a partir de dados tributários, a literatura sobre desigualdade no topo da distribuição, inclusive com dados brasileiros, é a continuação natural; para caudas pesadas em finanças, veja o @sec-ecm-d06.
