@@ -10,17 +10,757 @@
 :::
 <!-- cabecalho:fim -->
 
-::: {.callout-note title="Capítulo em construção"}
-Roteiro planejado:
+## Motivação {#sec-est-m04-motivacao}
 
-1. Suficiência e o teorema da fatoração
-2. Suficiência mínima
-3. Famílias exponenciais
-4. Completude, estatísticas ancilares e o teorema de Basu
-5. Rao–Blackwell e Lehmann–Scheffé
-6. Informação de Fisher e Cramér–Rao multivariado
-7. Consistência do EMV (Wald)
-8. Normalidade assintótica e eficiência do EMV
-9. EMV sob má especificação e a matriz sanduíche
-10. Aplicação: a distribuição $t$ para o crescimento do IBC-Br
+O @sec-est-g05 apresentou os critérios básicos para comparar estimadores — viés, erro quadrático médio, consistência —, a cota de Cramér–Rao num parâmetro e as propriedades assintóticas do estimador de máxima verossimilhança (EMV), estas admitidas. Restaram três perguntas, que este capítulo responde.
+
+1. **Que parte dos dados importa?** Numa amostra de lançamentos de uma moeda, a ordem dos resultados não diz nada sobre a probabilidade de cara: só o número de caras importa. Uma estatística que retém toda a informação sobre o parâmetro é **suficiente**, e o teorema da fatoração diz como encontrá-la.
+2. **Existe um estimador ótimo?** Entre os não viesados, a resposta é sim em muitos modelos: condicionar a uma estatística suficiente nunca piora um estimador (Rao–Blackwell), e, se ela é **completa**, o resultado é o único estimador não viesado de variância mínima (Lehmann–Scheffé).
+3. **Por que a máxima verossimilhança funciona?** O EMV é consistente porque o parâmetro verdadeiro maximiza a log-verossimilhança esperada (desigualdade da informação), e é assintoticamente normal com a variância da cota de Cramér–Rao. Quando o modelo está errado, ele ainda converge — para o parâmetro que torna o modelo mais próximo dos dados —, mas a variância muda, e o erro padrão correto é o **sanduíche**.
+
+Ao longo do capítulo, a família exponencial — normal, Bernoulli, Poisson, gama, e quase todos os modelos de uso diário — é o caso em que tudo funciona: estatísticas suficientes de dimensão fixa, completude, verossimilhança côncava.
+
+## Modelos e estatísticas suficientes {#sec-est-m04-suficiencia}
+
+Um **modelo estatístico** é uma família $\{P_\theta : \theta \in \Theta\}$ de distribuições para os dados $X$ (@def-est-g05-modelo). Supomos o modelo **dominado**: todas as $P_\theta$ têm densidade $p_\theta = \dd P_\theta/\dd\mu$ em relação a uma mesma medida $\sigma$-finita $\mu$ — a de Lebesgue, a de contagem ou uma combinação (@thm-est-m01-radon-nikodym). A **verossimilhança** é $\theta \mapsto p_\theta(x)$, com os dados fixos.
+
+::: {#def-est-m04-suficiente}
+## Estatística suficiente
+Uma estatística $T = T(X)$ é **suficiente** para $\theta$ se a distribuição condicional de $X$ dado $T$ não depende de $\theta$: para cada evento $A$, existe uma função $h_A$ com $P_\theta(X \in A \mid T) = h_A(T)$ $P_\theta$-q.c., para todo $\theta$.
 :::
+
+A interpretação é operacional: conhecido $T$, um estatístico pode gerar uma amostra artificial $\tilde X$ com a distribuição condicional de $X$ dado $T$ — que ele conhece, porque não depende de $\theta$ — e $\tilde X$ terá exatamente a mesma distribuição que $X$, para todo $\theta$. Nada do que se faz com $X$ deixa de poder ser feito com $T$.
+
+::: {#thm-est-m04-fatoracao}
+## Teorema da fatoração
+$T$ é suficiente para $\theta$ se, e somente se, existem funções $g_\theta \geq 0$ e $h \geq 0$ com
+$$
+p_\theta(x) = g_\theta(T(x))\,h(x) \qquad\text{para todo } x \text{ e todo } \theta .
+$$
+:::
+
+::: {.proof}
+Demonstramos o caso discreto, em que $\mu$ é a contagem num conjunto enumerável. Se a fatoração vale e $T(x) = t$ com $P_\theta(T = t) > 0$, então $P_\theta(T = t) = \sum_{y : T(y) = t}g_\theta(t)h(y)$ e
+$$
+P_\theta(X = x \mid T = t) = \frac{p_\theta(x)}{P_\theta(T = t)} = \frac{g_\theta(t)h(x)}{g_\theta(t)\sum_{y : T(y) = t}h(y)} = \frac{h(x)}{\sum_{y : T(y) = t}h(y)},
+$$
+que não depende de $\theta$. Reciprocamente, se $T$ é suficiente, $p_\theta(x) = P_\theta(T = T(x))\cdot P(X = x \mid T = T(x))$, que é a fatoração com $g_\theta(t) = P_\theta(T = t)$ e $h(x) = P(X = x \mid T = T(x))$. O caso geral de modelos dominados é o teorema de Halmos e Savage; a demonstração usa a fórmula de Bayes abstrata (@prp-est-m02-bayes-abstrata) com uma medida dominante escolhida como mistura enumerável das $P_\theta$, e a admitimos (@lehmann1998).
+:::
+
+::: {#exm-est-m04-suficientes}
+## Estatísticas suficientes em amostras iid
+Para $X_1, \dots, X_n$ iid, $p_\theta(\vb x) = \prod_ip_\theta(x_i)$.
+
+- Bernoulli$(p)$: $p^{\sum x_i}(1 - p)^{n - \sum x_i}$ depende dos dados só por $T = \sum_iX_i$.
+- Poisson$(\lambda)$: $e^{-n\lambda}\lambda^{\sum x_i}/\prod_ix_i!$; $T = \sum_iX_i$, com $h(\vb x) = 1/\prod_ix_i!$.
+- $\Normal(\mu, \sigma^2)$: $(2\pi\sigma^2)^{-n/2}\exp\big(-\frac{1}{2\sigma^2}(\sum_ix_i^2 - 2\mu\sum_ix_i + n\mu^2)\big)$; $T = (\sum_iX_i, \sum_iX_i^2)$, equivalente a $(\bar X, S^2)$.
+- Uniforme$(0, \theta)$: $\theta^{-n}\mathbf 1\{\max_ix_i \leq \theta\}\,\mathbf 1\{\min_ix_i \geq 0\}$; $T = X_{(n)} = \max_iX_i$.
+:::
+
+### Suficiência mínima
+
+A amostra inteira é sempre suficiente; o que interessa é a maior redução possível.
+
+::: {#def-est-m04-minima}
+## Estatística suficiente mínima
+Uma estatística suficiente $T$ é **mínima** se é função de qualquer outra estatística suficiente: para toda $T'$ suficiente, $T'(x) = T'(y)$ implica $T(x) = T(y)$.
+:::
+
+::: {#thm-est-m04-minima}
+## Critério da razão de verossimilhanças
+Suponha que as densidades $p_\theta$ tenham o mesmo suporte. Se, para todos $x$ e $y$,
+$$
+\frac{p_\theta(x)}{p_\theta(y)}\ \text{não depende de}\ \theta \iff T(x) = T(y),
+$$
+então $T$ é suficiente mínima.
+:::
+
+::: {.proof}
+*Suficiência.* Para cada valor $t$ de $T$, fixe um ponto $x_t$ com $T(x_t) = t$. Então $p_\theta(x) = p_\theta(x_{T(x)})\cdot\frac{p_\theta(x)}{p_\theta(x_{T(x)})}$, e a razão não depende de $\theta$ porque $T(x) = T(x_{T(x)})$; é a fatoração com $g_\theta(t) = p_\theta(x_t)$. *Minimalidade.* Se $T'$ é suficiente, $p_\theta(x) = g'_\theta(T'(x))h'(x)$. Se $T'(x) = T'(y)$, a razão $p_\theta(x)/p_\theta(y) = h'(x)/h'(y)$ não depende de $\theta$, e pela hipótese $T(x) = T(y)$.
+:::
+
+No caso normal, $p_\theta(\vb x)/p_\theta(\vb y) = \exp\big(-\frac{1}{2\sigma^2}[\sum x_i^2 - \sum y_i^2] + \frac{\mu}{\sigma^2}[\sum x_i - \sum y_i]\big)$ não depende de $(\mu, \sigma^2)$ exatamente quando $\sum x_i = \sum y_i$ e $\sum x_i^2 = \sum y_i^2$: $(\bar X, S^2)$ é suficiente mínima. Num modelo de Cauchy com parâmetro de locação, ao contrário, a estatística suficiente mínima é a amostra ordenada inteira: não há redução além de "esquecer a ordem".
+
+## Famílias exponenciais {#sec-est-m04-exponencial}
+
+::: {#def-est-m04-exponencial}
+## Família exponencial
+Uma família $\{p_\theta\}$ é **exponencial** se as densidades têm a forma
+$$
+p_\theta(x) = h(x)\exp\big(\vb\eta(\theta)\T\vb T(x) - A(\theta)\big),
+$$
+com $\vb T(x) \in \R^k$. Na **parametrização natural**, $\vb\eta$ é o próprio parâmetro, $p_{\vb\eta}(x) = h(x)\exp(\vb\eta\T\vb T(x) - A(\vb\eta))$, com $A(\vb\eta) = \log\int he^{\vb\eta\T\vb T}\,\dd\mu$, e o **espaço natural** $\mathcal H = \{\vb\eta : A(\vb\eta) < \infty\}$. A família é de **posto completo** se $\mathcal H$ contém um aberto de $\R^k$ e as coordenadas de $\vb T$ não satisfazem nenhuma relação afim.
+:::
+
+Bernoulli: $p^x(1 - p)^{1-x} = \exp\big(x\log\frac{p}{1 - p} + \log(1 - p)\big)$, com $\eta = \log\frac{p}{1-p}$ (o *logit*), $T = x$ e $A = \log(1 + e^\eta)$. Poisson: $\eta = \log\lambda$, $T = x$, $A = e^\eta$, $h = 1/x!$. Normal: $\vb\eta = (\mu/\sigma^2, -1/(2\sigma^2))$, $\vb T = (x, x^2)$. Também são exponenciais a gama, a beta, a binomial com $n$ conhecido, a geométrica e a normal multivariada. Não são a uniforme em $(0, \theta)$ (o suporte depende do parâmetro), a Cauchy e a $t$ com locação desconhecida. Pelo teorema da fatoração, em amostras iid $\sum_i\vb T(X_i)$ é suficiente — de dimensão $k$, qualquer que seja $n$.
+
+::: {#prp-est-m04-exponencial}
+## Momentos e verossimilhança na família exponencial
+Na parametrização natural, para $\vb\eta$ no interior de $\mathcal H$:
+
+(a) $A$ é infinitamente derivável e convexa, com $\nabla A(\vb\eta) = \E_{\vb\eta}[\vb T]$ e $\nabla^2A(\vb\eta) = \Var_{\vb\eta}(\vb T)$;
+(b) em amostras iid, a log-verossimilhança $\ell(\vb\eta) = \vb\eta\T\sum_i\vb T(x_i) - nA(\vb\eta) + \text{const.}$ é côncava, e o EMV, quando existe no interior, resolve $\nabla A(\hat{\vb\eta}) = \frac1n\sum_i\vb T(x_i)$.
+:::
+
+::: {.proof}
+Para (a), $e^{A(\vb\eta)} = \int h\,e^{\vb\eta\T\vb T}\,\dd\mu$ é uma função geradora de momentos (de $\vb T$ sob a medida $h\,\dd\mu$), e as derivadas sob o sinal de integral se justificam como no @exm-est-m01-fgm. Derivando, $\nabla A\,e^A = \int\vb Th\,e^{\vb\eta\T\vb T}\,\dd\mu$, isto é, $\nabla A = \E_{\vb\eta}[\vb T]$; derivando de novo, $\nabla^2A = \E_{\vb\eta}[\vb T\vb T\T] - \nabla A\,\nabla A\T = \Var_{\vb\eta}(\vb T)$, semidefinida positiva, logo $A$ é convexa. (b) segue de (a): $\ell$ é linear menos convexa, e a condição de primeira ordem é a do enunciado.
+:::
+
+A condição (b) diz que, numa família exponencial, **o EMV iguala a média teórica de $\vb T$ à média amostral**: é também um estimador de momentos. Na regressão logística, por exemplo, as equações do EMV igualam, para cada regressor, a soma dos valores observados à soma das probabilidades previstas (@sec-ecm-g09).
+
+### Completude e o teorema de Basu
+
+::: {#def-est-m04-completa}
+## Estatística completa
+$T$ é **completa** para $\{P_\theta\}$ se, para toda função $g$ com $g(T)$ integrável,
+$$
+\E_\theta[g(T)] = 0\ \text{para todo}\ \theta \quad\Longrightarrow\quad P_\theta(g(T) = 0) = 1\ \text{para todo}\ \theta .
+$$
+:::
+
+A completude diz que não há função de $T$ com média zero além da trivial: a família de distribuições de $T$ é "rica" o suficiente para detectar qualquer $g$ não nula. Para a Bernoulli, com $T = \sum_iX_i \sim$ Bin$(n, p)$, $\E_p[g(T)] = \sum_t g(t)\binom nt p^t(1 - p)^{n-t} = (1 - p)^n\sum_tg(t)\binom nt r^t$ com $r = p/(1 - p)$; um polinômio em $r$ nulo para todo $r > 0$ tem coeficientes nulos, logo $g = 0$.
+
+::: {#thm-est-m04-exponencial-completa}
+## Famílias exponenciais de posto completo são completas
+Se $\{p_{\vb\eta}\}$ é uma família exponencial de posto completo, $\vb T$ é completa.
+:::
+
+::: {.proof}
+Fazemos o caso $k = 1$; o caso vetorial é idêntico com a unicidade da função geradora vetorial. Seja $\nu$ a distribuição de $T$ sob a medida $h\,\dd\mu$, isto é, $\nu(B) = \int\mathbf 1_B(T)\,h\,\dd\mu$, de modo que $\E_\eta[g(T)] = e^{-A(\eta)}\int g(t)e^{\eta t}\,\nu(\dd t)$. Tome $\eta_0$ e $\delta > 0$ com $(\eta_0 - \delta, \eta_0 + \delta) \subseteq \mathcal H$. Se $\E_\eta[g(T)] = 0$ nesse intervalo, as medidas finitas $\nu_\pm(\dd t) = g^\pm(t)e^{\eta_0t}\,\nu(\dd t)$ satisfazem
+$$
+\int e^{st}\,\nu_+(\dd t) = \int e^{st}\,\nu_-(\dd t) < \infty \qquad\text{para } \abs s < \delta .
+$$
+Com $s = 0$, as duas têm a mesma massa total $c$. Se $c = 0$, então $g^+ = g^- = 0$ $\nu$-q.t.p. Se $c > 0$, $\nu_\pm/c$ são probabilidades com a mesma função geradora num intervalo em torno de zero, logo iguais (@cor-est-m03-fgm): $g^+ = g^-$ $\nu$-q.t.p. Como $g^+g^- = 0$, ambas se anulam, e $g(T) = 0$ quase certamente sob todo $P_\eta$.
+:::
+
+Uma estatística $V$ é **ancilar** se sua distribuição não depende de $\theta$ — por exemplo, numa família de locação, qualquer função das diferenças $X_i - X_j$. Sozinha, não diz nada sobre $\theta$; mas pode ser dependente de uma estatística suficiente. A completude exclui isso.
+
+::: {#thm-est-m04-basu}
+## Teorema de Basu
+Se $T$ é suficiente e completa e $V$ é ancilar, então $T$ e $V$ são independentes sob todo $P_\theta$.
+:::
+
+::: {.proof}
+Fixe um boreliano $B$. A probabilidade $p_B = P_\theta(V \in B)$ não depende de $\theta$ (ancilaridade), e $q(T) = P(V \in B \mid T)$ também não (suficiência). Como $\E_\theta[q(T) - p_B] = P_\theta(V \in B) - p_B = 0$ para todo $\theta$, a completude dá $q(T) = p_B$ quase certamente: $P_\theta(V \in B \mid T) = P_\theta(V \in B)$ para todo $B$, que é a independência.
+:::
+
+Com $X_i$ iid $\Normal(\mu, \sigma^2)$ e $\sigma^2$ fixo, $\bar X$ é suficiente e completa para $\mu$ (família exponencial de posto completo), e $S^2$, função dos desvios $X_i - \bar X$, é ancilar. Pelo teorema de Basu, $\bar X \indep S^2$ — para cada $\mu$ e, como $\sigma^2$ era arbitrário, para todos. É outra demonstração de parte do @thm-est-g04-amostras-normais, sem nenhum cálculo de distribuição.
+
+## Estimação ótima: Rao–Blackwell e Lehmann–Scheffé {#sec-est-m04-umvue}
+
+::: {#thm-est-m04-rao-blackwell}
+## Rao–Blackwell
+Seja $W$ um estimador de $\tau(\theta)$ com $\E_\theta W^2 < \infty$ e $T$ suficiente. Então $\varphi(T) = \E[W \mid T]$ é um estimador (não depende de $\theta$), tem o mesmo viés que $W$ e
+$$
+\E_\theta\big[(\varphi(T) - \tau(\theta))^2\big] \leq \E_\theta\big[(W - \tau(\theta))^2\big] \qquad\text{para todo } \theta,
+$$
+com igualdade somente se $W = \varphi(T)$ quase certamente.
+:::
+
+::: {.proof}
+Pela suficiência, a distribuição condicional de $X$ dado $T$ não depende de $\theta$, logo $\E[W \mid T]$ também não: $\varphi(T)$ é calculável a partir dos dados. Pela torre, $\E_\theta[\varphi(T)] = \E_\theta[W]$. Pela decomposição da variância (@cor-est-m02-variancia) aplicada a $W - \tau(\theta)$,
+$$
+\E_\theta(W - \tau)^2 = \E_\theta(\varphi(T) - \tau)^2 + \E_\theta\big(W - \varphi(T)\big)^2,
+$$
+e o último termo é zero apenas se $W = \varphi(T)$ q.c.
+:::
+
+O mesmo argumento, com o Jensen condicional (@thm-est-m02-jensen), vale para qualquer perda convexa. Sem a suficiência, $\E_\theta[W \mid T]$ dependeria de $\theta$ e não seria um estimador.
+
+::: {#thm-est-m04-lehmann-scheffe}
+## Lehmann–Scheffé
+Se $T$ é suficiente e completa e $\varphi(T)$ é um estimador não viesado de $\tau(\theta)$ com variância finita, então $\varphi(T)$ é o **único** estimador não viesado de variância mínima (ENVVM) de $\tau(\theta)$, uniformemente em $\theta$.
+:::
+
+::: {.proof}
+Seja $W$ qualquer estimador não viesado de $\tau(\theta)$ com variância finita. Por Rao–Blackwell, $\varphi_W(T) = \E[W \mid T]$ é não viesado e $\Var_\theta(\varphi_W(T)) \leq \Var_\theta(W)$. Mas $\E_\theta[\varphi(T) - \varphi_W(T)] = 0$ para todo $\theta$, e a completude dá $\varphi(T) = \varphi_W(T)$ q.c. Logo $\Var_\theta(\varphi(T)) \leq \Var_\theta(W)$, com igualdade apenas se $W = \varphi(T)$ q.c.
+:::
+
+A receita é: encontre uma estatística suficiente completa e uma função dela sem viés — por cálculo direto ou condicionando um estimador não viesado ingênuo. Na Bernoulli, $\bar X$ é o ENVVM de $p$, e $T(T - 1)/(n(n - 1))$, com $T = \sum X_i$, é o de $p^2$ (@exr-est-m04-p-quadrado). Na Poisson, condicionar o estimador ingênuo $\mathbf 1\{X_1 = 0\}$ de $e^{-\lambda} = P(X = 0)$ a $T = \sum X_i$ dá $((n - 1)/n)^T$ (@exr-est-m04-poisson-zero, e o interativo da @sec-est-m04-interativo). Na normal, $\bar X$ e $S^2$ são os ENVVM de $\mu$ e $\sigma^2$.
+
+Duas ressalvas. A primeira é que o ENVVM pode ser um estimador ruim: o único estimador não viesado de $e^{-2\lambda}$ a partir de uma observação Poisson é $(-1)^X$, que só vale $\pm 1$. A segunda é que a restrição a estimadores não viesados é arbitrária; em erro quadrático, estimadores viesados podem ser melhores em todo o espaço paramétrico, como o estimador de James–Stein (@sec-est-m06).
+
+## Informação de Fisher e Cramér–Rao multivariado {#sec-est-m04-cramer-rao}
+
+Seja $\Theta \subseteq \R^k$ aberto. O modelo é **regular** se o suporte de $p_\theta$ não depende de $\theta$, $\theta \mapsto p_\theta(x)$ é diferenciável e as derivadas sob o sinal de integral abaixo são legítimas (@prp-est-m01-derivacao). O **escore** é $\vb s_\theta(x) = \nabla_\theta\log p_\theta(x)$, e a **matriz de informação de Fisher** é $\vb I(\theta) = \E_\theta[\vb s_\theta\vb s_\theta\T]$.
+
+Como no @lem-est-g05-escore, derivar $\int p_\theta\,\dd\mu = 1$ dá $\E_\theta[\vb s_\theta] = \vb 0$, e derivar de novo dá a **igualdade da informação** $\vb I(\theta) = -\E_\theta[\nabla^2_\theta\log p_\theta(X)]$. Em amostras iid, os escores se somam e $\vb I_n(\theta) = n\vb I(\theta)$.
+
+::: {#thm-est-m04-cramer-rao}
+## Cramér–Rao multivariado
+Num modelo regular com $\vb I(\theta)$ invertível, seja $\vb W$ uma estatística em $\R^m$ com $\E_\theta\vb W = \vb\tau(\theta)$, diferenciável, com matriz jacobiana $\vb D(\theta) = \partial\vb\tau/\partial\theta\T$, e suponha que se possa derivar $\int\vb Wp_\theta\,\dd\mu$ sob o sinal de integral. Então, no sentido das matrizes semidefinidas positivas,
+$$
+\Var_\theta(\vb W) \succeq \vb D(\theta)\,\vb I(\theta)^{-1}\,\vb D(\theta)\T .
+$$
+:::
+
+::: {.proof}
+Derivando $\vb\tau(\theta) = \int\vb Wp_\theta\,\dd\mu$, $\vb D = \int\vb W\,(\nabla p_\theta)\T\,\dd\mu = \E_\theta[\vb W\vb s_\theta\T] = \Cov_\theta(\vb W, \vb s_\theta)$, pois $\E\vb s_\theta = \vb 0$. A variável $\vb W - \vb D\vb I^{-1}\vb s_\theta$ tem matriz de covariâncias
+$$
+\Var(\vb W) - 2\vb D\vb I^{-1}\vb D\T + \vb D\vb I^{-1}\vb I\vb I^{-1}\vb D\T = \Var(\vb W) - \vb D\vb I^{-1}\vb D\T,
+$$
+que é semidefinida positiva.
+:::
+
+Para um estimador não viesado de $\theta$, $\vb D = \Id$ e a cota é $\vb I(\theta)^{-1}$; para a $j$-ésima coordenada, $\Var(\hat\theta_j) \geq [\vb I^{-1}]_{jj} \geq 1/I_{jj}$: desconhecer os demais parâmetros nunca reduz a cota. A igualdade exige que $\vb W - \vb\tau$ seja uma função linear do escore, o que, em uma dimensão, só acontece em famílias exponenciais com $W$ função afim de $T$. Na normal com $(\mu, \sigma^2)$ desconhecidos, $\vb I = \diag(1/\sigma^2,\ 1/(2\sigma^4))$, e a cota para estimar $\sigma^2$ com $n$ observações é $2\sigma^4/n$; o ENVVM $S^2$ tem variância $2\sigma^4/(n - 1)$ — a cota não é atingida, mas nenhum estimador não viesado faz melhor (@exr-est-m04-cr-normal).
+
+## Consistência do estimador de máxima verossimilhança {#sec-est-m04-consistencia}
+
+Sejam $X_1, X_2, \dots$ iid com densidade $p_{\theta_0}$ e $\ell_n(\theta) = \frac1n\sum_{i \leq n}\log p_\theta(X_i)$ a log-verossimilhança média. Pela lei forte, $\ell_n(\theta) \to m(\theta) = \E_{\theta_0}[\log p_\theta(X)]$ para cada $\theta$. O ponto de partida é que $\theta_0$ maximiza $m$.
+
+::: {#lem-est-m04-informacao}
+## Desigualdade da informação
+Se $P_\theta \neq P_{\theta_0}$ e $\E_{\theta_0}\abs{\log p_{\theta_0}(X)} < \infty$, então $m(\theta) < m(\theta_0)$. Equivalentemente, a **divergência de Kullback–Leibler** $\mathrm{KL}(p_{\theta_0}\,\|\,p_\theta) = \E_{\theta_0}\big[\log\frac{p_{\theta_0}(X)}{p_\theta(X)}\big]$ é estritamente positiva.
+:::
+
+::: {.proof}
+Se $m(\theta) = -\infty$, não há o que provar. Caso contrário, pela desigualdade de Jensen para o logaritmo (côncavo),
+$$
+m(\theta) - m(\theta_0) = \E_{\theta_0}\Big[\log\frac{p_\theta(X)}{p_{\theta_0}(X)}\Big] \leq \log\E_{\theta_0}\Big[\frac{p_\theta(X)}{p_{\theta_0}(X)}\Big] = \log\int_{\{p_{\theta_0} > 0\}}p_\theta\,\dd\mu \leq \log 1 = 0 .
+$$
+Se valesse a igualdade, a igualdade no Jensen exigiria $p_\theta/p_{\theta_0} = c$ constante $P_{\theta_0}$-q.c., e a última desigualdade exigiria $\int_{\{p_{\theta_0} > 0\}}p_\theta = 1$; então $c = 1$ e $P_\theta = P_{\theta_0}$, contra a hipótese.
+:::
+
+A convergência pontual de $\ell_n$ para $m$ não basta: o maximizador de $\ell_n$ poderia fugir para regiões onde a convergência é lenta. O argumento de Wald controla isso com compacidade.
+
+::: {#thm-est-m04-consistencia}
+## Consistência do EMV (Wald)
+Suponha:
+
+(i) $\Theta$ é um espaço métrico compacto e o modelo é **identificado**: $P_\theta \neq P_{\theta_0}$ para $\theta \neq \theta_0$;
+(ii) para cada $x$, $\theta \mapsto \log p_\theta(x)$ é contínua (podendo valer $-\infty$);
+(iii) $\E_{\theta_0}\big[\sup_{\theta \in \Theta}\log p_\theta(X)\big] < \infty$ e $\E_{\theta_0}\abs{\log p_{\theta_0}(X)} < \infty$.
+
+Se $\hat\theta_n$ satisfaz $\ell_n(\hat\theta_n) \geq \ell_n(\theta_0) - o(1)$ q.c. — em particular, se maximiza $\ell_n$ —, então $\hat\theta_n \to \theta_0$ quase certamente.
+:::
+
+::: {.proof}
+Para $\theta \neq \theta_0$ e $\delta > 0$, seja $U_\delta(x, \theta) = \sup\{\log p_{\theta'}(x) : d(\theta', \theta) < \delta\}$ (por (ii), basta tomar o supremo num subconjunto enumerável denso, o que garante a mensurabilidade). Quando $\delta \downarrow 0$, $U_\delta(x, \theta) \downarrow \log p_\theta(x)$ pela continuidade, e $U_\delta \leq \sup_\Theta\log p_{\theta'}$, integrável por cima por (iii); pela convergência monótona (aplicada a $\sup_\Theta\log p - U_\delta$, que cresce), $\E_{\theta_0}U_\delta(X, \theta) \downarrow m(\theta) < m(\theta_0)$, pelo @lem-est-m04-informacao. Escolha $\delta_\theta$ com $\E_{\theta_0}U_{\delta_\theta}(X, \theta) < m(\theta_0)$.
+
+Fixe $\varepsilon > 0$. O conjunto $K = \{\theta : d(\theta, \theta_0) \geq \varepsilon\}$ é compacto e coberto pelas bolas $B(\theta, \delta_\theta)$; tome uma subcobertura finita, com centros $\theta_1, \dots, \theta_J$, e seja $\eta > 0$ com $\E_{\theta_0}U_{\delta_{\theta_j}}(X, \theta_j) < m(\theta_0) - 2\eta$ para todo $j$. Pela lei forte — que vale também para variáveis com parte positiva integrável e média $-\infty$, caso em que as médias tendem a $-\infty$ —, quase certamente, para $n$ grande,
+$$
+\sup_{\theta \in K}\ell_n(\theta) \leq \max_{j \leq J}\frac1n\sum_{i \leq n}U_{\delta_{\theta_j}}(X_i, \theta_j) < m(\theta_0) - \eta < \ell_n(\theta_0) - \frac\eta2 .
+$$
+Como $\ell_n(\hat\theta_n) \geq \ell_n(\theta_0) - o(1)$, $\hat\theta_n \notin K$ para $n$ grande, isto é, $d(\hat\theta_n, \theta_0) < \varepsilon$.
+:::
+
+A compacidade pode ser trocada por concavidade: se $\theta \mapsto \log p_\theta(x)$ é côncava — como nas famílias exponenciais na parametrização natural —, a convergência pontual de funções côncavas é uniforme nos compactos, e o EMV é consistente sem restringir $\Theta$. A identificação é indispensável: no problema dos parâmetros incidentais de Neyman e Scott, o número de parâmetros cresce com $n$ e o EMV de $\sigma^2$ converge para $\sigma^2/2$ (@exr-est-m04-neyman-scott) — a razão pela qual efeitos fixos em painéis curtos exigem cuidado (@sec-ecm-m07).
+
+## Normalidade assintótica e eficiência {#sec-est-m04-normalidade}
+
+::: {#thm-est-m04-normalidade}
+## Normalidade assintótica do EMV
+Suponha que $\theta_0$ esteja no interior de $\Theta \subseteq \R^k$; que, numa vizinhança $N$ de $\theta_0$, $\theta \mapsto \log p_\theta(x)$ seja duas vezes continuamente diferenciável, com $\E_{\theta_0}\sup_{\theta \in N}\norm{\nabla^2\log p_\theta(X)} < \infty$; que valham $\E_{\theta_0}\vb s_{\theta_0} = \vb 0$ e a igualdade da informação, com $\vb I = \vb I(\theta_0)$ invertível; e que $\hat\theta_n$ seja consistente e satisfaça $\nabla\ell_n(\hat\theta_n) = \vb 0$ com probabilidade tendendo a 1. Então
+$$
+\sqrt n\,(\hat\theta_n - \theta_0) \dto \Normal\big(\vb 0,\ \vb I(\theta_0)^{-1}\big) .
+$$
+:::
+
+::: {.proof}
+No evento em que $\nabla\ell_n(\hat\theta_n) = \vb 0$ e o segmento entre $\theta_0$ e $\hat\theta_n$ está em $N$ — de probabilidade tendendo a 1 —, o teorema fundamental do cálculo aplicado a $u \mapsto \nabla\ell_n(\theta_0 + u(\hat\theta_n - \theta_0))$ dá
+$$
+\vb 0 = \nabla\ell_n(\theta_0) + \bar{\vb H}_n(\hat\theta_n - \theta_0), \qquad \bar{\vb H}_n = \int_0^1\nabla^2\ell_n\big(\theta_0 + u(\hat\theta_n - \theta_0)\big)\,\dd u .
+$$
+*O hessiano médio converge.* Seja $\Delta_\delta(x) = \sup_{\norm{\theta - \theta_0} \leq \delta}\norm{\nabla^2\log p_\theta(x) - \nabla^2\log p_{\theta_0}(x)}$. Pela continuidade, $\Delta_\delta \downarrow 0$ quando $\delta \downarrow 0$, com dominante $2\sup_N\norm{\nabla^2\log p_\theta}$; pela convergência dominada, $\E\Delta_\delta \to 0$. Dado $\varepsilon$, tome $\delta$ com $\E\Delta_\delta < \varepsilon$; no evento $\norm{\hat\theta_n - \theta_0} \leq \delta$, $\norm{\bar{\vb H}_n - \nabla^2\ell_n(\theta_0)} \leq \frac1n\sum_i\Delta_\delta(X_i)$, que pela lei dos grandes números é menor que $2\varepsilon$ com probabilidade tendendo a 1. Como $\nabla^2\ell_n(\theta_0) \to -\vb I$ q.c. (lei forte e igualdade da informação), $\bar{\vb H}_n \pto -\vb I$.
+
+*Conclusão.* $\sqrt n\,\nabla\ell_n(\theta_0) = \frac{1}{\sqrt n}\sum_i\vb s_{\theta_0}(X_i) \dto \Normal(\vb 0, \vb I)$ pelo TCL multivariado (@cor-est-m03-tcl-vetorial). Com probabilidade tendendo a 1, $\bar{\vb H}_n$ é invertível e $\sqrt n(\hat\theta_n - \theta_0) = -\bar{\vb H}_n^{-1}\sqrt n\,\nabla\ell_n(\theta_0)$; pelo lema de Slutsky (@thm-est-m03-slutsky), o limite é $\vb I^{-1}Z$ com $Z \sim \Normal(\vb 0, \vb I)$, isto é, $\Normal(\vb 0, \vb I^{-1}\vb I\vb I^{-1}) = \Normal(\vb 0, \vb I^{-1})$.
+:::
+
+Esse é o resultado admitido no @sec-est-g05. Na prática, $\vb I(\theta_0)$ é estimada por $\vb I(\hat\theta_n)$ ou pela **informação observada** $-\nabla^2\ell_n(\hat\theta_n)$, consistentes pelo mesmo argumento, e os erros padrão são as raízes da diagonal de $[n\hat{\vb I}]^{-1}$. Pelo método delta (@thm-est-m03-delta), $g(\hat\theta_n)$ é assintoticamente normal com variância $\nabla g\T\vb I^{-1}\nabla g/n$ — que coincide com a cota de Cramér–Rao para $g(\theta)$.
+
+**Eficiência.** O EMV atinge assintoticamente a cota de Cramér–Rao. Isso não é uma otimalidade literal: o **estimador de Hodges**, que na $\Normal(\theta, 1)$ vale $\bar X_n$ se $\abs{\bar X_n} > n^{-1/4}$ e $0$ caso contrário, tem a mesma distribuição limite que $\bar X_n$ para $\theta \neq 0$ e variância assintótica **zero** em $\theta = 0$ — "superefficiente". O preço aparece perto de zero: para $\theta$ da ordem de $n^{-1/4}$, o erro quadrático de Hodges, multiplicado por $n$, cresce sem limite (o interativo mostra). O teorema da convolução de Hájek e Le Cam, que admitimos (@vandervaart1998), restaura a otimalidade do EMV entre os estimadores **regulares** — aqueles cuja distribuição limite não muda sob perturbações do parâmetro da ordem de $n^{-1/2}$.
+
+## O EMV sob má especificação {#sec-est-m04-ma-especificacao}
+
+Os dados raramente vêm de um modelo paramétrico exato. Suponha que $X_i$ sejam iid com densidade $f$, não necessariamente da forma $p_\theta$. O EMV ainda maximiza $\ell_n(\theta) \to m(\theta) = \E_f[\log p_\theta(X)]$, e o seu limite natural é
+$$
+\theta^* = \argmax_\theta\E_f[\log p_\theta(X)] = \argmin_\theta\mathrm{KL}(f\,\|\,p_\theta),
+$$
+o **parâmetro pseudoverdadeiro**: o membro do modelo mais próximo da verdade em divergência de Kullback–Leibler. O EMV de um modelo errado é chamado de **estimador de quase-máxima verossimilhança** (QMV).
+
+::: {#thm-est-m04-sanduiche}
+## Distribuição do EMV sob má especificação
+Suponha que $\theta^*$ seja o único maximizador de $m$, interior, e que valham as condições do @thm-est-m04-consistencia e do @thm-est-m04-normalidade com $f$ no lugar de $p_{\theta_0}$ e $\theta^*$ no lugar de $\theta_0$, exceto a igualdade da informação. Sejam $\vb A = -\E_f[\nabla^2\log p_{\theta^*}(X)]$, invertível, e $\vb B = \E_f[\vb s_{\theta^*}(X)\vb s_{\theta^*}(X)\T]$. Então $\hat\theta_n \to \theta^*$ q.c. e
+$$
+\sqrt n\,(\hat\theta_n - \theta^*) \dto \Normal\big(\vb 0,\ \vb A^{-1}\vb B\vb A^{-1}\big) .
+$$
+:::
+
+::: {.proof}
+A consistência é a demonstração do @thm-est-m04-consistencia, com a unicidade do maximizador $\theta^*$ no lugar do @lem-est-m04-informacao. Como $\theta^*$ é um máximo interior de $m$, $\E_f[\vb s_{\theta^*}] = \nabla m(\theta^*) = \vb 0$ (derivando sob o sinal de integral). A expansão do @thm-est-m04-normalidade vale sem alteração, com $\bar{\vb H}_n \pto -\vb A$ e $\sqrt n\,\nabla\ell_n(\theta^*) \dto \Normal(\vb 0, \vb B)$; pelo lema de Slutsky, o limite é $\vb A^{-1}Z$ com $Z \sim \Normal(\vb 0, \vb B)$.
+:::
+
+Quando o modelo está correto, $\vb A = \vb B = \vb I$ e a **matriz sanduíche** $\vb A^{-1}\vb B\vb A^{-1}$ se reduz a $\vb I^{-1}$. Quando está errado, os erros padrão baseados na informação — $\hat{\vb A}^{-1}$ ou $\hat{\vb B}^{-1}$ — estão errados, e os corretos usam $\hat{\vb A}^{-1}\hat{\vb B}\hat{\vb A}^{-1}$, com $\hat{\vb A}$ o hessiano médio e $\hat{\vb B}$ a média dos produtos externos dos escores, ambos em $\hat\theta_n$ (@white1982). É a mesma ideia dos erros padrão robustos à heterocedasticidade de White na regressão (@sec-ecm-g05, @sec-ecm-m02): o MQO é o EMV do modelo normal homocedástico, e o sanduíche corrige a variância quando a homocedasticidade falha. Às vezes $\theta^*$ é exatamente o que se quer: o EMV de Poisson converge para a média verdadeira mesmo com sobredispersão (@exr-est-m04-qmv-poisson), e o MQO converge para a melhor previsão linear mesmo sem normalidade.
+
+## Pontes {#sec-est-m04-pontes}
+
+- **Testes e regiões de confiança (@sec-est-m05).** A razão de verossimilhança, o teste de Wald e o do escore usam a expansão do @thm-est-m04-normalidade; o teorema de Wilks.
+- **Máxima verossimilhança em econometria (@sec-ecm-m05).** Modelos de escolha binária, de contagem, de duração; a trindade de testes; o QMV e os erros padrão robustos.
+- **GMM (@sec-ecm-m06).** O escore é uma condição de momento; o EMV é o GMM eficiente quando o modelo está correto, e a matriz sanduíche é a variância geral do GMM.
+- **Inferência bayesiana (@sec-est-m06).** Estatísticas suficientes resumem os dados também para o bayesiano; famílias exponenciais têm prioris conjugadas; Bernstein–von Mises liga a posteriori à distribuição assintótica do EMV.
+- **Modelos lineares generalizados e escolha discreta (@sec-ecm-g09).** Logit e Poisson são famílias exponenciais: verossimilhança côncava e EMV como igualação de momentos.
+- **Painéis (@sec-ecm-m07).** Parâmetros incidentais e o viés dos efeitos fixos em modelos não lineares.
+
+## Interativo {#sec-est-m04-interativo}
+
+::: {.content-visible when-format="html"}
+**Rao–Blackwell na Poisson.** Para estimar $e^{-\lambda} = P(X = 0)$ com uma amostra Poisson de tamanho $n$, comparamos três estimadores em 3000 amostras simuladas: o ingênuo $\mathbf 1\{X_1 = 0\}$, não viesado mas que só vale 0 ou 1; o seu condicionamento a $T = \sum X_i$, $((n - 1)/n)^T$, que é o ENVVM; e o EMV $e^{-\bar X}$, ligeiramente viesado. A linha tracejada marca o valor verdadeiro.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+import {controle, alternador, seletor} from "/ojs/controles.js"
+viewof lambdaM04 = controle("λ", [0.2, 4], {valor: 1, passo: 0.1, casas: 1})
+viewof nM04 = controle("n", [2, 60], {valor: 10, passo: 1, casas: 0})
+viewof sementeM04 = controle("semente", [1, 50], {valor: 1, passo: 1, casas: 0})
+```
+
+```{ojs}
+//| echo: false
+md`Valor verdadeiro e^(−λ) = ${fmtM04(Math.exp(-lambdaM04), 4)}. ${resumoM04.map(r => `**${r.nome}**: viés ${fmtM04(r.vies, 4)}, EQM ${fmtM04(r.eqm, 5)}`).join("; ")}.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "estimativa de e^(−λ)", domain: [0, 1]}, y: {label: "frequência relativa"},
+  color: {domain: ["ingênuo 1{X₁ = 0}", "Rao–Blackwell ((n−1)/n)^T", "EMV e^(−X̄)"], range: ["#9AA5B1", "#2F5D8A", "#B7791F"], legend: true},
+  marks: [
+    Plot.rect(histM04, {x1: "x1", x2: "x2", y1: 0, y2: "f", fill: "estimador", fillOpacity: 0.5}),
+    Plot.ruleX([Math.exp(-lambdaM04)], {stroke: "#8C2F39", strokeDasharray: "5,3", strokeWidth: 2})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+fmtM04 = (v, c) => v.toFixed(c).replace(".", ",")
+geradorM04 = semente => () => {
+  semente |= 0; semente = semente + 0x6D2B79F5 | 0
+  let t = Math.imul(semente ^ semente >>> 15, 1 | semente)
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t
+  return ((t ^ t >>> 14) >>> 0) / 4294967296
+}
+poissonM04 = (r, lam) => {
+  let k = 0, p = Math.exp(-lam), F = p
+  const u = r()
+  while (u > F && k < 200) { k++; p *= lam / k; F += p }
+  return k
+}
+simM04 = {
+  const r = geradorM04(sementeM04 * 104729), R = 3000, sims = []
+  for (let s = 0; s < R; s++) {
+    let T = 0, x1 = 0
+    for (let i = 0; i < nM04; i++) { const x = poissonM04(r, lambdaM04); if (i === 0) x1 = x; T += x }
+    sims.push({ing: x1 === 0 ? 1 : 0, rb: Math.pow((nM04 - 1) / nM04, T), emv: Math.exp(-T / nM04)})
+  }
+  return sims
+}
+resumoM04 = {
+  const alvo = Math.exp(-lambdaM04)
+  return [["ingênuo", "ing"], ["Rao–Blackwell", "rb"], ["EMV", "emv"]].map(([nome, c]) => {
+    const v = simM04.map(s => s[c])
+    return {nome, vies: d3.mean(v) - alvo, eqm: d3.mean(v, x => (x - alvo) ** 2)}
+  })
+}
+histM04 = {
+  const k = 40, nomes = {ing: "ingênuo 1{X₁ = 0}", rb: "Rao–Blackwell ((n−1)/n)^T", emv: "EMV e^(−X̄)"}, out = []
+  for (const c of ["ing", "rb", "emv"]) {
+    const cont = new Array(k).fill(0)
+    for (const s of simM04) cont[Math.min(k - 1, Math.floor(s[c] * k))]++
+    cont.forEach((n, j) => out.push({estimador: nomes[c], x1: j / k, x2: (j + 1) / k, f: n / simM04.length}))
+  }
+  return out
+}
+```
+:::
+
+**Superefficiência de Hodges.** Na $\Normal(\theta, 1)$, o erro quadrático de $\bar X_n$, multiplicado por $n$, é 1 para todo $\theta$ (linha cinza). O estimador de Hodges zera $\bar X_n$ quando $\abs{\bar X_n} \leq n^{-1/4}$: em $\theta = 0$ ele é muito melhor, mas perto de zero o seu erro, multiplicado por $n$, explode à medida que $n$ cresce.
+
+::: {.interativo}
+```{ojs}
+//| echo: false
+viewof logNM04 = controle("n (escala log₁₀)", [1, 6], {valor: 2, passo: 0.1, casas: 1})
+```
+
+```{ojs}
+//| echo: false
+md`n = ${Math.round(10 ** logNM04)}. Limiar n^(−1/4) = ${fmtM04(10 ** (-logNM04 / 4), 4)}. Em θ = 0: n·EQM = **${fmtM04(riscoHodgesM04(0), 4)}**. Máximo de n·EQM no gráfico: **${fmtM04(d3.max(curvaHodgesM04, d => d.r), 2)}**.`
+```
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 640, height: 300, grid: true,
+  x: {label: "θ", domain: [-1.2, 1.2]}, y: {label: "n × erro quadrático médio", type: "log", ticks: [1e-4, 1e-3, 1e-2, 0.1, 1, 10, 100, 1000], tickFormat: d => String(d).replace(".", ",")},
+  marks: [
+    Plot.ruleY([1], {stroke: "#9AA5B1", strokeWidth: 2}),
+    Plot.line(curvaHodgesM04, {x: "theta", y: "r", stroke: "#8C2F39", strokeWidth: 2})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+phiM04 = z => Math.exp(-(z * z) / 2) / Math.sqrt(2 * Math.PI)
+PhiM04 = x => {
+  const t = 1 / (1 + 0.3275911 * Math.abs(x) / Math.SQRT2)
+  const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-(x * x) / 2)
+  return x >= 0 ? 0.5 * (1 + y) : 0.5 * (1 - y)
+}
+riscoHodgesM04 = theta => {
+  const n = 10 ** logNM04, c = n ** -0.25, rn = Math.sqrt(n)
+  const a = rn * (-c - theta), b = rn * (c - theta)
+  const pz = PhiM04(b) - PhiM04(a)
+  const z2 = pz - (b * phiM04(b) - a * phiM04(a))
+  return Math.max(1e-4, 1 - z2 + n * theta * theta * pz)
+}
+curvaHodgesM04 = d3.range(-1.2, 1.2001, 0.002).map(theta => ({theta, r: riscoHodgesM04(theta)}))
+```
+:::
+:::
+
+::: {.content-visible unless-format="html"}
+*Os interativos desta seção — Rao–Blackwell na estimação de $e^{-\lambda}$ e a superefficiência de Hodges — estão disponíveis na versão web do livro. O laboratório a seguir reproduz os principais cálculos em Python.*
+:::
+
+## Laboratório computacional {#sec-est-m04-laboratorio}
+
+### Suficiência: a ordem não importa
+
+Dado $T = \sum X_i = t$ numa amostra Bernoulli, todos os $\binom nt$ arranjos de zeros e uns são equiprováveis, qualquer que seja $p$. Verificamos com $n = 4$ e $t = 2$ para dois valores de $p$.
+
+```{python}
+import numpy as np
+from collections import Counter
+from scipy import stats, optimize, special
+
+rng = np.random.default_rng(4)
+for p in [0.2, 0.7]:
+    X = (rng.uniform(size=(400_000, 4)) < p).astype(int)
+    sel = X[X.sum(axis=1) == 2]
+    freq = Counter(map(tuple, sel))
+    total = sum(freq.values())
+    pares = [f"{''.join(map(str, k))}:{v / total:.3f}"
+             for k, v in sorted(freq.items())]
+    print(f"p = {p}:")
+    print("  " + " ".join(pares))
+```
+
+### Basu: média e variância amostrais
+
+Na normal, $\bar X \indep S^2$; na exponencial, a média e a variância amostrais são positivamente correlacionadas, porque a exponencial não é uma família de locação e $S^2$ não é ancilar.
+
+```{python}
+for nome, gerar in [("normal", rng.standard_normal),
+                    ("exponencial", rng.exponential)]:
+    A = gerar(size=(200_000, 10))
+    m, s2 = A.mean(axis=1), A.var(axis=1, ddof=1)
+    r = np.corrcoef(m, s2)[0, 1]
+    print(f"{nome:<12} corr(media, variancia) = {r:.3f}")
+```
+
+### O EMV da gama e a cota de Cramér–Rao
+
+Na gama com forma $\alpha$ e taxa $\beta$, a informação por observação é $\vb I = \begin{pmatrix}\psi'(\alpha) & -1/\beta \\ -1/\beta & \alpha/\beta^2\end{pmatrix}$, em que $\psi'$ é a função trigama. Calculamos o EMV numericamente em muitas amostras e comparamos a matriz de covariâncias de $\sqrt n(\hat\theta - \theta)$ com $\vb I^{-1}$.
+
+```{python}
+alfa, beta, n, R = 2.0, 0.5, 400, 1000
+
+def emv_gama(x):
+    # CPO: log(a) - digama(a) = log(media de x) - media de log(x)
+    s = np.log(x.mean()) - np.mean(np.log(x))
+    a = optimize.brentq(lambda a: np.log(a) - special.digamma(a) - s,
+                        1e-3, 1e3)
+    return a, a / x.mean()
+
+est = np.array([emv_gama(rng.gamma(alfa, 1 / beta, size=n))
+                for _ in range(R)])
+cov_sim = np.cov(np.sqrt(n) * (est - [alfa, beta]), rowvar=False)
+I = np.array([[special.polygamma(1, alfa), -1 / beta],
+              [-1 / beta, alfa / beta ** 2]])
+np.set_printoptions(precision=3, suppress=True)
+print("covariancia simulada de sqrt(n)(emv - theta):\n", cov_sim)
+print("inversa da informacao de Fisher:\n", np.linalg.inv(I))
+```
+
+### Má especificação: modelo exponencial para dados log-normais
+
+O EMV do modelo exponencial para a média é $\bar X$, com erro padrão "do modelo" $\bar X/\sqrt n$ (a variância da exponencial é o quadrado da média). Com dados log-normais, o parâmetro pseudoverdadeiro ainda é a média, mas a variância é outra: o erro padrão do modelo subcobre, e o sanduíche — que aqui é $S/\sqrt n$ — acerta.
+
+```{python}
+def coberturas(n, R=20_000):
+    X = rng.lognormal(0, 1, size=(R, n))
+    media = np.exp(0.5)
+    xb = X.mean(axis=1)
+    ep_modelo = xb / np.sqrt(n)
+    ep_sand = X.std(axis=1, ddof=1) / np.sqrt(n)
+    cob = lambda ep: np.mean(np.abs(xb - media) <= 1.96 * ep)
+    return cob(ep_modelo), cob(ep_sand)
+
+for n in [20, 100, 1000]:
+    c1, c2 = coberturas(n)
+    print(f"n = {n:>4}: cobertura com EP do modelo {c1:.3f}; "
+          f"com sanduiche {c2:.3f}")
+```
+
+## Aplicação: a distribuição $t$ para o crescimento do IBC-Br {#sec-est-m04-aplicacao}
+
+O IBC-Br, índice de atividade econômica do Banco Central, tem variações mensais com caudas mais pesadas que as da normal: meses de choques — como abril de 2020 — são muito mais extremos do que uma distribuição normal permitiria. Ajustamos por máxima verossimilhança dois modelos para o crescimento mensal (em log, com ajuste sazonal): a normal, com EMV em forma fechada, e a $t$ de Student com locação $\mu$, escala $s$ e graus de liberdade $\nu$, com EMV numérico. Comparamos os ajustes pela log-verossimilhança e, para a normal, os erros padrão baseados na informação de Fisher com os da matriz sanduíche, que não supõem o modelo correto. (Os meses consecutivos não são independentes; erros padrão robustos à autocorrelação são o tema do @sec-ecm-m02.)
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+from IPython.display import Markdown
+from formacao import dados, graficos
+
+graficos.estilo()
+try:
+    ibc = dados.sgs("ibcbr_dessaz", inicio="2003-01-01")
+    disponivel = True
+except dados.DadosIndisponiveis as erro:
+    disponivel = False
+    print(f"Dados indisponiveis ({erro}).")
+    print("Renderize com acesso a internet para preencher a cache.")
+
+def ll_t(par, x):
+    mu, log_s, log_nu = par
+    return stats.t.logpdf(x, df=np.exp(log_nu), loc=mu,
+                          scale=np.exp(log_s))
+
+def hessiana(f, par, h=1e-4):
+    k = len(par)
+    H = np.zeros((k, k))
+    for j in range(k):
+        for l in range(k):
+            ej, el = np.eye(k)[j] * h, np.eye(k)[l] * h
+            num = (f(par + ej + el) - f(par + ej - el)
+                   - f(par - ej + el) + f(par - ej - el))
+            H[j, l] = num / (4 * h * h)
+    return H
+
+if disponivel:
+    x = 100 * np.log(ibc).diff().dropna().to_numpy()
+    n = len(x)
+    mu_n, sig_n = x.mean(), x.std()
+    ll_normal = stats.norm.logpdf(x, mu_n, sig_n).sum()
+    inicio = np.array([np.median(x), np.log(x.std()), np.log(5.0)])
+    res = optimize.minimize(lambda p: -ll_t(p, x).sum(), inicio,
+                            method="Nelder-Mead",
+                            options={"xatol": 1e-8, "fatol": 1e-10,
+                                     "maxiter": 20_000})
+    par_t = res.x
+    ll_tt = ll_t(par_t, x).sum()
+    H = hessiana(lambda p: ll_t(p, x).sum(), par_t)
+    ep_mu_t = np.sqrt(np.linalg.inv(-H)[0, 0])
+    nu_t, s_t = np.exp(par_t[2]), np.exp(par_t[1])
+    # normal: erro padrao de sigma pela informacao e pelo sanduiche
+    m4 = np.mean((x - mu_n) ** 4)
+    ep_sig_info = sig_n / np.sqrt(2 * n)
+    ep_sig_sand = np.sqrt((m4 - sig_n ** 4) / (4 * sig_n ** 2 * n))
+    curt = m4 / sig_n ** 4
+    print(f"{n} meses; curtose amostral {curt:.1f} (normal: 3)")
+    print(f"normal: mu = {mu_n:.3f}, sigma = {sig_n:.3f}, "
+          f"logL = {ll_normal:.1f}")
+    print(f"t:      mu = {par_t[0]:.3f}, s = {s_t:.3f}, "
+          f"nu = {nu_t:.2f}, logL = {ll_tt:.1f}")
+    print(f"EP de mu: normal {sig_n / np.sqrt(n):.3f}; t {ep_mu_t:.3f}")
+    print(f"EP de sigma (normal): informacao {ep_sig_info:.3f}; "
+          f"sanduiche {ep_sig_sand:.3f}")
+
+    fig, ax = plt.subplots(1, 2, figsize=(9.5, 3.4))
+    grade = np.linspace(x.min() - 0.5, x.max() + 0.5, 600)
+    dn = stats.norm.pdf(grade, mu_n, sig_n)
+    dt = stats.t.pdf(grade, nu_t, par_t[0], s_t)
+    for a, escala in zip(ax, ["linear", "log"]):
+        a.hist(x, bins=60, density=True, alpha=0.5,
+               color=graficos.PALETA["cinza"])
+        a.plot(grade, dn, color=graficos.PALETA["ambar"],
+               label="normal (EMV)")
+        a.plot(grade, dt, color=graficos.PALETA["azul"],
+               label="t (EMV)")
+        a.set_xlabel("crescimento mensal do IBC-Br (%)")
+        if escala == "log":
+            a.set_yscale("log")
+            a.set_ylim(1e-4, None)
+            a.set_title("escala logarítmica: as caudas")
+    ax[0].set_ylabel("densidade")
+    ax[0].legend(frameon=False, fontsize=8)
+    graficos.fonte(ax[0], "BCB, IBC-Br dessazonalizado (SGS 24364).")
+    plt.tight_layout()
+    plt.show()
+
+    br = lambda v, c=2: f"{v:.{c}f}".replace(".", ",")
+    ganho = ll_tt - ll_normal
+    razao = ep_sig_sand / ep_sig_info
+    resumo = ("A $t$ ajustada tem "
+              f"$\\hat\\nu = {br(nu_t, 1)}$ graus de "
+              f"liberdade e log-verossimilhança {br(ganho, 1)} pontos "
+              "maior que a da normal, com um único parâmetro a mais — "
+              "pelo critério de Akaike, que penaliza cada parâmetro "
+              f"com 1 ponto, a $t$ {'é' if ganho > 1 else 'não é'} "
+              "preferível. Com curtose amostral de "
+              f"{br(curt, 1)}, o erro padrão de $\\hat\\sigma$ no "
+              "modelo normal calculado pela informação de Fisher "
+              "subestima a "
+              f"incerteza: o sanduíche é {br(razao, 1)} vezes maior. "
+              "Para a média, os dois coincidem, porque o escore de "
+              "$\\mu$ na normal não depende da curtose.")
+else:
+    resumo = ("*(Os resultados aparecem quando o capítulo é "
+              "renderizado com acesso aos dados.)*")
+Markdown(resumo)
+```
+
+O exemplo mostra as duas lições do capítulo numa só aplicação. Um modelo de caudas pesadas descreve melhor os dados — e o EMV da $t$ dá menos peso aos meses extremos ao estimar a locação. E, quando se insiste num modelo errado, o EMV ainda estima algo com sentido (aqui, a média e o desvio padrão), mas os erros padrão precisam do sanduíche. Modelos de volatilidade (@sec-ecm-d06) e de risco de cauda usam a $t$ e distribuições ainda mais flexíveis pelas mesmas razões.
+
+## Exercícios resolvidos {#sec-est-m04-exercicios}
+
+::: {#exr-est-m04-uniforme}
+Sejam $X_1, \dots, X_n$ iid uniformes em $(0, \theta)$. Mostre que $X_{(n)} = \max_iX_i$ é suficiente e completa, encontre o ENVVM de $\theta$ e compare a sua variância com a ordem $1/n$ da cota de Cramér–Rao. Por que a cota não se aplica?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+A densidade conjunta é $\theta^{-n}\mathbf 1\{x_{(n)} \leq \theta\}\mathbf 1\{x_{(1)} \geq 0\}$, e a fatoração dá a suficiência de $T = X_{(n)}$, cuja densidade é $nt^{n-1}/\theta^n$ em $(0, \theta)$. Se $\int_0^\theta g(t)nt^{n-1}\,\dd t = 0$ para todo $\theta$, derivando em $\theta$ obtém-se $g(\theta)n\theta^{n-1} = 0$ para quase todo $\theta$: $T$ é completa. Como $\E T = \frac{n}{n + 1}\theta$, o ENVVM é $\frac{n + 1}{n}X_{(n)}$, com variância $\frac{\theta^2}{n(n + 2)}$ — da ordem de $1/n^2$, muito menor que qualquer cota da ordem de $1/n$. A cota não se aplica porque o suporte depende de $\theta$: não se pode derivar $\int_0^\theta p_\theta = 1$ sob o sinal de integral sem um termo de fronteira, e a igualdade $\E\,s_\theta = 0$ falha.
+:::
+
+::: {#exr-est-m04-gama}
+Escreva a gama com forma $\alpha$ e taxa $\beta$ como família exponencial, identifique $\vb\eta$, $\vb T$ e $A$, e use a @prp-est-m04-exponencial para obter $\E[\log X]$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$p(x) = \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1}e^{-\beta x} = \frac1x\exp\big(\alpha\log x - \beta x - [\log\Gamma(\alpha) - \alpha\log\beta]\big)$ para $x > 0$. Logo $\vb\eta = (\alpha, -\beta)$, $\vb T = (\log x, x)$, $h(x) = 1/x$ e $A(\vb\eta) = \log\Gamma(\eta_1) - \eta_1\log(-\eta_2)$. Pela proposição, $\E[\log X] = \partial A/\partial\eta_1 = \psi(\alpha) - \log\beta$, em que $\psi = \Gamma'/\Gamma$ é a função digama, e $\E[X] = \partial A/\partial\eta_2 = -\eta_1/\eta_2 = \alpha/\beta$. A estatística suficiente de uma amostra é $(\sum\log X_i, \sum X_i)$, e a equação do EMV para $\alpha$, $\log\alpha - \psi(\alpha) = \log\bar X - \overline{\log X}$, é a usada no laboratório.
+:::
+
+::: {#exr-est-m04-p-quadrado}
+Numa amostra Bernoulli$(p)$ com $n \geq 2$, encontre o ENVVM de $p^2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+O estimador ingênuo $X_1X_2$ é não viesado para $p^2$. Condicionando a $T = \sum X_i$, que é suficiente e completa: dado $T = t$, os arranjos são equiprováveis, e $\Prob(X_1 = X_2 = 1 \mid T = t) = \binom{n-2}{t-2}/\binom nt = \frac{t(t - 1)}{n(n - 1)}$. Pelo @thm-est-m04-lehmann-scheffe, $\frac{T(T - 1)}{n(n - 1)}$ é o ENVVM. Compare com o EMV $\bar X^2$, viesado: $\E\bar X^2 = p^2 + p(1 - p)/n$.
+:::
+
+::: {#exr-est-m04-poisson-zero}
+Numa amostra Poisson$(\lambda)$, mostre que $\E[\mathbf 1\{X_1 = 0\} \mid T] = ((n - 1)/n)^T$, com $T = \sum X_i$, e conclua que esse é o ENVVM de $e^{-\lambda}$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Dado $T = t$, $X_1 \sim$ Bin$(t, 1/n)$: $\Prob(X_1 = k \mid T = t) = \frac{\Prob(X_1 = k)\Prob(\sum_{i \geq 2}X_i = t - k)}{\Prob(T = t)}$, e com $X_1 \sim$ Poisson$(\lambda)$, $\sum_{i \geq 2}X_i \sim$ Poisson$((n - 1)\lambda)$ e $T \sim$ Poisson$(n\lambda)$, os fatores $e^{-n\lambda}$ e $\lambda^t$ se cancelam, sobrando $\binom tk(1/n)^k((n - 1)/n)^{t-k}$. Logo $\Prob(X_1 = 0 \mid T) = ((n - 1)/n)^T$. Como $\mathbf 1\{X_1 = 0\}$ é não viesado e $T$ é suficiente e completa (família exponencial), o resultado é o ENVVM. Para $n$ grande, $((n - 1)/n)^T = (1 - 1/n)^{n\bar X} \approx e^{-\bar X}$, o EMV.
+:::
+
+::: {#exr-est-m04-neyman-scott}
+(Neyman–Scott.) Para $i = 1, \dots, n$, sejam $X_{i1}, X_{i2}$ independentes $\Normal(\mu_i, \sigma^2)$, com $\mu_1, \dots, \mu_n$ e $\sigma^2$ desconhecidos. Mostre que o EMV de $\sigma^2$ converge para $\sigma^2/2$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Para $\sigma^2$ fixo, o EMV de cada $\mu_i$ é $\bar X_i = (X_{i1} + X_{i2})/2$. Substituindo, o EMV de $\sigma^2$ é $\hat\sigma^2 = \frac{1}{2n}\sum_i\sum_j(X_{ij} - \bar X_i)^2 = \frac{1}{4n}\sum_i(X_{i1} - X_{i2})^2$. Como $X_{i1} - X_{i2} \sim \Normal(0, 2\sigma^2)$ iid, a lei dos grandes números dá $\hat\sigma^2 \to 2\sigma^2/4 = \sigma^2/2$. O número de parâmetros cresce com $n$, cada $\mu_i$ é estimado com apenas duas observações, e o @thm-est-m04-consistencia não se aplica. É o problema dos **parâmetros incidentais**: em painéis com poucos períodos, os efeitos fixos contaminam a estimação dos parâmetros comuns (@sec-ecm-m07). Aqui a correção é simples ($2\hat\sigma^2$); em modelos não lineares, não.
+:::
+
+::: {#exr-est-m04-qmv-poisson}
+Sejam $X_i$ iid com média $m$ e variância $v$, não necessariamente Poisson. Mostre que o EMV de Poisson, $\hat\lambda = \bar X$, converge para $m$ e que a variância sanduíche é $v$, enquanto a "do modelo" é $m$.
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+$\log p_\lambda(x) = x\log\lambda - \lambda - \log x!$, com escore $x/\lambda - 1$ e segunda derivada $-x/\lambda^2$. O maximizador de $\E[X\log\lambda - \lambda]$ é $\lambda^* = m$. Então $A = \E[X]/m^2 = 1/m$ e $B = \E[(X/m - 1)^2] = v/m^2$, e a variância sanduíche é $A^{-1}BA^{-1} = m^2\cdot v/m^2 = v$, enquanto a inversa da informação dá $A^{-1} = m$. Com sobredispersão ($v > m$), os erros padrão do modelo Poisson são pequenos demais; o sanduíche, estimado por $S^2/n$, corrige. É por isso que regressões de Poisson com erros padrão robustos são consistentes para a função de média mesmo quando os dados não são Poisson (@sec-ecm-m05).
+:::
+
+::: {#exr-est-m04-cr-normal}
+Na $\Normal(\mu, \sigma^2)$ com os dois parâmetros desconhecidos, calcule $\vb I(\mu, \sigma^2)$ e a cota de Cramér–Rao para $\sigma^2$. Compare com a variância de $S^2$. O que muda se $\mu$ é conhecido?
+:::
+
+::: {.callout-tip collapse="true" title="Solução"}
+Com $\tau = \sigma^2$, $\log p = -\frac12\log(2\pi\tau) - \frac{(x - \mu)^2}{2\tau}$. As segundas derivadas são $-1/\tau$, $-(x - \mu)/\tau^2$ e $\frac{1}{2\tau^2} - \frac{(x - \mu)^2}{\tau^3}$, com esperanças $-1/\tau$, $0$ e $-\frac{1}{2\tau^2}$. Logo $\vb I = \diag(1/\sigma^2,\ 1/(2\sigma^4))$, e a cota para estimadores não viesados de $\sigma^2$ é $2\sigma^4/n$. Como $(n - 1)S^2/\sigma^2 \sim \chi^2_{n-1}$, $\Var(S^2) = 2\sigma^4/(n - 1) > 2\sigma^4/n$: o ENVVM não atinge a cota. Se $\mu$ é conhecido, $\frac1n\sum(X_i - \mu)^2$ é não viesado com variância $2\sigma^4/n$ e atinge a cota — o "grau de liberdade" gasto para estimar $\mu$ é o que separa os dois casos.
+:::
+
+## Flashcards {#sec-est-m04-flashcards}
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é uma estatística suficiente, e como se encontra uma?
+$T$ tal que a distribuição de $X$ dado $T$ não depende de $\theta$. Fatoração: $p_\theta(x) = g_\theta(T(x))h(x)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o critério para suficiência mínima?
+$p_\theta(x)/p_\theta(y)$ não depende de $\theta$ $\iff T(x) = T(y)$. Normal: $(\bar X, S^2)$; Cauchy de locação: a amostra ordenada.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é uma família exponencial e o que ela garante?
+$p = h\exp(\vb\eta\T\vb T - A(\vb\eta))$. $\nabla A = \E\vb T$, $\nabla^2A = \Var\vb T$; $\sum\vb T(X_i)$ suficiente de dimensão fixa; log-verossimilhança côncava; EMV iguala $\E\vb T$ à média amostral; completa se de posto completo.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é completude, e como se prova para famílias exponenciais?
+$\E_\theta g(T) = 0\ \forall\theta \Rightarrow g(T) = 0$ q.c. Prova: as medidas $g^\pm e^{\eta_0t}\,\dd\nu$ têm a mesma FGM num intervalo, logo coincidem.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que diz o teorema de Basu?
+Suficiente completa e ancilar são independentes. Ex.: $\bar X \indep S^2$ na normal.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que dizem Rao–Blackwell e Lehmann–Scheffé?
+RB: $\E[W \mid T]$, com $T$ suficiente, tem o mesmo viés e EQM menor (decomposição da variância). LS: se $T$ é suficiente completa, a função não viesada de $T$ é o único ENVVM.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Qual é o ENVVM de $e^{-\lambda}$ numa amostra Poisson?
+$((n - 1)/n)^T$, $T = \sum X_i$: o condicionamento de $\mathbf 1\{X_1 = 0\}$ a $T$, pois $X_1 \mid T \sim$ Bin$(T, 1/n)$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Enuncie Cramér–Rao multivariado.
+Modelo regular, $\E\vb W = \vb\tau(\theta)$ com jacobiana $\vb D$: $\Var\vb W \succeq \vb D\vb I^{-1}\vb D\T$. Prova: $\Cov(\vb W, \vb s) = \vb D$ e $\Var(\vb W - \vb D\vb I^{-1}\vb s) \succeq 0$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é a desigualdade da informação?
+$\E_{\theta_0}\log p_\theta < \E_{\theta_0}\log p_{\theta_0}$ se $P_\theta \neq P_{\theta_0}$ (Jensen): KL $> 0$. É por isso que o EMV mira $\theta_0$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Quais são as hipóteses e a ideia da consistência de Wald?
+$\Theta$ compacto, identificação, continuidade em $\theta$, $\E\sup_\theta\log p_\theta < \infty$. Cobrir $\{d(\theta, \theta_0) \geq \varepsilon\}$ por finitas bolas em que o supremo esperado fica abaixo de $m(\theta_0)$; lei forte.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Como se prova a normalidade assintótica do EMV?
+$\vb 0 = \nabla\ell_n(\theta_0) + \bar{\vb H}_n(\hat\theta - \theta_0)$; $\bar{\vb H}_n \pto -\vb I$ (continuidade + dominação); $\sqrt n\nabla\ell_n(\theta_0) \dto \Normal(\vb 0, \vb I)$ (TCL); Slutsky: $\Normal(\vb 0, \vb I^{-1})$.
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o estimador de Hodges e o que ele ensina?
+$\bar X\mathbf 1\{\abs{\bar X} > n^{-1/4}\}$: variância assintótica 0 em $\theta = 0$, mas $n\cdot$EQM explode perto de zero. A eficiência do EMV vale entre estimadores regulares (Hájek–Le Cam).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## Para onde converge o EMV de um modelo errado, e com que variância?
+Para $\theta^* = \argmin\mathrm{KL}(f\,\|\,p_\theta)$. $\sqrt n(\hat\theta - \theta^*) \dto \Normal(\vb 0, \vb A^{-1}\vb B\vb A^{-1})$, $\vb A = -\E\nabla^2\log p$, $\vb B = \E\vb s\vb s\T$ (sanduíche de White).
+:::
+
+::: {.callout-note .flashcard collapse="true"}
+## O que é o problema dos parâmetros incidentais?
+Com parâmetros cujo número cresce com $n$ (Neyman–Scott: $\mu_i$ por par), o EMV dos parâmetros comuns é inconsistente ($\hat\sigma^2 \to \sigma^2/2$).
+:::
+
+## Ficha-resumo {#sec-est-m04-ficha}
+
+::: {.ficha-resumo}
+**Suficiência.** $X \mid T$ não depende de $\theta$. Fatoração $p_\theta = g_\theta(T)h$. Mínima: razão de verossimilhanças constante em $\theta$ $\iff$ mesmo $T$. Bernoulli/Poisson $\sum X_i$; normal $(\bar X, S^2)$; uniforme $X_{(n)}$.
+
+**Família exponencial.** $h\exp(\vb\eta\T\vb T - A)$; $\nabla A = \E\vb T$, $\nabla^2A = \Var\vb T$; log-verossimilhança côncava; EMV: $\nabla A(\hat{\vb\eta}) = \overline{\vb T}$. Posto completo $\Rightarrow$ completa (unicidade da FGM). Basu: completa suficiente $\indep$ ancilar.
+
+**Otimalidade.** Rao–Blackwell: $\E[W \mid T]$ reduz o EQM. Lehmann–Scheffé: função não viesada de suficiente completa = ENVVM único. Exemplos: $\bar X$; $T(T-1)/(n(n-1))$ para $p^2$; $((n-1)/n)^T$ para $e^{-\lambda}$; $\frac{n+1}{n}X_{(n)}$.
+
+**Cramér–Rao.** $\vb s = \nabla\log p$, $\E\vb s = \vb 0$, $\vb I = \E\vb s\vb s\T = -\E\nabla^2\log p$, $\vb I_n = n\vb I$. $\Var\vb W \succeq \vb D\vb I^{-1}\vb D\T$. Normal: $\diag(1/\sigma^2, 1/(2\sigma^4))$; $S^2$ não atinge. Uniforme: não se aplica.
+
+**EMV.** Desigualdade da informação (KL $> 0$). Wald: compacto + identificado + contínuo + $\E\sup\log p < \infty$ $\Rightarrow$ consistente q.c. (ou concavidade). Normalidade: expansão do escore, $\bar{\vb H}_n \pto -\vb I$, TCL, Slutsky: $\Normal(\vb 0, \vb I^{-1})$. Hodges e regularidade. Neyman–Scott.
+
+**Má especificação.** $\theta^* = \argmin\mathrm{KL}(f\,\|\,p_\theta)$; $\sqrt n(\hat\theta - \theta^*) \dto \Normal(\vb 0, \vb A^{-1}\vb B\vb A^{-1})$; modelo correto: $\vb A = \vb B = \vb I$. Poisson QMV: $\lambda^* = $ média, variância $v$.
+:::
+
+## Notas bibliográficas {#sec-est-m04-notas}
+
+@casella2002 [caps. 6 e 7] cobre suficiência, completude, famílias exponenciais, Rao–Blackwell, Lehmann–Scheffé e Cramér–Rao com muitos exemplos e é a leitura principal da primeira metade do capítulo. @lehmann1998 é o tratado de referência sobre estimação pontual: demonstra o teorema da fatoração em modelos dominados (Halmos–Savage), a completude das famílias exponenciais e a teoria assintótica do EMV com as condições de Wald e de Cramér. @vandervaart1998 [caps. 5 e 8] apresenta a consistência e a normalidade assintótica de estimadores M em geral, a eficiência, o estimador de Hodges e o teorema da convolução de Hájek–Le Cam. A teoria do EMV sob má especificação e a matriz sanduíche são de @white1982, ponto de partida dos erros padrão robustos em econometria.
